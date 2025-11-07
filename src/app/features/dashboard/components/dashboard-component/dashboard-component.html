@@ -1,0 +1,114 @@
+<p>dashboard-component works!</p>
+<div class="dashboard">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <button (click)="refreshDashboard()" class="refresh-btn" [disabled]="loading">
+      {{ loading ? 'Refreshing...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total">📋</div>
+      <div class="stat-content">
+        <h3>{{ stats.totalTasks }}</h3>
+        <p>Total Tasks</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon completed">✅</div>
+      <div class="stat-content">
+        <h3>{{ stats.completedTasks }}</h3>
+        <p>Completed</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon progress">🔄</div>
+      <div class="stat-content">
+        <h3>{{ stats.inProgressTasks }}</h3>
+        <p>In Progress</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon overdue">⚠️</div>
+      <div class="stat-content">
+        <h3>{{ stats.overdueTasks }}</h3>
+        <p>Overdue</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts and Activity Grid -->
+  <div class="dashboard-grid">
+    <!-- Left Column - Charts -->
+    <div class="charts-column">
+      <!-- Task Completion Chart -->
+      <div class="chart-card">
+        <h3>Task Completion</h3>
+        <app-chart
+          chartId="completionChart"
+          type="doughnut"
+          [data]="completionChartData"
+          [options]="pieChartOptions"
+          [loading]="loading">
+        </app-chart>
+      </div>
+
+      <!-- Priority Distribution -->
+      <div class="chart-card">
+        <h3>Priority Distribution</h3>
+        <app-chart
+          chartId="priorityChart"
+          type="bar"
+          [data]="priorityChartData"
+          [options]="barChartOptions"
+          [loading]="loading">
+        </app-chart>
+      </div>
+
+      <!-- Completion Trend -->
+      <div class="chart-card">
+        <h3>Completion Trend (14 Days)</h3>
+        <app-chart
+          chartId="trendChart"
+          type="line"
+          [data]="trendChartData"
+          [options]="lineChartOptions"
+          [loading]="loading">
+        </app-chart>
+      </div>
+    </div>
+
+    <!-- Right Column - Activity and Overdue -->
+    <div class="sidebar-column">
+      <!-- Overdue Tasks -->
+      <div class="overdue-card">
+        <h3>Overdue Tasks</h3>
+        <div *ngIf="overdueTasks.length === 0" class="empty-overdue">
+          <p>No overdue tasks 🎉</p>
+        </div>
+        <div *ngFor="let task of overdueTasks" class="overdue-item">
+          <div class="task-info">
+            <strong>{{ task.title }}</strong>
+            <span class="due-date">Due: {{ task.dueDate | date:'shortDate' }}</span>
+          </div>
+          <span class="priority-badge" [class]="task.priority">{{ task.priority }}</span>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <app-activity-feed
+        [activities]="activities"
+        [maxItems]="8"
+        [showViewAll]="true"
+        (activityClick)="onActivityClick(activity)
+        (viewAllClick)="onViewAllActivities()">
+      </app-activity-feed>
+    </div>
+  </div>
+</div>

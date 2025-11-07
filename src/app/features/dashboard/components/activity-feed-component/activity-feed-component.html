@@ -1,0 +1,51 @@
+<p>activity-feed-component works!</p>
+<div class="activity-feed">
+  <div class="activity-header">
+    <h3 class="activity-title">{{ title }}</h3>
+    <button 
+      *ngIf="showViewAll && activities.length > maxItems"
+      (click)="onViewAllClick()" 
+      class="view-all-btn">
+      View All
+    </button>
+  </div>
+
+  <div class="activities-list">
+    <div *ngIf="displayedActivities.length === 0" class="empty-state">
+      <div class="empty-icon">📝</div>
+      <p>No recent activity</p>
+    </div>
+
+    <div 
+      *ngFor="let activity of displayedActivities"
+      class="activity-item"
+      (click)="onActivityClick(activity)"
+      [title]="activity.details">
+      
+      <!-- User Avatar -->
+      <div class="activity-avatar" [style.background]="getActionColor(activity.action)">
+        <span class="avatar-initials">{{ activity.userInitials }}</span>
+      </div>
+
+      <!-- Activity Content -->
+      <div class="activity-content">
+        <div class="activity-message">
+          <span class="user-name">{{ activity.userName }}</span>
+          <span class="action" [style.color]="getActionColor(activity.action)">
+            {{ activity.action }} 
+          </span>
+          <span class="item-type">{{ activity.itemType }}</span>
+          <span class="item-name">"{{ activity.itemName }}"</span>
+        </div>
+        <div class="activity-time">
+          {{ getRelativeTime(activity.timestamp) }}
+        </div>
+      </div>
+
+      <!-- Action Icon -->
+      <div class="activity-icon" [style.color]="getActionColor(activity.action)">
+        {{ getActionIcon(activity.action) }}
+      </div>
+    </div>
+  </div>
+</div>

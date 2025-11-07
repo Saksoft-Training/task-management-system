@@ -1,0 +1,20 @@
+<p>chartcomponent works!</p>
+  <div class="chart-container" [class.loading]="loading" [class.empty]="isEmpty">
+      @if (isBrowser) {
+        <canvas [id]="chartId"></canvas>
+      }
+      
+      @if (loading && isBrowser) {
+        <div class="chart-loading">
+          <div class="spinner"></div>
+          <p>Loading chart...</p>
+        </div>
+      }
+      
+      @if (isEmpty) {
+        <div class="chart-empty">
+          <div class="empty-icon">📊</div>
+          <p>No data available</p>
+        </div>
+      }
+    </div>
