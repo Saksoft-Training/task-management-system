@@ -1,0 +1,15 @@
+<div class="task-card">
+  <div class="task-header">
+    <h4>{{ task.title }}</h4>
+    <span class="priority {{ task.priority.toLowerCase() }}">{{ task.priority }}</span>
+  </div>
+
+  <div class="task-meta">
+    <div class="assignee">
+       👤 {{ task.assignee }}
+    </div>
+    <div class="due-date">
+      🗓️ {{ task.dueDate | date }}
+    </div>
+  </div>
+</div>

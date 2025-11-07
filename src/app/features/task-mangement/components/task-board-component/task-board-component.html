@@ -1,0 +1,15 @@
+<div class="task-board">
+  @for (status of ['To Do', 'In Progress', 'Completed']; track status) {
+    <div class="column">
+      <h3>{{ status }} ({{ getTasksByStatus(status).length }})</h3>
+
+      @if (getTasksByStatus(status).length === 0) {
+        <p class="empty">No tasks</p>
+      } @else {
+        @for (task of getTasksByStatus(status); track task.id) {
+          <app-task-card-component [task]="task"></app-task-card-component>
+        }
+      }
+    </div>
+  }
+</div>

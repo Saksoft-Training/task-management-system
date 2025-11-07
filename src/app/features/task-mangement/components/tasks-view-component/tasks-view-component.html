@@ -1,0 +1,17 @@
+<div class="view-header">
+  <h2>Tasks</h2>
+  <div class="toggle-buttons">
+    <button [class.active]="viewMode === 'list'" (click)="toggleView('list')">List View</button>
+    <button [class.active]="viewMode === 'board'" (click)="toggleView('board')">Board View</button>
+  </div>
+</div>
+
+@if (tasks.length === 0) {
+  <p class="empty">No tasks available.</p>
+} @else {
+  @if (viewMode === 'list') {
+    <app-task-list [tasks]="tasks"></app-task-list>
+  } @else {
+    <app-task-board [tasks]="tasks"></app-task-board>
+  }
+}
