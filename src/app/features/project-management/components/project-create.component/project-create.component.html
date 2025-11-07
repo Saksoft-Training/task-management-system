@@ -1,0 +1,65 @@
+<div class="project-form-container">
+  <button class="close-btn" (click)="onCancel()">
+    <img src="assets/icons/cancel.svg" alt="Cancel" width="16" height="16">
+  </button>
+  <h2>Create Project</h2>
+
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <label>Project Name</label>
+    <input type="text" formControlName="name" />
+    @if (projectForm.get('name')?.touched && projectForm.get('name')?.invalid) {
+    <div class="error">
+      @if (projectForm.get('name')?.hasError('required')) {
+      <small>Name is required.</small>
+      }
+      @if (projectForm.get('name')?.hasError('minlength')) {
+      <small>Minimum 3 characters.</small>
+      }
+      @if (projectForm.get('name')?.hasError('maxlength')) {
+      <small>Maximum 100 characters.</small>
+      }
+    </div>
+    }
+
+    <label>Description</label>
+    <textarea formControlName="description"></textarea>
+    @if (projectForm.get('description')?.hasError('maxlength')) {
+    <div class="error">
+      <small>Maximum 500 characters allowed.</small>
+    </div>
+    }
+
+    <label>Start Date</label>
+    <input type="date" formControlName="startDate" />
+    @if (projectForm.get('startDate')?.hasError('pastDate')) {
+    <div class="error">
+      <small>Start date cannot be in the past.</small>
+    </div>
+    }
+
+    <label>End Date</label>
+    <input type="date" formControlName="endDate" />
+    @if (projectForm.errors?.['endBeforeStart']) {
+    <div class="error">
+      <small>End date must be after start date.</small>
+    </div>
+    }
+
+    <label>Status</label>
+    <select formControlName="status">
+      <option value=""> Select Status </option>
+      @for (status of statuses; track status) {
+      <option [value]="status">{{ status }}</option>
+      }
+    </select>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="projectForm.invalid">Add</button>
+      <button type="button" (click)="onReset()">Reset</button>
+    </div>
+  </form>
+
+  @if (successMessage) {
+  <div class="success">{{ successMessage }}</div>
+  }
+</div>

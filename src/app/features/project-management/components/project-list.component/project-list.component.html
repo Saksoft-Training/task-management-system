@@ -1,0 +1,16 @@
+<div class="project-list">
+    <div class="header">
+        <h2>Projects</h2>
+        <button (click)="goToCreate()">Create Project</button>
+    </div>
+    @for (p of projects; track p.id) {
+    <ul class="project-list-items">
+        <li (click)="viewProject(p.id)">
+            <strong>{{ p.name }}</strong> - {{ p.status }} <br />
+            <small>Created by {{ p.createdBy }} on {{ p.createdAt }}</small>
+        </li>
+    </ul>
+    } @empty {
+    <p>No projects found. Click "Create Project" to add one.</p>
+    }
+</div>

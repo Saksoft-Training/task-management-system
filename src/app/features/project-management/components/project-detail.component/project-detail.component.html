@@ -1,0 +1,13 @@
+@if (project) {
+<div>
+    <button (click)="router.navigate(['/projects'])">Back to List</button>
+    <h2>{{ project.name }}</h2>
+    <p><strong>Status:</strong> {{ project.status }}</p>
+    <p><strong>Description:</strong> {{ project.description || 'No description' }}</p>
+    <p><strong>Start Date:</strong> {{ project.startDate }}</p>
+    <p><strong>End Date:</strong> {{ project.endDate }}</p>
+    <p><strong>Created By:</strong> {{ project.createdBy }}</p>
+    <p><strong>Created At:</strong> {{ project.createdAt }}</p>
+    <p><strong>Last Updated:</strong> {{ project.updatedAt | date:'short' }}</p>
+</div>
+}
