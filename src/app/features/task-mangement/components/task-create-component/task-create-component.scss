@@ -1,0 +1,64 @@
+// for basic design for my self and understanding 
+.task-create-container {
+  max-width: 550px;
+  margin: 2rem auto;
+  background: #ffffff;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+  }
+
+  .error {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+
+    button {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+
+      &:first-child {
+        background: #2563eb;
+        color: white;
+      }
+
+      &:last-child {
+        background: #ef4444;
+        color: white;
+      }
+
+      &:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

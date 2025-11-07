@@ -1,0 +1,119 @@
+<div class="task-create-container">
+  <h2>Create Task</h2>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <!-- TITLE -->
+    <label for="title">Title *</label>
+    <input id="title" type="text" formControlName="title" placeholder="Enter task title" />
+
+    @if (f['title'].touched && f['title'].errors) {
+      <div class="error">
+        @if (f['title'].errors['required']) {
+          <span>Title is required.</span>
+        }
+        @if (f['title'].errors['minlength']) {
+          <span>Minimum 5 characters.</span>
+        }
+        @if (f['title'].errors['maxlength']) {
+          <span>Maximum 100 characters.</span>
+        }
+      </div>
+    }
+
+    <!-- DESCRIPTION -->
+    <label for="description">Description</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="3"
+      placeholder="up to 500 characters">
+    </textarea>
+
+    @if (f['description'].touched && f['description'].errors) {
+      <div class="error">
+        @if (f['description'].errors['maxlength']) {
+          <span>Description cannot exceed 500 characters.</span>
+        }
+      </div>
+    }
+
+    <!-- STATUS -->
+    <label for="status">Status *</label>
+    <select id="status" formControlName="status">
+      <option value="" disabled selected>Select Status</option>
+      <option>To Do</option>
+      <option>In Progress</option>
+      <option>Completed</option>
+    </select>
+
+    @if (f['status'].touched && f['status'].errors) {
+      <div class="error">
+        <span>Status is required.</span>
+      </div>
+    }
+
+    <!-- PRIORITY -->
+    <label for="priority">Priority *</label>
+    <select id="priority" formControlName="priority">
+      <option value="" disabled selected>Select Priority</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+      <option value="Urgent">Urgent</option>
+    </select>
+
+    @if (f['priority'].touched && f['priority'].errors) {
+      <div class="error">
+        <span>Priority is required.</span>
+      </div>
+    }
+
+    <!-- ASSIGNEE -->
+    <label for="assignee">Assignee *</label>
+    <select id="assignee" formControlName="assignee">
+      <option value="" disabled selected>Select Assignee</option>
+      @for (user of users; track user) {
+        <option [value]="user">{{ user }}</option>
+      }
+    </select>
+
+    @if (f['assignee'].touched && f['assignee'].errors) {
+      <div class="error">
+        <span>Assignee is required.</span>
+      </div>
+    }
+
+    <!-- DUE DATE -->
+    <label for="dueDate">Due Date *</label>
+    <input id="dueDate" type="date" formControlName="dueDate" />
+
+    @if (f['dueDate'].touched && f['dueDate'].errors) {
+      <div class="error">
+        @if (f['dueDate'].errors['required']) {
+          <span>Due date is required.</span>
+        }
+        @if (f['dueDate'].errors['pastDate']) {
+          <span>Due date cannot be in the past.</span>
+        }
+        @if (f['dueDate'].errors['outOfRange']) {
+          <span>
+            Due date must be between {{ projectStartDate | date }} and
+            {{ projectEndDate | date }}.
+          </span>
+        }
+      </div>
+    }
+
+    <!-- BUTTONS -->
+    <div class="buttons">
+      <button type="submit" [disabled]="taskForm.invalid">Create Task</button>
+      <button type="button" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>
+@if (successMessage) {
+  <div class="success-message">
+    {{ successMessage }}
+  </div>
+}
+
