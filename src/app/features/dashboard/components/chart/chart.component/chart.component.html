@@ -1,0 +1,7 @@
+<p>chart.component works!</p>
+<div class="chart-container" [class.loading]="loading">
+      <canvas #chartCanvas *ngIf="data && hasData()"></canvas>
+      <div class="empty-state" *ngIf="!data || !hasData()">
+        <p>No data available</p>
+      </div>
+    </div>

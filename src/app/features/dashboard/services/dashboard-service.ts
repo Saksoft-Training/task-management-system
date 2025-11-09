@@ -1,58 +1,41 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-interface Task {
-id: number;
-  title: string;
-  description?: string;
-  status: 'todo' | 'in_progress' | 'done' | 'cancelled' ;
-  priority: 'low'|'medium' | 'high' | 'critical';
-  assignee: string;
-  dueDate: string;
-  projectId: string;
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Project, Task } from '../../../contracts/task.interface';
 
 export interface ChartData {
   labels: string[];
-  datasets: {
+  datasets: Array<{
+    label: string;
     data: number[];
-    backgroundColor?: string[];
-    borderColor?: string[];
-    label?: string;
+    backgroundColor?: string | string[];
+    borderColor?: string | string[];
+    borderWidth?: number;
     fill?: boolean;
-  }[];
+    tension?: number;
+    pointRadius?: number;
+    pointBackgroundColor?: string | string[];
+  }>;
 }
 
-export interface TrendData {
-  date: string;
+export interface TaskCompletionData {
   completed: number;
-  created: number;
+  inProgress: number;
+  todo: number;
+  total: number;
 }
 
-export interface Activity {
-  id: string;
-  action: 'created' | 'updated' | 'deleted' | 'completed' | 'assigned';
-  itemType: 'project' | 'task' | 'user';
-  itemId: string;
-  itemName: string;
-  userId: string;
-  userName: string;
-  userInitials: string;
-  timestamp: Date;
-  details?: string;
+export interface PriorityData {
+  low: number;
+  medium: number;
+  high: number;
+  urgent: number;
 }
 
-export interface DashboardStats {
-  totalTasks: number;
-  completedTasks: number;
-  inProgressTasks: number;
-  todoTasks: number;
-  overdueTasks: number;
-  completionRate: number;
+export interface OverdueTask extends Task {
+  daysOverdue: number;
 }
+
 
 
 @Injectable({
@@ -61,313 +44,332 @@ export interface DashboardStats {
 
 
 export class DashboardService {
-   private isBrowser: boolean;
-  private statsSubject = new BehaviorSubject<DashboardStats>(this.getInitialStats());
-  private activitiesSubject = new BehaviorSubject<Activity[]>([]);
+  private tasksSubject = new BehaviorSubject<Task[]>([]);
+  private projectsSubject = new BehaviorSubject<Project[]>([]);
 
-  public stats$ = this.statsSubject.asObservable();
-  public activities$ = this.activitiesSubject.asObservable();
+  public tasks$ = this.tasksSubject.asObservable();
+  public projects$ = this.projectsSubject.asObservable();
 
-   private readonly statusColors = {
-    ['done']: '#4CAF50',
-    ['in_progress']: '#FFC107',
-    ['todo']: '#F44336'
-  };
-
-  private readonly priorityColors = {
-    ['low']: '#4CAF50',
-    ['medium']: '#FFC107',
-    ['high']: '#FF9800',
-    ['critical']: '#F44336'
-  };
-
-  constructor(@Inject(PLATFORM_ID) private platformId: any) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
-    this.loadActivities();
-  }
-
-  private getInitialStats(): DashboardStats {
-    return {
-      totalTasks: 0,
-      completedTasks: 0,
-      inProgressTasks: 0,
-      todoTasks: 0,
-      overdueTasks: 0,
-      completionRate: 0
-    };
-  }
-
-   refreshStats(): void {
-    if (!this.isBrowser) return;
-
-    try {
-      const tasksJson = localStorage.getItem('tasks');
-      const tasks: Task[] = tasksJson ? JSON.parse(tasksJson) : [];
-
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-      const stats: DashboardStats = {
-        totalTasks: tasks.length,
-        completedTasks: tasks.filter(t => t.status === 'done').length,
-        inProgressTasks: tasks.filter(t => t.status === 'in_progress').length,
-        todoTasks: tasks.filter(t => t.status === 'todo').length,
-        overdueTasks: tasks.filter(t => {
-          if (!t.dueDate || t.status === 'done') return false;
-          const dueDate = new Date(t.dueDate);
-          return dueDate < today;
-        }).length,
-        completionRate: tasks.length > 0 ? 
-          (tasks.filter(t => t.status ==='done').length / tasks.length) * 100 : 0
-      };
-
-      this.statsSubject.next(stats);
-    } catch (error) {
-      console.error('Error refreshing dashboard stats:', error);
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadDataFromStorage();
+    } else {
+      this.initializeSampleData();
     }
   }
 
-   getTaskCompletionChartData(): ChartData {
-    const stats = this.statsSubject.value;
-    
-    
+  private loadDataFromStorage(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.initializeSampleData();
+      return;
+    }
+
+    const tasks = localStorage.getItem('tasks');
+    const projects = localStorage.getItem('projects');
+
+    if (tasks) {
+      const parsed = JSON.parse(tasks).map((t: any) => ({
+        ...t,
+        createdDate: new Date(t.createdDate),
+        completedDate: t.completedDate ? new Date(t.completedDate) : undefined,
+        dueDate: t.dueDate ? new Date(t.dueDate) : undefined,
+      }));
+      this.tasksSubject.next(parsed);
+    } else {
+      this.initializeSampleData();
+    }
+
+    if (projects) {
+      const parsed = JSON.parse(projects).map((p: any) => ({
+        ...p,
+        createdDate: new Date(p.createdDate),
+        updatedDate: new Date(p.updatedDate),
+      }));
+      this.projectsSubject.next(parsed);
+    } else {
+      const sampleProjects: Project[] = [
+        {
+          id: '1',
+          name: 'Web Development',
+          description: 'Build a responsive website',
+          createdDate: new Date('2025-11-01'),
+          updatedDate: new Date('2025-11-08'),
+        },
+        {
+          id: '2',
+          name: 'Mobile App',
+          description: 'Develop iOS and Android apps',
+          createdDate: new Date('2025-11-02'),
+          updatedDate: new Date('2025-11-08'),
+        },
+      ];
+      this.projectsSubject.next(sampleProjects);
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('projects', JSON.stringify(sampleProjects));
+      }
+    }
+  }
+
+  private initializeSampleData(): void {
+    const sampleProjects: Project[] = [
+      {
+        id: '1',
+        name: 'Web Development',
+        description: 'Build a responsive website',
+        createdDate: new Date('2025-11-01'),
+        updatedDate: new Date('2025-11-08'),
+      },
+      {
+        id: '2',
+        name: 'Mobile App',
+        description: 'Develop iOS and Android apps',
+        createdDate: new Date('2025-11-02'),
+        updatedDate: new Date('2025-11-08'),
+      },
+    ];
+    this.projectsSubject.next(sampleProjects);
+
+    const sampleTasks: Task[] = [
+      {
+        id: '1',
+        title: 'Design homepage',
+        description: 'Create mockups for homepage',
+        status: 'completed',
+        priority: 'high',
+        dueDate: new Date('2025-11-05'),
+        createdDate: new Date('2025-11-01'),
+        completedDate: new Date('2025-11-05'),
+        projectId: '1',
+      },
+      {
+        id: '2',
+        title: 'Setup database',
+        description: 'Configure PostgreSQL database',
+        status: 'completed',
+        priority: 'urgent',
+        dueDate: new Date('2025-11-03'),
+        createdDate: new Date('2025-10-30'),
+        completedDate: new Date('2025-11-03'),
+        projectId: '1',
+      },
+      {
+        id: '3',
+        title: 'Create API endpoints',
+        description: 'Build REST API for user management',
+        status: 'in-progress',
+        priority: 'high',
+        dueDate: new Date('2025-11-10'),
+        createdDate: new Date('2025-11-04'),
+        projectId: '1',
+      },
+      {
+        id: '4',
+        title: 'Write unit tests',
+        description: 'Test database functions',
+        status: 'in-progress',
+        priority: 'medium',
+        dueDate: new Date('2025-11-12'),
+        createdDate: new Date('2025-11-05'),
+        projectId: '1',
+      },
+      {
+        id: '5',
+        title: 'Fix login bug',
+        description: 'Debug authentication issue',
+        status: 'todo',
+        priority: 'high',
+        dueDate: new Date('2025-11-09'),
+        createdDate: new Date('2025-11-06'),
+        projectId: '2',
+      },
+      {
+        id: '6',
+        title: 'Update documentation',
+        description: 'Add API documentation',
+        status: 'todo',
+        priority: 'low',
+        dueDate: new Date('2025-11-15'),
+        createdDate: new Date('2025-11-07'),
+        projectId: '1',
+      },
+      {
+        id: '7',
+        title: 'Code review',
+        description: 'Review pull requests',
+        status: 'in-progress',
+        priority: 'medium',
+        dueDate: new Date('2025-11-08'),
+        createdDate: new Date('2025-11-06'),
+        projectId: '2',
+      },
+    ];
+
+    this.tasksSubject.next(sampleTasks);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('tasks', JSON.stringify(sampleTasks));
+    }
+  }
+
+  addTask(task: Task): void {
+    const current = this.tasksSubject.value;
+    const updated = [...current, task];
+    this.tasksSubject.next(updated);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('tasks', JSON.stringify(updated));
+    }
+  }
+
+  updateTask(task: Task): void {
+    const current = this.tasksSubject.value;
+    const updated = current.map(t => (t.id === task.id ? task : t));
+    this.tasksSubject.next(updated);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('tasks', JSON.stringify(updated));
+    }
+  }
+
+  addProject(project: Project): void {
+    const current = this.projectsSubject.value;
+    const updated = [...current, project];
+    this.projectsSubject.next(updated);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('projects', JSON.stringify(updated));
+    }
+  }
+
+  getTasks(): Task[] {
+    return this.tasksSubject.value;
+  }
+
+  getProjects(): Project[] {
+    return this.projectsSubject.value;
+  }
+
+  getTaskCompletionData(): TaskCompletionData {
+    const tasks = this.tasksSubject.value;
+    return {
+      completed: tasks.filter(t => t.status === 'completed').length,
+      inProgress: tasks.filter(t => t.status === 'in-progress').length,
+      todo: tasks.filter(t => t.status === 'todo').length,
+      total: tasks.length,
+    };
+  }
+
+  getTaskCompletionChart(): ChartData {
+    const data = this.getTaskCompletionData();
+    const colors = ['#4ade80', '#f59e0b', '#ef4444'];
+
     return {
       labels: ['Completed', 'In Progress', 'To Do'],
-      datasets: [{
-        data: [stats.completedTasks, stats.inProgressTasks, stats.todoTasks],
-        backgroundColor: [
-          this.statusColors['done'],
-          this.statusColors['in_progress'],
-          this.statusColors['todo']
-        ],
-  borderColor: ['#fff', '#fff', '#fff']
-      }]
+      datasets: [
+        {
+          label: 'Tasks',
+          data: [data.completed, data.inProgress, data.todo],
+          backgroundColor: colors,
+          borderColor: '#fff',
+          borderWidth: 2,
+        },
+      ],
     };
   }
 
-  getPriorityDistributionChartData(): ChartData {
-    if (!this.isBrowser) {
-      return { labels: [], datasets: [] };
-    }
+  getTaskTrendData(days: number = 14): ChartData {
+    const tasks = this.tasksSubject.value;
+    const today = new Date();
+    const dateMap: { [key: string]: number } = {};
 
-    try {
-      const tasksJson = localStorage.getItem('tasks');
-      const tasks: Task[] = tasksJson ? JSON.parse(tasksJson) : [];
-
-      const priorityCounts = {
-        ['low']: 0,
-        ['medium']: 0,
-        ['high']: 0,
-        ['critical']: 0
-      };
-
-      tasks.forEach(task => {
-        priorityCounts[task.priority]++;
-      });
-
-      return {
-        labels: ['Low', 'Medium', 'High', 'Critical'],
-        datasets: [{
-          label: 'Tasks by Priority',
-          data: [
-            priorityCounts['low'],
-            priorityCounts['medium'],
-            priorityCounts['high'],
-            priorityCounts['critical']
-          ],
-          backgroundColor: [
-            this.priorityColors['low'],
-            this.priorityColors['medium'],
-            this.priorityColors['high'],
-            this.priorityColors['critical']
-          ],
-          borderColor: [
-            this.priorityColors['low'],
-            this.priorityColors['medium'],
-            this.priorityColors['high'],
-            this.priorityColors['critical']
-          ],
-         
-        }]
-      };
-    } catch (error) {
-      console.error('Error generating priority distribution data:', error);
-      return { labels: [], datasets: [] };
-    }
-  }
-
-   getCompletionTrendData(): ChartData {
-    if (!this.isBrowser) {
-      return { labels: [], datasets: [] };
-    }
-
-    try {
-     
-      const labels = this.generateLast14Days();
-      const completedData = this.generateTrendData('completed');
-      const createdData = this.generateTrendData('created');
-
-      return {
-        labels,
-        datasets: [
-          {
-            label: 'Tasks Completed',
-            data: completedData,
-            borderColor: ['#4CAF50'],
-            backgroundColor: ['rgba(76, 175, 80, 0.1)'],
-            fill: true,
-           
-          },
-          {
-            label: 'Tasks Created',
-            data: createdData,
-            borderColor: ['#2196F3'],
-            backgroundColor: ['rgba(33, 150, 243, 0.1)'],
-            fill: true,
-            
-          }
-        ]
-      };
-    } catch (error) {
-      console.error('Error generating trend data:', error);
-      return { labels: [], datasets: [] };
-    }
-  }
-
-   private generateLast14Days(): string[] {
-    const days = [];
-    for (let i = 13; i >= 0; i--) {
-      const date = new Date();
+    for (let i = 0; i < days; i++) {
+      const date = new Date(today);
       date.setDate(date.getDate() - i);
-      days.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      const dateStr = date.toISOString().split('T')[0];
+      dateMap[dateStr] = 0;
     }
-    return days;
-  }
 
-  private generateTrendData(type: 'completed' | 'created'): number[] {
-    
-    const data = [];
-    for (let i = 0; i < 14; i++) {
-      if (type === 'completed') {
-        data.push(Math.floor(Math.random() * 10) + 5); 
-      } else {
-        data.push(Math.floor(Math.random() * 8) + 3); 
+    tasks.forEach(task => {
+      if (task.completedDate) {
+        const dateStr = task.completedDate
+          .toISOString()
+          .split('T')[0];
+        if (dateStr in dateMap) {
+          dateMap[dateStr]++;
+        }
       }
-    }
-    return data;
+    });
+
+    const labels = Object.keys(dateMap)
+      .sort()
+      .reverse();
+    const data = labels.map(label => dateMap[label]);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Tasks Completed',
+          data,
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4,
+          pointBackgroundColor: '#3b82f6',
+        },
+      ],
+    };
   }
 
-   getOverdueTasks(): Task[] {
-    if (!this.isBrowser) return [];
-
-    try {
-      const tasksJson = localStorage.getItem('tasks');
-      const tasks: Task[] = tasksJson ? JSON.parse(tasksJson) : [];
-
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-      return tasks
-        .filter(task => {
-          if (!task.dueDate || task.status === 'done') return false;
-          const dueDate = new Date(task.dueDate);
-          return dueDate < today;
-        })
-        .slice(0, 5); 
-    } catch (error) {
-      console.error('Error getting overdue tasks:', error);
-      return [];
-    }
+  getPriorityDistributionData(): PriorityData {
+    const tasks = this.tasksSubject.value;
+    return {
+      low: tasks.filter(t => t.priority === 'low').length,
+      medium: tasks.filter(t => t.priority === 'medium').length,
+      high: tasks.filter(t => t.priority === 'high').length,
+      urgent: tasks.filter(t => t.priority === 'urgent').length,
+    };
   }
 
-   private loadActivities(): void {
-    if (!this.isBrowser) return;
+  getPriorityDistributionChart(): ChartData {
+    const data = this.getPriorityDistributionData();
+    const colors = ['#10b981', '#f59e0b', '#f87171', '#dc2626'];
 
-    try {
-      const activitiesJson = localStorage.getItem('activities');
-      const activities: Activity[] = activitiesJson ? JSON.parse(activitiesJson) : [];
-
-      
-      const sortedActivities = activities
-        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-        .slice(0, 15);
-
-      this.activitiesSubject.next(sortedActivities);
-    } catch (error) {
-      console.error('Error loading activities:', error);
-    }
+    return {
+      labels: ['Low', 'Medium', 'High', 'Urgent'],
+      datasets: [
+        {
+          label: 'Tasks by Priority',
+          data: [data.low, data.medium, data.high, data.urgent],
+          backgroundColor: colors,
+          borderColor: '#fff',
+          borderWidth: 1,
+        },
+      ],
+    };
   }
 
-  addActivity(activity: Omit<Activity, 'id'>): void {
-    if (!this.isBrowser) return;
+  getOverdueTasks(): OverdueTask[] {
+    const tasks = this.tasksSubject.value;
+    const now = new Date();
 
-    try {
-      const newActivity: Activity = {
-        ...activity,
-        id: Date.now().toString()
-      };
-
-      const currentActivities = this.activitiesSubject.value;
-      const updatedActivities = [newActivity, ...currentActivities].slice(0, 15); 
-      this.activitiesSubject.next(updatedActivities);
-
-
-      localStorage.setItem('activities', JSON.stringify(updatedActivities));
-    } catch (error) {
-      console.error('Error adding activity:', error);
-    }
+    return tasks
+      .filter(
+        task =>
+          task.dueDate &&
+          task.status !== 'completed' &&
+          new Date(task.dueDate) < now
+      )
+      .map(task => ({
+        ...task,
+        daysOverdue: Math.floor(
+          (now.getTime() - new Date(task.dueDate!).getTime()) /
+            (1000 * 60 * 60 * 24)
+        ),
+      }))
+      .sort((a, b) => b.daysOverdue - a.daysOverdue);
   }
 
-  initializeSampleData(): void {
-    if (!this.isBrowser) return;
-
-    try {
-      const activities = this.activitiesSubject.value;
-      if (activities.length === 0) {
-        const sampleActivities: Activity[] = [
-          {
-            id: '1',
-            action: 'created',
-            itemType: 'project',
-            itemId: '1',
-            itemName: 'Website Redesign',
-            userId: '1',
-            userName: 'John Doe',
-            userInitials: 'JD',
-            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), 
-            details: 'New project created'
-          },
-          {
-            id: '2',
-            action: 'completed',
-            itemType: 'task',
-            itemId: '1',
-            itemName: 'Homepage Layout',
-            userId: '2',
-            userName: 'Jane Smith',
-            userInitials: 'JS',
-            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4), 
-            details: 'Task marked as completed'
-          },
-          {
-            id: '3',
-            action: 'assigned',
-            itemType: 'task',
-            itemId: '2',
-            itemName: 'API Integration',
-            userId: '1',
-            userName: 'John Doe',
-            userInitials: 'JD',
-            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6),
-            details: 'Task assigned to developer'
-          }
-        ];
-
-        this.activitiesSubject.next(sampleActivities);
-        localStorage.setItem('activities', JSON.stringify(sampleActivities));
-      }
-    } catch (error) {
-      console.error('Error initializing sample data:', error);
-    }
+  getTaskCompletionPercentage(): number {
+    const data = this.getTaskCompletionData();
+    if (data.total === 0) return 0;
+    return Math.round((data.completed / data.total) * 100);
   }
 }

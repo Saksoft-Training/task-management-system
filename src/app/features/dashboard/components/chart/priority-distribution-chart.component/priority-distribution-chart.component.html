@@ -1,0 +1,29 @@
+<p>priority-distribution-chart.component works!</p>
+ <div class="card">
+      <h3>Priority Distribution</h3>
+      <div class="priority-stats">
+        <div class="priority-item low">
+          <span class="priority-label">Low</span>
+          <span class="priority-count">{{ priorityData.low }}</span>
+        </div>
+        <div class="priority-item medium">
+          <span class="priority-label">Medium</span>
+          <span class="priority-count">{{ priorityData.medium }}</span>
+        </div>
+        <div class="priority-item high">
+          <span class="priority-label">High</span>
+          <span class="priority-count">{{ priorityData.high }}</span>
+        </div>
+        <div class="priority-item urgent">
+          <span class="priority-label">Urgent</span>
+          <span class="priority-count">{{ priorityData.urgent }}</span>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <app-chart
+          [data]="chartData"
+          type="bar"
+          [loading]="loading"
+        ></app-chart>
+      </div>
+    </div>

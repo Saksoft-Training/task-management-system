@@ -1,0 +1,30 @@
+<p>overdue-tasks-alert.component works!</p>
+<div class="card" [class.empty]="overdueTasks.length === 0">
+      <div class="header">
+        <h3>Overdue Tasks</h3>
+        <span class="badge" [class.active]="overdueTasks.length > 0">{{
+          overdueTasks.length
+        }}</span>
+      </div>
+
+      <div class="content" *ngIf="overdueTasks.length === 0">
+        <p class="empty-message">No overdue tasks - Great job!</p>
+      </div>
+
+      <div class="content" *ngIf="overdueTasks.length > 0">
+        <div class="task-list">
+          <div class="task-item" *ngFor="let task of overdueTasks">
+            <div class="task-header">
+              <span class="task-title">{{ task.title }}</span>
+              <span class="days-overdue">{{ task.daysOverdue }} days</span>
+            </div>
+            <div class="task-meta">
+              <span class="priority-badge" [ngClass]="task.priority">{{
+                task.priority | uppercase
+              }}</span>
+              <span class="due-date">Due: {{ task.dueDate | date }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

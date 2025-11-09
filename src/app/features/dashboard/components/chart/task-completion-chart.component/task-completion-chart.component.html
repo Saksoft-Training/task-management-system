@@ -1,0 +1,31 @@
+<p>task-completion-chart.component works!</p>
+<div class="card">
+      <h3>Task Completion Status</h3>
+      <div class="chart-stats">
+        <div class="stat-box">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value completed">{{ completionData.completed }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">In Progress</span>
+          <span class="stat-value inprogress">{{
+            completionData.inProgress
+          }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">To Do</span>
+          <span class="stat-value todo">{{ completionData.todo }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Completion %</span>
+          <span class="stat-value percentage">{{ completionPercentage }}%</span>
+        </div>
+      </div>
+      <div class="chart-wrapper">
+        <app-chart
+          [data]="chartData"
+          type="doughnut"
+          [loading]="loading"
+        ></app-chart>
+      </div>
+    </div>

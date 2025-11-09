@@ -1,0 +1,62 @@
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.chart-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.stat-value.completed {
+  color: #4ade80;
+}
+
+.stat-value.inprogress {
+  color: #f59e0b;
+}
+
+.stat-value.todo {
+  color: #ef4444;
+}
+
+.stat-value.percentage {
+  color: #3b82f6;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+}
