@@ -1,0 +1,22 @@
+@if (visible) {
+<div class="error-message-container" [ngClass]="type">
+    <div class="icon">
+
+        @switch (type) {
+        @case ('success') { <span class="material-icons">check_circle</span> }
+        @case ('error') { <span class="material-icons">error</span> }
+        @case ('warning') { <span class="material-icons">warning</span> }
+        @case ('info') { <span class="material-icons">info</span> }
+        }
+    </div>
+
+    <div class="message">{{ message }}</div>
+
+
+    @if (dismissible) {
+    <button class="close-btn" (click)="close()">
+        <span class="material-icons">close</span>
+    </button>
+    }
+</div>
+}
