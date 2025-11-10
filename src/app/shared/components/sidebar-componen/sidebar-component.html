@@ -1,0 +1,17 @@
+<nav class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="sidebar-header">
+        <h2 *ngIf="!isCollapsed">Project Manager</h2>
+        <button class="toggle-btn" (click)="toggleSidebar()">
+            {{ isCollapsed ? '➡️' : '⬅️' }}
+        </button>
+    </div>
+
+    <ul class="menu">
+        <li *ngFor="let item of menuItems" routerLinkActive="active">
+            <a [routerLink]="item.route">
+                <span class="icon">{{ item.icon }}</span>
+                <span class="label" *ngIf="!isCollapsed">{{ item.label }}</span>
+            </a>
+        </li>
+    </ul>
+</nav>

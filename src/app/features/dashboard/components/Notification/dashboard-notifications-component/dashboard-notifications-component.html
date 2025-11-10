@@ -1,0 +1,25 @@
+<p>dashboard-notifications-component works!</p>
+<div class="dashboard-notifications">
+  <div class="widget-header">
+    <h3>Recent Notifications</h3>
+    <div class="notification-stats">
+      <span *ngIf="criticalCount > 0" class="stat critical">
+        {{ criticalCount }} critical
+      </span>
+      <span *ngIf="warningCount > 0" class="stat warning">
+        {{ warningCount }} warnings
+      </span>
+    </div>
+  </div>
+
+  <div class="notifications-list">
+    <div *ngIf="recentNotifications.length === 0" class="empty-state">
+      No notifications
+    </div>
+    
+    <app-notification-item-component
+      *ngFor="let notification of recentNotifications"
+      [notification]="notification"
+    ></app-notification-item-component>
+  </div>
+</div>
