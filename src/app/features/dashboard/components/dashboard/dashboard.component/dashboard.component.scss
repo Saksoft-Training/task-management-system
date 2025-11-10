@@ -109,3 +109,14 @@ p {
     }
   }
 }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.chart-section {
+  min-height: 400px;
+}

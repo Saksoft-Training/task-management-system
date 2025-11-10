@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationService,Notification } from '../../../services/notification';
 interface ToastNotification extends Notification {
@@ -6,7 +7,7 @@ interface ToastNotification extends Notification {
 }
 @Component({
   selector: 'app-toast-notification-component',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './toast-notification-component.html',
   styleUrl: './toast-notification-component.scss',
 })

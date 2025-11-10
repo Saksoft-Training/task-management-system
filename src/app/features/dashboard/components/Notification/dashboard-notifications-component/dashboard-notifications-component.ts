@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NotificationService ,Notification} from '../../../services/notification';
 import { NotificationItemComponent } from "../notification-item-component/notification-item-component";
 
 @Component({
   selector: 'app-dashboard-notifications-component',
-  imports: [NotificationItemComponent],
+  imports: [CommonModule, NotificationItemComponent],
   templateUrl: './dashboard-notifications-component.html',
   styleUrl: './dashboard-notifications-component.scss',
 })

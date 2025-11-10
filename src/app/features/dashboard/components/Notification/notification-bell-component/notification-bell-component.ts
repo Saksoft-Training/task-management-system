@@ -1,12 +1,12 @@
 import { Component, HostListener, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NotificationService, Notification } from '../../../services/notification';
 import { NotificationItemComponent } from '../notification-item-component/notification-item-component';
 
 @Component({
   selector: 'app-notification-bell-component',
   standalone:true,
-  imports: [NotificationItemComponent],
-  providers:[NotificationService],
+  imports: [CommonModule, NotificationItemComponent],
   templateUrl: './notification-bell-component.html',
   styleUrl: './notification-bell-component.scss',
 })

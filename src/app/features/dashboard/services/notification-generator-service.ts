@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NotificationService } from './notification';
-export interface Task {
-  id: string;
-  title: string;
-  dueDate: Date;
-  completed: boolean;
-  assignedTo: string;
-}
+import { Task } from '../../../contracts/task.interface';
 
 export interface Project {
   id: string;
@@ -45,7 +39,7 @@ export class NotificationGeneratorService {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     tasks.forEach(task => {
-      if (task.completed) return;
+      if (task.status === 'completed' || !task.dueDate) return;
 
       const dueDate = new Date(task.dueDate);
       const taskDueDate = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate());
@@ -86,6 +80,12 @@ export class NotificationGeneratorService {
       taskId: task.id,
       taskName: task.title
     });
+  }
+
+  onTaskStatusChanged(task: Task, oldStatus: string): void {
+    if (task.status === 'completed' && oldStatus !== 'completed') {
+      this.onTaskCompleted(task);
+    }
   }
 
   onTaskAssigned(task: Task): void {

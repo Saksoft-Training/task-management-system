@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnInit, AfterViewInit, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration } from 'chart.js';
-
 export interface BaseChartData {
   labels: string[];
   datasets: Array<{
@@ -10,7 +9,6 @@ export interface BaseChartData {
     [key: string]: any;
   }>;
 }
-
 @Component({
   selector: 'app-chart',
   standalone: true,
@@ -18,7 +16,7 @@ export interface BaseChartData {
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss',
 })
-export class ChartComponent implements OnInit, OnChanges{
+export class ChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy{
 @Input() data: BaseChartData | null = null;
   @Input() type: 'doughnut' | 'pie' | 'line' | 'bar' = 'doughnut';
   @Input() options: Partial<ChartConfiguration> = {};
@@ -27,8 +25,11 @@ export class ChartComponent implements OnInit, OnChanges{
 
   private chart: Chart | null = null;
   private currentType: 'doughnut' | 'pie' | 'line' | 'bar' = 'doughnut';
-
   ngOnInit(): void {
+    // Data validation and setup
+  }
+
+  ngAfterViewInit(): void {
     if (this.data && this.canvasRef && this.hasData()) {
       this.currentType = this.type;
       this.createChart();
@@ -44,7 +45,7 @@ export class ChartComponent implements OnInit, OnChanges{
     ) {
       if (this.chart) {
         this.updateChart();
-      } else if (this.data && this.canvasRef && this.hasData()) {
+      } else if (this.data && this.canvasRef && this.hasData() && this.canvasRef.nativeElement) {
         this.currentType = this.type;
         this.createChart();
       }
@@ -73,6 +74,7 @@ export class ChartComponent implements OnInit, OnChanges{
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        cutout: this.type === 'doughnut' ? 0 : undefined,
         plugins: {
           legend: {
             position: 'bottom',

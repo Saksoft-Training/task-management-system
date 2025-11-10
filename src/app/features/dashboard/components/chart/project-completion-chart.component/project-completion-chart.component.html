@@ -1,0 +1,23 @@
+<div class="card">
+  <h3>Project Completion Status</h3>
+  <div class="chart-stats">
+    <div class="stat-box">
+      <span class="stat-label">Completed</span>
+      <span class="stat-value completed">{{ projectCompletionData.completed }}</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">In Progress</span>
+      <span class="stat-value inprogress">{{
+        projectCompletionData.inProgress
+      }}</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Total Projects</span>
+      <span class="stat-value total">{{ projectCompletionData.total }}</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label">Completion %</span>
+      <span class="stat-value percentage">{{ projectCompletionPercentage }}%</span>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Project, Task } from '../../../contracts/task.interface';
+import { NotificationGeneratorService } from './notification-generator-service';
+import { ActivityService } from './activity.service';
 
 export interface ChartData {
   labels: string[];
@@ -32,6 +34,12 @@ export interface PriorityData {
   urgent: number;
 }
 
+export interface ProjectCompletionData {
+  completed: number;
+  inProgress: number;
+  total: number;
+}
+
 export interface OverdueTask extends Task {
   daysOverdue: number;
 }
@@ -50,12 +58,20 @@ export class DashboardService {
   public tasks$ = this.tasksSubject.asObservable();
   public projects$ = this.projectsSubject.asObservable();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private notificationGenerator: NotificationGeneratorService,
+    private activityService: ActivityService
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       this.loadDataFromStorage();
     } else {
       this.initializeSampleData();
     }
+
+    // Start notification checks
+    this.notificationGenerator.startNotificationChecks();
+    this.setupNotificationChecks();
   }
 
   private loadDataFromStorage(): void {
@@ -108,6 +124,13 @@ export class DashboardService {
         localStorage.setItem('projects', JSON.stringify(sampleProjects));
       }
     }
+  }
+
+  private setupNotificationChecks(): void {
+    // Check for notifications whenever tasks change
+    this.tasks$.subscribe(tasks => {
+      this.notificationGenerator.checkForDueDateNotifications(tasks);
+    });
   }
 
   private initializeSampleData(): void {
@@ -208,6 +231,109 @@ export class DashboardService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('tasks', JSON.stringify(sampleTasks));
     }
+
+    // Initialize sample activities
+    this.initializeSampleActivities();
+  }
+
+  private initializeSampleActivities(): void {
+    // Create activities manually with proper IDs and timestamps
+    const activities = [
+      {
+        id: 'activity-1',
+        action: 'created',
+        itemName: 'Web Development',
+        itemType: 'project' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Created project "Web Development"',
+        timestamp: new Date('2025-11-01T10:00:00Z')
+      },
+      {
+        id: 'activity-2',
+        action: 'created',
+        itemName: 'Mobile App',
+        itemType: 'project' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Created project "Mobile App"',
+        timestamp: new Date('2025-11-02T11:00:00Z')
+      },
+      {
+        id: 'activity-3',
+        action: 'created',
+        itemName: 'Design homepage',
+        itemType: 'task' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Created task "Design homepage"',
+        timestamp: new Date('2025-11-01T12:00:00Z')
+      },
+      {
+        id: 'activity-4',
+        action: 'created',
+        itemName: 'Setup database',
+        itemType: 'task' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Created task "Setup database"',
+        timestamp: new Date('2025-10-30T14:00:00Z')
+      },
+      {
+        id: 'activity-5',
+        action: 'marked as completed',
+        itemName: 'Setup database',
+        itemType: 'task' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Changed status from in-progress to completed',
+        timestamp: new Date('2025-11-03T16:00:00Z')
+      },
+      {
+        id: 'activity-6',
+        action: 'marked as completed',
+        itemName: 'Design homepage',
+        itemType: 'task' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Changed status from in-progress to completed',
+        timestamp: new Date('2025-11-05T09:00:00Z')
+      },
+      {
+        id: 'activity-7',
+        action: 'created',
+        itemName: 'Create API endpoints',
+        itemType: 'task' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Created task "Create API endpoints"',
+        timestamp: new Date('2025-11-04T10:30:00Z')
+      },
+      {
+        id: 'activity-8',
+        action: 'marked as in-progress',
+        itemName: 'Create API endpoints',
+        itemType: 'task' as const,
+        userId: 'user-1',
+        userName: 'You',
+        userInitials: 'Y',
+        description: 'Changed status from todo to in-progress',
+        timestamp: new Date('2025-11-04T11:00:00Z')
+      }
+    ];
+
+    // Set activities directly (since we're initializing)
+    this.activityService['activities'].next(activities);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('activities', JSON.stringify(activities));
+    }
   }
 
   addTask(task: Task): void {
@@ -217,14 +343,56 @@ export class DashboardService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('tasks', JSON.stringify(updated));
     }
+
+    // Generate activity for new task
+    this.activityService.addActivity({
+      action: 'created',
+      itemName: task.title,
+      itemType: 'task',
+      userId: 'user-1', // Default user for now
+      userName: 'You',
+      userInitials: 'Y',
+      description: `Created task "${task.title}"`
+    });
   }
 
   updateTask(task: Task): void {
     const current = this.tasksSubject.value;
+    const oldTask = current.find(t => t.id === task.id);
     const updated = current.map(t => (t.id === task.id ? task : t));
     this.tasksSubject.next(updated);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('tasks', JSON.stringify(updated));
+    }
+
+    // Generate activity for task updates
+    if (oldTask) {
+      if (oldTask.status !== task.status) {
+        this.activityService.addActivity({
+          action: `marked as ${task.status}`,
+          itemName: task.title,
+          itemType: 'task',
+          userId: 'user-1',
+          userName: 'You',
+          userInitials: 'Y',
+          description: `Changed status from ${oldTask.status} to ${task.status}`
+        });
+      } else {
+        this.activityService.addActivity({
+          action: 'updated',
+          itemName: task.title,
+          itemType: 'task',
+          userId: 'user-1',
+          userName: 'You',
+          userInitials: 'Y',
+          description: `Updated task "${task.title}"`
+        });
+      }
+    }
+
+    // Trigger notifications for task changes
+    if (oldTask && oldTask.status !== task.status) {
+      this.notificationGenerator.onTaskStatusChanged(task, oldTask.status);
     }
   }
 
@@ -235,6 +403,17 @@ export class DashboardService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('projects', JSON.stringify(updated));
     }
+
+    // Generate activity for new project
+    this.activityService.addActivity({
+      action: 'created',
+      itemName: project.name,
+      itemType: 'project',
+      userId: 'user-1',
+      userName: 'You',
+      userInitials: 'Y',
+      description: `Created project "${project.name}"`
+    });
   }
 
   getTasks(): Task[] {
@@ -257,7 +436,7 @@ export class DashboardService {
 
   getTaskCompletionChart(): ChartData {
     const data = this.getTaskCompletionData();
-    const colors = ['#4ade80', '#f59e0b', '#ef4444'];
+    const colors = ['#22c55e', '#3b82f6', '#6b7280']; // Green for completed, blue for in-progress, gray for todo
 
     return {
       labels: ['Completed', 'In Progress', 'To Do'],
@@ -369,6 +548,60 @@ export class DashboardService {
 
   getTaskCompletionPercentage(): number {
     const data = this.getTaskCompletionData();
+    if (data.total === 0) return 0;
+    return Math.round((data.completed / data.total) * 100);
+  }
+
+  getProjectCompletionData(): ProjectCompletionData {
+    const projects = this.projectsSubject.value;
+    const tasks = this.tasksSubject.value;
+
+    let completed = 0;
+    let inProgress = 0;
+
+    projects.forEach(project => {
+      const projectTasks = tasks.filter(task => task.projectId === project.id);
+      if (projectTasks.length === 0) {
+        // Project with no tasks is considered in progress
+        inProgress++;
+        return;
+      }
+
+      const allTasksCompleted = projectTasks.every(task => task.status === 'completed');
+      if (allTasksCompleted) {
+        completed++;
+      } else {
+        inProgress++;
+      }
+    });
+
+    return {
+      completed,
+      inProgress,
+      total: projects.length,
+    };
+  }
+
+  getProjectCompletionChart(): ChartData {
+    const data = this.getProjectCompletionData();
+    const colors = ['#4ade80', '#f59e0b'];
+
+    return {
+      labels: ['Completed', 'In Progress'],
+      datasets: [
+        {
+          label: 'Projects',
+          data: [data.completed, data.inProgress],
+          backgroundColor: colors,
+          borderColor: '#fff',
+          borderWidth: 2,
+        },
+      ],
+    };
+  }
+
+  getProjectCompletionPercentage(): number {
+    const data = this.getProjectCompletionData();
     if (data.total === 0) return 0;
     return Math.round((data.completed / data.total) * 100);
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { DashboardService } from '../../../services/dashboard-service';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { ChartComponent } from '../chart.component/chart.component';
   templateUrl: './task-completion-chart.component.html',
   styleUrl: './task-completion-chart.component.scss',
 })
-export class TaskCompletionChartComponent {
+export class TaskCompletionChartComponent implements OnInit, OnDestroy {
 chartData: any = null;
   completionData: any = {};
   completionPercentage: number = 0;
