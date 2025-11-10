@@ -10,11 +10,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('task-project-management');
-<<<<<<< Updated upstream
-=======
 
-  constructor() {
-    injectSpeedInsights();
-  }
->>>>>>> Stashed changes
 }
