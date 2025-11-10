@@ -1,0 +1,23 @@
+<p>toast-notification-component works!</p>
+<div class="toast-container">
+  <div 
+    *ngFor="let toast of toasts"
+    class="toast"
+    [class]="toast.severity"
+    [class.visible]="toast.visible"
+    (click)="dismissToast(toast)"
+  >
+    <div class="toast-icon">
+      <span *ngIf="toast.severity === 'critical'">🚨</span>
+      <span *ngIf="toast.severity === 'warning'">⚠️</span>
+      <span *ngIf="toast.severity === 'success'">✅</span>
+      <span *ngIf="toast.severity === 'info'">ℹ️</span>
+    </div>
+    <div class="toast-content">
+      <div class="toast-message">{{ toast.message }}</div>
+    </div>
+    <button class="toast-close" (click)="dismissToast(toast); $event.stopPropagation()">
+      ×
+    </button>
+  </div>
+</div>
