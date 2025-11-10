@@ -25,6 +25,7 @@ export class RegisterComponent implements OnInit {
     hasNumber: false,
     hasSpecialChar: false
   };
+
   //#endregion
   //#region Constructor
   /**
@@ -63,7 +64,9 @@ export class RegisterComponent implements OnInit {
         name: ['', [Validators.required, Validators.minLength(3), this.nameValidator()]],
         email: ['', [Validators.required, this.gmailValidator()], [this.emailUniqueValidator()]],
         password: ['', [Validators.required, this.passwordStrengthValidator()]],
-        confirmPassword: ['', [Validators.required]]
+        confirmPassword: ['', [Validators.required]],
+        role: ['', [Validators.required]]   // <-- Add this line
+
       },
       { validators: this.confirmPasswordValidator() }
     );
@@ -219,32 +222,42 @@ export class RegisterComponent implements OnInit {
    * @summary Handles the registration form submission.
    * @returns void
   */
-  public onSubmit(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
-    this.isSubmitting = true;
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      this.isSubmitting = false;
-      return;
-    }
-    const { name, email, password } = this.registerForm.value;
-    if (this.authService.isEmailRegistered(email)) {
-      this.errorMessage = 'Email is already registered.';
-      this.isSubmitting = false;
-      return;
-    }
-    const encryptedPassword = this.authService.encodePassword(password);
-    const newUser: User = {
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      password: encryptedPassword,
-      createdAt: new Date().toISOString()
-    };
-    this.authService.registerUser(newUser);
-    this.successMessage = 'Registration successful! Redirecting to login...';
-    setTimeout(() => this.router.navigate(['/login']), 1000);
+public onSubmit(): void {
+  this.errorMessage = '';
+  this.successMessage = '';
+  this.isSubmitting = true;
+
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
     this.isSubmitting = false;
+    return;
   }
-  //#endregion
+
+  const { name, email, password, role } = this.registerForm.value; 
+
+  if (this.authService.isEmailRegistered(email)) {
+    this.errorMessage = 'Email is already registered.';
+    this.isSubmitting = false;
+    return;
+  }
+
+  const encryptedPassword = this.authService.encodePassword(password);
+
+  const newUser: User = {
+    name: name.trim(),
+    email: email.trim().toLowerCase(),
+    password: encryptedPassword,
+    role: role.trim(), 
+    createdAt: new Date().toISOString()
+  };
+
+  this.authService.registerUser(newUser);
+  this.successMessage = 'Registration successful! Redirecting to login...';
+  setTimeout(() => this.router.navigate(['/login']), 1000);
+  this.isSubmitting = false;
+}
+
+  public goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
 }
