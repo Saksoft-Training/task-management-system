@@ -3,7 +3,13 @@ import { TaskCreateComponent } from './features/task-mangement/components/task-c
 import { TasksViewComponent } from './features/task-mangement/components/tasks-view-component/tasks-view-component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
   { path: 'tasks', component: TasksViewComponent },
-  { path: 'projects/:projectId/tasks/create', component: TaskCreateComponent },
+  // {
+  //   path: 'projects/:projectId/tasks',
+  //   children: [
+  //     { path: '', component: TasksViewComponent },
+  //     { path: 'create', component: TaskCreateComponent },
+  //   ],
+  // },
 ];
