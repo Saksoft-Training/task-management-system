@@ -42,27 +42,7 @@
       }
     }
 
-    <label>
-      Role
-      <select formControlName="role">
-        <option value="" disabled selected>Select your role</option>
-        <option value="Software Developer">Software Developer</option>
-        <option value="QA">QA</option>
-        <option value="Product Owner">Product Owner</option>
-        <option value="Project Management">Project Management</option>
-        <option value="Admin">Admin</option>
-        <option value="BA">BA</option>
-      </select>
-    </label>
-    @if (formControls['role']; as roleControl) {
-      @if (roleControl.touched && roleControl.invalid) {
-        <div class="error">
-          @if (roleControl.errors?.['required']) {
-            <div>Role is required.</div>
-          }
-        </div>
-      }
-    }
+   
 
 
     <label>

@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../user-account-management/services/auth-service';
-import { User } from '../../../contracts/user.interface';
+import { AuthService } from '../../services/auth-service';
+import { User } from '../../../../contracts/user.interface';
+
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -65,7 +67,7 @@ export class RegisterComponent implements OnInit {
         email: ['', [Validators.required, this.gmailValidator()], [this.emailUniqueValidator()]],
         password: ['', [Validators.required, this.passwordStrengthValidator()]],
         confirmPassword: ['', [Validators.required]],
-        role: ['', [Validators.required]]   // <-- Add this line
+    
 
       },
       { validators: this.confirmPasswordValidator() }
@@ -233,7 +235,7 @@ public onSubmit(): void {
     return;
   }
 
-  const { name, email, password, role } = this.registerForm.value; 
+  const { name, email, password } = this.registerForm.value; 
 
   if (this.authService.isEmailRegistered(email)) {
     this.errorMessage = 'Email is already registered.';
@@ -247,7 +249,6 @@ public onSubmit(): void {
     name: name.trim(),
     email: email.trim().toLowerCase(),
     password: encryptedPassword,
-    role: role.trim(), 
     createdAt: new Date().toISOString()
   };
 

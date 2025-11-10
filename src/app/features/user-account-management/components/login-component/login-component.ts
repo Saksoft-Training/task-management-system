@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../user-account-management/services/auth-service';
-import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner-component/loading-spinner-component';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner-component/loading-spinner-component';
+import { AuthService } from '../../services/auth-service';
+
+
+
 
 @Component({
   selector: 'app-login',
