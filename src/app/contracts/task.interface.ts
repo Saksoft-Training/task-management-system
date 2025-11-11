@@ -1,5 +1,5 @@
 export interface Task {
-  id: string;
+  id: number;
   title: string;
   description?: string;
   status: 'todo' | 'in-progress' | 'completed';
@@ -12,7 +12,7 @@ export interface Task {
 }
 
 export interface Project {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   createdDate: Date;

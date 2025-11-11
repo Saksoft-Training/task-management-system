@@ -26,16 +26,13 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestr
   private chart: Chart | null = null;
   private currentType: 'doughnut' | 'pie' | 'line' | 'bar' = 'doughnut';
   ngOnInit(): void {
-    // Data validation and setup
   }
-
   ngAfterViewInit(): void {
     if (this.data && this.canvasRef && this.hasData()) {
       this.currentType = this.type;
       this.createChart();
     }
   }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (
       changes['data'] ||
@@ -51,7 +48,6 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestr
       }
     }
   }
-
   hasData(): boolean {
     return !!(
       this.data &&
@@ -61,13 +57,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestr
       this.data.datasets[0].data.length > 0
     );
   }
-
   private createChart(): void {
     if (!this.canvasRef || !this.data) return;
-
     const ctx = this.canvasRef.nativeElement.getContext('2d');
     if (!ctx) return;
-
     const config: ChartConfiguration = {
       type: this.type,
       data: this.data as any,
@@ -94,13 +87,10 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestr
         ...this.options,
       } as any,
     };
-
     this.chart = new Chart(ctx, config);
   }
-
   private updateChart(): void {
     if (!this.chart || !this.data) return;
-
     this.chart.data = this.data as any;
     if (this.currentType !== this.type) {
       this.chart.destroy();
@@ -110,7 +100,6 @@ export class ChartComponent implements OnInit, AfterViewInit, OnChanges, OnDestr
       this.chart.update();
     }
   }
-
   ngOnDestroy(): void {
     if (this.chart) {
       this.chart.destroy();

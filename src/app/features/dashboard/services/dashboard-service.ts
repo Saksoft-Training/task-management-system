@@ -105,14 +105,14 @@ export class DashboardService {
     } else {
       const sampleProjects: Project[] = [
         {
-          id: '1',
+          id: 1,
           name: 'Web Development',
           description: 'Build a responsive website',
           createdDate: new Date('2025-11-01'),
           updatedDate: new Date('2025-11-08'),
         },
         {
-          id: '2',
+          id: 2,
           name: 'Mobile App',
           description: 'Develop iOS and Android apps',
           createdDate: new Date('2025-11-02'),
@@ -136,14 +136,14 @@ export class DashboardService {
   private initializeSampleData(): void {
     const sampleProjects: Project[] = [
       {
-        id: '1',
+        id: 1,
         name: 'Web Development',
         description: 'Build a responsive website',
         createdDate: new Date('2025-11-01'),
         updatedDate: new Date('2025-11-08'),
       },
       {
-        id: '2',
+        id: 2,
         name: 'Mobile App',
         description: 'Develop iOS and Android apps',
         createdDate: new Date('2025-11-02'),
@@ -154,7 +154,7 @@ export class DashboardService {
 
     const sampleTasks: Task[] = [
       {
-        id: '1',
+        id: 1,
         title: 'Design homepage',
         description: 'Create mockups for homepage',
         status: 'completed',
@@ -165,7 +165,7 @@ export class DashboardService {
         projectId: '1',
       },
       {
-        id: '2',
+        id: 2,
         title: 'Setup database',
         description: 'Configure PostgreSQL database',
         status: 'completed',
@@ -176,7 +176,7 @@ export class DashboardService {
         projectId: '1',
       },
       {
-        id: '3',
+        id: 3,
         title: 'Create API endpoints',
         description: 'Build REST API for user management',
         status: 'in-progress',
@@ -186,7 +186,7 @@ export class DashboardService {
         projectId: '1',
       },
       {
-        id: '4',
+        id: 4,
         title: 'Write unit tests',
         description: 'Test database functions',
         status: 'in-progress',
@@ -196,7 +196,7 @@ export class DashboardService {
         projectId: '1',
       },
       {
-        id: '5',
+        id: 5,
         title: 'Fix login bug',
         description: 'Debug authentication issue',
         status: 'todo',
@@ -206,7 +206,7 @@ export class DashboardService {
         projectId: '2',
       },
       {
-        id: '6',
+        id: 6,
         title: 'Update documentation',
         description: 'Add API documentation',
         status: 'todo',
@@ -216,7 +216,7 @@ export class DashboardService {
         projectId: '1',
       },
       {
-        id: '7',
+        id: 7,
         title: 'Code review',
         description: 'Review pull requests',
         status: 'in-progress',
@@ -560,7 +560,7 @@ export class DashboardService {
     let inProgress = 0;
 
     projects.forEach(project => {
-      const projectTasks = tasks.filter(task => task.projectId === project.id);
+      const projectTasks = tasks.filter(task =>Number(task.projectId) === Number(project.id));
       if (projectTasks.length === 0) {
         // Project with no tasks is considered in progress
         inProgress++;

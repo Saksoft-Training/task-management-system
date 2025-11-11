@@ -3,7 +3,7 @@ import { NotificationService } from './notification';
 import { Task } from '../../../contracts/task.interface';
 
 export interface Project {
-  id: string;
+  id: number;
   name: string;
   status: string;
 }
@@ -49,7 +49,7 @@ export class NotificationGeneratorService {
           type: 'due-today',
           severity: 'warning',
           message: `"${task.title}" is due today`,
-          taskId: task.id,
+          taskId: task.id.toString(),
           taskName: task.title
         });
       } else if (taskDueDate.getTime() === tomorrow.getTime()) {
@@ -57,7 +57,7 @@ export class NotificationGeneratorService {
           type: 'due-tomorrow',
           severity: 'info',
           message: `"${task.title}" is due tomorrow`,
-          taskId: task.id,
+          taskId: task.id.toString(),
           taskName: task.title
         });
       } else if (taskDueDate.getTime() < today.getTime()) {
@@ -65,7 +65,7 @@ export class NotificationGeneratorService {
           type: 'overdue',
           severity: 'critical',
           message: `"${task.title}" is overdue`,
-          taskId: task.id,
+          taskId: task.id.toString(),
           taskName: task.title
         });
       }
@@ -77,7 +77,7 @@ export class NotificationGeneratorService {
       type: 'completed',
       severity: 'success',
       message: `Task "${task.title}" completed`,
-      taskId: task.id,
+      taskId: task.id.toString(),
       taskName: task.title
     });
   }
@@ -93,7 +93,7 @@ export class NotificationGeneratorService {
       type: 'assigned',
       severity: 'info',
       message: `New task assigned: "${task.title}"`,
-      taskId: task.id,
+      taskId: task.id.toString(),
       taskName: task.title
     });
   }
@@ -103,7 +103,7 @@ export class NotificationGeneratorService {
       type: 'project-status',
       severity: 'info',
       message: `Project "${project.name}" status changed from ${oldStatus} to ${project.status}`,
-      projectId: project.id,
+      projectId: project.id.toString(),
       projectName: project.name
     });
   }
@@ -113,7 +113,7 @@ export class NotificationGeneratorService {
       type: 'due-today',
       severity: 'info',
       message: `Due date for "${task.title}" has been updated`,
-      taskId: task.id,
+      taskId: task.id.toString(),
       taskName: task.title
     });
   }
