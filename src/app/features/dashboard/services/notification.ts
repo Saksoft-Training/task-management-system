@@ -5,6 +5,7 @@ export interface Notification {
   id: string|number;
   type: 'due-today' | 'due-tomorrow' | 'overdue' | 'completed' | 'project-status' | 'assigned';
   severity: 'info' | 'warning' | 'critical' | 'success';
+  title?: string;
   message: string;
   timestamp: Date;
   read: boolean;
@@ -17,6 +18,7 @@ export interface Notification {
 export interface CreateNotification {
   type: 'due-today' | 'due-tomorrow' | 'overdue' | 'completed' | 'project-status' | 'assigned';
   severity: 'info' | 'warning' | 'critical' | 'success';
+  title?: string;
   message: string;
   taskId?: string;
   projectId?: string;

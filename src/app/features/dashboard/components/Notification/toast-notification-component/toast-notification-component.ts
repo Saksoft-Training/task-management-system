@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationService,Notification } from '../../../services/notification';
@@ -12,6 +12,7 @@ interface ToastNotification extends Notification {
   styleUrl: './toast-notification-component.scss',
 })
 export class ToastNotificationComponent {
+  @Input() notifications: Notification[] = [];
  toasts: ToastNotification[] = [];
   private subscription = new Subscription();
 
