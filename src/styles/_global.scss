@@ -165,3 +165,298 @@
     }
   }
 }
+
+// ====== NOTIFICATION BELL STYLES ======
+.notification-bell {
+  position: relative;
+  display: inline-block;
+
+  .bell-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    position: relative;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: vars.$color-panel-hover-bg;
+    }
+
+    &.has-unread {
+      .bell-icon {
+        color: vars.$color-bell-icon-unread;
+      }
+    }
+
+    .bell-icon {
+      font-size: 20px;
+      color:  vars.$color-bell-icon;
+    }
+
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: vars.$color-badge-bg;
+      color: vars.$color-badge-text;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+  }
+
+  .notification-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: vars.$notification-width;
+    max-height: vars.$notification-max-height;
+    background: vars.$color-panel-bg;
+    border: 1px solid vars.$color-panel-border;
+    border-radius:  vars.$notification-panel-radius;
+    box-shadow: 0 4px 12px vars.$color-panel-shadow;
+    z-index: 1000;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .panel-header {
+      padding: 16px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .panel-actions {
+        display: flex;
+        gap: 8px;
+
+        .action-btn {
+          background: none;
+          border: 1px solid #ddd;
+          padding: 4px 8px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 12px;
+          color: #666;
+
+          &:hover {
+            background-color: #f8f9fa;
+          }
+
+          &.clear {
+             color: vars.$color-panel-clear-text;
+            border-color: vars.$color-panel-clear-border;
+
+            &:hover {
+              background-color: vars.$color-panel-clear-hover;
+            }
+          }
+        }
+      }
+    }
+
+    .notifications-list {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 300px;
+
+      .empty-state {
+        padding: 32px 16px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+      }
+    }
+  }
+}
+
+//notification-item-styles
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  padding: vars.$notification-item-padding-y vars.$notification-item-padding-x;
+  border-bottom: 1px solid vars.$color-notification-border;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  gap: vars.$notification-item-gap;
+
+  &:hover {
+    background-color: vars.$color-notification-hover-bg;
+  }
+
+  &.unread {
+    background-color: vars.$color-notification-unread-bg;
+    border-left: 3px solid vars.$color-notification-unread-border;
+
+    &:hover {
+      background-color: vars.$color-notification-unread-hover-bg;
+    }
+  }
+
+  &.critical {
+    border-left-color: vars.$color-notification-critical-border;
+  }
+
+  &.warning {
+    border-left-color: vars.$color-notification-warning-border;
+  }
+
+  &.success {
+    border-left-color: vars.$color-notification-success-border;
+  }
+
+  .notification-icon {
+    font-size: vars.$notification-item-icon-size;
+    flex-shrink: 0;
+  }
+
+  .notification-content {
+    flex: 1;
+    min-width: 0;
+
+    .notification-message {
+      font-size: vars.$notification-item-font-size;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      color: vars.$color-notification-text;
+    }
+
+    .notification-time {
+      font-size: vars.$notification-item-time-size;
+      color: vars.$color-notification-time;
+    }
+  }
+
+  .notification-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+
+    .action-btn {
+      background: none;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: vars.$notification-item-btn-font-size;
+      transition: background-color 0.2s, color 0.2s;
+
+      &.navigate {
+        color: vars.$color-notification-btn-navigate;
+        border: 1px solid vars.$color-notification-btn-navigate;
+
+        &:hover {
+          background-color: vars.$color-notification-btn-navigate-hover-bg;
+          color: vars.$color-notification-btn-navigate-hover-text;
+        }
+      }
+
+      &.dismiss {
+        color: vars.$color-notification-btn-dismiss;
+        border: 1px solid vars.$color-notification-btn-border;
+
+        &:hover {
+          background-color: vars.$color-notification-btn-hover-bg;
+        }
+      }
+    }
+  }
+}
+
+//--toast-notification styles
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: vars.$toast-z-index;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$toast-gap;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  min-width: vars.$toast-min-width;
+  padding: vars.$toast-padding-y vars.$toast-padding-x;
+  border-radius: vars.$toast-radius;
+  box-shadow: 0 4px 12px vars.$color-toast-shadow;
+  background: vars.$color-toast-bg;
+  border-left: 4px solid vars.$color-toast-border-default;
+  transform: translateX(vars.$toast-transform-distance);
+  opacity: 0;
+  transition: all vars.$toast-transition-duration vars.$toast-transition-timing;
+  cursor: pointer;
+
+  &.visible {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  &.critical {
+    border-left-color: vars.$color-toast-border-critical;
+  }
+
+  &.warning {
+    border-left-color: vars.$color-toast-border-warning;
+  }
+
+  &.success {
+    border-left-color: vars.$color-toast-border-success;
+  }
+
+  &.info {
+    border-left-color: vars.$color-toast-border-info;
+  }
+
+  .toast-icon {
+    margin-right: 12px;
+    font-size: vars.$toast-icon-size;
+    flex-shrink: 0;
+  }
+
+  .toast-content {
+    flex: 1;
+
+    .toast-message {
+      font-size: vars.$toast-font-size;
+      line-height: 1.4;
+      color: vars.$color-toast-text;
+    }
+  }
+
+  .toast-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: vars.$color-toast-close;
+    cursor: pointer;
+    padding: 0;
+    width: vars.$toast-close-size;
+    height: vars.$toast-close-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color vars.$toast-transition-duration vars.$toast-transition-timing;
+
+    &:hover {
+      color: vars.$color-toast-close-hover;
+    }
+  }
+}

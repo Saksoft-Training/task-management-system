@@ -65,3 +65,81 @@ $dialog-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 
 // ====== ANIMATIONS ======
 $dialog-fade-duration: 0.3s;
+
+// ====== NOTIFICATION BELL COLORS ======
+$color-bell-icon: #666;
+$color-bell-icon-unread: #007bff;
+$color-badge-bg: #dc3545;
+$color-badge-text: #ffffff;
+$color-panel-bg: #ffffff;
+$color-panel-border: #ddd;
+$color-panel-shadow: rgba(0, 0, 0, 0.15);
+$color-panel-hover-bg: #f0f0f0;
+$color-panel-clear-hover: #f8d7da;
+$color-panel-clear-border: #dc3545;
+$color-panel-clear-text: #dc3545;
+
+// ====== NOTIFICATION SIZES & SPACING ======
+$notification-width: 350px;
+$notification-max-height: 400px;
+$notification-badge-size: 16px;
+$notification-badge-font-size: 10px;
+$notification-icon-size: 20px;
+$notification-panel-radius: 8px;
+
+// ====== NOTIFICATION ITEM COLORS ======
+$color-notification-border: #f0f0f0;
+$color-notification-hover-bg: #f9f9f9;
+$color-notification-unread-bg: #f8f9fa;
+$color-notification-unread-hover-bg: #e9ecef;
+$color-notification-unread-border: #007bff;
+$color-notification-critical-border: #dc3545;
+$color-notification-warning-border: #ffc107;
+$color-notification-success-border: #28a745;
+
+$color-notification-text: #333;
+$color-notification-time: #666;
+
+$color-notification-btn-navigate: #007bff;
+$color-notification-btn-dismiss: #666;
+$color-notification-btn-border: #ddd;
+$color-notification-btn-hover-bg: #f8f9fa;
+$color-notification-btn-navigate-hover-bg: #007bff;
+$color-notification-btn-navigate-hover-text: #ffffff;
+
+// ====== NOTIFICATION ITEM SIZES ======
+$notification-item-padding-y: 12px;
+$notification-item-padding-x: 16px;
+$notification-item-gap: 12px;
+$notification-item-icon-size: 18px;
+$notification-item-font-size: 14px;
+$notification-item-time-size: 12px;
+$notification-item-btn-font-size: 12px;
+
+// ====== TOAST (SNACKBAR) COLORS ======
+$color-toast-bg: #ffffff;
+$color-toast-text: #333;
+$color-toast-border-default: #6c757d;
+$color-toast-border-critical: #dc3545;
+$color-toast-border-warning: #ffc107;
+$color-toast-border-success: #28a745;
+$color-toast-border-info: #17a2b8;
+$color-toast-shadow: rgba(0, 0, 0, 0.15);
+$color-toast-close: #666;
+$color-toast-close-hover: #333;
+
+// ====== TOAST SIZES ======
+$toast-min-width: 300px;
+$toast-padding-y: 12px;
+$toast-padding-x: 16px;
+$toast-radius: 8px;
+$toast-gap: 10px;
+$toast-icon-size: 20px;
+$toast-close-size: 24px;
+$toast-font-size: 14px;
+$toast-z-index: 1050;
+
+// ====== TOAST ANIMATIONS ======
+$toast-transform-distance: 400px;
+$toast-transition-duration: 0.3s;
+$toast-transition-timing: ease;
