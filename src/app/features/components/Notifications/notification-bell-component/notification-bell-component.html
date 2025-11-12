@@ -1,11 +1,10 @@
-<p>notification-bell-component works!</p>
 <div class="notification-bell">
   <button 
     class="bell-button" 
     (click)="togglePanel()"
     [class.has-unread]="unreadCount > 0"
   >
-    <i class="bell-icon">🔔</i>
+    <i class="bell-icon"><img src="assets/icons/Bell-Icon.svg" alt="Notification"></i>
     <span *ngIf="unreadCount > 0" class="badge">{{ unreadCount }}</span>
   </button>
 

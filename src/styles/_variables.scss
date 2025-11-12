@@ -66,6 +66,37 @@ $dialog-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 // ====== ANIMATIONS ======
 $dialog-fade-duration: 0.3s;
 
+// ====== DASHBOARD NOTIFICATIONS COLORS ======
+$color-white: #ffffff;
+$color-gray-light: #f0f0f0;
+$color-gray-dark: #333333;
+$color-gray-medium: #666666;
+$color-gray-muted: #999999;
+
+$color-critical-bg: #ffebee;
+$color-critical-text: #d32f2f;
+$color-critical-border: #f5c6cb;
+
+$color-warning-bg: #fff3e0;
+$color-warning-text: #f57c00;
+$color-warning-border: #ffcc02;
+
+// ====== DASHBOARD NOTIFICATIONS SIZES ======
+$border-radius-large: 12px;
+$spacing-lg: 24px;
+$spacing-md: 16px;
+$spacing-sm: 8px;
+
+$notification-height: 600px;
+$notification-width: 100%;
+
+// ====== DASHBOARD NOTIFICATIONS TYPOGRAPHY ======
+$font-family-main: 'Inter', sans-serif;
+
+// ====== DASHBOARD NOTIFICATIONS SHADOWS ======
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+$item-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
 // ====== NOTIFICATION BELL COLORS ======
 $color-bell-icon: #666;
 $color-bell-icon-unread: #007bff;
@@ -143,3 +174,37 @@ $toast-z-index: 1050;
 $toast-transform-distance: 400px;
 $toast-transition-duration: 0.3s;
 $toast-transition-timing: ease;
+
+//=======dashboard-notifications-component======
+$color-white: #ffffff;
+$color-black: #000000;
+$color-gray-light: #e0e0e0;
+$color-gray-medium: #888;
+$color-gray-dark: #333;
+$color-gray-muted: #aaa;
+
+// ⚠️ Status Colors
+$color-critical-bg: #ffebee;
+$color-critical-text: #d32f2f;
+$color-critical-border: #ffcdd2;
+
+$color-warning-bg: #fff8e1;
+$color-warning-text: #f57c00;
+$color-warning-border: #ffe0b2;
+
+// 🧱 Layout + Shadows
+$border-radius-large: 16px;
+$card-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+$item-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+// ✍️ Typography
+$font-family-main: 'Inter', sans-serif;
+
+// 📏 Spacing
+$spacing-sm: 10px;
+$spacing-md: 15px;
+$spacing-lg: 20px;
+
+// 📐 Sizing
+$notification-width: 380px;
+$notification-height: 259px;

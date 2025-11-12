@@ -9,12 +9,12 @@
     <div class="toast-header">
       <span class="toast-icon">
   <ng-container [ngSwitch]="toast.type">
-    <span *ngSwitchCase="'due-today'"><img src="assets/icons/Icon3.svg"></span>
-    <span *ngSwitchCase="'due-tomorrow'"><img src="assets/icons/Icon (1).svg"></span>
-    <span *ngSwitchCase="'overdue'"><img src="assets/icons/Icon (2).svg"></span>
-    <span *ngSwitchCase="'completed'"><img src="assets/icons/Icon3.svg"></span>
-    <span *ngSwitchCase="'project-status'"><img src="assets/icons/Icon (2).svg"></span>
-    <span *ngSwitchCase="'assigned'"><img src="assets/icons/Icon (1).svg"></span>
+    <span *ngSwitchCase="'due-today'"><img src="assets/icons/Icon3.svg" alt="due-today"></span>
+    <span *ngSwitchCase="'due-tomorrow'"><img src="assets/icons/Icon (1).svg" alt="due-tomorrow"></span>
+    <span *ngSwitchCase="'overdue'"><img src="assets/icons/Icon (2).svg" alt="overdue"></span>
+    <span *ngSwitchCase="'completed'"><img src="assets/icons/Icon3.svg" alt="completed"></span>
+    <span *ngSwitchCase="'project-status'"><img src="assets/icons/Icon (2).svg" alt="project-status"></span>
+    <span *ngSwitchCase="'assigned'"><img src="assets/icons/Icon (1).svg" alt="assigned"></span>
     <img *ngSwitchDefault src="assets/icons/Icon.svg" alt="Notification Bell" class="bell-icon" />
   </ng-container>
 </span>

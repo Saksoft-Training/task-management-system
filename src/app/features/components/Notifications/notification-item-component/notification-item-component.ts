@@ -15,9 +15,9 @@ export class NotificationItemComponent {
 
   get icon(): string {
     const icons = {
-      'due-today': '⏰',
-      'due-tomorrow': '📅',
-      'overdue': '🚨',
+      'due-today': '<img src="assets/icons/Icon3.svg" alt="⏰">',
+      'due-tomorrow': '<img src="assets/icons/Icon (1).svg" alt="📅">',
+      'overdue': '<img src="assets/icons/Icon (2).svg" alt="🚨">',
       'completed': '✅',
       'project-status': '📊',
       'assigned': '👤'

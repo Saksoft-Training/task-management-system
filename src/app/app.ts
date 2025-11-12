@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { injectSpeedInsights } from '@vercel/speed-insights';
+
 import { FooterComponent } from './shared/components/footer-component/footer-component';
 
 @Component({
@@ -12,6 +12,6 @@ import { FooterComponent } from './shared/components/footer-component/footer-com
 export class App {
   protected readonly title = signal('task-project-management');
   constructor() {
-    injectSpeedInsights();
+    
   }
 }

@@ -193,6 +193,10 @@
     .bell-icon {
       font-size: 20px;
       color:  vars.$color-bell-icon;
+       img {
+          width: 16px;
+          height: 16px;
+          }
     }
 
     .badge {
@@ -458,5 +462,98 @@
     &:hover {
       color: vars.$color-toast-close-hover;
     }
+  }
+}
+
+//====dashboard-notifications-component styles=====
+.dashboard-notifications {
+  background: vars.$color-white;
+  border-radius: vars.$border-radius-large;
+  padding: vars.$spacing-lg;
+  box-shadow: vars.$card-shadow;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-md;
+  height: vars.$notification-height;
+  width: vars.$notification-width;
+  font-family: vars.$font-family-main;
+
+  .widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid vars.$color-gray-light;
+    padding-bottom: vars.$spacing-sm;
+
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: vars.$color-gray-dark;
+      margin: 0;
+    }
+
+    .notification-stats {
+      display: flex;
+      gap: 12px;
+
+      .stat {
+        font-size: 0.9rem;
+        font-weight: 500;
+        padding: 4px 10px;
+        border-radius: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        &.critical {
+          background-color: vars.$color-critical-bg;
+          color: vars.$color-critical-text;
+          border: 1px solid vars.$color-critical-border;
+        }
+
+        &.warning {
+          background-color: vars.$color-warning-bg;
+          color: vars.$color-warning-text;
+          border: 1px solid vars.$color-warning-border;
+        }
+      }
+    }
+  }
+
+  .notifications-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacing-sm;
+    padding-top: vars.$spacing-sm;
+
+    .empty-state {
+      text-align: center;
+      color: vars.$color-gray-medium;
+      margin-top: 40px;
+
+      img {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 10px;
+        filter: brightness(0) invert(0.7);
+      }
+
+      p {
+        font-size: 0.9rem;
+        color: vars.$color-gray-muted;
+        margin-top: 5px;
+      }
+    }
+  }
+}
+
+// Optional: subtle hover for child notification items
+app-notification-item-component {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: vars.$item-hover-shadow;
   }
 }
