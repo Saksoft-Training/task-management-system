@@ -1,0 +1,32 @@
+<p>notification-item-component works!</p>
+<div
+  class="notification-item"
+  [class.unread]="!notification.read"
+  [class.critical]="notification.severity === 'critical'"
+  [class.warning]="notification.severity === 'warning'"
+  [class.success]="notification.severity === 'success'"
+  (click)="markAsRead()"
+>
+  <div class="notification-icon">{{ icon }}</div>
+  
+  <div class="notification-content">
+    <div class="notification-message">{{ notification.message }}</div>
+    <div class="notification-time">{{ timeAgo }}</div>
+  </div>
+
+  <div class="notification-actions">
+    <button 
+      *ngIf="notification.taskId || notification.projectId"
+      (click)="onNavigate(); $event.stopPropagation()"
+      class="action-btn navigate"
+    >
+      View
+    </button>
+    <button 
+      (click)="onDismiss(); $event.stopPropagation()"
+      class="action-btn dismiss"
+    >
+      ×
+    </button>
+  </div>
+</div>

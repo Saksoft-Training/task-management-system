@@ -1,0 +1,32 @@
+<p>toast-notification-component works!</p>
+<div class="toast-container">
+  <div
+    *ngFor="let toast of toasts"
+    class="toast"
+    [class.visible]="toast.visible"
+    [class.hidden]="!toast.visible"
+  >
+    <div class="toast-header">
+      <span class="toast-icon">
+  <ng-container [ngSwitch]="toast.type">
+    <span *ngSwitchCase="'due-today'"><img src="assets//icons//Icon (2).svg"></span>
+    <span *ngSwitchCase="'due-tomorrow'"><img src="assets//icons//Icon (1).svg"></span>
+    <span *ngSwitchCase="'overdue'"><img src="assets//icons//Icon (2).svg"></span>
+    <span *ngSwitchCase="'completed'"><img src="assets//icons//Icon3.svg"></span>
+    <span *ngSwitchCase="'project-status'"><img src="assets//icons//Icon (2).svg"></span>
+    <span *ngSwitchCase="'assigned'"><img src="assets//icons//Icon (1).svg"></span>
+    <img *ngSwitchDefault src="assets//icons//Icon.svg" alt="Notification Bell" class="bell-icon" />
+  </ng-container>
+</span>
+      <strong class="toast-title">{{ toast.title || 'Notification' }}</strong>
+      <button class="toast-close" (click)="dismissToast(toast)">✕</button>
+    </div>
+
+    <div class="toast-body">
+      <p>{{ toast.message }}</p>
+      <small class="toast-time">
+        {{ toast.timestamp | date:'shortTime' }}
+      </small>
+    </div>
+  </div>
+</div>
