@@ -1,4 +1,4 @@
-@use 'variables';
-@use 'mixins';
-@use 'global';
-@use 'responsive';
+@use './variables' as vars;
+@use './mixins';
+@use './responsive';
+@use './global';

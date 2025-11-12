@@ -1,3 +1,4 @@
+@use './variables' as vars;
 // ====== FLEX HELPERS ======
 @mixin flex($justify: center, $align: center, $direction: row) {
   display: flex;
@@ -22,7 +23,7 @@
 
 // ====== FONT HELPERS ======
 @mixin font-primary($size: 14px, $weight: normal) {
-  font-family: $font-family-primary;
+  font-family: vars.$font-family-primary;
   font-size: $size;
   font-weight: $weight;
 }
