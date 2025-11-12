@@ -1,0 +1,15 @@
+@if (visible) {
+<div class="error-message-container">
+    <div class="icon">
+        <span class="material-icons">error</span>
+    </div>
+
+    <div class="message">{{ message }}</div>
+
+    @if (dismissible) {
+    <button class="close-btn" (click)="close()">
+        <span class="material-icons">close</span>
+    </button>
+    }
+</div>
+}
