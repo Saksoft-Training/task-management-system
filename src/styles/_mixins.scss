@@ -1,0 +1,54 @@
+// ====== FLEX HELPERS ======
+@mixin flex($justify: center, $align: center, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin flex-between {
+  @include flex(space-between, center);
+}
+
+// ====== POSITION HELPERS ======
+@mixin fixed-bottom($z-index: 1000) {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: $z-index;
+  box-sizing: border-box;
+}
+
+// ====== FONT HELPERS ======
+@mixin font-primary($size: 14px, $weight: normal) {
+  font-family: $font-family-primary;
+  font-size: $size;
+  font-weight: $weight;
+}
+
+// ====== EFFECTS ======
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
+}
+
+@mixin transition($props: all, $duration: 0.2s, $ease: ease) {
+  transition: $props $duration $ease;
+}
+
+// ====== ANIMATION ======
+@mixin fade-in($duration: 0.3s) {
+  animation: fadeIn $duration ease;
+}
+
+// ====== KEYFRAMES ======
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

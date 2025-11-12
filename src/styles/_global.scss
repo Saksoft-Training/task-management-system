@@ -1,0 +1,168 @@
+@import 'variables';
+@import 'mixins';
+@import 'responsive';
+
+// ====== FOOTER STYLES ======
+.footer {
+  @include fixed-bottom;
+  border-top: 1px solid $color-border;
+  background-color: $color-bg-footer;
+  color: $color-text-footer;
+  font-size: $font-size-footer;
+  font-weight: $font-weight-footer;
+  padding: $padding-footer-top $padding-footer-sides $padding-footer-bottom;
+  @include flex-between;
+
+  &-left,
+  &-right {
+    flex-shrink: 0;
+  }
+}
+
+// ERROR MESSAGE STYLES
+
+.error-message-container {
+  @include flex(flex-start, center);
+  background-color: $color-error-bg;
+  color: $color-error-text;
+  border: 1px solid $color-error-border;
+  padding: $error-padding-y $error-padding-x;
+  border-radius: $error-border-radius;
+  @include font-primary($font-size-error);
+  @include box-shadow($error-shadow);
+  position: relative;
+  margin: $error-margin-y 0;
+
+  .icon {
+    margin-right: 10px;
+    font-size: $error-icon-size;
+  }
+
+  .message {
+    flex-grow: 1;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: $color-error-text;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    @include transition(color, 0.2s);
+
+    &:hover {
+      color: $color-error-hover;
+    }
+  }
+}
+
+// DIALOG COMPONENT STYLES
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $color-overlay-bg;
+  @include flex();
+  z-index: $dialog-overlay-z;
+}
+
+.dialog-box {
+  background: $color-dialog-bg;
+  border-radius: $dialog-radius;
+  width: $dialog-width;
+  max-width: $dialog-max-width;
+  @include box-shadow($dialog-shadow);
+  overflow: hidden;
+  @include fade-in($dialog-fade-duration);
+
+  .dialog-header {
+    @include flex-between;
+    padding: $dialog-padding-header;
+    border-bottom: 1px solid $color-dialog-border;
+    background-color: $color-dialog-header-bg;
+
+    h3 {
+      margin: 0;
+      @include font-primary($font-size-title, $font-weight-title);
+      color: $color-text-primary;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      @include flex();
+      @include transition(transform, 0.2s);
+
+      img {
+        width: 18px;
+        height: 18px;
+        filter: brightness(0) saturate(100%) invert(14%) sepia(89%)
+          saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+      }
+
+      &:hover {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .dialog-body {
+    padding: $dialog-padding-body;
+
+    p {
+      font-size: $font-size-body;
+      color: $color-text-secondary;
+      line-height: 1.4;
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $dialog-gap-actions;
+    padding: $dialog-padding-actions;
+    border-top: 1px solid $color-dialog-border;
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-size: $font-size-button;
+      cursor: pointer;
+      @include transition(background-color);
+
+      &.cancel {
+        background-color: $color-btn-cancel-bg;
+        color: $color-btn-cancel-text;
+
+        &:hover {
+          background-color: $color-btn-cancel-hover;
+        }
+      }
+
+      &.confirm {
+        background-color: $color-btn-confirm-bg;
+        color: $color-btn-confirm-text;
+
+        &:hover {
+          background-color: $color-btn-confirm-hover;
+        }
+
+        &.danger {
+          background-color: $color-btn-danger-bg;
+
+          &:hover {
+            background-color: $color-btn-danger-hover;
+          }
+        }
+      }
+    }
+  }
+}

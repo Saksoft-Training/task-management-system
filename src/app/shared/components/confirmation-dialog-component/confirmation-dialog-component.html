@@ -1,0 +1,19 @@
+<div class="dialog-overlay">
+    <div class="dialog-box" [ngClass]="type">
+        <div class="dialog-header">
+            <h3>{{ title }}</h3>
+            <button class="close-btn" (click)="onCancel()">
+                <img src="assets/icons/close-icon.svg" alt="Close" />
+            </button>
+        </div>
+
+        <div class="dialog-body">
+            <p>{{ message }}</p>
+        </div>
+
+        <div class="dialog-actions">
+            <button class="btn cancel" (click)="onCancel()">{{ cancelText }}</button>
+            <button class="btn confirm" [ngClass]="type" (click)="onConfirm()">{{ confirmText }}</button>
+        </div>
+    </div>
+</div>
