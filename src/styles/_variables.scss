@@ -1,0 +1,67 @@
+// ====== COLOR VARIABLES ======
+$color-border: #f1f1f1;
+$color-bg-footer: #ffffff;
+$color-text-footer: #4d5b2a;
+
+$color-error-bg: #fdecea;
+$color-error-text: #b71c1c;
+$color-error-border: #f5c6cb;
+$color-error-hover: #7f0000;
+
+$color-dialog-bg: #ffffff;
+$color-dialog-header-bg: #fafafa;
+$color-dialog-border: #f0f0f0;
+$color-overlay-bg: rgba(0, 0, 0, 0.4);
+$color-text-primary: #333;
+$color-text-secondary: #444;
+
+// Button colors
+$color-btn-cancel-bg: #f1f1f1;
+$color-btn-cancel-hover: #e0e0e0;
+$color-btn-cancel-text: #333;
+
+$color-btn-confirm-bg: #1a73e8;
+$color-btn-confirm-hover: #1765c1;
+$color-btn-confirm-text: #ffffff;
+
+$color-btn-danger-bg: #d32f2f;
+$color-btn-danger-hover: #b71c1c;
+
+// ====== TYPOGRAPHY ======
+$font-family-primary: 'Inter', sans-serif;
+$font-size-footer: 13px;
+$font-weight-footer: 600;
+$font-size-error: 14px;
+$font-size-title: 18px;
+$font-weight-title: 600;
+$font-size-body: 15px;
+$font-size-button: 14px;
+
+// ====== SPACING ======
+$padding-footer-top: 40px;
+$padding-footer-sides: 20px;
+$padding-footer-bottom: 20px;
+
+$error-padding-y: 12px;
+$error-padding-x: 16px;
+$error-border-radius: 6px;
+$error-margin-y: 1rem;
+
+$dialog-padding-header: 16px 20px;
+$dialog-padding-body: 20px;
+$dialog-padding-actions: 12px 20px;
+$dialog-gap-actions: 10px;
+
+// ====== SIZES ======
+$error-icon-size: 20px;
+$dialog-width: 400px;
+$dialog-max-width: 90%;
+$dialog-radius: 8px;
+$dialog-overlay-z: 2000;
+
+// ====== SHADOWS ======
+$error-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+$dialog-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+// ====== ANIMATIONS ======
+$dialog-fade-duration: 0.3s;
