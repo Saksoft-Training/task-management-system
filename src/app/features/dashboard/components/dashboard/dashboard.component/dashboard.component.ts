@@ -11,7 +11,7 @@ import { ProjectCompletionChartComponent } from '../../chart/project-completion-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, TaskCompletionChartComponent, ProjectCompletionChartComponent, TaskTrendChartComponent,PriorityDistributionChartComponent,OverdueTasksAlertComponent],
+  imports: [CommonModule, TaskCompletionChartComponent, ProjectCompletionChartComponent, TaskTrendChartComponent,PriorityDistributionChartComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
