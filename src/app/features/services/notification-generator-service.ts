@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Task } from '../../contracts/task.interface';
+import { Task } from '../../../types/models/task.interface';
 import { NotificationService } from './notification-service';
 
 export interface Project {
