@@ -59,6 +59,14 @@ $dialog-max-width: 90%;
 $dialog-radius: 8px;
 $dialog-overlay-z: 2000;
 
+$border-radius-large: 12px;
+$spacing-lg: 24px;
+$spacing-md: 16px;
+$spacing-sm: 8px;
+
+$notification-height: 600px;
+$notification-width: 100%;
+
 // ====== SHADOWS ======
 $error-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 $dialog-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
@@ -146,6 +154,20 @@ $notification-item-icon-size: 18px;
 $notification-item-font-size: 14px;
 $notification-item-time-size: 12px;
 $notification-item-btn-font-size: 12px;
+$notification-item-component-height: 400px;
+$notification-item-component-width:382px;
+
+//====notification image size=====
+ $notification-img-height:16px;
+  $notification-img-width:16px;
+
+  //====notification message size==
+  $notification-message-width:254px;
+$notification-message-height:48px;
+
+//===notification content height===
+$notification-content-height:136px;
+$notification-content-width:366px;
 
 // ====== TOAST (SNACKBAR) COLORS ======
 $color-toast-bg: #ffffff;
@@ -208,3 +230,6 @@ $spacing-lg: 20px;
 // 📐 Sizing
 $notification-width: 380px;
 $notification-height: 259px;
+
+// align items center
+$notification-item-center:center;

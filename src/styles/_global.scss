@@ -1,3 +1,4 @@
+@use './variables' as *;
 @use './variables' as vars;
 @use './mixins';
 
@@ -210,8 +211,8 @@
       height: 16px;
       font-size: 10px;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: $notification-item-center;
+      justify-content:  $notification-item-center;
       font-weight: bold;
     }
   }
@@ -236,7 +237,7 @@
       border-bottom: 1px solid #eee;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items:  $notification-item-center;;
 
       h3 {
         margin: 0;
@@ -298,6 +299,8 @@
   cursor: pointer;
   transition: background-color 0.2s;
   gap: vars.$notification-item-gap;
+  height:$notification-item-component-height;
+  width: $notification-item-component-width;
 
   &:hover {
     background-color: vars.$color-notification-hover-bg;
@@ -332,12 +335,18 @@
   .notification-content {
     flex: 1;
     min-width: 0;
+    height:$notification-content-height;
+    width:$notification-content-width;
+    align-items:  $notification-item-center;
 
     .notification-message {
       font-size: vars.$notification-item-font-size;
       line-height: 1.4;
       margin-bottom: 4px;
       color: vars.$color-notification-text;
+      height:$notification-message-height;
+      width:$notification-message-width;
+      align-items:  $notification-item-center;
     }
 
     .notification-time {
@@ -359,6 +368,8 @@
       cursor: pointer;
       font-size: vars.$notification-item-btn-font-size;
       transition: background-color 0.2s, color 0.2s;
+      
+     
 
       &.navigate {
         color: vars.$color-notification-btn-navigate;
@@ -373,7 +384,12 @@
       &.dismiss {
         color: vars.$color-notification-btn-dismiss;
         border: 1px solid vars.$color-notification-btn-border;
-
+          .notification-img {
+        height: $notification-img-height;
+        width:  $notification-img-width;
+        object-fit: contain;
+        pointer-events: none;  
+      }
         &:hover {
           background-color: vars.$color-notification-btn-hover-bg;
         }
@@ -396,7 +412,7 @@
 
 .toast {
   display: flex;
-  align-items: center;
+  align-items:  $notification-item-center;;
   min-width: vars.$toast-min-width;
   padding: vars.$toast-padding-y vars.$toast-padding-x;
   border-radius: vars.$toast-radius;
@@ -455,8 +471,8 @@
     width: vars.$toast-close-size;
     height: vars.$toast-close-size;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items:  $notification-item-center;
+    justify-content:  $notification-item-center;
     transition: color vars.$toast-transition-duration vars.$toast-transition-timing;
 
     &:hover {
@@ -477,6 +493,7 @@
   height: vars.$notification-height;
   width: vars.$notification-width;
   font-family: vars.$font-family-main;
+  align-items:  $notification-item-center;
 
   .widget-header {
     display: flex;
@@ -502,8 +519,8 @@
         padding: 4px 10px;
         border-radius: 20px;
         display: inline-flex;
-        align-items: center;
-        justify-content: center;
+        align-items:  $notification-item-center;
+        justify-content:  $notification-item-center;
 
         &.critical {
           background-color: vars.$color-critical-bg;
@@ -528,7 +545,7 @@
     padding-top: vars.$spacing-sm;
 
     .empty-state {
-      text-align: center;
+      text-align: $notification-item-center;
       color: vars.$color-gray-medium;
       margin-top: 40px;
 

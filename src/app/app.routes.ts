@@ -3,9 +3,4 @@ import { DashboardNotificationsComponent } from './features/components/Notificat
 
 export const routes: Routes = [
 
-{
-    path:'dashboard',
-    component:DashboardNotificationsComponent,
-}
-
 ];
