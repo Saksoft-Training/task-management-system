@@ -2,12 +2,10 @@
 $color-border: #f1f1f1;
 $color-bg-footer: #ffffff;
 $color-text-footer: #4d5b2a;
-
 $color-error-bg: #fdecea;
 $color-error-text: #b71c1c;
 $color-error-border: #f5c6cb;
 $color-error-hover: #7f0000;
-
 $color-dialog-bg: #ffffff;
 $color-dialog-header-bg: #fafafa;
 $color-dialog-border: #f0f0f0;
@@ -15,7 +13,59 @@ $color-overlay-bg: rgba(0, 0, 0, 0.4);
 $color-text-primary: #333;
 $color-text-secondary: #444;
 
-// Button colors
+// Base
+$color-white: #ffffff;
+$color-black: #000000;
+
+// Footer
+$color-bg-footer: #ffffff;
+$color-text-footer: #4d5b2a;
+
+// Neutral / Grayscale
+$color-gray-50: #fafafa;
+$color-gray-100: #f1f1f1; 
+$color-gray-200: #e5e7eb;
+$color-gray-300: #e9e9e9;
+$color-gray-400: #f3f3f5;
+$color-gray-500: #717182;
+$color-gray-600: #6b7280;
+$color-gray-700: #444;
+$color-gray-800: #333;
+
+// Border color 
+$color-border: $color-gray-100;
+
+// Typography colors
+$color-text-primary: #333;
+$color-text-secondary: #444;
+
+// Primary Brand
+$color-primary: #485c11;
+
+// Error States
+$color-error-bg: #fdecea;
+$color-error-text: #b71c1c;
+$color-error-border: #f5c6cb;
+$color-error-hover: #7f0000;
+
+// Success States
+$color-success-bg: #ecfdf5;
+$color-success-text: #065f46;
+$color-success-border: #6ee7b7;
+
+// Password Strength Colors
+$color-weak: #d4183d;
+$color-medium: #f97316;
+$color-strong: #65a30d;
+$color-very-strong: #059669;
+
+// Dialog Colors
+$color-dialog-bg: #ffffff;
+$color-dialog-header-bg: #fafafa;
+$color-dialog-border: #f0f0f0;
+$color-overlay-bg: rgba(0, 0, 0, 0.4);
+
+// Button Colors
 $color-btn-cancel-bg: #f1f1f1;
 $color-btn-cancel-hover: #e0e0e0;
 $color-btn-cancel-text: #333;
@@ -27,41 +77,66 @@ $color-btn-confirm-text: #ffffff;
 $color-btn-danger-bg: #d32f2f;
 $color-btn-danger-hover: #b71c1c;
 
-// ====== TYPOGRAPHY ======
+// =========================================
+// TYPOGRAPHY 
+// =========================================
+
 $font-family-primary: 'Inter', sans-serif;
-$font-size-footer: 13px;
+
+$font-size-footer: 0.8125rem; 
 $font-weight-footer: 600;
-$font-size-error: 14px;
-$font-size-title: 18px;
+
+$font-size-error: 0.875rem; 
+$font-size-title: 1.125rem; 
 $font-weight-title: 600;
-$font-size-body: 15px;
-$font-size-button: 14px;
 
-// ====== SPACING ======
-$padding-footer-top: 40px;
-$padding-footer-sides: 20px;
-$padding-footer-bottom: 20px;
+$font-size-body: 0.9375rem; 
+$font-size-button: 0.875rem; 
+// =========================================
+// SPACING 
+// =========================================
 
-$error-padding-y: 12px;
-$error-padding-x: 16px;
-$error-border-radius: 6px;
+// Footer
+$padding-footer-top: 2.5rem;      
+$padding-footer-sides: 1.25rem;   
+$padding-footer-bottom: 1.25rem; 
+
+// Error Message Block
+$error-padding-y: 0.75rem;        
+$error-padding-x: 1rem;          
+$error-border-radius: 0.375rem;   
 $error-margin-y: 1rem;
 
-$dialog-padding-header: 16px 20px;
-$dialog-padding-body: 20px;
-$dialog-padding-actions: 12px 20px;
-$dialog-gap-actions: 10px;
+// Dialog Spacing
+$dialog-padding-header: 1rem 1.25rem; 
+$dialog-padding-body: 1.25rem;       
+$dialog-padding-actions: 0.75rem 1.25rem; 
+$dialog-gap-actions: 0.625rem;       
 
-// ====== SIZES ======
-$error-icon-size: 20px;
-$dialog-width: 400px;
+// =========================================
+// SIZES 
+// =========================================
+
+$error-icon-size: 1.25rem; 
+
+$dialog-width: 25rem; 
 $dialog-max-width: 90%;
-$dialog-radius: 8px;
+$dialog-radius: 0.5rem; 
+
 $dialog-overlay-z: 2000;
 
-// ====== SHADOWS ======
-$error-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-$dialog-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+// =========================================
+// SHADOWS 
+// =========================================
 
-// ====== ANIMATIONS ======
+// 0 2px 6px rgba...
+$error-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05);
+
+// 0 4px 20px rgba...
+$dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
+
+// =========================================
+// ANIMATIONS
+// =========================================
+
 $dialog-fade-duration: 0.3s;
