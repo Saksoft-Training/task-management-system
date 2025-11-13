@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NotificationBellComponent } from './notification-bell-component';
+import { NotificationBellComponent } from './notification-bell.component';
 
 describe('NotificationBellComponent', () => {
   let component: NotificationBellComponent;

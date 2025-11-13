@@ -1,7 +1,7 @@
 import { Component, HostListener, Input } from '@angular/core';
 import { NotificationService,Notification } from '../../../services/notification-service';
 import { CommonModule } from '@angular/common';
-import { NotificationItemComponent } from '../notification-item-component/notification-item-component';
+import { NotificationItemComponent } from '../notification-item.component/notification-item-component';
 
 @Component({
   selector: 'app-notification-bell-component',
