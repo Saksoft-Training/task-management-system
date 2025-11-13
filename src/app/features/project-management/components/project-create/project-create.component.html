@@ -1,0 +1,103 @@
+<div class="project-create-page">
+    <div class="breadcrumb">
+        <span class="breadcrumb-link" (click)="goToProjects()">Projects</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">Create New Project</span>
+    </div>
+    <h1 class="page-title">
+        Create Project
+    </h1>
+
+    <p class="page-subtitle">Create your projects</p>
+
+    <div class="project-form-container">
+        <p class="form-title">Set up a new project to organize your tasks</p>
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="formProject">
+            <div class="field-group">
+                <label class="field-label required">Project Name</label>
+                <input type="text" formControlName="name" class="field-input" autofocus />
+                @if (projectForm.get('name')?.touched && projectForm.get('name')?.invalid) {
+                <div class="error">
+                    @if (projectForm.get('name')?.hasError('required')) {
+                    <small>Name is required.</small>
+                    }
+                    @if (projectForm.get('name')?.hasError('minlength')) {
+                    <small>Minimum 3 characters.</small>
+                    }
+                    @if (projectForm.get('name')?.hasError('maxlength')) {
+                    <small>Maximum 100 characters.</small>
+                    }
+                </div>
+                }
+            </div>
+
+            <div class="field-group">
+                <label class="field-label required">Status</label>
+
+                <select class="field-select" formControlName="status">
+                    <option value="" disabled selected>Select status</option>
+
+                    @for (status of statuses; track status) {
+                    <option [value]="status" class="status-options">{{ status }}</option>
+                    }
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label required">Start Date</label>
+                <input type="date" formControlName="startDate" [min]="minDate" class="field-input" />
+                @if (projectForm.get('startDate')?.hasError('pastDate')) {
+                <div class="error">
+                    <small>Start date cannot be in the past.</small>
+                </div>
+                }
+            </div>
+
+            <div class="field-group">
+                <label class="field-label required">End Date</label>
+                <input type="date" formControlName="endDate" [min]="minEndDate" class="field-input" />
+                @if (projectForm.errors?.['endBeforeStart']) {
+                <div class="error">
+                    <small>End date must be after start date.</small>
+                </div>
+                }
+            </div>
+
+            <div class="field-group description-group">
+
+                <div class="description-header">
+                    <label class="field-label">Description</label>
+                    <span class="char-counter">
+                        {{ projectForm.get('description')?.value?.length || 0 }}/500
+                    </span>
+                </div>
+
+                <textarea formControlName="description" class="project-description" maxlength="500"
+                    placeholder="Enter Project Description (Optional)"> </textarea>
+
+                @if (projectForm.get('description')?.hasError('maxlength')) {
+                <div class="error">
+                    <small>Maximum 500 characters allowed.</small>
+                </div>
+                }
+            </div>
+
+
+
+            <div class="buttons">
+                <button type="submit" [disabled]="projectForm.invalid" class="btn btn-submit">
+                    Create Project
+                </button>
+                <button type="button" (click)="onReset()" class="btn btn-secondary">Reset</button>
+                <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancel</button>
+            </div>
+
+
+        </form>
+    </div>
+
+    @if (successMessage) {
+    <div class="success">{{ successMessage }}</div>
+    }
+</div>
+<app-footer-component></app-footer-component>

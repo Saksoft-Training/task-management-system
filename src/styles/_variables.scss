@@ -1,4 +1,4 @@
-// ====== COLOR VARIABLES ======
+// ====== COLORS ======
 $color-border: #f1f1f1;
 $color-bg-footer: #ffffff;
 $color-text-footer: #4d5b2a;
@@ -11,11 +11,19 @@ $color-error-hover: #7f0000;
 $color-dialog-bg: #ffffff;
 $color-dialog-header-bg: #fafafa;
 $color-dialog-border: #f0f0f0;
+
 $color-overlay-bg: rgba(0, 0, 0, 0.4);
+
 $color-text-primary: #333;
 $color-text-secondary: #444;
 
-// Button colors
+$color-breadcrumb: #485C11;
+$color-title: #000000;
+$color-subtitle: #6F6F6F;
+$input-background: #F3F3F5;
+$color-primary-hover: #3b421a;
+
+// Buttons
 $color-btn-cancel-bg: #f1f1f1;
 $color-btn-cancel-hover: #e0e0e0;
 $color-btn-cancel-text: #333;
@@ -28,14 +36,20 @@ $color-btn-danger-bg: #d32f2f;
 $color-btn-danger-hover: #b71c1c;
 
 // ====== TYPOGRAPHY ======
-$font-family-primary: 'Inter', sans-serif;
+$font-family-primary: 'Inter';
 $font-size-footer: 13px;
 $font-weight-footer: 600;
+
 $font-size-error: 14px;
 $font-size-title: 18px;
 $font-weight-title: 600;
+
 $font-size-body: 15px;
 $font-size-button: 14px;
+
+$font-size-breadcrumb: 14px;
+$font-size-subtitle: 15px;
+$font-size-page-title: 60px;
 
 // ====== SPACING ======
 $padding-footer-top: 40px;
@@ -52,9 +66,12 @@ $dialog-padding-body: 20px;
 $dialog-padding-actions: 12px 20px;
 $dialog-gap-actions: 10px;
 
+$padding-primary: 2.5rem;
+
 // ====== SIZES ======
-$error-icon-size: 20px;
-$dialog-width: 400px;
+$error-icon-size: 1.25rem;
+
+$dialog-width: 25rem;
 $dialog-max-width: 90%;
 $dialog-radius: 8px;
 $dialog-overlay-z: 2000;

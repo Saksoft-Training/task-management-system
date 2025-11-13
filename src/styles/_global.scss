@@ -1,16 +1,17 @@
 @use './variables' as vars;
 @use './mixins';
 
-// ====== FOOTER STYLES ======
+// ====================== FOOTER ======================
 .footer {
   @include mixins.fixed-bottom;
+  @include mixins.flex-between;
+
   border-top: 1px solid vars.$color-border;
   background-color: vars.$color-bg-footer;
   color: vars.$color-text-footer;
   font-size: vars.$font-size-footer;
   font-weight: vars.$font-weight-footer;
   padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-bottom;
-  @include mixins.flex-between;
 
   &-left,
   &-right {
@@ -18,19 +19,20 @@
   }
 }
 
-// ERROR MESSAGE STYLES
-
+// ====================== ERROR MESSAGE ======================
 .error-message-container {
   @include mixins.flex(flex-start, center);
+  @include mixins.font-primary(vars.$font-size-error);
+  @include mixins.box-shadow(vars.$error-shadow);
+
   background-color: vars.$color-error-bg;
   color: vars.$color-error-text;
   border: 1px solid vars.$color-error-border;
+
   padding: vars.$error-padding-y vars.$error-padding-x;
   border-radius: vars.$error-border-radius;
-  @include mixins.font-primary(vars.$font-size-error);
-  @include mixins.box-shadow(vars.$error-shadow);
-  position: relative;
   margin: vars.$error-margin-y 0;
+  position: relative;
 
   .icon {
     margin-right: 10px;
@@ -44,11 +46,12 @@
   .close-btn {
     background: none;
     border: none;
-    color: vars.$color-error-text;
     cursor: pointer;
     font-size: 18px;
     margin-left: 10px;
-    @include mixins.transition(color, 0.2s);
+    color: vars.$color-error-text;
+
+    @include mixins.transition(color);
 
     &:hover {
       color: vars.$color-error-hover;
@@ -56,15 +59,12 @@
   }
 }
 
-// DIALOG COMPONENT STYLES
-
+// ====================== DIALOG ======================
 .dialog-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: vars.$color-overlay-bg;
+
   @include mixins.flex();
   z-index: vars.$dialog-overlay-z;
 }
@@ -74,15 +74,18 @@
   border-radius: vars.$dialog-radius;
   width: vars.$dialog-width;
   max-width: vars.$dialog-max-width;
+
   @include mixins.box-shadow(vars.$dialog-shadow);
-  overflow: hidden;
   @include mixins.fade-in(vars.$dialog-fade-duration);
+
+  overflow: hidden;
 
   .dialog-header {
     @include mixins.flex-between;
+
     padding: vars.$dialog-padding-header;
-    border-bottom: 1px solid vars.$color-dialog-border;
     background-color: vars.$color-dialog-header-bg;
+    border-bottom: 1px solid vars.$color-dialog-border;
 
     h3 {
       margin: 0;
@@ -93,16 +96,15 @@
     .close-btn {
       background: none;
       border: none;
-      cursor: pointer;
       padding: 4px;
+      cursor: pointer;
+
       @include mixins.flex();
-      @include mixins.transition(transform, 0.2s);
+      @include mixins.transition(transform);
 
       img {
         width: 18px;
         height: 18px;
-        filter: brightness(0) saturate(100%) invert(14%) sepia(89%)
-          saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
       }
 
       &:hover {
@@ -116,8 +118,8 @@
     padding: vars.$dialog-padding-body;
 
     p {
-      font-size: vars.$font-size-body;
       color: vars.$color-text-secondary;
+      font-size: vars.$font-size-body;
       line-height: 1.4;
     }
   }
@@ -131,10 +133,11 @@
 
     .btn {
       padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
       font-size: vars.$font-size-button;
+      border-radius: 4px;
+      border: none;
       cursor: pointer;
+
       @include mixins.transition(background-color);
 
       &.cancel {
@@ -164,4 +167,209 @@
       }
     }
   }
+}
+
+// ====================== CREATE PROJECT PAGE ======================
+.project-create-page {
+  padding: vars.$padding-primary;
+}
+
+// Breadcrumb
+.breadcrumb {
+  @include mixins.flex(flex-start);
+
+  gap: 6px;
+  margin-bottom: 20px;
+  font-size: vars.$font-size-breadcrumb;
+
+  .breadcrumb-link {
+    color: vars.$color-breadcrumb;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .breadcrumb-current {
+    color: vars.$color-title;
+    font-weight: 500;
+  }
+
+  .breadcrumb-separator {
+    color: #555;
+  }
+}
+
+// Page titles
+.page-title {
+  font-family: vars.$font-family-primary;
+  font-size: vars.$font-size-page-title;
+  font-weight: 600;
+  color: vars.$color-title;
+  margin-bottom: 8px;
+}
+
+.page-subtitle {
+  font-size: vars.$font-size-subtitle;
+  color: vars.$color-subtitle;
+  margin-bottom: 36px;
+}
+
+// Form wrapper
+.project-form-container {
+  background: #ffffff;
+  border: 1px solid #ededed;
+  border-radius: 14px;
+  padding: 34px 60px 34px 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-title {
+  font-family: vars.$font-family-primary;
+  font-size: vars.$font-size-subtitle;
+  font-weight: 500;
+  color: vars.$color-subtitle;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+// Form grid
+.formProject {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem 2.5rem;
+}
+
+.description-group {
+  grid-column: span 2;
+}
+
+.description-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-counter {
+  font-size: 12px;
+  color: #777;
+}
+
+
+.project-description {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  font-size: 14px;
+  width: 100%;
+  resize: vertical;
+  font-family: vars.$font-family-primary;
+  background-color: vars.$input-background;
+
+  &:focus {
+      background-color: vars.$color-bg-footer;
+      border-color: vars.$color-breadcrumb;
+      outline: none;
+    }
+}
+
+
+// Field group
+.field-group {
+  display: flex;
+  flex-direction: column;
+
+  .field-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .field-label.required::after {
+    content: " *";
+    color: red;
+  }
+
+  .field-input,
+  .field-select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    background-color: vars.$input-background;
+    font-size: 14px;
+    font-family: vars.$font-family-primary;
+
+    &:focus {
+      background-color: vars.$color-bg-footer;
+      border-color: vars.$color-breadcrumb;
+      outline: none;
+    }
+  }
+  
+.status-options{
+  background-color: #eeeeee;
+  padding-bottom: 25px;
+  font-size: 18px;
+  color: #777;
+}
+  .error small {
+    color: vars.$color-error-text;
+    margin-top: 4px;
+    font-size: 12px;
+  }
+}
+
+// Buttons
+.buttons {
+  grid-column: span 2;
+  @include mixins.flex(center);
+
+  gap: 14px;
+  margin-top: 10px;
+
+  .btn {
+    padding: 12px 28px;
+    font-size: 14px;
+    border-radius: 22px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .btn-submit {
+    background-color: vars.$color-breadcrumb;
+    color: #fff;
+    width: 23.75rem;
+
+    &:disabled {
+      background-color: #86916b;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: darken(vars.$color-primary-hover, 6%);
+    }
+  }
+
+  .btn-secondary {
+    background-color: #f5f5f7;
+    color: #000;
+    padding: 12px 22px;
+
+    &:hover {
+      background-color: #e2e2e7;
+    }
+  }
+}
+
+.success {
+  text-align: center;
+  margin-top: 18px;
+  color: #2e7d32;
+  font-size: 14px;
+  font-weight: 500;
 }
