@@ -1,7 +1,26 @@
 @use './variables' as vars;
 @use './mixins';
 
-// ====== FOOTER STYLES ======
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: vars.$font-family-primary;
+  background-color: vars.$color-gray-50;
+  color: vars.$color-text-primary;
+  line-height: 1.4;
+}
+
+// =========================================
+// FOOTER STYLES
+// =========================================
+
 .footer {
   @include mixins.fixed-bottom;
   border-top: 1px solid vars.$color-border;
@@ -18,7 +37,9 @@
   }
 }
 
+// =========================================
 // ERROR MESSAGE STYLES
+// =========================================
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
@@ -31,32 +52,30 @@
   @include mixins.box-shadow(vars.$error-shadow);
   position: relative;
   margin: vars.$error-margin-y 0;
-
   .icon {
-    margin-right: 10px;
+    margin-right: 0.625rem; 
     font-size: vars.$error-icon-size;
   }
-
   .message {
     flex-grow: 1;
   }
-
   .close-btn {
     background: none;
     border: none;
     color: vars.$color-error-text;
     cursor: pointer;
-    font-size: 18px;
-    margin-left: 10px;
+    font-size: 1.125rem; 
+    margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
-
     &:hover {
       color: vars.$color-error-hover;
     }
   }
 }
 
-// DIALOG COMPONENT STYLES
+// =========================================
+// DIALOG COMPONENT
+// =========================================
 
 .dialog-overlay {
   position: fixed;
@@ -78,31 +97,30 @@
   overflow: hidden;
   @include mixins.fade-in(vars.$dialog-fade-duration);
 
+  // HEADER
   .dialog-header {
     @include mixins.flex-between;
     padding: vars.$dialog-padding-header;
     border-bottom: 1px solid vars.$color-dialog-border;
     background-color: vars.$color-dialog-header-bg;
-
     h3 {
       margin: 0;
       @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-title);
       color: vars.$color-text-primary;
     }
-
     .close-btn {
       background: none;
       border: none;
       cursor: pointer;
-      padding: 4px;
+      padding: 0.25rem; 
       @include mixins.flex();
       @include mixins.transition(transform, 0.2s);
-
       img {
-        width: 18px;
-        height: 18px;
-        filter: brightness(0) saturate(100%) invert(14%) sepia(89%)
-          saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+        width: 1.125rem; 
+        height: 1.125rem;
+        filter: brightness(0) saturate(100%)
+          invert(14%) sepia(89%) saturate(5500%)
+          hue-rotate(354deg) brightness(91%) contrast(92%);
       }
 
       &:hover {
@@ -112,9 +130,9 @@
     }
   }
 
+  // BODY
   .dialog-body {
     padding: vars.$dialog-padding-body;
-
     p {
       font-size: vars.$font-size-body;
       color: vars.$color-text-secondary;
@@ -122,25 +140,23 @@
     }
   }
 
+  // ACTIONS
   .dialog-actions {
     display: flex;
     justify-content: flex-end;
     gap: vars.$dialog-gap-actions;
     padding: vars.$dialog-padding-actions;
     border-top: 1px solid vars.$color-dialog-border;
-
     .btn {
-      padding: 8px 16px;
+      padding: 0.5rem 1rem; 
       border: none;
-      border-radius: 4px;
+      border-radius: 0.25rem; 
       font-size: vars.$font-size-button;
       cursor: pointer;
       @include mixins.transition(background-color);
-
       &.cancel {
         background-color: vars.$color-btn-cancel-bg;
         color: vars.$color-btn-cancel-text;
-
         &:hover {
           background-color: vars.$color-btn-cancel-hover;
         }
@@ -149,14 +165,11 @@
       &.confirm {
         background-color: vars.$color-btn-confirm-bg;
         color: vars.$color-btn-confirm-text;
-
         &:hover {
           background-color: vars.$color-btn-confirm-hover;
         }
-
         &.danger {
           background-color: vars.$color-btn-danger-bg;
-
           &:hover {
             background-color: vars.$color-btn-danger-hover;
           }
