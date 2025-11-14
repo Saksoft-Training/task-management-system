@@ -1,7 +1,10 @@
 @use './variables' as vars;
 @use './mixins';
 
-// ====== FOOTER STYLES ======
+/* ========================================================= */
+/* FOOTER */
+/* ========================================================= */
+
 .footer {
   @include mixins.fixed-bottom;
   border-top: 1px solid vars.$color-border;
@@ -18,7 +21,9 @@
   }
 }
 
-// ERROR MESSAGE STYLES
+/* ========================================================= */
+/* ERROR MESSAGES */
+/* ========================================================= */
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
@@ -56,7 +61,9 @@
   }
 }
 
-// DIALOG COMPONENT STYLES
+/* ========================================================= */
+/* DIALOG BOX */
+/* ========================================================= */
 
 .dialog-overlay {
   position: fixed;
@@ -101,8 +108,8 @@
       img {
         width: 18px;
         height: 18px;
-        filter: brightness(0) saturate(100%) invert(14%) sepia(89%)
-          saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+        filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(5500%)
+          hue-rotate(354deg) brightness(91%) contrast(92%);
       }
 
       &:hover {
@@ -164,4 +171,208 @@
       }
     }
   }
+}
+// Task Create form global css
+
+// Page main container 
+.create-task-page {
+  padding: vars.$padding-primary;
+}
+
+// Page title 
+.page-title {
+  font-family: vars.$font-family-primary;
+  font-size: vars.$font-size-page-title;
+  font-weight: vars.$font-weight-footer;
+  color: vars.$color-title;
+  margin-bottom: 6px;
+}
+
+// Small subtitle under title 
+.page-subtitle {
+  font-size: vars.$font-size-body;
+  color: vars.$color-subtitle;
+  margin-bottom: 36px;
+}
+
+// Main white box of the form 
+.project-form-container {
+  background: vars.$color-bg-footer;
+  border: 1px solid #ededed;
+  border-radius: 10px;
+  padding: 34px 60px 34px 40px;
+}
+
+// Two-column form layout 
+.formProject {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 40px;
+}
+
+// Label + input wrapper 
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+// Label style 
+.field-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+// For labels that need a required icon 
+.field-label.required {
+  position: relative;
+  padding-right: 40px;
+}
+
+// The required icon 
+.field-label.required::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 36.95px;
+  width: 6.52px;
+  height: 14px;
+  background-image: url('/assets/icons/required-Icon.svg');
+  background-repeat: no-repeat;
+  background-size: 6.52px 14px;
+}
+
+// Inputs, selects, textarea 
+.field-input,
+.field-select,
+.project-description {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: vars.$dialog-radius;
+  border: 1px solid vars.$border-color;
+  background: vars.$input-background;
+  font-size: 14px;
+  font-family: vars.$font-family-primary;
+  transition: 0.2s ease;
+}
+
+// Highlight on focus 
+.field-input:focus,
+.field-select:focus,
+.project-description:focus {
+  background: white !important;
+  border-color: vars.$color-breadcrumb;
+}
+
+// Dropdown arrow 
+.field-select {
+  appearance: none;
+  background-image: url('/assets/icons/drop-down-Icon.svg');
+  background-repeat: no-repeat;
+  background-position: right 36.95px center;
+  background-size: 6.52px 14px;
+  padding-right: 50px;
+}
+
+// Description section header + character count 
+.description-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: -4px;
+}
+
+// Character count text 
+.char-counter {
+  font-size: 12px;
+  color: vars.$color-text-secondary;
+}
+
+// Textarea minimum size 
+.project-description {
+  resize: vertical;
+  min-height: 90px;
+  background: vars.$input-background;
+}
+
+// Error text message 
+.error small {
+  color: vars.$color-error-text;
+  font-size: 12px;
+  margin-top: -4px;
+}
+
+// Red border for invalid fields 
+.field-input.ng-invalid.ng-touched,
+.field-select.ng-invalid.ng-touched {
+  border-color: red !important;
+}
+
+// Small helper text under date fields 
+.project-dates {
+  font-size: 12px;
+  color: vars.$color-subtitle;
+  margin-top: -4px;
+}
+
+// Calendar icon inside date input 
+.date-wrapper {
+  position: relative;
+}
+
+.date-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 36.95px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6.52px;
+  height: 14px;
+  background-image: url('/assets/icons/calendar-Icon.svg');
+  background-repeat: no-repeat;
+  background-size: 6.52px 14px;
+  pointer-events: none;
+}
+
+// Buttons container 
+.buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+// Base button style 
+.btn {
+  padding: 12px 28px;
+  border-radius: 22px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+// Main submit button 
+.btn-submit {
+  background: vars.$color-breadcrumb;
+  color: white;
+  width: 380px;
+}
+
+// Disabled submit 
+.btn-submit:disabled {
+  background: vars.$disabled-bg-color;
+  cursor: not-allowed;
+}
+
+// Cancel button 
+.btn-secondary {
+  background: vars.$btn-secondary-bg-color;
+  color: #000;
+}
+
+// Hover for secondary button 
+.btn-secondary:hover {
+  background: vars.$hover-bg-color;
 }

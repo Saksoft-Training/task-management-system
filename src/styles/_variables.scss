@@ -2,19 +2,27 @@
 $color-border: #f1f1f1;
 $color-bg-footer: #ffffff;
 $color-text-footer: #4d5b2a;
-
+$color-title: #000000;
 $color-error-bg: #fdecea;
 $color-error-text: #b71c1c;
 $color-error-border: #f5c6cb;
 $color-error-hover: #7f0000;
-
+$color-subtitle: #6F6F6F;
 $color-dialog-bg: #ffffff;
 $color-dialog-header-bg: #fafafa;
 $color-dialog-border: #f0f0f0;
 $color-overlay-bg: rgba(0, 0, 0, 0.4);
 $color-text-primary: #333;
+$color-breadcrumb: #485C11;
 $color-text-secondary: #444;
-
+$input-background: #F3F3F5;
+$color-text: #333;
+$border-color: #ededed;
+$color-primary-hover: #3a5c1f;
+$disabled-bg-color: #c7c7c7;
+$btn-secondary-bg-color: #f3f3f3;
+$hover-bg-color: #e6e6e6;
+$color-primary-hover: #3a5c1f;
 // Button colors
 $color-btn-cancel-bg: #f1f1f1;
 $color-btn-cancel-hover: #e0e0e0;
@@ -31,6 +39,7 @@ $color-btn-danger-hover: #b71c1c;
 $font-family-primary: 'Inter', sans-serif;
 $font-size-footer: 13px;
 $font-weight-footer: 600;
+$font-size-page-title: 60px;
 $font-size-error: 14px;
 $font-size-title: 18px;
 $font-weight-title: 600;
@@ -41,7 +50,7 @@ $font-size-button: 14px;
 $padding-footer-top: 40px;
 $padding-footer-sides: 20px;
 $padding-footer-bottom: 20px;
-
+$padding-primary: 40px;
 $error-padding-y: 12px;
 $error-padding-x: 16px;
 $error-border-radius: 6px;
@@ -57,6 +66,7 @@ $error-icon-size: 20px;
 $dialog-width: 400px;
 $dialog-max-width: 90%;
 $dialog-radius: 8px;
+$font-size-subtitle: 15px;
 $dialog-overlay-z: 2000;
 
 // ====== SHADOWS ======
