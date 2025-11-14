@@ -9,5 +9,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   // Project module routes
-  { path: 'create', component: ProjectCreateComponent },
+  { path: 'projects/create', component: ProjectCreateComponent },
 ];

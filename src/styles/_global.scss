@@ -7,6 +7,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
   font-size: 16px;
 }
@@ -25,7 +26,6 @@ body {
 .footer {
   @include mixins.fixed-bottom;
   @include mixins.flex-between;
-
   border-top: 1px solid vars.$color-border;
   background-color: vars.$color-bg-footer;
   color: vars.$color-text-footer;
@@ -39,7 +39,6 @@ body {
   }
 }
 
-// ====================== ERROR MESSAGE ======================
 // =========================================
 // ERROR MESSAGE STYLES
 // =========================================
@@ -48,23 +47,23 @@ body {
   @include mixins.flex(flex-start, center);
   @include mixins.font-primary(vars.$font-size-error);
   @include mixins.box-shadow(vars.$error-shadow);
-
   background-color: vars.$color-error-bg;
   color: vars.$color-error-text;
   border: 1px solid vars.$color-error-border;
-
   padding: vars.$error-padding-y vars.$error-padding-x;
   border-radius: vars.$error-border-radius;
   margin: vars.$error-margin-y 0;
   position: relative;
 
   .icon {
-    margin-right: 0.625rem; 
+    margin-right: 0.625rem;
     font-size: vars.$error-icon-size;
   }
+
   .message {
     flex-grow: 1;
   }
+
   .close-btn {
     background: none;
     border: none;
@@ -72,19 +71,17 @@ body {
     font-size: vars.$font-size-title;
     margin-left: 10px;
     color: vars.$color-error-text;
-
     @include mixins.transition(color);
-
-    font-size: 1.125rem; 
+    font-size: 1.125rem;
     margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
+
     &:hover {
       color: vars.$color-error-hover;
     }
   }
 }
 
-// ====================== DIALOG ======================
 // =========================================
 // DIALOG COMPONENT
 // =========================================
@@ -93,7 +90,6 @@ body {
   position: fixed;
   inset: 0;
   background: vars.$color-overlay-bg;
-
   @include mixins.flex();
   z-index: vars.$dialog-overlay-z;
 }
@@ -103,16 +99,13 @@ body {
   border-radius: vars.$dialog-radius;
   width: vars.$dialog-width;
   max-width: vars.$dialog-max-width;
-
   @include mixins.box-shadow(vars.$dialog-shadow);
   @include mixins.fade-in(vars.$dialog-fade-duration);
-
   overflow: hidden;
 
   // HEADER
   .dialog-header {
     @include mixins.flex-between;
-
     padding: vars.$dialog-padding-header;
     background-color: vars.$color-dialog-header-bg;
     border-bottom: 1px solid vars.$color-dialog-border;
@@ -122,41 +115,41 @@ body {
       @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
       color: vars.$color-text-primary;
     }
+
     .close-btn {
       background: none;
       border: none;
       padding: 4px;
       cursor: pointer;
-
       @include mixins.flex();
       @include mixins.transition(transform);
 
       img {
         width: 18px;
         height: 18px;
-      cursor: pointer;
-      padding: 0.25rem; 
-      @include mixins.flex();
-      @include mixins.transition(transform, 0.2s);
-      img {
-        width: 1.125rem; 
-        height: 1.125rem;
-        filter: brightness(0) saturate(100%)
-          invert(14%) sepia(89%) saturate(5500%)
-          hue-rotate(354deg) brightness(91%) contrast(92%);
-      }
+        cursor: pointer;
+        padding: 0.25rem;
+        @include mixins.flex();
+        @include mixins.transition(transform, 0.2s);
 
-      &:hover {
-        opacity: 0.8;
-        transform: scale(1.1);
+        img {
+          width: 1.125rem;
+          height: 1.125rem;
+          filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+        }
+
+        &:hover {
+          opacity: 0.8;
+          transform: scale(1.1);
+        }
       }
     }
   }
-}
 
   // BODY
   .dialog-body {
     padding: vars.$dialog-padding-body;
+
     p {
       color: vars.$color-text-secondary;
       font-size: vars.$font-size-body;
@@ -171,17 +164,18 @@ body {
     gap: vars.$dialog-gap-actions;
     padding: vars.$dialog-padding-actions;
     border-top: 1px solid vars.$color-dialog-border;
+
     .btn {
       padding: 8px 16px;
       font-size: vars.$font-size-button;
       border-radius: 4px;
       border: none;
       cursor: pointer;
-
       @include mixins.transition(background-color);
+
       &.cancel {
         background-color: vars.$color-btn-cancel-bg;
-        color: vars.$color-btn-cancel-text;
+        color: vars.$color-bg-footer;
 
         &:hover {
           background-color: vars.$color-btn-cancel-hover;
@@ -190,13 +184,15 @@ body {
 
       &.confirm {
         background-color: vars.$color-btn-confirm-bg;
-        color: vars.$color-btn-confirm-text;
+        color: vars.$color-bg-footer;
 
         &:hover {
           background-color: vars.$color-btn-confirm-hover;
         }
+
         &.danger {
           background-color: vars.$color-btn-danger-bg;
+
           &:hover {
             background-color: vars.$color-btn-danger-hover;
           }
@@ -211,10 +207,8 @@ body {
   padding: vars.$padding-primary;
 }
 
-// Breadcrumb
 .breadcrumb {
   @include mixins.flex(flex-start);
-
   gap: 6px;
   margin-bottom: vars.$padding-footer-sides;
   font-size: vars.$font-size-error;
@@ -239,7 +233,6 @@ body {
   }
 }
 
-// Page titles
 .page-title {
   font-family: vars.$font-family-primary;
   font-size: vars.$font-size-page-title;
@@ -254,7 +247,6 @@ body {
   margin-bottom: 36px;
 }
 
-// Form wrapper
 .project-form-container {
   background: vars.$color-bg-footer;
   border: 1px solid #ededed;
@@ -273,7 +265,6 @@ body {
   line-height: 1.4;
 }
 
-// Form grid
 .formProject {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -295,7 +286,6 @@ body {
   color: vars.$color-text;
 }
 
-
 .project-description {
   padding: 12px 14px;
   border-radius: vars.$dialog-radius;
@@ -307,14 +297,12 @@ body {
   background-color: vars.$input-background;
 
   &:focus {
-      background-color: vars.$color-bg-footer;
-      border-color: vars.$color-breadcrumb;
-      outline: none;
-    }
+    background-color: vars.$color-bg-footer;
+    border-color: vars.$color-breadcrumb;
+    outline: none;
+  }
 }
 
-
-// Field group
 .field-group {
   display: flex;
   flex-direction: column;
@@ -346,13 +334,14 @@ body {
       outline: none;
     }
   }
-  
-.status-options{
-  background-color: #eeeeee;
-  padding-bottom: 25px;
-  font-size: 18px;
-  color: vars.$color-text;
-}
+
+  .status-options {
+    background-color: #eeeeee;
+    padding-bottom: 25px;
+    font-size: 18px;
+    color: vars.$color-text;
+  }
+
   .error small {
     color: vars.$color-error-text;
     margin-top: 4px;
@@ -360,11 +349,9 @@ body {
   }
 }
 
-// Buttons
 .buttons {
   grid-column: span 2;
   @include mixins.flex(center);
-
   gap: 14px;
   margin-top: 10px;
 
