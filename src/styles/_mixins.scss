@@ -12,7 +12,6 @@
   @include flex(space-between, center);
 }
 
-// ====== POSITION HELPERS ======
 @mixin fixed-bottom($z-index: 1000) {
   position: fixed;
   bottom: 0;
@@ -24,12 +23,12 @@
 
 // ====== FONT HELPERS ======
 @mixin font-primary($size: 14px, $weight: 400) {
+@mixin font-primary($size: 1rem, $weight: normal) {
   font-family: vars.$font-family-primary;
   font-size: $size;
   font-weight: $weight;
 }
 
-// ====== EFFECTS ======
 @mixin box-shadow($shadow) {
   box-shadow: $shadow;
 }
@@ -38,7 +37,6 @@
   transition: $props $duration $ease;
 }
 
-// ====== ANIMATION ======
 @mixin fade-in($duration: 0.3s) {
   animation: fadeIn $duration ease;
 }

@@ -1,9 +1,13 @@
 import { Routes } from '@angular/router';
 import { ProjectCreateComponent } from './features/project-management/components/project-create/project-create.component';
+import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 
 export const routes: Routes = [
-    {
-        path: 'create',
-        component: ProjectCreateComponent
-    }
+  { path: '', redirectTo: 'register', pathMatch: 'full' },
+
+  // User module routes
+  { path: 'register', component: RegisterComponent },
+
+  // Project module routes
+  { path: 'create', component: ProjectCreateComponent },
 ];
