@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Task } from '../../../../types/models/task/task.interface';
+
 import { NotificationService } from './notification-service';
+import { Task } from '../../../../types/models/task';
 
 export interface Project {
   id: number;
