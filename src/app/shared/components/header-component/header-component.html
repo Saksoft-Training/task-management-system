@@ -1,0 +1,20 @@
+<header class="app-header">
+  <div class="header-container">
+    <div class="logo">SakNgTrain</div>
+    <nav class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/projects" routerLinkActive="active">Projects</a>
+      <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
+      <a routerLink="/board" routerLinkActive="active">Board</a>
+    </nav>
+    <div class="user-section">
+      @if (userEmail) {
+      <div class="user-email">
+          <img src="assets/icons/profile-Icon.svg" alt="create" />
+        <span>{{ userEmail }}</span>
+      </div>
+      }
+          <img src="assets/icons/logout-Icon.svg" alt="create" />
+    </div>
+  </div>
+</header>
