@@ -31,7 +31,7 @@ body {
   color: vars.$color-text-footer;
   font-size: vars.$font-size-footer;
   font-weight: vars.$font-weight-footer;
-  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-bottom;
+  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-sides;
 
   &-left,
   &-right {
@@ -69,7 +69,7 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 18px;
+    font-size: vars.$font-size-title;
     margin-left: 10px;
     color: vars.$color-error-text;
 
@@ -99,7 +99,7 @@ body {
 }
 
 .dialog-box {
-  background: vars.$color-dialog-bg;
+  background: vars.$color-bg-footer;
   border-radius: vars.$dialog-radius;
   width: vars.$dialog-width;
   max-width: vars.$dialog-max-width;
@@ -119,7 +119,7 @@ body {
 
     h3 {
       margin: 0;
-      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-title);
+      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
       color: vars.$color-text-primary;
     }
     .close-btn {
@@ -152,6 +152,7 @@ body {
       }
     }
   }
+}
 
   // BODY
   .dialog-body {
@@ -172,9 +173,6 @@ body {
     border-top: 1px solid vars.$color-dialog-border;
     .btn {
       padding: 8px 16px;
-      padding: 0.5rem 1rem; 
-      border: none;
-      border-radius: 0.25rem; 
       font-size: vars.$font-size-button;
       border-radius: 4px;
       border: none;
@@ -184,6 +182,7 @@ body {
       &.cancel {
         background-color: vars.$color-btn-cancel-bg;
         color: vars.$color-btn-cancel-text;
+
         &:hover {
           background-color: vars.$color-btn-cancel-hover;
         }
@@ -192,6 +191,7 @@ body {
       &.confirm {
         background-color: vars.$color-btn-confirm-bg;
         color: vars.$color-btn-confirm-text;
+
         &:hover {
           background-color: vars.$color-btn-confirm-hover;
         }
@@ -216,12 +216,12 @@ body {
   @include mixins.flex(flex-start);
 
   gap: 6px;
-  margin-bottom: 20px;
-  font-size: vars.$font-size-breadcrumb;
+  margin-bottom: vars.$padding-footer-sides;
+  font-size: vars.$font-size-error;
 
   .breadcrumb-link {
     color: vars.$color-breadcrumb;
-    font-weight: 500;
+    font-weight: vars.$font-weight-primary;
     cursor: pointer;
 
     &:hover {
@@ -231,11 +231,11 @@ body {
 
   .breadcrumb-current {
     color: vars.$color-title;
-    font-weight: 500;
+    font-weight: vars.$font-weight-primary;
   }
 
   .breadcrumb-separator {
-    color: #555;
+    color: vars.$color-text-secondary;
   }
 }
 
@@ -243,22 +243,22 @@ body {
 .page-title {
   font-family: vars.$font-family-primary;
   font-size: vars.$font-size-page-title;
-  font-weight: 600;
+  font-weight: vars.$font-weight-footer;
   color: vars.$color-title;
-  margin-bottom: 8px;
+  margin-bottom: vars.$dialog-radius;
 }
 
 .page-subtitle {
-  font-size: vars.$font-size-subtitle;
+  font-size: vars.$font-size-body;
   color: vars.$color-subtitle;
   margin-bottom: 36px;
 }
 
 // Form wrapper
 .project-form-container {
-  background: #ffffff;
+  background: vars.$color-bg-footer;
   border: 1px solid #ededed;
-  border-radius: 14px;
+  border-radius: vars.$font-size-error;
   padding: 34px 60px 34px 40px;
   width: 100%;
   box-sizing: border-box;
@@ -266,8 +266,8 @@ body {
 
 .form-title {
   font-family: vars.$font-family-primary;
-  font-size: vars.$font-size-subtitle;
-  font-weight: 500;
+  font-size: vars.$font-size-body;
+  font-weight: vars.$font-weight-primary;
   color: vars.$color-subtitle;
   margin-bottom: 24px;
   line-height: 1.4;
@@ -292,15 +292,15 @@ body {
 
 .char-counter {
   font-size: 12px;
-  color: #777;
+  color: vars.$color-text;
 }
 
 
 .project-description {
   padding: 12px 14px;
-  border-radius: 8px;
-  border: 1px solid #cccccc;
-  font-size: 14px;
+  border-radius: vars.$dialog-radius;
+  border: 1px solid vars.$border-color;
+  font-size: vars.$font-size-error;
   width: 100%;
   resize: vertical;
   font-family: vars.$font-family-primary;
@@ -320,8 +320,8 @@ body {
   flex-direction: column;
 
   .field-label {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: vars.$font-size-error;
+    font-weight: vars.$font-weight-footer;
     margin-bottom: 4px;
   }
 
@@ -334,8 +334,8 @@ body {
   .field-select {
     width: 100%;
     padding: 12px 14px;
-    border-radius: 8px;
-    border: 1px solid #cccccc;
+    border-radius: vars.$dialog-radius;
+    border: 1px solid vars.$border-color;
     background-color: vars.$input-background;
     font-size: 14px;
     font-family: vars.$font-family-primary;
@@ -351,7 +351,7 @@ body {
   background-color: #eeeeee;
   padding-bottom: 25px;
   font-size: 18px;
-  color: #777;
+  color: vars.$color-text;
 }
   .error small {
     color: vars.$color-error-text;
@@ -370,7 +370,7 @@ body {
 
   .btn {
     padding: 12px 28px;
-    font-size: 14px;
+    font-size: vars.$font-size-error;
     border-radius: 22px;
     border: none;
     cursor: pointer;
@@ -379,11 +379,11 @@ body {
 
   .btn-submit {
     background-color: vars.$color-breadcrumb;
-    color: #fff;
+    color: vars.$color-bg-footer;
     width: 23.75rem;
 
     &:disabled {
-      background-color: #86916b;
+      background-color: vars.$disabled-bg-color;
       cursor: not-allowed;
     }
 
@@ -393,20 +393,20 @@ body {
   }
 
   .btn-secondary {
-    background-color: #f5f5f7;
-    color: #000;
+    background-color: vars.$btn-secondary-bg-color;
+    color: vars.$color-title;
     padding: 12px 22px;
 
     &:hover {
-      background-color: #e2e2e7;
+      background-color: vars.$hover-bg-color;
     }
   }
 }
 
 .success {
   text-align: center;
-  margin-top: 18px;
+  margin-top: vars.$font-size-title;
   color: #2e7d32;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: vars.$font-size-error;
+  font-weight: vars.$font-weight-primary;
 }

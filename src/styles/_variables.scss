@@ -14,12 +14,15 @@ $color-overlay-bg: rgba(0, 0, 0, 0.4);
 
 $color-text-primary: #333;
 $color-text-secondary: #444;
+$color-text: #777;
 
 $color-breadcrumb: #485C11;
 $color-title: #000000;
 $color-subtitle: #6F6F6F;
 $input-background: #F3F3F5;
 $color-primary-hover: #3b421a;
+$btn-secondary-bg-color:#f5f5f7;
+$hover-bg-color:#e2e2e7;
 
 // Buttons
 // Base
@@ -77,11 +80,9 @@ $color-overlay-bg: rgba(0, 0, 0, 0.4);
 // Button Colors
 $color-btn-cancel-bg: #f1f1f1;
 $color-btn-cancel-hover: #e0e0e0;
-$color-btn-cancel-text: #333;
 
 $color-btn-confirm-bg: #1a73e8;
 $color-btn-confirm-hover: #1765c1;
-$color-btn-confirm-text: #ffffff;
 
 $color-btn-danger-bg: #d32f2f;
 $color-btn-danger-hover: #b71c1c;
@@ -90,16 +91,13 @@ $color-btn-danger-hover: #b71c1c;
 $font-family-primary: 'Inter';
 $font-size-footer: 13px;
 $font-weight-footer: 600;
+$font-weight-primary:500;
 
 $font-size-error: 14px;
 $font-size-title: 18px;
-$font-weight-title: 600;
 
 $font-size-body: 15px;
-$font-size-button: 14px;
 
-$font-size-breadcrumb: 14px;
-$font-size-subtitle: 15px;
 $font-size-page-title: 60px;
 
 // ====== SPACING ======

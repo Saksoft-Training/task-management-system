@@ -22,7 +22,6 @@
 }
 
 // ====== FONT HELPERS ======
-@mixin font-primary($size: 14px, $weight: 400) {
 @mixin font-primary($size: 1rem, $weight: normal) {
   font-family: vars.$font-family-primary;
   font-size: $size;
