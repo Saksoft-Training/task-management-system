@@ -7,30 +7,33 @@ import { AuthService } from '../../../features/user-account-management/services/
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './header-component.html',
-  styleUrls: ['./header-component.scss']
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
   //#region Properties
-  /** Stores logged-in user's email for display */
-  userEmail: string | null = null;
-
-  /** Controls visibility of logout dialog */
-  showLogoutDialog = false;
+  /** Logged-in user's email shown in header */
+  public userEmail: string | null = null;
+  /** Navigation menu items displayed in header */
+  public navLinks = [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Projects', path: '/projects' },
+    { label: 'Tasks', path: '/tasks' },
+    { label: 'Board', path: '/board' }
+  ];
   //#endregion
 
   //#region Constructor
   /**
-   * Creates an instance of HeaderComponent.
-   * @param authService AuthService used to retrieve logged-in user details
+   * @summary Injects AuthService to get logged-in user details.
+   * @param authService Used to fetch current user information
    */
   constructor(private authService: AuthService) {}
   //#endregion
 
-  //#region Lifecycle Methods
+  //#region Lifecycle Hook
   /**
-   * Initializes component by loading current user details
+   * @summary Loads logged-in user's email on component initialization.
    * @returns void
    */
   ngOnInit(): void {

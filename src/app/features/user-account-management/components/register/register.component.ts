@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, ReactiveFormsModule} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../../types/models/user';
 import { AuthService } from '../../services/auth-service';
+import { UserStorageService } from '../../../../shared/services/storage-service';
 
 @Component({
   selector: 'app-register',
@@ -16,14 +17,15 @@ import { AuthService } from '../../services/auth-service';
 })
 export class RegisterComponent implements OnInit {
   //#region Properties
+  /** Registration form group */
   public registerForm!: FormGroup;
   /** Success message displayed after registration */
   public successMessage = '';
   /** Error message for UI display */
   public errorMessage = '';
-  /** To disable submit button during processing */
+  /** Disabled state for submit button */
   public isSubmitting = false;
-  /** Status of password rules used for strength meter */
+  /** Password rule tracker for meter */
   public passwordRulesStatus = {
     hasMinLength: false,
     hasUppercase: false,
@@ -31,22 +33,26 @@ export class RegisterComponent implements OnInit {
     hasSpecialChar: false
   };
   //#endregion
+
   //#region Constructor
   /**
-   * @summary Initializes required services.
-   * @param formBuilder - Builds reactive forms
-   * @param authService - Handles registration and validations
-   * @param router - Navigates after success
+   * @summary Initializes required services for registration.
+   * @param formBuilder Builds reactive forms
+   * @param authService Handles registration & validations
+   * @param userStorage Provides user storage helpers
+   * @param router Handles navigation
    */
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private userStorage: UserStorageService,
     private router: Router
-  ) { }
+  ) {}
   //#endregion
+
   //#region Lifecycle Hook
   /**
-   * @summary Initializes the form and subscribes to password changes.
+   * @summary Runs on component initialization. Builds form and subscribes to password changes.
    * @returns void
    */
   ngOnInit(): void {
@@ -56,6 +62,7 @@ export class RegisterComponent implements OnInit {
     );
   }
   //#endregion
+
   //#region Form Initialization
   /**
    * @summary Creates registration form with validators.
@@ -73,10 +80,11 @@ export class RegisterComponent implements OnInit {
     );
   }
   //#endregion
+
   //#region Validators
   /**
    * @summary Validates that name contains only alphabets and spaces.
-   * @param control - Form control
+   * @param control Form control
    * @returns ValidationErrors | null
    */
   private nameValidator() {
@@ -87,8 +95,8 @@ export class RegisterComponent implements OnInit {
     };
   }
   /**
-   * @summary Only lowercase Gmail addresses allowed.
-   * @param control - Form control
+   * @summary Validates only lowercase Gmail address.
+   * @param control Form control
    * @returns ValidationErrors | null
    */
   private gmailValidator() {
@@ -101,8 +109,8 @@ export class RegisterComponent implements OnInit {
     };
   }
   /**
-   * @summary Validates password strength.
-   * @param control - Form control
+   * @summary Validates password strength rules.
+   * @param control Form control
    * @returns ValidationErrors | null
    */
   private passwordStrengthValidator() {
@@ -113,20 +121,26 @@ export class RegisterComponent implements OnInit {
         /[A-Z]/.test(password) &&
         /\d/.test(password) &&
         /[^A-Za-z0-9]/.test(password);
+
       return valid ? null : { weakPassword: true };
     };
   }
-  public getPasswordStrengthClass() {
-  const s = this.getPasswordStrengthPercentage();
-  if (s <= 25) return 'strength-weak';
-  if (s <= 50) return 'strength-medium';
-  if (s <= 75) return 'strength-strong';
-  return 'strength-very-strong';
-}
   /**
-   * @summary Ensures password and confirm password match.
-   * @param group - Form group
-   * @returns ValidationErrors
+   * @summary Returns CSS class based on password strength.
+   * @returns string
+   */
+  public getPasswordStrengthClass() {
+    const s = this.getPasswordStrengthPercentage();
+    if (s <= 25) return 'strength-weak';
+    if (s <= 50) return 'strength-medium';
+    if (s <= 75) return 'strength-strong';
+    return 'strength-very-strong';
+  }
+
+  /**
+   * @summary Validator ensuring password & confirm password match.
+   * @param group Form group
+   * @returns ValidationErrors | null
    */
   private confirmPasswordValidator() {
     return (group: AbstractControl): ValidationErrors | null => {
@@ -138,23 +152,29 @@ export class RegisterComponent implements OnInit {
     };
   }
   /**
-   * @summary Async validator to check if email already exists.
-   * @returns AsyncValidatorFunction
+   * @summary Checks if email already exists asynchronously.
+   * @returns AsyncValidatorFn
    */
   private emailUniqueValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const email = control.value;
       if (!email) return of(null);
-      return of(this.authService.isEmailRegistered(email)).pipe(
+
+      return of(
+        this.userStorage.getAllUsers().some(
+          u => u.email.toLowerCase() === email.toLowerCase()
+        )
+      ).pipe(
         delay(300),
         map(taken => (taken ? { emailTaken: true } : null))
       );
     };
   }
   //#endregion
+
   //#region Email Lowercase
   /**
-   * @summary Forces email input to always be lowercase.
+   * @summary Forces email input to lowercase for consistency.
    * @returns void
    */
   public forceLowercaseEmail(): void {
@@ -163,10 +183,11 @@ export class RegisterComponent implements OnInit {
     emailCtrl?.setValue(val.toLowerCase(), { emitEvent: false });
   }
   //#endregion
+
   //#region Password Meter Logic
   /**
-   * @summary Updates rules for password strength meter.
-   * @param password - user input
+   * @summary Updates dynamic password strength rule statuses.
+   * @param password User-entered password
    * @returns void
    */
   private updatePasswordRulesStatus(password: string): void {
@@ -177,9 +198,9 @@ export class RegisterComponent implements OnInit {
       hasSpecialChar: /[^A-Za-z0-9]/.test(password)
     };
   }
-  /** 
-   * @summary Returns password strength percentage.
-   * @returns number (0–100)
+  /**
+   * @summary Calculates password strength percentage.
+   * @returns number
    */
   public getPasswordStrengthPercentage(): number {
     let s = 0;
@@ -190,8 +211,8 @@ export class RegisterComponent implements OnInit {
     return s;
   }
   /**
-   * @summary Gets color based on password strength.
-   * @returns string - color
+   * @summary Gets meter color based on strength.
+   * @returns string
    */
   public getPasswordStrengthColor(): string {
     const s = this.getPasswordStrengthPercentage();
@@ -201,7 +222,7 @@ export class RegisterComponent implements OnInit {
     return 'green';
   }
   /**
-   * @summary Returns label of password strength.
+   * @summary Returns readable strength label.
    * @returns string
    */
   public getPasswordStrengthLabel(): string {
@@ -212,16 +233,17 @@ export class RegisterComponent implements OnInit {
     return 'Very Strong';
   }
   //#endregion
+
   //#region Form Helpers
   /**
-   * @summary Shorthand to access form controls.
+   * @summary Shorthand getter for form controls.
    * @returns any
    */
   public get formControls() {
     return this.registerForm.controls;
   }
   /**
-   * @summary Resets form + password rules.
+   * @summary Resets the form state and meter values.
    * @returns void
    */
   public onReset(): void {
@@ -236,9 +258,10 @@ export class RegisterComponent implements OnInit {
     this.errorMessage = '';
   }
   //#endregion
+
   //#region Form Submission
   /**
-   * @summary Handles registration form submission.
+   * @summary Handles form submission and user registration.
    * @returns void
    */
   public onSubmit(): void {
@@ -252,25 +275,30 @@ export class RegisterComponent implements OnInit {
       return;
     }
     const { name, email, password } = this.registerForm.value;
-    if (this.authService.isEmailRegistered(email)) {
+    if (this.userStorage.getAllUsers().some(u => u.email.toLowerCase() === email.toLowerCase())) {
       this.registerForm.get('email')?.setErrors({ emailTaken: true });
       this.isSubmitting = false;
       return;
     }
-    const encryptedPassword = this.authService.encodePassword(password);
+    const encryptedPassword = this.userStorage.encodePassword(password);
     const newUser: User = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       password: encryptedPassword,
       createdAt: new Date().toISOString()
     };
-    this.authService.registerUser(newUser);
+    const users = this.userStorage.getAllUsers();
+    users.push(newUser);
+    this.userStorage.saveAllUsers(users);
     this.successMessage = 'Registration successful';
     setTimeout(() => this.router.navigate(['/login']), 1200);
     this.isSubmitting = false;
   }
+  //#endregion
+
+  //#region Navigation
   /**
-   * @summary Navigates user back to login page.
+   * @summary Redirects to login page.
    * @returns void
    */
   public goToLogin(): void {

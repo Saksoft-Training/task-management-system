@@ -56,12 +56,12 @@
           <input type="checkbox" formControlName="rememberMe" />
           <span>Remember me</span>
         </div>
-        <a class="forgot-link" (click)="navigateToForgotPasswordPage()">Forgot Password?</a>
+        <a class="forgot-link" (click)="navigateTo('/forgot-password')">Forgot Password?</a>
       </div>
       <div class="button-section">
         <button type="submit" class="login-btn" [disabled]="isFormSubmitting">Login</button>
         <p class="no-account">Don't have an account?</p>
-        <button type="button" class="create-btn" (click)="navigateToRegisterPage()">
+        <button type="button" class="create-btn" (click)="navigateTo('/register')">
           <img src="assets/icons/create-account-Icon.svg" alt="create" />
           <span>Create Account</span>
         </button>

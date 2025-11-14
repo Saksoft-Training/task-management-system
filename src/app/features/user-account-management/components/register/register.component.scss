@@ -120,7 +120,7 @@
         background: vars.$color-gray-400;
         font-size: 0.875rem;
         font-weight: 400;
-        color: vars.$color-gray-500;
+        color: vars.$color-black; 
         line-height: 100%;
         letter-spacing: -0.009375rem;
         padding: 0.25rem 0.75rem;
@@ -129,10 +129,12 @@
         &:focus {
           outline: none;
           background: vars.$color-gray-400;
+            color: vars.$color-black; 
         }
         &.invalid-input {
           border: 0.0625rem solid vars.$color-error-text;
           background: #fff5f5;
+            color: vars.$color-black; 
         }
       }
     }

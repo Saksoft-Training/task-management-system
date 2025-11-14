@@ -3,149 +3,94 @@ import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { User } from '../../../../types/models/user';
+import { UserStorageService } from '../../../shared/services/storage-service';
 
-const USERS_KEY = 'users';
 const CURRENT_USER_KEY = 'currentUser';
 const AUTH_TOKEN_KEY = 'authToken';
-const PASSWORD_SECRET = 'MyAppSecret@2025';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   //#region Constructor
   /**
-   * @summary Initializes router service for navigation.
-   * @param router - Angular Router for redirection after logout.
+   * @summary Injects router and user storage service used for login operations.
+   * @param router Handles navigation after login/logout
+   * @param userStorage Provides access to stored user data
    */
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userStorage: UserStorageService
+  ) {}
   //#endregion
-  //#region Private Methods
+
+  //#region Login
   /**
-   * @summary Retrieves all registered users from localStorage.
-   * @returns User[] - List of all users.
+   * @summary Validates user credentials and logs user in.
+   * @param credentials Object containing email, password and rememberMe flag
+   * @returns Observable<User> Emits the authenticated user or error
    */
-  private getAllUsers(): User[] {
-    const usersJson = localStorage.getItem(USERS_KEY);
-    return usersJson ? JSON.parse(usersJson) : [];
-  }
-  /**
-   * @summary Saves user list into localStorage.
-   * @param users - Array of users to store.
-   * @returns void
-   */
-  private saveAllUsers(users: User[]): void {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }
-  //#endregion
-  //#region Public Methods
-  /**
-   * @summary Returns all users in the system.
-   * @returns User[]
-   */
-  public getUsers(): User[] {
-    return this.getAllUsers();
-  }
-  /**
-   * @summary Checks if an email is already registered.
-   * @param email - Email to verify.
-   * @returns boolean
-   */
-  public isEmailRegistered(email: string): boolean {
-    if (!email) return false;
-    return this.getAllUsers().some(u => u.email.toLowerCase() === email.toLowerCase());
-  }
-  /**
-   * @summary Adds a new user to storage.
-   * @param user - User object to register.
-   * @returns void
-   */
-  public registerUser(user: User): void {
-    const users = this.getAllUsers();
-    users.push(user);
-    this.saveAllUsers(users);
-  }
-  /**
-   * @summary Encodes password using simple reversible obfuscation.
-   * @param rawPassword - User-entered password.
-   * @returns string - Encoded password.
-   */
-  public encodePassword(rawPassword: string): string {
-    return btoa(`${PASSWORD_SECRET}:${rawPassword}`);
-  }
-  /**
-   * @summary Decodes previously obfuscated password.
-   * @param obfuscatedPassword - Encoded password string.
-   * @returns string - Decoded plain password.
-   */
-  public decodePassword(obfuscatedPassword: string): string {
-    try {
-      const decoded = atob(obfuscatedPassword);
-      return decoded.split(':')[1];
-    } catch {
-      return '';
-    }
-  }
-  /**
-   * @summary Attempts to login a user and stores session based on rememberMe.
-   * @param email - User email.
-   * @param password - User password.
-   * @param rememberMe - Whether to persist login.
-   * @returns Observable<User>
-   */
-  public login(email: string, password: string, rememberMe: boolean): Observable<User> {
-    const users = this.getAllUsers();
-    const user = users.find(u =>
+  public login(credentials: { email: string; password: string; rememberMe: boolean }): Observable<User> {
+    const { email, password, rememberMe } = credentials;
+    const allUsers = this.userStorage.getAllUsers();
+    const user = allUsers.find(u =>
       u.email.toLowerCase() === email.toLowerCase() &&
-      this.decodePassword(u.password) === password
+      this.userStorage.decodePassword(u.password) === password
     );
     if (!user) {
       return throwError(() => new Error('Invalid email or password'));
     }
-    const token = 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+    const token =
+      'token_' + Date.now() + '_' + Math.random().toString(36).substring(2);
     if (rememberMe) {
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       localStorage.setItem(AUTH_TOKEN_KEY, token);
-      sessionStorage.removeItem(CURRENT_USER_KEY);
-      sessionStorage.removeItem(AUTH_TOKEN_KEY);
+      sessionStorage.clear();
     } else {
       sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       sessionStorage.setItem(AUTH_TOKEN_KEY, token);
-      localStorage.removeItem(CURRENT_USER_KEY);
-      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.clear();
     }
     return of(user).pipe(delay(500));
   }
+  //#endregion
+
+  //#region Auth State
   /**
-   * @summary Retrieves currently authenticated user.
-   * @returns User 
+   * @summary Checks if authentication token exists.
+   * @returns boolean True if user is logged in
+   */
+  public isLoggedIn(): boolean {
+    return !!(localStorage.getItem(AUTH_TOKEN_KEY) || sessionStorage.getItem(AUTH_TOKEN_KEY));
+  }
+  /**
+   * @summary Retrieves the currently logged-in user's data.
+   * @returns User|null Current user or null
    */
   public getCurrentUser(): User | null {
-    const data = sessionStorage.getItem(CURRENT_USER_KEY) || localStorage.getItem(CURRENT_USER_KEY);
+    const data =
+      sessionStorage.getItem(CURRENT_USER_KEY) ||
+      localStorage.getItem(CURRENT_USER_KEY);
+
     return data ? JSON.parse(data) : null;
   }
   /**
-   * @summary Returns stored authentication token.
-   * @returns string | null
+   * @summary Gets the stored authentication token.
+   * @returns string|null Auth token value
    */
   public getAuthToken(): string | null {
     return sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY);
   }
+  //#endregion
+
+  //#region Logout
   /**
-   * @summary Clears session + token and redirects user to login page.
+   * @summary Clears all session/local storage and redirects to login page.
    * @returns void
    */
   public logout(): void {
-    sessionStorage.removeItem(CURRENT_USER_KEY);
-    sessionStorage.removeItem(AUTH_TOKEN_KEY);
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem(AUTH_TOKEN_KEY);
+    sessionStorage.clear();
+    localStorage.clear();
     this.router.navigate(['/login'], { replaceUrl: true });
-  }
-  /**
-   * @summary Checks whether a user is currently logged in.
-   * @returns boolean
-   */
-  public isLoggedIn(): boolean {
-    return !!this.getAuthToken();
   }
   //#endregion
 }
