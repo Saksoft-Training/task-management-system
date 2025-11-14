@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-error-message-component',
   imports: [CommonModule, FormsModule],
-  templateUrl: './error-message-component.html',
-  styleUrl: './error-message-component.scss',
+  templateUrl: './error-message.component.html',
+  styleUrl: './error-message.component.scss',
 })
 export class ErrorMessageComponent implements OnInit {
   @Input() message: string = '';

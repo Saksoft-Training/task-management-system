@@ -6,8 +6,8 @@ import { NotificationItemComponent } from '../notification-item.component/notifi
 @Component({
   selector: 'app-dashboard-notifications-component',
   imports: [CommonModule,NotificationItemComponent],
-  templateUrl: './dashboard-notifications-component.html',
-  styleUrl: './dashboard-notifications-component.scss',
+  templateUrl: './dashboard-notifications.component.html',
+  styleUrl: './dashboard-notifications.component.scss',
 })
 export class DashboardNotificationsComponent {
 recentNotifications: Notification[] = [];

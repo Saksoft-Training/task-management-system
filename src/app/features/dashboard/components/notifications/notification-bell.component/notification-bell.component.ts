@@ -6,8 +6,8 @@ import { NotificationItemComponent } from '../notification-item.component/notifi
 @Component({
   selector: 'app-notification-bell-component',
   imports: [CommonModule,NotificationItemComponent],
-  templateUrl: './notification-bell-component.html',
-  styleUrl: './notification-bell-component.scss',
+  templateUrl: './notification-bell.component.html',
+  styleUrl: './notification-bell.component.scss',
 })
 export class NotificationBellComponent {
 @Input() notification?: Notification;

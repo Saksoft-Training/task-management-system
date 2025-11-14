@@ -8,8 +8,8 @@ interface ToastNotification extends Notification {
 @Component({
   selector: 'app-toast-notification-component',
   imports: [CommonModule],
-  templateUrl: './toast-notification-component.html',
-  styleUrl: './toast-notification-component.scss',
+  templateUrl: './toast-notification.component.html',
+  styleUrl: './toast-notification.component.scss',
 })
 export class ToastNotificationComponent {
 @Input() notifications: Notification[] = [];
