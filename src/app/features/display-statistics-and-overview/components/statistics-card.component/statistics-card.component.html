@@ -1,0 +1,18 @@
+<p>statistics-card.component works!</p>
+<button class="stat-card" [ngClass]="colorClass" [attr.aria-label]="label">
+<div *ngIf="loading" class="skeleton">
+<div class="skeleton-line short"></div>
+<div class="skeleton-line long"></div>
+</div>
+<ng-container *ngIf="!loading">
+<div class="icon" *ngIf="icon">{{ icon }}</div>
+<div class="content">
+<div class="value">{{ value }} <small *ngIf="subValue">{{ subValue }}</
+small></div>
+<div class="label">{{ label }}</div>
+</div>
+<div class="meta">
+<div class="trend" *ngIf="showTrend">▲ 4%<!-- placeholder --></div>
+</div>
+</ng-container>
+</button>
