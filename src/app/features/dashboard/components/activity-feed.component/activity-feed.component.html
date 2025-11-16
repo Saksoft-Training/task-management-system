@@ -1,0 +1,39 @@
+<div class="activity-feed">
+  <div class="header-row">
+    <h2>Recent Activity</h2>
+  </div>
+
+  <ng-container *ngIf="activities$ | async as activities; else loadingTpl">
+    <ng-container *ngIf="activities.length > 0; else emptyTpl">
+      <ul class="activity-list">
+        <li
+          class="activity-item"
+          *ngFor="let activity of activities"
+          (click)="onActivityClick(activity)"
+        >
+          <div class="avatar">
+            <span>{{ getInitials(activity.user) }}</span>
+          </div>
+          <div class="content">
+            <div class="line1">
+              <span class="action">{{ formatAction(activity) }}</span>
+              <span class="item-name">{{ activity.itemName }}</span>
+            </div>
+            <div class="line2">
+              <span class="user">{{ activity.user }}</span>
+              <span class="timestamp">{{ activity.timestamp | date: 'short' }}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <div class="info">Loading activities…</div>
+  </ng-template>
+
+  <ng-template #emptyTpl>
+    <div class="info">No recent activities.</div>
+  </ng-template>
+</div>
