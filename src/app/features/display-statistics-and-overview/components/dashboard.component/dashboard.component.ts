@@ -17,12 +17,9 @@ export class DashboardComponent {
   loading = true;
   constructor(private dashboardService: DashboardService) {
     this.stats$ = this.dashboardService.getStatistics();
-    // turn off loading after first emission
     this.stats$.subscribe(() => (this.loading = false));
   }
-  // optional helper to force refresh after making changes
   refresh() {
     this.dashboardService.refresh();
   }
-
 }

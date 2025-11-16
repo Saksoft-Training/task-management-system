@@ -13,6 +13,18 @@ $color-overlay-bg: rgba(0, 0, 0, 0.4);
 $color-text-primary: #333;
 $color-text-secondary: #444;
 $text-light: rgba(0, 0, 0, 0.6);
+$white: #fff;
+$color-blue-bg: #e5f0ff;
+$color-blue-border: #d3e3ff;
+$color-purple-bg: #f3e9ff;
+$color-purple-border: #e8d6ff;
+$color-green-bg: #e8ffef;
+$color-green-border: #d3fadf;
+$color-neutral-bg: #f9f9ff;
+$color-neutral-border: #ececff;
+$color-red-bg: #ffecec;
+$color-red-border: #ffd5d5;
+$border-light: rgba(0, 0, 0, 0.06);
 
 // Base
 $color-white: #ffffff;
@@ -149,3 +161,25 @@ $bp-desktop: 1024px;
 // Layout
 $dashboard-padding: 16px;
 $grid-gap: 12px;
+
+/* ---- Spacing ---- */
+$card-padding: 14px;
+$gap-medium: 12px;
+$gap-small: 8px;
+
+/* ---- Sizing ---- */
+$stat-card-radius: 12px;
+$stat-card-width: 288px;
+$stat-card-height: 166px;
+$stat-card-min-height: 84px;
+
+/* ---- Typography ---- */
+$font-large: 20px;
+$font-medium: 18px;
+$font-small: 12px;
+$font-icon-size: 22px;
+
+/* ---- Icon ---- */
+$icon-size: 16px;
+$icon-offset-right: 220px;
+$icon-offset-top: 40px;

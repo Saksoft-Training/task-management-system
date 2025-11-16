@@ -211,3 +211,113 @@ body {
   margin-top: 20px;
   color: $text-light;
 }
+
+//=============statistics card===============
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: $gap-medium;
+  padding: $card-padding;
+  border-radius: $stat-card-radius;
+  border: 1px solid $border-light;
+  background: $white;
+  min-height: $stat-card-min-height;
+  width: $stat-card-width;
+  height: $stat-card-height;
+  text-align: left;
+  cursor: pointer;
+}
+
+.statistic-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  font-weight: 700;
+  font-size: $font-icon-size;
+}
+
+img {
+  margin-left: $icon-offset-right;
+  margin-top: $icon-offset-top;
+  width: $icon-size;
+  height: $icon-size;
+}
+
+.content {
+  flex: 1;
+}
+
+.label {
+  font-size: $font-medium;
+  margin-bottom: $icon-offset-top;
+}
+
+.value {
+  font-size: $font-large;
+  font-weight: 700;
+}
+
+.status-badge {
+  font-size: $font-small;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.meta {
+  font-size: $font-small;
+  justify-content: space-between;
+}
+
+/* ---- Card Color Variants ---- */
+
+.blue {
+  background: $color-blue-bg;
+  border-color: $color-blue-border;
+}
+
+.purple,
+.amber {
+  background: $color-purple-bg;
+  border-color: $color-purple-border;
+}
+
+.green {
+  background: $color-green-bg;
+  border-color: $color-green-border;
+}
+
+.neutral {
+  background: $color-neutral-bg;
+  border-color: $color-neutral-border;
+}
+
+.red {
+  background: $color-red-bg;
+  border-color: $color-red-border;
+}
+
+/* ---- Skeleton ---- */
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-small;
+  width: 100%;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eee, #f5f5f5, #eee);
+}
+
+.skeleton-line.short {
+  width: 30%;
+}
+
+.skeleton-line.long {
+  width: 70%;
+}

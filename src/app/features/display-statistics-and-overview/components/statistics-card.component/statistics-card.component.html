@@ -5,20 +5,19 @@
     </div>
     <ng-container *ngIf="!loading">
         <div class="statistic-card">
-       <div class="icon" *ngIf="icon">
-            <img [src]="icon" [alt]="label + ' icon'" *ngIf="icon.includes('.svg')" />
-            <span *ngIf="!icon.includes('.svg')">{{ icon }}</span>
-        </div>
-        <div class="content">
-            <div class="label">{{ label }}</div>
-            <div class="value">{{ value }} <small *ngIf="subValue">{{ subValue }}</small>
+            <div class="icon" *ngIf="icon">
+                <img [src]="icon" [alt]="label + ' icon'" *ngIf="icon.includes('.svg')" />
+                <span *ngIf="!icon.includes('.svg')">{{ icon }}</span>
             </div>
-            
-        </div>
-        <div class="meta">
-            <div class="status-badge" *ngIf="status">{{ status }}</div>
-            <div class="trend" *ngIf="showTrend">▲ 4%<!-- placeholder --></div>
-        </div>
+            <div class="content">
+                <div class="label">{{ label }}</div>
+                <div class="value">{{ value }} <small *ngIf="subValue">{{ subValue }}</small>
+                </div>
+            </div>
+            <div class="meta">
+                <div class="status-badge" *ngIf="status">{{ status }}</div>
+                <div class="trend" *ngIf="showTrend">▲ 4%<!-- placeholder --></div>
+            </div>
         </div>
     </ng-container>
 </button>
