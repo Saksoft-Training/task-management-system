@@ -13,27 +13,42 @@
     cursor: pointer;
 }
 
+.statistic-card{
+    display:flex;
+    flex-direction: column;
+}
 .icon {
     font-weight: 700;
     font-size: 22px;
 }
-
+img {
+        margin-left: 220px;
+        margin-top: 40px;
+        height: 16px;
+        width: 16px;
+    }
 .content {
     flex: 1;
 }
+.label{
+        font-size: 18px;
+        margin-bottom: 40px;
+    }
 
 .value {
     font-size: 20px;
     font-weight: 700;
+    
 }
-
-.label {
-    opacity: 0.7;
-    font-size: 13px;
+.status-badge {
+    font-size: 12px;
+    font-weight: 400;
+    margin-bottom: 20px;
 }
 
 .meta {
     font-size: 12px;
+    justify-content: space-between;
 }
 
 // Color variants

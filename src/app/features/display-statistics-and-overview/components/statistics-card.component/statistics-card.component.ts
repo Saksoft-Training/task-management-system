@@ -17,5 +17,6 @@ export class StatisticsCardComponent {
 @Input() route?: string; // optional route to navigate on click
 @Input() showTrend: boolean = false;
 @Input() loading: boolean = false;
+@Input() status?:string;
 
 }
