@@ -1,6 +1,6 @@
 @use './variables' as vars;
 @use './mixins';
-
+@use './variables' as *;
 * {
   margin: 0;
   padding: 0;
@@ -177,4 +177,37 @@ body {
       }
     }
   }
+}
+
+//==========dashboard statistics==================
+.dashboard-page {
+  padding: $dashboard-padding;
+}
+
+.grid {
+  display: grid;
+  gap: $grid-gap;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: $bp-tablet) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: $bp-desktop) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.loading-note {
+  color: $text-light;
+  margin-bottom: 8px;
+}
+
+.empty-state {
+  margin-top: 20px;
+  color: $text-light;
 }

@@ -12,6 +12,7 @@ $color-dialog-border: #f0f0f0;
 $color-overlay-bg: rgba(0, 0, 0, 0.4);
 $color-text-primary: #333;
 $color-text-secondary: #444;
+$text-light: rgba(0, 0, 0, 0.6);
 
 // Base
 $color-white: #ffffff;
@@ -140,3 +141,11 @@ $dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
 // =========================================
 
 $dialog-fade-duration: 0.3s;
+
+// Breakpoints
+$bp-tablet: 640px;
+$bp-desktop: 1024px;
+
+// Layout
+$dashboard-padding: 16px;
+$grid-gap: 12px;
