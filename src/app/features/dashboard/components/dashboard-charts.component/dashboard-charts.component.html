@@ -26,6 +26,21 @@
         </ng-template>
       </div>
 
+       <!-- Priority Bar -->
+      <div class="card">
+        <h2>Priority Distribution</h2>
+        <ng-container *ngIf="priorityData$ | async as prio; else emptyPrio">
+          <app-chart
+  [type]="'bar'"
+  [data]="(priorityData$ | async) ?? { labels: [], datasets: [] }"
+  [options]="priorityOptions">
+</app-chart>
+        </ng-container>
+        <ng-template #emptyPrio>
+          <div class="empty">No tasks to calculate priorities.</div>
+        </ng-template>
+      </div>
+
       <!-- Trend Line -->
       <div class="card">
         <h2>Completion Trend (Last 14 days)</h2>
@@ -40,21 +55,7 @@
           <div class="empty">No completed tasks to show trend.</div>
         </ng-template>
       </div>
-
-      <!-- Priority Bar -->
-      <div class="card">
-        <h2>Priority Distribution</h2>
-        <ng-container *ngIf="priorityData$ | async as prio; else emptyPrio">
-          <app-chart
-  [type]="'bar'"
-  [data]="(priorityData$ | async) ?? { labels: [], datasets: [] }"
-  [options]="priorityOptions">
-</app-chart>
-        </ng-container>
-        <ng-template #emptyPrio>
-          <div class="empty">No tasks to calculate priorities.</div>
-        </ng-template>
-      </div>
+     
 
       <!-- Overdue Box -->
       <div class="card overdue" *ngIf="overdue$ | async as overdue">

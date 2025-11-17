@@ -140,3 +140,82 @@ $dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
 // =========================================
 
 $dialog-fade-duration: 0.3s;
+
+//===========Activity feed=======
+// Colors
+$color-white: #ffffff;
+$color-black: #000000;
+$color-border: #eee;
+$color-hover: #fafafa;
+$color-avatar-bg: #2196f3;
+$color-avatar-text: #fff;
+
+// Spacing
+$space-xs: 0.4rem;
+$space-sm: 0.5rem;
+$space-md: 0.75rem;
+$space-lg: 1rem;
+
+// Border radius
+$radius-lg: 0.75rem;
+$radius-round: 50%;
+
+// Shadows
+$shadow-card: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+// Font sizes
+$font-xs: 0.8rem;
+$font-sm: 0.9rem;
+$font-md: 1rem;
+
+//======Chart=========
+// Spacing
+$space-xs: 0.5rem;
+$space-sm: 1rem;
+
+// Minimum height values
+$min-height-chart: 260px;
+
+// Font sizes
+$font-sm: 0.9rem;
+
+// Opacity
+$opacity-light: 0.7;
+
+//==========dashboard-chart=========
+// Colors
+$color-white: #ffffff;
+$color-danger: #f44336;
+$color-success: #4caf50;
+$color-border: #eee;
+
+// Shadows
+$shadow-card: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+// Border Radius
+$radius-md: 0.75rem;
+$radius-full: 999px;
+
+// Font Sizes
+$font-xs: 0.8rem;
+$font-sm: 0.9rem;
+$font-md: 1rem;
+$font-lg: 1.25rem;
+
+// Spacing
+$space-xs: 0.2rem;
+$space-sm: 0.4rem;
+$space-md: 0.5rem;
+$space-lg: 0.7rem;
+$space-xl: 1rem;
+$space-xxl: 1.5rem;
+
+// Component Sizes
+$card-height: 350px;
+$card-width: 494px;
+$activity-height: 292px;
+$activity-width: 394px;
+
+// Breakpoints
+$bp-tablet: 900px;
+$bp-desktop-lg: 1400px;
