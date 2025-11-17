@@ -1,5 +1,6 @@
 @use './variables' as vars;
 
+// ====== FLEX HELPERS ======
 @mixin flex($justify: center, $align: center, $direction: row) {
   display: flex;
   justify-content: $justify;
@@ -16,10 +17,11 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: $z-index;
   box-sizing: border-box;
+  z-index: $z-index;
 }
 
+// ====== FONT HELPERS ======
 @mixin font-primary($size: 1rem, $weight: normal) {
   font-family: vars.$font-family-primary;
   font-size: $size;
@@ -43,6 +45,7 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
