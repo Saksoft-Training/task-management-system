@@ -1,21 +1,24 @@
 <header class="app-header">
   <div class="header-container">
     <div class="logo">SakNgTrain</div>
+    @if (!isAuthMinimal()) {
     <nav class="nav-links">
       @for (link of navLinks; track link.label) {
-        <a [routerLink]="link.path" routerLinkActive="active">
-          {{ link.label }}
-        </a>
+      <a [routerLink]="link.path" routerLinkActive="active">
+        {{ link.label }}
+      </a>
       }
     </nav>
     <div class="user-section">
       @if (userEmail) {
-        <div class="user-email">
-          <img src="assets/icons/profile-Icon.svg" alt="profile" />
-          <span>{{ userEmail }}</span>
-        </div>
+      <div class="user-email">
+        <img src="assets/icons/profile-Icon.svg" alt="profile" />
+        <span>{{ userEmail }}</span>
+      </div>
       }
-      <img src="assets/icons/logout-Icon.svg" alt="logout" class="logout-icon" />
+      <img src="assets/icons/logout-Icon.svg" alt="logout"
+        class="logout-icon" />
     </div>
+    }
   </div>
 </header>
