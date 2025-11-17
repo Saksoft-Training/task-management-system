@@ -92,8 +92,8 @@
         <select title="assignee" class="field-select"
           formControlName="assignee">
           <option disabled value>Select an assignee</option>
-          @for (u of ['Prathyusha', 'Pragathi', currentUser]; track u) {
-          <option [value]="u">{{ u }}</option>
+          @for (u of users; track u.email) {
+          <option [value]="u.name">{{ u.name }}</option>
           }
         </select>
 
@@ -145,4 +145,3 @@
     </form>
   </div>
 </div>
-

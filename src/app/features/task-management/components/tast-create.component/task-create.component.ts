@@ -7,9 +7,10 @@ import { Project } from '../../../../../types/models/project';
 import { Task, TaskPriority, TaskStatus } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
 import { ProjectService } from '../../../project-management/services/project-service';
+import { UserStorageService } from '../../../../shared/services/user-storage-service';
+import { User } from '../../../../../types/models/user';
 //#endregion
 
-//#region Component Metadata
 @Component({
   selector: 'app-create-task',
   standalone: true,
@@ -17,62 +18,87 @@ import { ProjectService } from '../../../project-management/services/project-ser
   templateUrl: './task-create.component.html',
   styleUrls: ['./task-create.component.scss']
 })
-//#endregion
-
-//#region TaskCreate Component
 export class TastCreateComponent implements OnInit {
 
-  //#region Form + UI State
+  //#region Properties
+  /** Reactive form used for creating a new task */
   public form!: FormGroup;
 
-  public statuses: TaskStatus[] = ['To Do', 'In Progress', 'Completed']; // dropdown
-  public priorities: TaskPriority[] = ['Low', 'Medium', 'High', 'Urgent']; // dropdown
+  /** Dropdown list of allowed task statuses */
+  public statuses: TaskStatus[] = ['To Do', 'In Progress', 'Completed'];
 
-  public projects: Project[] = [];         // list of all projects
-  public selectedProject?: Project;        // currently selected project
-  public showProjectDropdown = true;       // hide dropdown if coming from inside project
+  /** Dropdown list of allowed task priorities */
+  public priorities: TaskPriority[] = ['Low', 'Medium', 'High', 'Urgent'];
 
-  public successMessage = '';              // toast-like success message
-  public maxDescription = 500;             // description limit
+  /** List of all available projects */
+  public projects: Project[] = [];
+
+  /** Project selected either from route or by user */
+  public selectedProject?: Project;
+
+  /** Whether to show project dropdown (false if route already provides projectId) */
+  public showProjectDropdown = true;
+
+  /** Success message shown after creating a task */
+  public successMessage = '';
+
+  /** Maximum length allowed for task description */
+  public maxDescription = 500;
+
+  /** List of system users loaded from local storage */
+  public users: User[] = [];
+
+  /** Logged-in username - temporary mock value */
+  public currentUser = 'demoUser';
   //#endregion
 
-  //#region Dummy User Data 
-  public currentUser = 'demoUser';  // TEMP VALUE until Auth integration
-  //#endregion
-
-  //#region Constructor , Injected Services
+  //#region Constructor
+  /**
+   * @summary Initializes services and sets up dependency injection.
+   *
+   * @param fb - Angular FormBuilder for building reactive forms
+   * @param route - ActivatedRoute for accessing route params
+   * @param router - Angular Router for navigation
+   * @param projectService - Service used to fetch project data
+   * @param taskService - Service used to save new tasks
+   * @param userStorage - Service used to load registered system users
+   */
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     public router: Router,
     private projectService: ProjectService,
-    private taskService: TaskService
-  ) { }
+    private taskService: TaskService,
+    private userStorage: UserStorageService
+  ) {}
   //#endregion
 
-  //#region Lifecycle Hooks
-  /** Initialize form, load projects & detect projectId from route */
+  //#region Lifecycle Methods
+  /**
+   * @summary Loads initial data, detects selected project from route, 
+   * and initializes the reactive form.
+   *
+   * @returns void
+   */
   ngOnInit(): void {
-
-    // TEMP: Fetching projects from local storage / dummy service
+    // Load all projects
     this.projects = this.projectService.getAll(this.currentUser);
 
-    // If coming from /projects/:id/tasks/create
+    // Load all users from local storage
+    this.users = this.userStorage.getAllUsers();
+
+    // Detect projectId if navigating from Project Details page
     const projectIdParam =
       this.route.snapshot.paramMap.get('id') ||
       this.route.snapshot.paramMap.get('projectId');
 
     if (projectIdParam) {
       const pid = Number(projectIdParam);
-
-      // TEMP: Fetch project from dummy project service
       this.selectedProject = this.projectService.getById(pid, this.currentUser) ?? undefined;
-
-      // Hide project dropdown because user is already inside a project
       this.showProjectDropdown = false;
     }
 
-    // Build form
+    // Build form with default values + validators
     this.form = this.fb.group({
       projectId: [
         this.selectedProject?.id || null,
@@ -86,14 +112,11 @@ export class TastCreateComponent implements OnInit {
       dueDate: ['', [Validators.required, this.dueDateWithinProjectValidator.bind(this)]]
     });
 
-    // When project changes → validate due date inside project range
+    // Re-validate due date whenever selected project changes
     this.form.get('projectId')?.valueChanges.subscribe(val => {
-      if (!val) {
-        this.selectedProject = undefined;
-      } else {
-        // TEMP: Using local project data
-        this.selectedProject = this.projectService.getById(Number(val), this.currentUser);
-      }
+      this.selectedProject = val
+        ? this.projectService.getById(Number(val), this.currentUser)
+        : undefined;
 
       this.form.get('dueDate')?.updateValueAndValidity();
     });
@@ -101,7 +124,13 @@ export class TastCreateComponent implements OnInit {
   //#endregion
 
   //#region Validators
-  /** Ensures due date is not in past & stays within project's timeline */
+  /**
+   * @summary Ensures selected due date is not in the past,
+   * and lies within the selected project's date range.
+   *
+   * @param control - FormControl representing the due date field
+   * @returns ValidationErrors | null
+   */
   dueDateWithinProjectValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
@@ -112,8 +141,10 @@ export class TastCreateComponent implements OnInit {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    // Prevent past due dates
     if (dt < today) return { pastDate: true };
 
+    // Validate against project range if project selected
     if (this.selectedProject) {
       const start = new Date(this.selectedProject.startDate);
       const end = new Date(this.selectedProject.endDate);
@@ -129,26 +160,48 @@ export class TastCreateComponent implements OnInit {
   }
   //#endregion
 
-  //#region Min/Max Getters for Date Input
+  //#region Getter Helpers
+  /**
+   * @summary Computes minimum selectable due date.
+   * @description Uses project start date if project selected; otherwise today.
+   *
+   * @returns string - minimum date in yyyy-mm-dd format
+   */
   public get minDate(): string {
-    return this.selectedProject?.startDate ||
-      new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0];
+    if (!this.selectedProject) return today;
+
+    return (new Date(this.selectedProject.startDate) > new Date(today))
+      ? this.selectedProject.startDate
+      : today;
   }
 
+  /**
+   * @summary Computes maximum selectable due date.
+   *
+   * @returns string
+   */
   public get maxDate(): string {
     return this.selectedProject?.endDate || '';
   }
-  //#endregion
 
-  //#region Helpers
-  /** Get live character count for description */
+  /**
+   * @summary Returns current description character count.
+   *
+   * @returns number
+   */
   public charCount(): number {
     return (this.form.get('description')?.value || '').length;
   }
   //#endregion
 
-  //#region Submit / Reset / Cancel
-  /** Creates a new task and redirects */
+  //#region Form Actions
+  /**
+   * @summary Validates form, creates new Task object, saves it,
+   * displays success message, and navigates user appropriately.
+   *
+   * @returns void
+   */
   public onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -158,7 +211,7 @@ export class TastCreateComponent implements OnInit {
     const f = this.form.value;
     const now = new Date().toISOString();
 
-    // TEMP: Using Date.now() → Replace with backend ID
+    // Construct new task object
     const newTask: Task = {
       id: Date.now(),
       title: f.title,
@@ -168,15 +221,16 @@ export class TastCreateComponent implements OnInit {
       assignee: f.assignee,
       dueDate: f.dueDate,
       projectId: Number(this.selectedProject?.id ?? f.projectId),
-      createdBy: this.currentUser,  // TEMP: Replace with real user
+      createdBy: this.currentUser,
       createdAt: now,
       updatedAt: now
     };
 
+    // Save to localStorage
     this.taskService.save(newTask);
     this.successMessage = 'Task created successfully!';
 
-    // Redirect after short delay
+    // Slight delay before navigating
     setTimeout(() => {
       if (this.selectedProject) {
         this.router.navigate(['/projects', this.selectedProject.id]);
@@ -186,7 +240,11 @@ export class TastCreateComponent implements OnInit {
     }, 900);
   }
 
-  /** Reset form values */
+  /**
+   * @summary Resets the form to initial state while keeping selected project prefilled.
+   *
+   * @returns void
+   */
   public onReset(): void {
     this.form.reset({
       projectId: this.selectedProject?.id || null,
@@ -196,7 +254,11 @@ export class TastCreateComponent implements OnInit {
     this.successMessage = '';
   }
 
-  /** Cancel and go back */
+  /**
+   * @summary Navigates user back to previous appropriate page.
+   *
+   * @returns void
+   */
   public onCancel(): void {
     if (this.selectedProject) {
       this.router.navigate(['/projects', this.selectedProject.id]);
@@ -206,4 +268,3 @@ export class TastCreateComponent implements OnInit {
   }
   //#endregion
 }
-//#endregion
