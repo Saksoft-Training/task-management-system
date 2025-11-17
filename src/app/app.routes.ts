@@ -5,13 +5,8 @@ import { LoginComponent } from './features/user-account-management/components/lo
 
 export const routes: Routes = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
-
-  // User module routes
   { path: 'register', component: RegisterComponent },
-
-  // Project module routes
   { path: 'projects/create', component: ProjectCreateComponent },
-];
-    { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent }
 
 ];
