@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Activity } from '../../../../../types/models/activity/activity.model';
 import { ActivityService } from '../../services/activity-service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DashboardService } from '../../services/dashboard-service';
+import { Activity } from '../../../../../types/activity/activity.model';
 
 @Component({
   selector: 'app-activity-feed',
