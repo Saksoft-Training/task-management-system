@@ -219,6 +219,7 @@ export class TastCreateComponent implements OnInit {
       status: f.status,
       priority: f.priority,
       assignee: f.assignee,
+      assigneeEmail : f.assigneeEmail,
       dueDate: f.dueDate,
       projectId: Number(this.selectedProject?.id ?? f.projectId),
       createdBy: this.currentUser,
