@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder,FormGroup,Validators,AbstractControl,ValidationErrors,AsyncValidatorFn,ReactiveFormsModule} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private userStorage: UserStorageService,
     private router: Router
-  ) {}
+  ) { }
   //#endregion
 
   //#region Lifecycle Hook
@@ -69,8 +69,11 @@ export class RegisterComponent implements OnInit {
         name: ['', [Validators.required, Validators.minLength(3), this.nameValidator()]],
         email: [
           '',
-          [Validators.required, this.gmailValidator()],
-          { asyncValidators: [this.emailUniqueValidator()], updateOn: 'blur' }
+          {
+            validators: [Validators.required, this.gmailValidator()],
+            asyncValidators: [this.emailUniqueValidator()],
+            updateOn: 'change'
+          }
         ],
         password: ['', [Validators.required, this.passwordStrengthValidator()]],
         confirmPassword: ['', Validators.required]
