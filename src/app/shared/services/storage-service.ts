@@ -8,48 +8,58 @@ const PASSWORD_SECRET = 'MyAppSecret@2025';
 export class UserStorageService {
   //#region Get Users
   /**
-   * @summary Retrieves all stored users from localStorage.
-   * @returns User[] - List of all registered users
+   * @summary Retrieves all registered users from local storage.
+   * @returns User[] Array of all stored users.
    */
-  getAllUsers(): User[] {
+  public getAllUsers(): User[] {
     const usersJson = localStorage.getItem(USERS_KEY);
     return usersJson ? JSON.parse(usersJson) : [];
   }
+  //#endregion 
 
+  //#region Save Users
   /**
-   * @summary Saves the complete list of users to localStorage.
-   * @param users - Array of users to save
+   * @summary Saves the provided list of users to local storage.
+   * @param users Array of User objects to store.
    * @returns void
    */
-  saveAllUsers(users: User[]): void {
+  public saveAllUsers(users: User[]): void {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
+  //#endregion 
 
+  //#region Email Check
   /**
-   * @summary Returns all users (wrapper for getAllUsers).
-   * @returns User[]
+   * @summary Checks whether an email already exists in storage.
+   * @param email Email string to be checked.
+   * @returns boolean True if email exists.
    */
-  getUsers(): User[] {
-    return this.getAllUsers();
+  public isEmailExists(email: string): boolean {
+    const check = email.trim().toLowerCase();
+    return this.getAllUsers().some(
+      user => user.email.trim().toLowerCase() === check
+    );
   }
-  //#endregion
+  //#endregion 
 
-  //#region Password Encoding / Decoding
+  //#region Encode Password
   /**
-   * @summary Encodes raw password with a secret key.
-   * @param rawPassword - Plain text password
-   * @returns string - Encoded password
+   * @summary Encodes (obfuscates) user password using base64.
+   * @param rawPassword Plain text password to encode.
+   * @returns string Encoded password string.
    */
-  encodePassword(rawPassword: string): string {
+  public encodePassword(rawPassword: string): string {
     return btoa(`${PASSWORD_SECRET}:${rawPassword}`);
   }
+  //#endregion 
 
+  //#region Decode Password
   /**
-   * @summary Decodes the encoded password.
-   * @param obfuscatedPassword - Encoded password string
-   * @returns string - Decoded plain password
+   * @summary Decodes the encoded password back to plain text.
+   * @param obfuscatedPassword Encoded password string.
+   * @returns string Decoded raw password.
    */
-  decodePassword(obfuscatedPassword: string): string {
+  public decodePassword(obfuscatedPassword: string): string {
     try {
       const decoded = atob(obfuscatedPassword);
       return decoded.split(':')[1];
@@ -57,5 +67,5 @@ export class UserStorageService {
       return '';
     }
   }
-  //#endregion
+  //#endregion 
 }

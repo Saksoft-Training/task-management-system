@@ -10,26 +10,29 @@ const AUTH_TOKEN_KEY = 'authToken';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   //#region Constructor
   /**
    * @summary Injects router and user storage service used for login operations.
-   * @param router Handles navigation after login/logout
-   * @param userStorage Provides access to stored user data
+   * @param router Handles navigation after login/logout.
+   * @param userStorage Provides access to stored user data.
    */
-  constructor(
-    private router: Router,
-    private userStorage: UserStorageService
+  public constructor(
+    private readonly router: Router,
+    private readonly userStorage: UserStorageService
   ) {}
-  //#endregion
+  //#endregion 
 
   //#region Login
   /**
    * @summary Validates user credentials and logs user in.
-   * @param credentials Object containing email, password and rememberMe flag
-   * @returns Observable<User> Emits the authenticated user or error
+   * @param credentials Object containing email, password, and rememberMe flag.
+   * @returns Observable<User> Emits authenticated user or error.
    */
-  public login(credentials: { email: string; password: string; rememberMe: boolean }): Observable<User> {
+  public login(credentials: {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+  }): Observable<User> {
     const { email, password, rememberMe } = credentials;
     const allUsers = this.userStorage.getAllUsers();
     const user = allUsers.find(u =>
@@ -39,32 +42,36 @@ export class AuthService {
     if (!user) {
       return throwError(() => new Error('Invalid email or password'));
     }
-    const token =
-      'token_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+    const token = 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2);
     if (rememberMe) {
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       localStorage.setItem(AUTH_TOKEN_KEY, token);
-      sessionStorage.clear();
+      sessionStorage.removeItem(CURRENT_USER_KEY);
+      sessionStorage.removeItem(AUTH_TOKEN_KEY);
     } else {
       sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       sessionStorage.setItem(AUTH_TOKEN_KEY, token);
-      localStorage.clear();
+      localStorage.removeItem(CURRENT_USER_KEY);
+      localStorage.removeItem(AUTH_TOKEN_KEY);
     }
     return of(user).pipe(delay(500));
   }
-  //#endregion
+  //#endregion 
 
-  //#region Auth State
+  //#region 
   /**
    * @summary Checks if authentication token exists.
-   * @returns boolean True if user is logged in
+   * @returns boolean Returns true if user is logged in.
    */
   public isLoggedIn(): boolean {
-    return !!(localStorage.getItem(AUTH_TOKEN_KEY) || sessionStorage.getItem(AUTH_TOKEN_KEY));
+    return !!(
+      localStorage.getItem(AUTH_TOKEN_KEY) ||
+      sessionStorage.getItem(AUTH_TOKEN_KEY)
+    );
   }
   /**
-   * @summary Retrieves the currently logged-in user's data.
-   * @returns User|null Current user or null
+   * @summary Retrieves the currently logged-in user.
+   * @returns User|null The logged-in user or null if not found.
    */
   public getCurrentUser(): User | null {
     const data =
@@ -74,17 +81,20 @@ export class AuthService {
     return data ? JSON.parse(data) : null;
   }
   /**
-   * @summary Gets the stored authentication token.
-   * @returns string|null Auth token value
+   * @summary Retrieves stored authentication token.
+   * @returns string|null Auth token string.
    */
   public getAuthToken(): string | null {
-    return sessionStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem(AUTH_TOKEN_KEY);
+    return (
+      sessionStorage.getItem(AUTH_TOKEN_KEY) ||
+      localStorage.getItem(AUTH_TOKEN_KEY)
+    );
   }
-  //#endregion
+  //#endregion 
 
-  //#region Logout
+  //#region 
   /**
-   * @summary Clears all session/local storage and redirects to login page.
+   * @summary Logs user out, clears storage, and redirects to login page.
    * @returns void
    */
   public logout(): void {
@@ -92,5 +102,5 @@ export class AuthService {
     localStorage.clear();
     this.router.navigate(['/login'], { replaceUrl: true });
   }
-  //#endregion
+  //#endregion 
 }
