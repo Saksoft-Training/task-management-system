@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 import { LoginComponent } from './features/user-account-management/components/login/login.component';
-import { ForgotPasswordComponent } from './features/user-account-management/components/forgot-password.component/forgot-password.component';
+import { ForgotPasswordComponent } from './features/user-account-management/components/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
