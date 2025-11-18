@@ -444,3 +444,48 @@ $toast-radius: 6px;
 
 // Font sizes
 $close-btn-size: 1rem;
+
+//=====dropdown notification=========
+// Dropdown Container
+$dropdown-width: 360px;
+$dropdown-bg: #ffffff;
+$dropdown-border: #e2e8f0;
+$dropdown-radius: 10px;
+$dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+
+// Header
+$header-padding: 0.85rem 1rem;
+$header-border: #f1f5f9;
+$header-bg: #fafafa;
+$header-font-weight: 600;
+$header-font-size: 0.95rem;
+
+// Header Buttons
+$action-gap: 0.75rem;
+$action-font-size: 0.8rem;
+$action-color: #3b82f6;
+$action-disabled-opacity: 0.5;
+
+// Body
+$body-max-height: 320px;
+$body-padding: 0.75rem;
+$body-gap: 0.65rem;
+
+// Scrollbar colors
+$scrollbar-track: #f1f5f9;
+$scrollbar-thumb: #c1c9d2;
+
+// Empty State
+$empty-padding: 2.5rem 0;
+$empty-color: #94a3b8;
+$empty-font-size: 0.9rem;
+
+// Card background colors
+$notification-success-bg: #e9f7ee;
+$notification-warning-bg: #fff7e6;
+$notification-critical-bg: #fdecec;
+$notification-info-bg: #e9f2ff;
+
+// Notification Card
+$notification-border-radius: 8px;
+$notification-border: #e2e8f0;

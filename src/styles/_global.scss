@@ -710,3 +710,105 @@ body::-webkit-scrollbar {
 .toast-info {
   background-color: $color-info;
 }
+
+//============dropdown notification===========
+.dropdown-container {
+  width: $dropdown-width;
+  background: $dropdown-bg;
+  border: 1px solid $dropdown-border;
+  border-radius: $dropdown-radius;
+  overflow: hidden;
+  box-shadow: $dropdown-shadow;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- HEADER ---------- */
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $header-padding;
+  border-bottom: 1px solid $header-border;
+  background: $header-bg;
+  font-weight: $header-font-weight;
+  font-size: $header-font-size;
+
+  .header-actions {
+    display: flex;
+    gap: $action-gap;
+
+    button {
+      border: none;
+      background: transparent;
+      color: $action-color;
+      font-size: $action-font-size;
+      cursor: pointer;
+      padding: 0;
+
+      &:disabled {
+        opacity: $action-disabled-opacity;
+        pointer-events: none;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* ---------- BODY ---------- */
+.dropdown-body {
+  max-height: $body-max-height;
+  overflow-y: auto;
+  padding: $body-padding;
+  display: flex;
+  flex-direction: column;
+  gap: $body-gap;
+
+  scrollbar-width: thin;
+  scrollbar-color: $scrollbar-thumb $scrollbar-track;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $scrollbar-track;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $scrollbar-thumb;
+    border-radius: 10px;
+  }
+}
+
+/* ---------- EMPTY ---------- */
+.empty {
+  padding: $empty-padding;
+  text-align: center;
+  color: $empty-color;
+  font-size: $empty-font-size;
+}
+
+/* ---------- CARD BACKGROUND COLORS ---------- */
+.notification-item.success {
+  background: $notification-success-bg;
+}
+
+.notification-item.warning {
+  background: $notification-warning-bg;
+}
+
+.notification-item.critical {
+  background: $notification-critical-bg;
+}
+
+.notification-item.info {
+  background: $notification-info-bg;
+}
+
+/* Rounded Cards */
+.notification-item {
+  border-radius: $notification-border-radius;
+  border: 1px solid $notification-border;
+}
