@@ -15,11 +15,29 @@ import { ToastNotificationComponent } from "../toast-notification/toast-notifica
   styleUrl: './dashboard-notifications.component.scss',
 })
 export class DashboardNotificationsComponent {
+  //#region Inputs & Outputs
 
+  /**
+   * @description List of notifications to display on the dashboard
+   * @required
+   */
   @Input() notifications: AppNotification[] | null = [];
+  /**
+  * @description Emits notification ID when a notification is marked as read
+  * @event
+  */
   @Output() markAsRead = new EventEmitter<string>();
+  //#endregion
 
+  //#region Public Methods
+
+  /**
+   * @description Triggered when user clicks to mark a notification as read
+   * @param notificationId string - The ID of the notification to update
+   * @returns void
+   */
   public onMarkAsRead(notificationId: string): void {
     this.markAsRead.emit(notificationId);
   }
+  //#endregion
 }

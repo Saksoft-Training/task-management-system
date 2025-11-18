@@ -5,68 +5,76 @@ import { AppNotification, NotificationKind, NotificationSeverity } from '../../.
 import { Task } from '../../../../types/models/task';
 import { Project } from '../../../../types/models/project';
 
+//#region Interfaces & Types
+/**
+ * Extended notification type used internally with additional metadata
+ */
+interface ExtendedAppNotification extends AppNotification {
+  metadata?: {
+    uniqueKey?: string;
+    [key: string]: any;
+  }
+};
+/**
+ * Generic structure for notification configuration
+ */
+export interface NotificationConfig {
+  kind: NotificationKind;
+  severity: NotificationSeverity;
+  title: string;
+  message: string;
+  route?: string;
+  metadata?: Record<string, any>;
+  showToast?: boolean;
+}
+/**
+ * Defines how notification handlers should behave for different domain events
+ */
+export interface NotificationHandler<T = any> {
+  shouldNotify(data: T): boolean;
+  createConfig(data: T): Omit<NotificationConfig, 'kind'>; // Remove kind from createConfig return
+  getUniqueKey(data: T): string;
+}
+//#endregion
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
-  //#region Private Properties
-  /**
-   * @summary Key used for storing notifications in browser localStorage
-   */
+  //#region Private Members
+  /** @description Local storage key used for persistence */
   private readonly STORAGE_KEY = 'notifications';
-/**
-   * @summary BehaviorSubject holding the current state of all notifications
-   * @description Maintains reactive state and provides real-time updates to subscribers
-   */
-  private notificationsSubject = new BehaviorSubject<AppNotification[]>(this.loadFromStorage());
-   //#region Public Observables
-  /**
-   * @summary Observable stream of all notifications in the system
-   * @description Emits the complete notification list whenever changes occur
-   */
+  /** @description Reactive source representing stored notifications */
+  private notificationsSubject = new BehaviorSubject<ExtendedAppNotification[]>(this.loadFromStorage());
+  /** @description Emits toast based notifications */
+  private toastNotificationSubject = new Subject<ExtendedAppNotification>();
+
+  /** @description Collection of registered notification handlers used to generate notifications dynamically */
+  private handlers = new Map<NotificationKind, NotificationHandler>();
+  //#region Public Observables
+  /** @description Observable exposing notifications list */
   public notifications$ = this.notificationsSubject.asObservable();
- /**
-   * @summary Observable stream of unread notification count
-   * @description Automatically calculates and emits count of unread notifications
-   */
+  /** @description Observable that emits unread notification count, shared across subscribers */
   public unreadCount$ = this.notifications$.pipe(
     map(notifications => notifications.filter(notification => !notification.isRead).length),
     shareReplay(1)
   );
-
-  /**
-   * @summary Subject for emitting toast notifications for real-time display
-   * @description Used by toast components to show temporary notification messages
-   */
-   //#region Public Observables
-  /**
-   * @summary Observable stream of all notifications in the system
-   * @description Emits the complete notification list whenever changes occur
-   */
-  private toastNotificationSubject = new Subject<AppNotification>();
-   /**
-   * @summary Observable stream for toast notification display
-   * @description Emits notifications that should be displayed as temporary toasts
-   */
+  /** @description Observable to trigger toast notifications */
   public toastNotification$ = this.toastNotificationSubject.asObservable();
-   /**
-   * @summary Alias for toastNotification$ for backward compatibility
-   * @description Maintains compatibility with components using the legacy toast$ property
-   */
   public toast$ = this.toastNotificationSubject.asObservable();
+  //#endregion
+  constructor() {
+    this.registerDefaultHandlers();
+  }
 
-  constructor() { }
- //#endregion
-  // #region CRUD on notifications =========
-/**
-   * @summary Creates and adds a new notification to the system
-   * @param data - Partial notification data without auto-generated fields
-   * @param data.showToast - Optional flag to display notification as toast
+   //#region Core Notification Methods
+
+  /**
+   * @description Adds a new notification to system and optionally displays a toast message
+   * @param data - Notification configuration excluding id, read status and timestamp
    * @returns void
-   */
-  public addNotification(
-    data: Omit<AppNotification, 'id' | 'isRead' | 'timestamp'> & { showToast?: boolean }
+   */  public addNotification(
+    data: Omit<ExtendedAppNotification, 'id' | 'isRead' | 'timestamp'> & { showToast?: boolean }
   ): void {
-    const notification: AppNotification = {
+    const notification: ExtendedAppNotification = {
       id: this.generateId(),
       isRead: false,
       timestamp: new Date().toISOString(),
@@ -82,9 +90,204 @@ export class NotificationService {
       this.toastNotificationSubject.next(notification);
     }
   }
- /**
-   * @summary Marks a specific notification as read
-   * @param notificationId - Unique identifier of the notification to update
+  /**
+  * @description Generic wrapper that executes registered handlers to display notifications
+  * @param kind - Notification type identifier
+  * @param data - Object passed to handler logic
+  * @returns boolean - True if notification created, false otherwise
+  */
+  public notify<T>(kind: NotificationKind, data: T): boolean {
+    const handler = this.handlers.get(kind);
+    if (!handler) {
+      console.warn(`No handler registered for notification kind: ${kind}`);
+      return false;
+    }
+    if (!handler.shouldNotify(data)) {
+      return false;
+    }
+    // Check for duplicates
+    const uniqueKey = handler.getUniqueKey(data);
+    if (this.existsDuplicateNotification(kind, uniqueKey)) {
+      return false;
+    }
+    const config = handler.createConfig(data);
+    this.addNotification({
+      ...config,
+      kind,
+      metadata: { ...data, uniqueKey } // Store data and unique key in metadata
+    });
+    return true;
+  }
+  /**
+ * @description Registers a custom notification handler for dynamic generation
+ * @param kind - Unique notification type
+ * @param handler - Custom implementation handler
+ * @returns void
+ */
+  public registerHandler<T>(kind: NotificationKind, handler: NotificationHandler<T>): void {
+    this.handlers.set(kind, handler);
+  }
+  //#endregion
+  //#region Domain-Specific Notification Methods
+  /**
+   * @description Triggers notification for a task based on provided kind
+   */
+  public notifyTaskDue(task: Task, notificationType: NotificationKind): void {
+    this.notify(notificationType, task);
+  }
+  /** @description Notifies when a task has been completed */
+  public notifyTaskCompleted(task: Task): void {
+    this.notify('task-completed' as NotificationKind, task);
+  }
+  /** @description Notifies when a task is assigned to a user */
+  public notifyTaskAssigned(task: Task): void {
+    this.notify('task-assigned' as NotificationKind, task);
+  }
+  /** @description Notifies when project status changes */
+  public notifyProjectStatusChanged(project: Project): void {
+    this.notify('project-status-changed' as NotificationKind, project);
+  }
+  /** @description Notifies when user role changes */
+  public notifyUserRoleChanged(user: any, oldRole: string, newRole: string): void {
+    this.notify('user-role-changed' as NotificationKind, { user, oldRole, newRole });
+  }
+  /** @description Notifies when a new user joins the platform */
+  public notifyNewUserRegistered(user: any): void {
+    this.notify('user-registered' as NotificationKind, user);
+  }
+  /** @description Displays scheduled maintenance notification */
+  public notifySystemMaintenance(scheduledTime: Date, duration: string): void {
+    this.notify('system-maintenance' as NotificationKind, { scheduledTime, duration });
+  }
+  //#endregion
+  //#region Default Handlers Registration
+  /**
+   * @description Registers all default handlers for task, project, user and system notifications
+   * @returns void
+   */
+  private registerDefaultHandlers(): void {
+    // Task Due Date Handler
+    this.registerHandler('task-due-today' as NotificationKind, {
+      shouldNotify: (task: Task) => task.status !== 'Completed',
+      createConfig: (task: Task) => ({
+        severity: 'warning' as NotificationSeverity,
+        title: 'Task due today',
+        message: `${task.title} (Assigned to: ${task.assignee} – ${task.assigneeEmail})`,
+        route: `/projects/${task.projectId}/tasks/${task.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (task: Task) => `task-due-today-${task.id}-${new Date().toDateString()}`
+    } as NotificationHandler<Task>);
+
+    this.registerHandler('task-due-tomorrow' as NotificationKind, {
+      shouldNotify: (task: Task) => task.status !== 'Completed',
+      createConfig: (task: Task) => ({
+        severity: 'info' as NotificationSeverity,
+        title: 'Task due tomorrow',
+        message: `${task.title} (Assigned to: ${task.assignee} – ${task.assigneeEmail})`,
+        route: `/projects/${task.projectId}/tasks/${task.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (task: Task) => `task-due-tomorrow-${task.id}-${new Date().toDateString()}`
+    } as NotificationHandler<Task>);
+
+    this.registerHandler('task-overdue' as NotificationKind, {
+      shouldNotify: (task: Task) => task.status !== 'Completed',
+      createConfig: (task: Task) => ({
+        severity: 'critical' as NotificationSeverity,
+        title: 'Task overdue',
+        message: `${task.title} (Assigned to: ${task.assignee} – ${task.assigneeEmail})`,
+        route: `/projects/${task.projectId}/tasks/${task.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (task: Task) => `task-overdue-${task.id}-${new Date().toDateString()}`
+    } as NotificationHandler<Task>);
+
+    // Task Completion Handler
+    this.registerHandler('task-completed' as NotificationKind, {
+      shouldNotify: () => true,
+      createConfig: (task: Task) => ({
+        severity: 'success' as NotificationSeverity,
+        title: 'Task completed',
+        message: `${task.title} has been marked as completed.`,
+        route: `/projects/${task.projectId}/tasks/${task.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (task: Task) => `task-completed-${task.id}`
+    } as NotificationHandler<Task>);
+
+    // Task Assignment Handler
+    this.registerHandler('task-assigned' as NotificationKind, {
+      shouldNotify: () => true,
+      createConfig: (task: Task) => ({
+        severity: 'info' as NotificationSeverity,
+        title: 'New task assigned',
+        message: `${task.title} has been assigned to ${task.assignee} (${task.assigneeEmail}).`,
+        route: `/projects/${task.projectId}/tasks/${task.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (task: Task) => `task-assigned-${task.id}`
+    } as NotificationHandler<Task>);
+
+    // Project Status Handler
+    this.registerHandler('project-status-changed' as NotificationKind, {
+      shouldNotify: () => true,
+      createConfig: (project: Project) => ({
+        severity: 'info' as NotificationSeverity,
+        title: 'Project status updated',
+        message: `${project.name} status changed to ${project.status}.`,
+        route: `/projects/${project.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (project: Project) => `project-status-${project.id}-${project.status}`
+    } as NotificationHandler<Project>);
+
+    // User Management Handlers (examples)
+    this.registerHandler('user-role-changed' as NotificationKind, {
+      shouldNotify: () => true,
+      createConfig: (data: { user: any, oldRole: string, newRole: string }) => ({
+        severity: 'info' as NotificationSeverity,
+        title: 'User role updated',
+        message: `${data.user.name}'s role changed from ${data.oldRole} to ${data.newRole}.`,
+        route: `/admin/users/${data.user.id}`,
+        showToast: true
+      }),
+      getUniqueKey: (data: { user: any, oldRole: string, newRole: string }) =>
+        `user-role-${data.user.id}-${data.newRole}`
+    });
+
+    this.registerHandler('user-registered' as NotificationKind, {
+      shouldNotify: () => true,
+      createConfig: (user: any) => ({
+        severity: 'success' as NotificationSeverity,
+        title: 'New user registered',
+        message: `${user.name} (${user.email}) has joined the platform.`,
+        route: `/admin/users/${user.id}`,
+        showToast: false // Don't show toast for new registrations
+      }),
+      getUniqueKey: (user: any) => `user-registered-${user.id}`
+    });
+
+    // System Maintenance Handler
+    this.registerHandler('system-maintenance' as NotificationKind, {
+      shouldNotify: () => true,
+      createConfig: (data: { scheduledTime: Date, duration: string }) => ({
+        severity: 'warning' as NotificationSeverity,
+        title: 'System Maintenance Scheduled',
+        message: `Maintenance scheduled for ${data.scheduledTime.toLocaleString()} for ${data.duration}.`,
+        showToast: true
+      }),
+      getUniqueKey: (data: { scheduledTime: Date, duration: string }) =>
+        `maintenance-${data.scheduledTime.getTime()}`
+    });
+  }
+  //#endregion
+
+  //#region CRUD & Helper Methods
+
+  /**
+   * @description Marks a notification as read
+   * @param notificationId - Id of the notification to update
    * @returns void
    */
   public markAsRead(notificationId: string): void {
@@ -94,21 +297,20 @@ export class NotificationService {
     this.notificationsSubject.next(updatedNotifications);
     this.saveToStorage(updatedNotifications);
   }
-
   /**
-   * @summary Marks all notifications as read
+   * @description Marks all notifications as read
    * @returns void
    */
   public markAllAsRead(): void {
-    const updatedNotifications = this.notificationsSubject.value.map(notification => 
+    const updatedNotifications = this.notificationsSubject.value.map(notification =>
       ({ ...notification, isRead: true })
     );
     this.notificationsSubject.next(updatedNotifications);
     this.saveToStorage(updatedNotifications);
   }
-/**
-   * @summary Removes a specific notification from the system
-   * @param notificationId - Unique identifier of the notification to remove
+  /**
+   * @description Removes a notification from the list
+   * @param notificationId - Identifier to remove
    * @returns void
    */
   public dismiss(notificationId: string): void {
@@ -118,191 +320,90 @@ export class NotificationService {
     this.notificationsSubject.next(updatedNotifications);
     this.saveToStorage(updatedNotifications);
   }
-/**
-   * @summary Removes all notifications from the system
+  /**
+   * @description Clears all notifications permanently
    * @returns void
    */
   public clearAll(): void {
     this.notificationsSubject.next([]);
     this.saveToStorage([]);
   }
- //#endregion
-
-  //#region Domain-Specific Notification Helpers
   /**
-   * @summary Creates a task due date notification
-   * @param task - The task that is approaching or past its due date
-   * @param notificationType - Type of due date notification (today, tomorrow, overdue)
+   * @description Validates and notifies tasks based on due date
+   * @param tasks - List of task items to validate
    * @returns void
-   */
-  public notifyTaskDue(task: Task, notificationType: NotificationKind): void {
-    let severity: NotificationSeverity;
-    let title: string;
-
-    switch (notificationType) {
-      case 'task-due-today':
-        severity = 'warning';
-        title = 'Task due today';
-        break;
-      case 'task-due-tomorrow':
-        severity = 'info';
-        title = 'Task due tomorrow';
-        break;
-      case 'task-overdue':
-        severity = 'critical';
-        title = 'Task overdue';
-        break;
-      default:
-        severity = 'info';
-        title = 'Task update';
-    }
-    if (this.existsDuplicateNotification(task.id, notificationType)) {
-      return;
-    }
-    this.addNotification({
-      kind: notificationType,
-      severity,
-      title,
-      message: `${task.title} (Assigned to: ${task.assignee} – ${task.assigneeEmail})`,
-      taskId: task.id,
-      projectId: task.projectId,
-      route: `/projects/${task.projectId}/tasks/${task.id}`,
-      showToast: true
-    });
-  }
-/**
-   * @summary Creates a task completion notification
-   * @param task - The task that was marked as completed
-   * @returns void
-   */
-  public notifyTaskCompleted(task: Task): void {
-    this.addNotification({
-      kind: 'task-completed',
-      severity: 'success',
-      title: 'Task completed',
-      message: `${task.title} has been marked as completed.`,
-      taskId: task.id,
-      projectId: task.projectId,
-      route: `/projects/${task.projectId}/tasks/${task.id}`,
-      showToast: true
-    });
-  }
- /**
-   * @summary Creates a task assignment notification
-   * @param task - The task that was assigned to a user
-   * @returns void
-   */
-  public notifyTaskAssigned(task: Task): void {
-    this.addNotification({
-      kind: 'task-assigned',
-      severity: 'info',
-      title: 'New task assigned',
-      message: `${task.title} has been assigned to ${task.assignee} (${task.assigneeEmail}).`,
-      taskId: task.id,
-      projectId: task.projectId,
-      route: `/projects/${task.projectId}/tasks/${task.id}`,
-      showToast: true
-    });
-  }
-
-  /**
-   * @summary Creates a project status change notification
-   * @param project - The project whose status was updated
-   * @returns void
-   */
-  public notifyProjectStatusChanged(project: Project): void {
-    this.addNotification({
-      kind: 'project-status-changed',
-      severity: 'info',
-      title: 'Project status updated',
-      message: `${project.name} status changed to ${project.status}.`,
-      projectId: project.id,
-      route: `/projects/${project.id}`,
-      showToast: true
-    });
-  }
- //#endregion
-
-  //#region Task Management Methods
-  /**
-   * @summary Checks all tasks and creates due date notifications
-   * @param tasks - Array of tasks to check for due dates
-   * @returns void
-   * @description Creates notifications for tasks due today, tomorrow, and overdue tasks
    */
   public checkTaskDueDates(tasks: Task[]): void {
     const today = this.stripTime(new Date());
     const tomorrow = this.addDays(today, 1);
 
     tasks.forEach(task => {
-      if (task.status === 'Completed') {
-        return;
-      }
+      if (task.status === 'Completed') return;
 
       const dueDate = this.stripTime(new Date(task.dueDate));
 
       if (this.isSameDay(dueDate, today)) {
-        this.notifyTaskDue(task, 'task-due-today');
+        this.notifyTaskDue(task, 'task-due-today' as NotificationKind);
       } else if (this.isSameDay(dueDate, tomorrow)) {
-        this.notifyTaskDue(task, 'task-due-tomorrow');
+        this.notifyTaskDue(task, 'task-due-tomorrow' as NotificationKind);
       } else if (dueDate < today) {
-        this.notifyTaskDue(task, 'task-overdue');
+        this.notifyTaskDue(task, 'task-overdue' as NotificationKind);
       }
     });
   }
- /**
-   * @summary Alias for checkTaskDueDates for backward compatibility
-   * @param tasks - Array of tasks to check for due dates
+  /**
+   * @description Helper wrapper around checkTaskDueDates (legacy support)
+   * @param tasks - Task list to validate
    * @returns void
    */
   public checkDueDates(tasks: Task[]): void {
     this.checkTaskDueDates(tasks);
   }
-  //#endregion
-
-  //#region Private Helper Methods
   /**
-   * @summary Generates a unique identifier for notifications
-   * @returns string - Unique ID combining timestamp and random component
+   * @description Creates unique random notification ID
+   * @returns string - UUID-like identifier
    */
   private generateId(): string {
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   }
-/**
-   * @summary Loads notifications from persistent storage
-   * @returns AppNotification[] - Array of notifications from localStorage
-   */
-  private loadFromStorage(): AppNotification[] {
+  /**
+   * @description Loads persisted notifications from browser storage
+   * @returns ExtendedAppNotification[]
+   */  private loadFromStorage(): ExtendedAppNotification[] {
     try {
       const storedData = localStorage.getItem(this.STORAGE_KEY);
       if (!storedData) return [];
-      return JSON.parse(storedData) as AppNotification[];
+
+      const parsed = JSON.parse(storedData) as AppNotification[];
+      // Convert to ExtendedAppNotification by adding metadata if missing
+      return parsed.map(notification => ({
+        ...notification,
+        metadata: (notification as ExtendedAppNotification).metadata || {}
+      }));
     } catch {
       return [];
     }
   }
-/**
-   * @summary Saves notifications to persistent storage
-   * @param notifications - Array of notifications to persist
+  /**
+   * @description Persists notification array to browser storage
+   * @param notifications - Updated notification list
    * @returns void
    */
-  private saveToStorage(notifications: AppNotification[]): void {
+  private saveToStorage(notifications: ExtendedAppNotification[]): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notifications));
   }
-/**
-   * @summary Removes time component from a Date object
-   * @param date - Date object to strip time from
-   * @returns Date - Date with time set to 00:00:00
-   */
+  /**
+     * @description Removes time for accurate comparison
+     * @param date - Input date
+     * @returns Date - Normalized date
+     */
   private stripTime(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
- /**
-   * @summary Checks if two dates represent the same calendar day
-   * @param firstDate - First date to compare
-   * @param secondDate - Second date to compare
-   * @returns boolean - True if both dates are the same day
-   */
+  /**
+    * @description Compares two dates ignoring time
+    * @returns boolean - True if dates match
+    */
   private isSameDay(firstDate: Date, secondDate: Date): boolean {
     return (
       firstDate.getFullYear() === secondDate.getFullYear() &&
@@ -311,28 +412,27 @@ export class NotificationService {
     );
   }
   /**
-   * @summary Adds specified number of days to a date
-   * @param date - Base date to add days to
-   * @param days - Number of days to add
-   * @returns Date - New date with days added
-   */
+    * @description Adds required number of days to a date
+    * @returns Date - Modified date
+    */
   private addDays(date: Date, days: number): Date {
     const newDate = new Date(date);
     newDate.setDate(newDate.getDate() + days);
     return newDate;
   }
- /**
-   * @summary Checks for duplicate task notifications on the same day
-   * @param taskId - ID of the task to check for duplicates
-   * @param notificationType - Type of notification to check
-   * @returns boolean - True if duplicate notification exists for today
-   */
-  private existsDuplicateNotification(taskId: number, notificationType: NotificationKind): boolean {
+  /**
+     * @description Checks whether similar notification already exists for today
+     * @param kind - Notification category
+     * @param uniqueKey - Unique identifier generated by the handler
+     * @returns boolean - True if notification duplicates found
+     */
+  private existsDuplicateNotification(kind: NotificationKind, uniqueKey: string): boolean {
     const today = this.stripTime(new Date());
     return this.notificationsSubject.value.some(notification => {
-      if (notification.taskId !== taskId || notification.kind !== notificationType) return false;
+      if (notification.kind !== kind) return false;
       const notificationDate = this.stripTime(new Date(notification.timestamp));
-      return this.isSameDay(notificationDate, today);
+      return this.isSameDay(notificationDate, today) &&
+        notification.metadata?.[uniqueKey] === uniqueKey;
     });
   }
   //#endregion
