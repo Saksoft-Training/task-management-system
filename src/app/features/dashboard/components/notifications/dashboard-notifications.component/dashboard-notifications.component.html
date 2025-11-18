@@ -1,25 +1,24 @@
-<div class="dashboard-notifications">
-  <div class="widget-header">
-    <h3>Recent Notifications</h3>
-    <div class="notification-stats">
-      <span *ngIf="criticalCount > 0" class="stat critical">
-        {{ criticalCount }} critical
-      </span>
-      <span *ngIf="warningCount > 0" class="stat warning">
-        {{ warningCount }} warnings
-      </span>
+<div class="notifications-card">
+  <h3>Recent Notifications</h3>
+
+  <div *ngIf="(notifications$ | async) as list">
+    <div *ngIf="list.length; else empty">
+      <div *ngFor="let n of list | slice:0:5"
+           class="row"
+           [class.unread]="!n.isRead"
+           (click)="onNavigate(n)">
+        <span class="dot" [ngClass]="'dot-' + n.severity"></span>
+        <div class="text">
+          <div class="title">{{ n.title }}</div>
+          <div class="msg">{{ n.message }}</div>
+          <div class="time">{{ n.timestamp | date: 'short' }}</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="notifications-list">
-    <div *ngIf="recentNotifications.length === 0" class="empty-state">
-      <img src="assets/icons/Icon.svg"><br>
-      No notifications<br><p>You're all caught up!</p>
-    </div>
-    
-    <app-notification-item-component
-      *ngFor="let notification of recentNotifications"
-      [notification]="notification"
-    ></app-notification-item-component>
-  </div>
+  <ng-template #empty>
+    <div class="empty">No notifications yet.</div>
+  </ng-template>
 </div>
+<app-toast-notification-component></app-toast-notification-component>

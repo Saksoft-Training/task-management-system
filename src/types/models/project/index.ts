@@ -1,7 +1,11 @@
 export interface Project {
-  id: number;
-  name: string;
-  description?: string;
-  createdDate: Date;
-  updatedDate: Date;
+ createdAt: string;
+    createdBy: string;
+    description?: string;
+    endDate: string;
+    id: number;
+    name: string;
+    startDate: string;
+    status: 'Planning' | 'In Progress' | 'Completed' | 'On Hold';
+    updatedAt: string;
 }

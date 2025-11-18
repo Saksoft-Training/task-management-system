@@ -1,32 +1,33 @@
-import { Component } from '@angular/core';
-import { NotificationService,Notification } from '../../../services/notification-service';
-import { CommonModule } from '@angular/common';
-import { NotificationItemComponent } from '../notification-item.component/notification-item-component';
+import { CommonModule } from "@angular/common";
+import { Component } from "@angular/core";
+import { NotificationItemComponent } from "../notification-item.component/notification-item.component";
+import { NotificationService } from "../../../services/notification-service";
+import { AppNotification } from "../../../../../../types/models/notifications";
+import { Observable } from "rxjs";
+import { Router } from "@angular/router";
+import { ToastNotificationComponent } from "../toast-notification.component/toast-notification.component";
 
 @Component({
   selector: 'app-dashboard-notifications-component',
-  imports: [CommonModule,NotificationItemComponent],
+  imports: [CommonModule,NotificationItemComponent,ToastNotificationComponent],
   templateUrl: './dashboard-notifications.component.html',
   styleUrl: './dashboard-notifications.component.scss',
 })
 export class DashboardNotificationsComponent {
-recentNotifications: Notification[] = [];
+notifications$!: Observable<AppNotification[]>;
 
-  constructor(private notificationService: NotificationService) {
-    this.notificationService.notifications$.subscribe(notifications => {
-      this.recentNotifications = notifications.slice(0, 5); // Show 5 most recent
-    });
+  constructor(
+    private notificationService: NotificationService,
+    private router: Router
+  ) {}
+   ngOnInit(): void {
+    this.notifications$ = this.notificationService.notifications$;
   }
 
-  get criticalCount(): number {
-    return this.recentNotifications.filter(n => 
-      !n.read && n.severity === 'critical'
-    ).length;
-  }
-
-  get warningCount(): number {
-    return this.recentNotifications.filter(n => 
-      !n.read && n.severity === 'warning'
-    ).length;
+  onNavigate(n: AppNotification) {
+    if (n.route) {
+      this.notificationService.markAsRead(n.id);
+      this.router.navigateByUrl(n.route);
+    }
   }
 }

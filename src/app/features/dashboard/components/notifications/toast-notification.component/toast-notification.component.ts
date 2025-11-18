@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NotificationService,Notification } from '../../../services/notification-service';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { AppNotification } from '../../../../../../types/models/notifications';
+import { Subscription, timer } from 'rxjs';
+import { NotificationService } from '../../../services/notification-service';
+
 interface ToastNotification extends Notification {
   visible: boolean;
 }
@@ -12,45 +14,30 @@ interface ToastNotification extends Notification {
   styleUrl: './toast-notification.component.scss',
 })
 export class ToastNotificationComponent {
-@Input() notifications: Notification[] = [];
- toasts: ToastNotification[] = [];
-  private subscription = new Subscription();
+current: AppNotification | null = null;
+  private sub?: Subscription;
+  private hideSub?: Subscription;
 
   constructor(private notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    this.subscription.add(
-      this.notificationService.notifications$.subscribe(notifications => {
-        const newNotifications = notifications
-          .filter(n => !n.read && !this.toasts.find(t => t.id === n.id))
-          .slice(0, 3); // Show max 3 toasts
-
-        newNotifications.forEach(notification => {
-          const toast: ToastNotification = {
-            ...notification,
-            visible: true
-          };
-          this.toasts.unshift(toast);
-          this.autoDismiss(toast);
-        });
-      })
-    );
-  }
-
-  dismissToast(toast: ToastNotification): void {
-    toast.visible = false;
-    setTimeout(() => {
-      this.toasts = this.toasts.filter(t => t.id !== toast.id);
-    }, 300);
-  }
-
-  private autoDismiss(toast: ToastNotification): void {
-    setTimeout(() => {
-      this.dismissToast(toast);
-    }, 5000); // Auto dismiss after 5 seconds
+    this.sub = this.notificationService.toast$.subscribe(n => {
+      this.current = n;
+      this.hideSub?.unsubscribe();
+      this.hideSub = timer(4000).subscribe(() => (this.current = null));
+    });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.sub?.unsubscribe();
+    this.hideSub?.unsubscribe();
+  }
+
+  close() {
+    this.current = null;
+  }
+
+  get severityClass() {
+    return this.current ? `toast-${this.current.severity}` : '';
   }
 }

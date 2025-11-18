@@ -1,0 +1,28 @@
+<p>notification-dropdown.component works!</p>
+<div class="dropdown-container">
+  <div class="dropdown-header">
+    <span>Notifications</span>
+    <div class="header-actions">
+      <button (click)="markAllRead.emit()" [disabled]="!notifications.length">
+        Mark all as read
+      </button>
+      <button (click)="clearAll.emit()" [disabled]="!notifications.length">
+        Clear all
+      </button>
+    </div>
+  </div>
+
+  <div class="dropdown-body" *ngIf="notifications.length; else emptyState">
+    <app-notification-item-component
+      *ngFor="let n of notifications"
+      [notification]="n"
+      (navigate)="navigate.emit($event)"
+      (markRead)="markAsRead.emit($event.id)"
+      (dismiss)="dismiss.emit($event.id)">
+    </app-notification-item-component>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="empty">No notifications</div>
+  </ng-template>
+</div>
