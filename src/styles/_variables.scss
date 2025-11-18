@@ -146,3 +146,44 @@ $dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
 // =========================================
 
 $dialog-fade-duration: 0.3s;
+
+// Task List Colors
+$color-task-toggle-active-text: #111827;
+$color-task-button-create-bg: #DFECC6;
+$color-task-button-create-hover: #d0e4b5;
+
+$color-task-border-light: #e9e7e7;
+$color-task-shadow-light: 0 2px 10px rgba(0,0,0,0.05);
+$color-task-shadow-menu: 0 4px 12px rgba(0,0,0,0.12);
+
+$color-status-todo-bg: #D1D5DC;
+$color-status-todo-text: #1E2939;
+
+$color-status-progress-bg: #DBEAFE;
+$color-status-progress-text: #0070ff;
+
+$color-status-complete-bg: #DCFCE7;
+$color-status-complete-text: #00C950;
+
+$color-priority-low-bg: #DCFCE7;
+$color-priority-low-text: #00C950;
+
+$color-priority-medium-bg: #F0B100;
+$color-priority-medium-text: #ffffff;
+
+$color-priority-high-bg: #FF6900;
+$color-priority-high-text: #ffffff;
+
+$color-priority-urgent-bg: #FB2C36;
+$color-priority-urgent-text: #ffffff;
+
+
+// task card expanded view
+$color-overlay-heavy: rgba(0,0,0,0.55);
+$color-task-expanded-bg: #DFECC6; 
+$color-task-heading: #222;
+$color-status-badge-bg: #f3f4f6;
+$color-priority-badge-bg: #FACC15;
+$color-priority-badge-text: #000;
+$color-info-label: #666;
+$color-info-value: #222;

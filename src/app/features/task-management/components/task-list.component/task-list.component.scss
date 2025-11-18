@@ -1,0 +1,294 @@
+@use "./variables" as vars;
+@use "./mixins";
+
+/* =============================================
+   TOP HEADER (COMMON)
+============================================= */
+
+html,
+body {
+  background: vars.$color-white !important; 
+}
+
+.page-wrapper {
+  width: 100%;
+  padding: 60px 40px 40px 40px;
+  height: 100vh;
+  background-color: vars.$color-white; 
+  gap: 10px;
+}
+
+.top-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin-bottom: 20px;
+
+  h2 {
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: -3%;
+  }
+
+  .right-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .middle-toggle {
+      display: flex;
+      align-items: center;
+      background: vars.$color-gray-200; 
+      border-radius: 999px;
+      padding: 4px;
+      height: 38px;
+      border: 1px solid vars.$color-gray-200; 
+    }
+
+    .middle-toggle .toggle-btn {
+      padding: 0 20px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: vars.$color-gray-600; 
+      transition: all 0.25s ease;
+    }
+
+    .middle-toggle .toggle-btn.active {
+      background: vars.$color-white; 
+      color: vars.$color-task-toggle-active-text; 
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .create-btn {
+      height: 34px;
+      padding: 0 22px;
+      background: vars.$color-task-button-create-bg; 
+      border-radius: 100px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: vars.$color-task-button-create-hover; 
+      }
+    }
+  }
+}
+
+/* =============================================
+   GLOBAL MODE – MAIN LAYOUT
+============================================= */
+
+.task-list.global {
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* FILTER + SORT BAR */
+.global-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  padding: 0;
+
+  .filter-btn,
+  .sort-box {
+    background: vars.$color-white; 
+    border: 1px solid vars.$color-gray-200; 
+    height: 34px;
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background: vars.$color-gray-100; 
+    }
+  }
+
+  .sort-box {
+    width: 190px;
+  }
+
+  .count {
+    position: absolute;
+    right: 40px;
+    font-size: 0.85rem;
+    color: vars.$color-text-secondary;
+  }
+
+  .sort-menu {
+    position: absolute;
+    top: 42px;
+    left: 155px;
+    width: 200px;
+    background: vars.$color-white; 
+    border: 1px solid vars.$color-gray-200; 
+    padding: 10px;
+    border-radius: 12px;
+    z-index: 100;
+    box-shadow: vars.$color-task-shadow-menu; 
+
+    button {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background: vars.$color-gray-200; 
+      }
+    }
+  }
+}
+
+/* TABLE CARD WRAPPER */
+.table-card {
+  width: calc(100% - 80px);
+  margin: 0 auto;
+  background: vars.$color-white; 
+  border-radius: 14px;
+  border: 1px solid vars.$color-gray-200; 
+  box-shadow: vars.$color-task-shadow-light; 
+  overflow: hidden;
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border: 1px solid vars.$color-task-border-light; 
+
+  thead {
+    background-color: vars.$color-white;
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: vars.$color-text-secondary;
+      cursor: pointer;
+      border-bottom: 1px solid vars.$color-task-border-light; 
+    }
+  }
+
+  tbody tr {
+    border-bottom: 1px solid vars.$color-gray-200;
+
+    &:hover {
+      background: vars.$color-gray-50; 
+    }
+  }
+}
+
+/* STATUS */
+.status {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &.to-do {
+    background: vars.$color-status-todo-bg;
+    color: vars.$color-status-todo-text;
+  }
+
+  &.in-progress {
+    background: vars.$color-status-progress-bg;
+    color: vars.$color-status-progress-text;
+  }
+
+  &.completed {
+    background: vars.$color-status-complete-bg;
+    color: vars.$color-status-complete-text;
+  }
+}
+
+/* PRIORITY */
+.priority {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &.low {
+    background: vars.$color-priority-low-bg;
+    color: vars.$color-priority-low-text;
+  }
+
+  &.medium {
+    background: vars.$color-priority-medium-bg;
+    color: vars.$color-priority-medium-text;
+  }
+
+  &.high {
+    background: vars.$color-priority-high-bg;
+    color: vars.$color-priority-high-text;
+  }
+
+  &.urgent {
+    background: vars.$color-priority-urgent-bg;
+    color: vars.$color-priority-urgent-text;
+  }
+}
+
+/* ASSIGNEE */
+.assignee {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    background: vars.$color-gray-200; 
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    @include mixins.flex(center, center);
+  }
+
+  .assignee-name {
+    font-size: 0.85rem;
+    color: vars.$color-text-primary;
+  }
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  gap: 10px;
+
+  .action-icon {
+    width: 18px;
+    cursor: pointer;
+    transition: 0.15s ease;
+
+    &:hover {
+      transform: scale(1.12);
+      opacity: 0.8;
+    }
+  }
+}

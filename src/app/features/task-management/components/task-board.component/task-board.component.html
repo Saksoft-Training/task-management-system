@@ -1,0 +1,139 @@
+<div class="task-board">
+
+  <!-- ===========================================================
+       ROW 1: PAGE HEADER
+       Contains Title, View Toggle, and Create Task Button
+  ============================================================ -->
+  <div class="board-top-row">
+
+    <!-- Page Title -->
+    <h2 class="board-title">{{ title }}</h2>
+
+    <!-- Right-side Actions -->
+    <div class="right-controls">
+
+      <!-- View Toggle -->
+      <div class="middle-toggle">
+        <button class="toggle-btn" (click)="goList()">
+          <img src="assets/icons/list-Icon.svg" class="icon" />
+          List
+        </button>
+
+        <button class="toggle-btn active">
+          <img src="assets/icons/board-Icon.svg" class="icon" />
+          Board
+        </button>
+      </div>
+
+      <!-- Create New Task -->
+      <button class="create-btn" (click)="createTask()">
+        Create New Task
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ===========================================================
+       ROW 2: FILTERS & SORTING
+       Contains Filters, Sort, and Task Count
+  ============================================================ -->
+  <div class="board-filters-row">
+
+    <!-- Filter Button -->
+    <button class="filter-btn">
+      <img src="assets/icons/filter-Icon.svg" class="icon" />
+      Filters
+    </button>
+
+    <!-- Sort Control -->
+    <div class="sort-box" (click)="toggleSortMenu = !toggleSortMenu">
+      <img src="assets/icons/sort-Icon.svg" class="icon" />
+      Sort: Due Date
+    </div>
+
+    <!-- Sort Dropdown Options -->
+    @if (toggleSortMenu) {
+    <div class="sort-menu">
+      <button>↑ Ascending</button>
+      <button>↓ Descending</button>
+      <button>Due Date</button>
+      <button>Priority</button>
+      <button>Status</button>
+      <button>Title</button>
+    </div>
+    }
+
+    <!-- Total Task Count -->
+    <span class="task-count">
+      Showing {{ tasks.length }} of {{ tasks.length }} tasks
+    </span>
+
+  </div>
+
+
+
+  <!-- ===========================================================
+       ROW 3: TASK BOARD COLUMNS
+       Loops through defined statuses and renders task cards
+  ============================================================ -->
+  <div class="columns-wrapper">
+
+    <!-- Loop: Each Status Column -->
+    @for (status of statuses; track status) {
+
+    <div class="column" [ngClass]="status.toLowerCase().replace(' ', '-')">
+
+      <!-- Column Header -->
+      <div class="column-header">
+        <h3>{{ status }}</h3>
+        <span class="count">{{ columns[status].length }}</span>
+      </div>
+
+      <!-- Empty State -->
+      @if (columns[status].length === 0) {
+      <div class="empty">No tasks</div>
+      }
+
+      <!-- Loop: Task Cards -->
+      @for (task of columns[status]; track task.id) {
+      <div class="task-card">
+
+        <!-- Card Top: Title + Priority -->
+        <div class="top">
+          <h4 class="title">{{ task.title }}</h4>
+          <span class="priority {{ priorityClass(task.priority) }}">
+            {{ task.priority }}
+          </span>
+        </div>
+
+        <!-- Card Bottom: Assignee + Due Date -->
+        <div class="bottom">
+
+          <!-- Assignee -->
+          <div class="assignee">
+            <div class="avatar">
+              {{ initials(task.assignee) }}
+            </div>
+            <span>{{ task.assignee }}</span>
+          </div>
+
+          <!-- Due Date -->
+          <div class="due">
+            {{ formatDate(task.dueDate) }}
+          </div>
+
+        </div>
+
+      </div>
+      }
+
+    </div>
+
+    }
+
+  </div>
+
+</div>

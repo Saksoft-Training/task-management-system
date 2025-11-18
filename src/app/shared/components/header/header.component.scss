@@ -2,7 +2,7 @@
 @use "mixins";
 
 .app-header {
-  width: 79.9375rem;
+  width: 100%;
   display: flex;
   justify-content: center;
   background: vars.$color-white;

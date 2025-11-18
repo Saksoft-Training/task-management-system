@@ -1,0 +1,138 @@
+@use "./variables" as vars;
+@use "./mixins";
+
+/* BACKDROP */
+.task-card-expanded-backdrop {
+  position: fixed;
+  inset: 0;
+  background: vars.$color-overlay-heavy; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* MAIN MODAL */
+.task-card-expanded {
+  width: 760px;
+  background: vars.$color-task-expanded-bg; 
+  border-radius: 16px;
+  padding: 28px 32px;
+  animation: fadeIn 0.25s ease-out;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    color: vars.$color-task-heading; 
+  }
+
+  .edit-btn {
+    background: vars.$color-white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 12px;
+    transition: 0.2s;
+
+    &:hover {
+      background: vars.$color-gray-300; 
+    }
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: 10px;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+/* DETAILS BOX */
+.details {
+  background: vars.$color-white; 
+  border-radius: 16px;
+  padding: 26px 32px;
+}
+
+/* BADGES */
+.badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  .status-badge {
+    background: vars.$color-status-badge-bg; 
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .priority-badge {
+    background: vars.$color-priority-badge-bg; 
+    color: vars.$color-priority-badge-text; 
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+/* INFO GRID */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 18px;
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    label {
+      width: 100px;
+      color: vars.$color-info-label; 
+      font-size: 14px;
+    }
+
+    span {
+      font-size: 15px;
+      font-weight: 500;
+      color: vars.$color-info-value; 
+    }
+  }
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+  }
+}
