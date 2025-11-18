@@ -1,4 +1,4 @@
-@use './variables' as vars;
+@use './variables' ;
 @use './mixins';
 
 /* ========================================================= */
@@ -7,13 +7,20 @@
 
 .footer {
   @include mixins.fixed-bottom;
+  border-top: 1px solid variables.$color-border;
+  background-color: variables.$color-bg-footer;
+  color: variables.$color-text-footer;
+  font-size: variables.$font-size-footer;
+  font-weight: variables.$font-weight-footer;
+  padding: variables.$padding-footer-top variables.$padding-footer-sides variables.$padding-footer-bottom;
   @include mixins.flex-between;
-  border-top: 1px solid vars.$color-border;
-  background-color: vars.$color-bg-footer;
-  color: vars.$color-text-footer;
-  font-size: vars.$font-size-footer;
-  font-weight: vars.$font-weight-footer;
-  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-sides;
+  @include mixins.flex-between;
+  border-top: 1px solid variables.$color-border;
+  background-color: variables.$color-bg-footer;
+  color: variables.$color-text-footer;
+  font-size: variables.$font-size-footer;
+  font-weight: variables.$font-weight-footer;
+  padding: variables.$padding-footer-top variables.$padding-footer-sides variables.$padding-footer-sides;
 
   &-left,
   &-right {
@@ -27,19 +34,19 @@
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
-  @include mixins.font-primary(vars.$font-size-error);
-  @include mixins.box-shadow(vars.$error-shadow);
-  background-color: vars.$color-error-bg;
-  color: vars.$color-error-text;
-  border: 1px solid vars.$color-error-border;
-  padding: vars.$error-padding-y vars.$error-padding-x;
-  border-radius: vars.$error-border-radius;
-  margin: vars.$error-margin-y 0;
+  background-color: variables.$color-error-bg;
+  color: variables.$color-error-text;
+  border: 1px solid variables.$color-error-border;
+  padding: variables.$error-padding-y variables.$error-padding-x;
+  border-radius: variables.$error-border-radius;
+  @include mixins.font-primary(variables.$font-size-error);
+  @include mixins.box-shadow(variables.$error-shadow);
   position: relative;
+  margin: variables.$error-margin-y 0;
 
   .icon {
     margin-right: 0.625rem;
-    font-size: vars.$error-icon-size;
+    font-size: variables.$error-icon-size;
   }
 
   .message {
@@ -49,17 +56,18 @@
   .close-btn {
     background: none;
     border: none;
+    color: variables.$color-error-text;
     cursor: pointer;
-    font-size: vars.$font-size-title;
+    font-size: variables.$font-size-title;
     margin-left: 10px;
-    color: vars.$color-error-text;
+    color: variables.$color-error-text;
     @include mixins.transition(color);
     font-size: 1.125rem;
     margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
 
     &:hover {
-      color: vars.$color-error-hover;
+      color: variables.$color-error-hover;
     }
   }
 }
@@ -82,17 +90,15 @@
 .spinner {
   width: 32px;
   height: 32px;
-
   border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: vars.$color-primary;
+  border-top-color: variables.$color-primary;
   border-radius: 50%;
-
   animation: spin 0.9s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
 }
 
 .spinner-text {
@@ -100,40 +106,43 @@
   color: #fff;
   font-size: 0.9rem;
   text-align: center;
-  font-family: vars.$font-family-primary;
+  font-family: variables.$font-family-primary;
 }
 
-/* ========================================================= */
+/* ========================================= */
 /* DIALOG */
-/* ========================================================= */
+/* ========================================= */
 
 .dialog-overlay {
   position: fixed;
-  inset: 0;
-  background: vars.$color-overlay-bg;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: variables.$color-overlay-bg;
   @include mixins.flex();
-  z-index: vars.$dialog-overlay-z;
+  z-index: variables.$dialog-overlay-z;
 }
 
 .dialog-box {
-  background: vars.$color-bg-footer;
-  border-radius: vars.$dialog-radius;
-  width: vars.$dialog-width;
-  max-width: vars.$dialog-max-width;
-  @include mixins.box-shadow(vars.$dialog-shadow);
-  @include mixins.fade-in(vars.$dialog-fade-duration);
+  background: variables.$color-dialog-bg;
+  border-radius: variables.$dialog-radius;
+  width: variables.$dialog-width;
+  max-width: variables.$dialog-max-width;
+  @include mixins.box-shadow(variables.$dialog-shadow);
   overflow: hidden;
+  @include mixins.fade-in(variables.$dialog-fade-duration);
 
   .dialog-header {
     @include mixins.flex-between;
-    padding: vars.$dialog-padding-header;
-    background-color: vars.$color-dialog-header-bg;
-    border-bottom: 1px solid vars.$color-dialog-border;
+    padding: variables.$dialog-padding-header;
+    border-bottom: 1px solid variables.$color-dialog-border;
+    background-color: variables.$color-dialog-header-bg;
 
     h3 {
       margin: 0;
-      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
-      color: vars.$color-text-primary;
+      @include mixins.font-primary(variables.$font-size-title, variables.$font-weight-title);
+      color: variables.$color-text-primary;
     }
 
     .close-btn {
@@ -160,11 +169,11 @@
   }
 
   .dialog-body {
-    padding: vars.$dialog-padding-body;
+    padding: variables.$dialog-padding-body;
 
     p {
-      color: vars.$color-text-secondary;
-      font-size: vars.$font-size-body;
+      font-size: variables.$font-size-body;
+      color: variables.$color-text-secondary;
       line-height: 1.4;
     }
   }
@@ -172,46 +181,75 @@
   .dialog-actions {
     display: flex;
     justify-content: flex-end;
-    gap: vars.$dialog-gap-actions;
-    padding: vars.$dialog-padding-actions;
-    border-top: 1px solid vars.$color-dialog-border;
+    gap: variables.$dialog-gap-actions;
+    padding: variables.$dialog-padding-actions;
+    border-top: 1px solid variables.$color-dialog-border;
 
     .btn {
       padding: 8px 16px;
-      font-size: vars.$font-size-button;
+      font-size: variables.$font-size-button;
       border-radius: 4px;
       border: none;
       cursor: pointer;
       @include mixins.transition(background-color);
 
       &.cancel {
-        background-color: vars.$color-btn-cancel-bg;
-        color: vars.$color-bg-footer;
+        background-color: variables.$color-btn-cancel-bg;
+        color: variables.$color-bg-footer;
 
         &:hover {
-          background-color: vars.$color-btn-cancel-hover;
+          background-color: variables.$color-btn-cancel-hover;
         }
       }
 
       &.confirm {
-        background-color: vars.$color-btn-confirm-bg;
-        color: vars.$color-bg-footer;
+        background-color: variables.$color-btn-confirm-bg;
+        color: variables.$color-bg-footer;
 
         &:hover {
-          background-color: vars.$color-btn-confirm-hover;
+          background-color: variables.$color-btn-confirm-hover;
         }
 
         &.danger {
-          background-color: vars.$color-btn-danger-bg;
+          background-color: variables.$color-btn-danger-bg;
 
           &:hover {
-            background-color: vars.$color-btn-danger-hover;
+            background-color: variables.$color-btn-danger-hover;
           }
         }
       }
       padding: 0.5rem 1rem;
+      border: none;
       border-radius: 0.25rem;
+      font-size: variables.$font-size-button;
       cursor: pointer;
+      @include mixins.transition(background-color);
+
+      &.cancel {
+        background-color: variables.$color-btn-cancel-bg;
+        color: variables.$color-btn-cancel-text;
+
+        &:hover {
+          background-color: variables.$color-btn-cancel-hover;
+        }
+      }
+
+      &.confirm {
+        background-color: variables.$color-btn-confirm-bg;
+        color: variables.$color-bg-footer;
+
+        &:hover {
+          background-color: variables.$color-btn-confirm-hover;
+        }
+
+        &.danger {
+          background-color: variables.$color-btn-danger-bg;
+
+          &:hover {
+            background-color: variables.$color-btn-danger-hover;
+          }
+        }
+      }
     }
   }
 }
@@ -233,14 +271,14 @@
 
 // Small subtitle under title 
 .page-subtitle {
-  font-size: vars.$font-size-body;
-  color: vars.$color-subtitle;
+  font-size: variables.$font-size-body;
+  color: variables.$color-subtitle;
   margin-bottom: 36px;
 }
 
 // Main white box of the form 
 .project-form-container {
-  background: vars.$color-bg-footer;
+  background: variables.$color-bg-footer;
   border: 1px solid #ededed;
   border-radius: 10px;
   padding: 34px 60px 34px 40px;
