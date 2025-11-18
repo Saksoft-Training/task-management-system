@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../../../../types/models/project';
-import { FooterComponent } from '../../../../shared/components/footer-component/footer-component';
+import { FooterComponent } from '../../../../shared/components/footer.component/footer.component';
 
 @Component({
   selector: 'app-project-create-component',

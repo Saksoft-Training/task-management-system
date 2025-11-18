@@ -8,7 +8,6 @@ export interface Project {
     startDate: string;
     status: 'Planning' | 'In Progress' | 'Completed' | 'On Hold';
     updatedAt: string;
-
 }
 
 

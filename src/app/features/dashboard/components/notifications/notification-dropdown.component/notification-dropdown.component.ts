@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AppNotification } from '../../../../../../types/models/notifications';
 import { NotificationItemComponent } from '../notification-item.component/notification-item.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-notification-dropdown.component',
-  imports: [NotificationItemComponent],
+  imports: [CommonModule, NotificationItemComponent],
   templateUrl: './notification-dropdown.component.html',
   styleUrl: './notification-dropdown.component.scss',
 })

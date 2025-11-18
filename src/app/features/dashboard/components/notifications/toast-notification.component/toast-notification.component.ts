@@ -9,6 +9,7 @@ interface ToastNotification extends Notification {
 }
 @Component({
   selector: 'app-toast-notification-component',
+   standalone: true,
   imports: [CommonModule],
   templateUrl: './toast-notification.component.html',
   styleUrl: './toast-notification.component.scss',
@@ -40,4 +41,6 @@ current: AppNotification | null = null;
   get severityClass() {
     return this.current ? `toast-${this.current.severity}` : '';
   }
+
+ 
 }

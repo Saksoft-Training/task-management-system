@@ -1,24 +1,23 @@
-@use './variables' as *;
 @use './variables' as vars;
 @use './mixins';
-
+ 
 // ====================== FOOTER ======================
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
+ 
 html {
   font-size: 16px;
   overflow-y: auto !important;
-  scrollbar-width: none !important;  
+  scrollbar-width: none !important;
 }
-
+ 
 html::-webkit-scrollbar {
   display: none !important;
 }
-
+ 
 body {
   font-family: vars.$font-family-primary;
   background-color: vars.$color-gray-50;
@@ -29,25 +28,25 @@ body {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
-
+ 
 body::-webkit-scrollbar {
   display: none !important;
 }
-
+ 
 .main-content {
   overflow-y: auto !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
 }
-
+ 
 .main-content::-webkit-scrollbar {
   display: none !important;
 }
-
+ 
 /* ========================================================= */
 /* FOOTER */
 /* ========================================================= */
-
+ 
 .footer {
   @include mixins.fixed-bottom;
   @include mixins.flex-between;
@@ -57,17 +56,17 @@ body::-webkit-scrollbar {
   font-size: vars.$font-size-footer;
   font-weight: vars.$font-weight-footer;
   padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-sides;
-
+ 
   &-left,
   &-right {
     flex-shrink: 0;
   }
 }
-
+ 
 /* ========================================================= */
 /* ERROR MESSAGE */
 /* ========================================================= */
-
+ 
 .error-message-container {
   @include mixins.flex(flex-start, center);
   @include mixins.font-primary(vars.$font-size-error);
@@ -79,16 +78,16 @@ body::-webkit-scrollbar {
   border-radius: vars.$error-border-radius;
   margin: vars.$error-margin-y 0;
   position: relative;
-
+ 
   .icon {
     margin-right: 0.625rem;
     font-size: vars.$error-icon-size;
   }
-
+ 
   .message {
     flex-grow: 1;
   }
-
+ 
   .close-btn {
     background: none;
     border: none;
@@ -100,17 +99,17 @@ body::-webkit-scrollbar {
     font-size: 1.125rem;
     margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
-
+ 
     &:hover {
       color: vars.$color-error-hover;
     }
   }
 }
-
+ 
 /* ========================================================= */
 /* LOADING OVERLAY */
 /* ========================================================= */
-
+ 
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -121,23 +120,28 @@ body::-webkit-scrollbar {
   @include mixins.flex(center, center, column);
   z-index: 9999;
 }
-
+ 
 .spinner {
   width: 32px;
   height: 32px;
-
+ 
   border: 4px solid rgba(255, 255, 255, 0.3);
   border-top-color: vars.$color-primary;
   border-radius: 50%;
-
+ 
   animation: spin 0.9s linear infinite;
 }
-
+ 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+ 
+  to {
+    transform: rotate(360deg);
+  }
 }
-
+ 
 .spinner-text {
   margin-top: 1rem;
   color: #fff;
@@ -145,11 +149,11 @@ body::-webkit-scrollbar {
   text-align: center;
   font-family: vars.$font-family-primary;
 }
-
+ 
 /* ========================================================= */
 /* DIALOG */
 /* ========================================================= */
-
+ 
 .dialog-overlay {
   position: fixed;
   inset: 0;
@@ -157,7 +161,7 @@ body::-webkit-scrollbar {
   @include mixins.flex();
   z-index: vars.$dialog-overlay-z;
 }
-
+ 
 .dialog-box {
   background: vars.$color-bg-footer;
   border-radius: vars.$dialog-radius;
@@ -166,19 +170,19 @@ body::-webkit-scrollbar {
   @include mixins.box-shadow(vars.$dialog-shadow);
   @include mixins.fade-in(vars.$dialog-fade-duration);
   overflow: hidden;
-
+ 
   .dialog-header {
     @include mixins.flex-between;
     padding: vars.$dialog-padding-header;
     background-color: vars.$color-dialog-header-bg;
     border-bottom: 1px solid vars.$color-dialog-border;
-
+ 
     h3 {
       margin: 0;
       @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
       color: vars.$color-text-primary;
     }
-
+ 
     .close-btn {
       background: none;
       border: none;
@@ -186,7 +190,7 @@ body::-webkit-scrollbar {
       cursor: pointer;
       @include mixins.flex();
       @include mixins.transition(transform);
-
+ 
       img {
         width: 18px;
         height: 18px;
@@ -194,21 +198,22 @@ body::-webkit-scrollbar {
         padding: 0.25rem;
         @include mixins.flex();
         @include mixins.transition(transform, 0.2s);
-
+ 
         img {
           width: 1.125rem;
           height: 1.125rem;
           filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
         }
-      padding: 0.25rem;
-      @include mixins.flex();
-      @include mixins.transition(transform, 0.2s);
-
-      img {
-        width: 1.125rem;
-        height: 1.125rem;
-      }
-
+ 
+        padding: 0.25rem;
+        @include mixins.flex();
+        @include mixins.transition(transform, 0.2s);
+ 
+        img {
+          width: 1.125rem;
+          height: 1.125rem;
+        }
+ 
         &:hover {
           opacity: 0.8;
           transform: scale(1.1);
@@ -216,24 +221,24 @@ body::-webkit-scrollbar {
       }
     }
   }
-
+ 
   .dialog-body {
     padding: vars.$dialog-padding-body;
-
+ 
     p {
       color: vars.$color-text-secondary;
       font-size: vars.$font-size-body;
       line-height: 1.4;
     }
   }
-
+ 
   .dialog-actions {
     display: flex;
     justify-content: flex-end;
     gap: vars.$dialog-gap-actions;
     padding: vars.$dialog-padding-actions;
     border-top: 1px solid vars.$color-dialog-border;
-
+ 
     .btn {
       padding: 8px 16px;
       font-size: vars.$font-size-button;
@@ -241,382 +246,71 @@ body::-webkit-scrollbar {
       border: none;
       cursor: pointer;
       @include mixins.transition(background-color);
-
+ 
       &.cancel {
         background-color: vars.$color-btn-cancel-bg;
         color: vars.$color-bg-footer;
-
+ 
         &:hover {
           background-color: vars.$color-btn-cancel-hover;
         }
       }
-
+ 
       &.confirm {
         background-color: vars.$color-btn-confirm-bg;
         color: vars.$color-bg-footer;
-
+ 
         &:hover {
           background-color: vars.$color-btn-confirm-hover;
         }
-
+ 
         &.danger {
           background-color: vars.$color-btn-danger-bg;
-
+ 
           &:hover {
             background-color: vars.$color-btn-danger-hover;
           }
         }
       }
+ 
       padding: 0.5rem 1rem;
       border-radius: 0.25rem;
       cursor: pointer;
     }
   }
 }
-
-
-// ====== NOTIFICATION BELL STYLES ======
-.notification-bell {
-  position: relative;
-  display: inline-block;
-
-  .bell-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 4px;
-    position: relative;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: vars.$color-panel-hover-bg;
-    }
-
-    &.has-unread {
-      .bell-icon {
-        color: vars.$color-bell-icon-unread;
-      }
-    }
-
-    .bell-icon {
-      font-size: 20px;
-      color:  vars.$color-bell-icon;
-       img {
-          width: 16px;
-          height: 16px;
-          }
-    }
-
-    .badge {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      background-color: vars.$color-badge-bg;
-      color: vars.$color-badge-text;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 10px;
-      display: flex;
-      align-items: $notification-item-center;
-      justify-content:  $notification-item-center;
-      font-weight: bold;
-    }
-  }
-
-  .notification-panel {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: vars.$notification-width;
-    max-height: vars.$notification-max-height;
-    background: vars.$color-panel-bg;
-    border: 1px solid vars.$color-panel-border;
-    border-radius:  vars.$notification-panel-radius;
-    box-shadow: 0 4px 12px vars.$color-panel-shadow;
-    z-index: 1000;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-
-    .panel-header {
-      padding: 16px;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items:  $notification-item-center;;
-
-      h3 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-      }
-
-      .panel-actions {
-        display: flex;
-        gap: 8px;
-
-        .action-btn {
-          background: none;
-          border: 1px solid #ddd;
-          padding: 4px 8px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 12px;
-          color: #666;
-
-          &:hover {
-            background-color: #f8f9fa;
-          }
-
-          &.clear {
-             color: vars.$color-panel-clear-text;
-            border-color: vars.$color-panel-clear-border;
-
-            &:hover {
-              background-color: vars.$color-panel-clear-hover;
-            }
-          }
-        }
-      }
-    }
-
-    .notifications-list {
-      flex: 1;
-      overflow-y: auto;
-      max-height: 300px;
-
-      .empty-state {
-        padding: 32px 16px;
-        text-align: center;
-        color: #666;
-        font-style: italic;
-      }
-    }
-  }
-}
-
-//notification-item-styles
-
-.notification-item {
-  display: flex;
-  align-items: flex-start;
-  padding: vars.$notification-item-padding-y vars.$notification-item-padding-x;
-  border-bottom: 1px solid vars.$color-notification-border;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  gap: vars.$notification-item-gap;
-  height:$notification-item-component-height;
-  width: $notification-item-component-width;
-
-  &:hover {
-    background-color: vars.$color-notification-hover-bg;
-  }
-
-  &.unread {
-    background-color: vars.$color-notification-unread-bg;
-    border-left: 3px solid vars.$color-notification-unread-border;
-
-    &:hover {
-      background-color: vars.$color-notification-unread-hover-bg;
-    }
-  }
-
-  &.critical {
-    border-left-color: vars.$color-notification-critical-border;
-  }
-
-  &.warning {
-    border-left-color: vars.$color-notification-warning-border;
-  }
-
-  &.success {
-    border-left-color: vars.$color-notification-success-border;
-  }
-
-  .notification-icon {
-    font-size: vars.$notification-item-icon-size;
-    flex-shrink: 0;
-  }
-
-  .notification-content {
-    flex: 1;
-    min-width: 0;
-    height:$notification-content-height;
-    width:$notification-content-width;
-    align-items:  $notification-item-center;
-
-    .notification-message {
-      font-size: vars.$notification-item-font-size;
-      line-height: 1.4;
-      margin-bottom: 4px;
-      color: vars.$color-notification-text;
-      height:$notification-message-height;
-      width:$notification-message-width;
-      align-items:  $notification-item-center;
-    }
-
-    .notification-time {
-      font-size: vars.$notification-item-time-size;
-      color: vars.$color-notification-time;
-    }
-  }
-
-  .notification-actions {
-    display: flex;
-    gap: 4px;
-    flex-shrink: 0;
-
-    .action-btn {
-      background: none;
-      border: none;
-      padding: 4px 8px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: vars.$notification-item-btn-font-size;
-      transition: background-color 0.2s, color 0.2s;
-      
-     
-
-      &.navigate {
-        color: vars.$color-notification-btn-navigate;
-        border: 1px solid vars.$color-notification-btn-navigate;
-
-        &:hover {
-          background-color: vars.$color-notification-btn-navigate-hover-bg;
-          color: vars.$color-notification-btn-navigate-hover-text;
-        }
-      }
-
-      &.dismiss {
-        color: vars.$color-notification-btn-dismiss;
-        border: 1px solid vars.$color-notification-btn-border;
-          .notification-img {
-        height: $notification-img-height;
-        width:  $notification-img-width;
-        object-fit: contain;
-        pointer-events: none;  
-      }
-        &:hover {
-          background-color: vars.$color-notification-btn-hover-bg;
-        }
-      }
-    }
-  }
-}
-
-//--toast-notification styles
-
-.toast-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: vars.$toast-z-index;
-  display: flex;
-  flex-direction: column;
-  gap: vars.$toast-gap;
-}
-
-.toast {
-  display: flex;
-  align-items:  $notification-item-center;;
-  min-width: vars.$toast-min-width;
-  padding: vars.$toast-padding-y vars.$toast-padding-x;
-  border-radius: vars.$toast-radius;
-  box-shadow: 0 4px 12px vars.$color-toast-shadow;
-  background: vars.$color-toast-bg;
-  border-left: 4px solid vars.$color-toast-border-default;
-  transform: translateX(vars.$toast-transform-distance);
-  opacity: 0;
-  transition: all vars.$toast-transition-duration vars.$toast-transition-timing;
-  cursor: pointer;
-
-  &.visible {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  &.critical {
-    border-left-color: vars.$color-toast-border-critical;
-  }
-
-  &.warning {
-    border-left-color: vars.$color-toast-border-warning;
-  }
-
-  &.success {
-    border-left-color: vars.$color-toast-border-success;
-  }
-
-  &.info {
-    border-left-color: vars.$color-toast-border-info;
-  }
-
-  .toast-icon {
-    margin-right: 12px;
-    font-size: vars.$toast-icon-size;
-    flex-shrink: 0;
-  }
-
-  .toast-content {
-    flex: 1;
-
-    .toast-message {
-      font-size: vars.$toast-font-size;
-      line-height: 1.4;
-      color: vars.$color-toast-text;
-    }
-  }
-
-  .toast-close {
-    background: none;
-    border: none;
-    font-size: 18px;
-    color: vars.$color-toast-close;
-    cursor: pointer;
-    padding: 0;
-    width: vars.$toast-close-size;
-    height: vars.$toast-close-size;
-    display: flex;
-    align-items:  $notification-item-center;
-    justify-content:  $notification-item-center;
-    transition: color vars.$toast-transition-duration vars.$toast-transition-timing;
-
-    &:hover {
-      color: vars.$color-toast-close-hover;
-=======
+ 
 // ====================== CREATE PROJECT PAGE ======================
 .project-create-page {
   padding: vars.$padding-primary;
 }
-
+ 
 .breadcrumb {
   @include mixins.flex(flex-start);
   gap: 6px;
   margin-bottom: vars.$padding-footer-sides;
   font-size: vars.$font-size-error;
-
+ 
   .breadcrumb-link {
     color: vars.$color-breadcrumb;
     font-weight: vars.$font-weight-primary;
     cursor: pointer;
-
+ 
     &:hover {
       text-decoration: underline;
     }
   }
-
+ 
   .breadcrumb-current {
     color: vars.$color-title;
     font-weight: vars.$font-weight-primary;
   }
-
+ 
   .breadcrumb-separator {
     color: vars.$color-text-secondary;
   }
 }
-
+ 
 .page-title {
   font-family: vars.$font-family-primary;
   font-size: vars.$font-size-page-title;
@@ -624,13 +318,13 @@ body::-webkit-scrollbar {
   color: vars.$color-title;
   margin-bottom: vars.$dialog-radius;
 }
-
+ 
 .page-subtitle {
   font-size: vars.$font-size-body;
   color: vars.$color-subtitle;
   margin-bottom: 36px;
 }
-
+ 
 .project-form-container {
   background: vars.$color-bg-footer;
   border: 1px solid #ededed;
@@ -639,7 +333,7 @@ body::-webkit-scrollbar {
   width: 100%;
   box-sizing: border-box;
 }
-
+ 
 .form-title {
   font-family: vars.$font-family-primary;
   font-size: vars.$font-size-body;
@@ -648,28 +342,28 @@ body::-webkit-scrollbar {
   margin-bottom: 24px;
   line-height: 1.4;
 }
-
+ 
 .formProject {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.75rem 2.5rem;
 }
-
+ 
 .description-group {
   grid-column: span 2;
 }
-
+ 
 .description-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
+ 
 .char-counter {
   font-size: 12px;
   color: vars.$color-text;
 }
-
+ 
 .project-description {
   padding: 12px 14px;
   border-radius: vars.$dialog-radius;
@@ -679,29 +373,29 @@ body::-webkit-scrollbar {
   resize: vertical;
   font-family: vars.$font-family-primary;
   background-color: vars.$input-background;
-
+ 
   &:focus {
     background-color: vars.$color-bg-footer;
     border-color: vars.$color-breadcrumb;
     outline: none;
   }
 }
-
+ 
 .field-group {
   display: flex;
   flex-direction: column;
-
+ 
   .field-label {
     font-size: vars.$font-size-error;
     font-weight: vars.$font-weight-footer;
     margin-bottom: 4px;
   }
-
+ 
   .field-label.required::after {
     content: " *";
     color: red;
   }
-
+ 
   .field-input,
   .field-select {
     width: 100%;
@@ -711,34 +405,34 @@ body::-webkit-scrollbar {
     background-color: vars.$input-background;
     font-size: 14px;
     font-family: vars.$font-family-primary;
-
+ 
     &:focus {
       background-color: vars.$color-bg-footer;
       border-color: vars.$color-breadcrumb;
       outline: none;
     }
   }
-
+ 
   .status-options {
     background-color: #eeeeee;
     padding-bottom: 25px;
     font-size: 18px;
     color: vars.$color-text;
   }
-
+ 
   .error small {
     color: vars.$color-error-text;
     margin-top: 4px;
     font-size: 12px;
   }
 }
-
+ 
 .buttons {
   grid-column: span 2;
   @include mixins.flex(center);
   gap: 14px;
   margin-top: 10px;
-
+ 
   .btn {
     padding: 12px 28px;
     font-size: vars.$font-size-error;
@@ -747,132 +441,37 @@ body::-webkit-scrollbar {
     cursor: pointer;
     transition: 0.2s ease;
   }
-
+ 
   .btn-submit {
     background-color: vars.$color-breadcrumb;
     color: vars.$color-bg-footer;
     width: 23.75rem;
-
+ 
     &:disabled {
       background-color: vars.$disabled-bg-color;
       cursor: not-allowed;
     }
-
+ 
     &:hover:not(:disabled) {
       background-color: darken(vars.$color-primary-hover, 6%);
     }
   }
-
+ 
   .btn-secondary {
     background-color: vars.$btn-secondary-bg-color;
     color: vars.$color-title;
     padding: 12px 22px;
-
+ 
     &:hover {
       background-color: vars.$hover-bg-color;
->>>>>>> 29413163485ac7c3b38f12c2efce0a60ece7b04b
     }
   }
 }
-
-
-//====dashboard-notifications-component styles=====
-.dashboard-notifications {
-  background: vars.$color-white;
-  border-radius: vars.$border-radius-large;
-  padding: vars.$spacing-lg;
-  box-shadow: vars.$card-shadow;
-  display: flex;
-  flex-direction: column;
-  gap: vars.$spacing-md;
-  height: vars.$notification-height;
-  width: vars.$notification-width;
-  font-family: vars.$font-family-main;
-  align-items:  $notification-item-center;
-
-  .widget-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid vars.$color-gray-light;
-    padding-bottom: vars.$spacing-sm;
-
-    h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: vars.$color-gray-dark;
-      margin: 0;
-    }
-
-    .notification-stats {
-      display: flex;
-      gap: 12px;
-
-      .stat {
-        font-size: 0.9rem;
-        font-weight: 500;
-        padding: 4px 10px;
-        border-radius: 20px;
-        display: inline-flex;
-        align-items:  $notification-item-center;
-        justify-content:  $notification-item-center;
-
-        &.critical {
-          background-color: vars.$color-critical-bg;
-          color: vars.$color-critical-text;
-          border: 1px solid vars.$color-critical-border;
-        }
-
-        &.warning {
-          background-color: vars.$color-warning-bg;
-          color: vars.$color-warning-text;
-          border: 1px solid vars.$color-warning-border;
-        }
-      }
-    }
-  }
-
-  .notifications-list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: vars.$spacing-sm;
-    padding-top: vars.$spacing-sm;
-
-    .empty-state {
-      text-align: $notification-item-center;
-      color: vars.$color-gray-medium;
-      margin-top: 40px;
-
-      img {
-        width: 64px;
-        height: 64px;
-        margin-bottom: 10px;
-        filter: brightness(0) invert(0.7);
-      }
-
-      p {
-        font-size: 0.9rem;
-        color: vars.$color-gray-muted;
-        margin-top: 5px;
-      }
-    }
-  }
-}
-
-
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: vars.$item-hover-shadow;
-  }
-
+ 
 .success {
   text-align: center;
   margin-top: vars.$font-size-title;
   color: #2e7d32;
   font-size: vars.$font-size-error;
   font-weight: vars.$font-weight-primary;
-}
 }
