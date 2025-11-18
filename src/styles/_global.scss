@@ -88,10 +88,6 @@ body::-webkit-scrollbar {
   border-radius: variables.$error-border-radius;
   margin: variables.$error-margin-y 0;
   position: relative;
-  @include mixins.font-primary(variables.$font-size-error);
-  @include mixins.box-shadow(variables.$error-shadow);
-  position: relative;
-  margin: variables.$error-margin-y 0;
 
   .icon {
     margin-right: 0.625rem;
@@ -189,7 +185,6 @@ body::-webkit-scrollbar {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  cursor: pointer;
 }
 
 .user-email {
@@ -287,7 +282,6 @@ body::-webkit-scrollbar {
 
 .dialog-box {
   background: variables.$color-bg-footer;
-  background: variables.$color-dialog-bg;
   border-radius: variables.$dialog-radius;
   width: variables.$dialog-width;
   max-width: variables.$dialog-max-width;
@@ -416,19 +410,6 @@ body::-webkit-scrollbar {
           }
         }
       }
-  overflow: hidden;
-  @include mixins.fade-in(variables.$dialog-fade-duration);
-
-  .dialog-header {
-    @include mixins.flex-between;
-    padding: variables.$dialog-padding-header;
-    border-bottom: 1px solid variables.$color-dialog-border;
-    background-color: variables.$color-dialog-header-bg;
-
-    h3 {
-      margin: 0;
-      @include mixins.font-primary(variables.$font-size-title, variables.$font-weight-title);
-      color: variables.$color-text-primary;
     }
   }
 
@@ -492,12 +473,6 @@ body::-webkit-scrollbar {
       font-weight: variables.$font-weight-primary;
       color: variables.$color-subtitle;
       margin-bottom: 24px;
-  .dialog-body {
-    padding: variables.$dialog-padding-body;
-
-    p {
-      font-size: variables.$font-size-body;
-      color: variables.$color-text-secondary;
       line-height: 1.4;
     }
 
@@ -622,27 +597,6 @@ body::-webkit-scrollbar {
 
         &:hover {
           background-color: variables.$hover-bg-color;
-  .dialog-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: variables.$dialog-gap-actions;
-    padding: variables.$dialog-padding-actions;
-    border-top: 1px solid variables.$color-dialog-border;
-
-    .btn {
-      padding: 8px 16px;
-      font-size: variables.$font-size-button;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      @include mixins.transition(background-color);
-
-      &.cancel {
-        background-color: variables.$color-btn-cancel-bg;
-        color: variables.$color-bg-footer;
-
-        &:hover {
-          background-color: variables.$color-btn-cancel-hover;
         }
       }
     }
@@ -679,12 +633,6 @@ body::-webkit-scrollbar {
 
         &:hover {
           background: darken(variables.$create-btn-bg, 8%);
-      &.confirm {
-        background-color: variables.$color-btn-confirm-bg;
-        color: variables.$color-bg-footer;
-
-        &:hover {
-          background-color: variables.$color-btn-confirm-hover;
         }
       }
 
@@ -833,43 +781,6 @@ body::-webkit-scrollbar {
 
           .filter-icon {
             filter: brightness(0) invert(1);
-        &.danger {
-          background-color: variables.$color-btn-danger-bg;
-
-          &:hover {
-            background-color: variables.$color-btn-danger-hover;
-          }
-        }
-      }
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 0.25rem;
-      font-size: variables.$font-size-button;
-      cursor: pointer;
-      @include mixins.transition(background-color);
-
-      &.cancel {
-        background-color: variables.$color-btn-cancel-bg;
-        color: variables.$color-btn-cancel-text;
-
-        &:hover {
-          background-color: variables.$color-btn-cancel-hover;
-        }
-      }
-
-      &.confirm {
-        background-color: variables.$color-btn-confirm-bg;
-        color: variables.$color-bg-footer;
-
-        &:hover {
-          background-color: variables.$color-btn-confirm-hover;
-        }
-
-        &.danger {
-          background-color: variables.$color-btn-danger-bg;
-
-          &:hover {
-            background-color: variables.$color-btn-danger-hover;
           }
         }
       }
@@ -901,21 +812,6 @@ body::-webkit-scrollbar {
         color: variables.$color-text-secondary;
         margin-bottom: 12px;
       }
-// ====================== CREATE PROJECT PAGE ======================
-.project-create-page {
-  padding: variables.$padding-primary;
-}
-
-.breadcrumb {
-  @include mixins.flex(flex-start);
-  gap: 6px;
-  margin-bottom: variables.$padding-footer-sides;
-  font-size: variables.$font-size-error;
-
-  .breadcrumb-link {
-    color: variables.$color-breadcrumb;
-    font-weight: variables.$font-weight-primary;
-    cursor: pointer;
 
       .filter-options {
         display: flex;
@@ -965,47 +861,6 @@ body::-webkit-scrollbar {
       .status-pill.in-progress {
         background: variables.$progress-color;
       }
-  .breadcrumb-current {
-    color: variables.$color-title;
-    font-weight: variables.$font-weight-primary;
-  }
-
-  .breadcrumb-separator {
-    color: variables.$color-text-secondary;
-  }
-}
-
-.page-title {
-  font-family: variables.$font-family-primary;
-  font-size: variables.$font-size-page-title;
-  font-weight: variables.$font-weight-footer;
-  color: variables.$color-title;
-  margin-bottom: variables.$dialog-radius;
-}
-
-.page-subtitle {
-  font-size: variables.$font-size-body;
-  color: variables.$color-subtitle;
-  margin-bottom: 36px;
-}
-
-.project-form-container {
-  background: variables.$color-bg-footer;
-  border: 1px solid #ededed;
-  border-radius: variables.$font-size-error;
-  padding: 34px 60px 34px 40px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.form-title {
-  font-family: variables.$font-family-primary;
-  font-size: variables.$font-size-body;
-  font-weight: variables.$font-weight-primary;
-  color: variables.$color-subtitle;
-  margin-bottom: 24px;
-  line-height: 1.4;
-}
 
       .status-pill.completed {
         background: variables.$completed-color;
@@ -1031,27 +886,6 @@ body::-webkit-scrollbar {
 
       app-project-card-component {
         transition: 0.2s ease;
-.char-counter {
-  font-size: 12px;
-  color: variables.$color-text;
-}
-
-.project-description {
-  padding: 12px 14px;
-  border-radius: variables.$dialog-radius;
-  border: 1px solid variables.$border-color;
-  font-size: variables.$font-size-error;
-  width: 100%;
-  resize: vertical;
-  font-family: variables.$font-family-primary;
-  background-color: variables.$input-background;
-
-  &:focus {
-    background-color: variables.$color-bg-footer;
-    border-color: variables.$color-breadcrumb;
-    outline: none;
-  }
-}
 
         &:hover {
           transform: translateY(-3px);
@@ -1067,11 +901,6 @@ body::-webkit-scrollbar {
         font-size: 0.95rem;
         color: variables.$color-text-primary;
       }
-  .field-label {
-    font-size: variables.$font-size-error;
-    font-weight: variables.$font-weight-footer;
-    margin-bottom: 4px;
-  }
 
       .active-filters .label {
         font-weight: 600;
@@ -1169,20 +998,6 @@ body::-webkit-scrollbar {
         }
       }
 
-  .field-input,
-  .field-select {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: variables.$dialog-radius;
-    border: 1px solid variables.$border-color;
-    background-color: variables.$input-background;
-    font-size: 14px;
-    font-family: variables.$font-family-primary;
-
-    &:focus {
-      background-color: variables.$color-bg-footer;
-      border-color: variables.$color-breadcrumb;
-      outline: none;
     }
 
     /*============== Project Card ============*/
@@ -1206,19 +1021,6 @@ body::-webkit-scrollbar {
       justify-content: space-between;
       align-items: flex-start;
     }
-  .status-options {
-    background-color: #eeeeee;
-    padding-bottom: 25px;
-    font-size: 18px;
-    color: variables.$color-text;
-  }
-
-  .error small {
-    color: variables.$color-error-text;
-    margin-top: 4px;
-    font-size: 12px;
-  }
-}
 
     .project-title {
       font-size: 1.05rem;
@@ -1251,27 +1053,6 @@ body::-webkit-scrollbar {
 
     .status-pill.Planning {
       background: variables.$planning-color;
-  .btn {
-    padding: 12px 28px;
-    font-size: variables.$font-size-error;
-    border-radius: 22px;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s ease;
-  }
-
-  .btn-submit {
-    background-color: variables.$color-breadcrumb;
-    color: variables.$color-bg-footer;
-    width: 23.75rem;
-
-    &:disabled {
-      background-color: variables.$disabled-bg-color;
-      cursor: not-allowed;
-    }
-
-    &:hover:not(:disabled) {
-      background-color: darken(variables.$color-primary-hover, 6%);
     }
 
     .status-pill.Completed {
@@ -1280,13 +1061,6 @@ body::-webkit-scrollbar {
 
     .card-details {
       margin-top: 10px;
-  .btn-secondary {
-    background-color: variables.$btn-secondary-bg-color;
-    color: variables.$color-title;
-    padding: 12px 22px;
-
-    &:hover {
-      background-color: variables.$hover-bg-color;
     }
 
     .detail-row {
@@ -1348,10 +1122,3 @@ body::-webkit-scrollbar {
     .status-badge.cancelled {
       background: variables.$color-btn-danger-bg;
     }
-.success {
-  text-align: center;
-  margin-top: variables.$font-size-title;
-  color: #2e7d32;
-  font-size: variables.$font-size-error;
-  font-weight: variables.$font-weight-primary;
-}
