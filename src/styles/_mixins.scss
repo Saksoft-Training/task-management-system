@@ -1,4 +1,4 @@
-@use './variables' ;
+@use './variables';
 
 // ====== FLEX HELPERS ======
 @mixin flex($justify: center, $align: center, $direction: row) {
