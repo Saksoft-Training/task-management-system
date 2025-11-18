@@ -4,7 +4,7 @@
     <form [formGroup]="loginFormGroup" (ngSubmit)="submitLoginForm()" class="card" autocomplete="off">
       <div class="header">
         <div class="header-content">
-          <img src="assets/icons/arrow-Icon.svg" alt="login" />
+          <img src="assets/icons/arrow-Icon.svg" alt="Welcome back" />
           <h2>Welcome Back</h2>
         </div>
         <p>Login to access your task management dashboard</p>
@@ -42,7 +42,7 @@
         <button type="submit" class="login-btn" [disabled]="isFormSubmitting">Login</button>
         <p class="no-account">Don't have an account?</p>
         <button type="button" class="create-btn" (click)="navigateTo('/register')">
-          <img src="assets/icons/create-account-Icon.svg" alt="create" />
+          <img src="assets/icons/create-account-Icon.svg" alt="create account" />
           <span>Create Account</span>
         </button>
       </div>
