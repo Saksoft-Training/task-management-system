@@ -1,0 +1,10 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "sprint": true,
+      "main": false,
+      "development": false,
+      "feature/*": false
+    }
+  }
+}
