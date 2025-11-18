@@ -1,4 +1,4 @@
-@use './variables' as variable;
+@use './variables' ;
 @use './mixins';
 
 // ====================== FOOTER ======================
@@ -19,9 +19,9 @@ html::-webkit-scrollbar {
 }
 
 body {
-  font-family: variable.$font-family-primary;
-  background-color: variable.$color-gray-50;
-  color: variable.$color-text-primary;
+  font-family: variables.$font-family-primary;
+  background-color: variables.$color-gray-50;
+  color: variables.$color-text-primary;
   line-height: 1.4;
   overflow-x: hidden;
   overflow-y: auto;
@@ -49,20 +49,20 @@ body::-webkit-scrollbar {
 
 .footer {
   @include mixins.fixed-bottom;
-  border-top: 1px solid variable.$color-border;
-  background-color: variable.$color-bg-footer;
-  color: variable.$color-text-footer;
-  font-size: variable.$font-size-footer;
-  font-weight: variable.$font-weight-footer;
-  padding: variable.$padding-footer-top variable.$padding-footer-sides variable.$padding-footer-bottom;
+  border-top: 1px solid variables.$color-border;
+  background-color: variables.$color-bg-footer;
+  color: variables.$color-text-footer;
+  font-size: variables.$font-size-footer;
+  font-weight: variables.$font-weight-footer;
+  padding: variables.$padding-footer-top variables.$padding-footer-sides variables.$padding-footer-bottom;
   @include mixins.flex-between;
   @include mixins.flex-between;
-  border-top: 1px solid vars.$color-border;
-  background-color: vars.$color-bg-footer;
-  color: vars.$color-text-footer;
-  font-size: vars.$font-size-footer;
-  font-weight: vars.$font-weight-footer;
-  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-sides;
+  border-top: 1px solid variables.$color-border;
+  background-color: variables.$color-bg-footer;
+  color: variables.$color-text-footer;
+  font-size: variables.$font-size-footer;
+  font-weight: variables.$font-weight-footer;
+  padding: variables.$padding-footer-top variables.$padding-footer-sides variables.$padding-footer-sides;
 
   &-left,
   &-right {
@@ -76,32 +76,19 @@ body::-webkit-scrollbar {
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
-  background-color: variable.$color-error-bg;
-  color: variable.$color-error-text;
-  border: 1px solid variable.$color-error-border;
-  padding: variable.$error-padding-y variable.$error-padding-x;
-  border-radius: variable.$error-border-radius;
-  @include mixins.font-primary(variable.$font-size-error);
-  @include mixins.box-shadow(variable.$error-shadow);
+  background-color: variables.$color-error-bg;
+  color: variables.$color-error-text;
+  border: 1px solid variables.$color-error-border;
+  padding: variables.$error-padding-y variables.$error-padding-x;
+  border-radius: variables.$error-border-radius;
+  @include mixins.font-primary(variables.$font-size-error);
+  @include mixins.box-shadow(variables.$error-shadow);
   position: relative;
-  margin: variable.$error-margin-y 0;
+  margin: variables.$error-margin-y 0;
 
   .icon {
     margin-right: 0.625rem;
-    font-size: variable.$error-icon-size;
-  @include mixins.font-primary(vars.$font-size-error);
-  @include mixins.box-shadow(vars.$error-shadow);
-  background-color: vars.$color-error-bg;
-  color: vars.$color-error-text;
-  border: 1px solid vars.$color-error-border;
-  padding: vars.$error-padding-y vars.$error-padding-x;
-  border-radius: vars.$error-border-radius;
-  margin: vars.$error-margin-y 0;
-  position: relative;
-
-  .icon {
-    margin-right: 0.625rem;
-    font-size: vars.$error-icon-size;
+    font-size: variables.$error-icon-size;
   }
 
   .message {
@@ -111,18 +98,18 @@ body::-webkit-scrollbar {
   .close-btn {
     background: none;
     border: none;
-    color: variable.$color-error-text;
+    color: variables.$color-error-text;
     cursor: pointer;
-    font-size: vars.$font-size-title;
+    font-size: variables.$font-size-title;
     margin-left: 10px;
-    color: vars.$color-error-text;
+    color: variables.$color-error-text;
     @include mixins.transition(color);
     font-size: 1.125rem;
     margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
 
     &:hover {
-      color: variable.$color-error-hover;
+      color: variables.$color-error-hover;
     }
   }
 }
@@ -135,12 +122,12 @@ body::-webkit-scrollbar {
   width: 79.9375rem;
   display: flex;
   justify-content: center;
-  background: variable.$color-white;
-  border-bottom: 0.0625rem solid variable.$color-gray-200;
+  background: variables.$color-white;
+  border-bottom: 0.0625rem solid variables.$color-gray-200;
   height: 6.25rem;
   padding: 0;
   box-sizing: border-box;
-  font-family: variable.$font-family-primary;
+  font-family: variables.$font-family-primary;
 }
 
 .header-container {
@@ -161,7 +148,7 @@ body::-webkit-scrollbar {
   font-weight: 500;
   letter-spacing: -5%;
   line-height: 120%;
-  color: variable.$color-black;
+  color: variables.$color-black;
 }
 
 .nav-links {
@@ -186,7 +173,7 @@ body::-webkit-scrollbar {
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 140%;
-    color: variable.$color-black;
+    color: variables.$color-black;
     text-decoration: none;
   }
 }
@@ -195,6 +182,7 @@ body::-webkit-scrollbar {
   display: flex;
   align-items: center;
   gap: 0.625rem;
+  cursor: pointer;
 }
 
 .user-email {
@@ -206,16 +194,16 @@ body::-webkit-scrollbar {
   background: #dfecc6;
   border-radius: 62.5rem;
   width: fit-content;
-  font-family: variable.$font-family-primary;
+  font-family: variables.$font-family-primary;
   font-size: 0.875rem;
   font-weight: 500;
-  color: variable.$color-black;
+  color: variables.$color-black;
   white-space: nowrap;
 }
 
 .email-icon {
   font-size: 0.875rem;
-  color: variable.$color-black;
+  color: variables.$color-black;
 }
 
 .logout-icon {
@@ -242,7 +230,7 @@ body::-webkit-scrollbar {
   width: 32px;
   height: 32px;
   border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: variable.$color-primary;
+  border-top-color: variables.$color-primary;
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
@@ -257,7 +245,7 @@ body::-webkit-scrollbar {
   color: #fff;
   font-size: 0.9rem;
   text-align: center;
-  font-family: variable.$font-family-primary;
+  font-family: variables.$font-family-primary;
 }
 
 /* ========================================= */
@@ -270,50 +258,30 @@ body::-webkit-scrollbar {
   left: 0;
   width: 100%;
   height: 100%;
-  background: variable.$color-overlay-bg;
-  inset: 0;
-  background: vars.$color-overlay-bg;
+  background: variables.$color-overlay-bg;
   @include mixins.flex();
-  z-index: variable.$dialog-overlay-z;
+  z-index: variables.$dialog-overlay-z;
 }
 
 .dialog-box {
-  background: variable.$color-dialog-bg;
-  border-radius: variable.$dialog-radius;
-  width: variable.$dialog-width;
-  max-width: variable.$dialog-max-width;
-  @include mixins.box-shadow(variable.$dialog-shadow);
+  background: variables.$color-dialog-bg;
+  border-radius: variables.$dialog-radius;
+  width: variables.$dialog-width;
+  max-width: variables.$dialog-max-width;
+  @include mixins.box-shadow(variables.$dialog-shadow);
   overflow: hidden;
-  @include mixins.fade-in(variable.$dialog-fade-duration);
+  @include mixins.fade-in(variables.$dialog-fade-duration);
 
   .dialog-header {
     @include mixins.flex-between;
-    padding: variable.$dialog-padding-header;
-    border-bottom: 1px solid variable.$color-dialog-border;
-    background-color: variable.$color-dialog-header-bg;
+    padding: variables.$dialog-padding-header;
+    border-bottom: 1px solid variables.$color-dialog-border;
+    background-color: variables.$color-dialog-header-bg;
 
     h3 {
       margin: 0;
-      @include mixins.font-primary(variable.$font-size-title, variable.$font-weight-title);
-      color: variable.$color-text-primary;
-  background: vars.$color-bg-footer;
-  border-radius: vars.$dialog-radius;
-  width: vars.$dialog-width;
-  max-width: vars.$dialog-max-width;
-  @include mixins.box-shadow(vars.$dialog-shadow);
-  @include mixins.fade-in(vars.$dialog-fade-duration);
-  overflow: hidden;
-
-  .dialog-header {
-    @include mixins.flex-between;
-    padding: vars.$dialog-padding-header;
-    background-color: vars.$color-dialog-header-bg;
-    border-bottom: 1px solid vars.$color-dialog-border;
-
-    h3 {
-      margin: 0;
-      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
-      color: vars.$color-text-primary;
+      @include mixins.font-primary(variables.$font-size-title, variables.$font-weight-title);
+      color: variables.$color-text-primary;
     }
 
     .close-btn {
@@ -358,16 +326,11 @@ body::-webkit-scrollbar {
   }
 
   .dialog-body {
-    padding: variable.$dialog-padding-body;
+    padding: variables.$dialog-padding-body;
 
     p {
-      font-size: variable.$font-size-body;
-      color: variable.$color-text-secondary;
-    padding: vars.$dialog-padding-body;
-
-    p {
-      color: vars.$color-text-secondary;
-      font-size: vars.$font-size-body;
+      font-size: variables.$font-size-body;
+      color: variables.$color-text-secondary;
       line-height: 1.4;
     }
   }
@@ -375,72 +338,72 @@ body::-webkit-scrollbar {
   .dialog-actions {
     display: flex;
     justify-content: flex-end;
-    gap: variable.$dialog-gap-actions;
-    padding: variable.$dialog-padding-actions;
-    border-top: 1px solid variable.$color-dialog-border;
+    gap: variables.$dialog-gap-actions;
+    padding: variables.$dialog-padding-actions;
+    border-top: 1px solid variables.$color-dialog-border;
 
     .btn {
       padding: 8px 16px;
-      font-size: vars.$font-size-button;
+      font-size: variables.$font-size-button;
       border-radius: 4px;
       border: none;
       cursor: pointer;
       @include mixins.transition(background-color);
 
       &.cancel {
-        background-color: vars.$color-btn-cancel-bg;
-        color: vars.$color-bg-footer;
+        background-color: variables.$color-btn-cancel-bg;
+        color: variables.$color-bg-footer;
 
         &:hover {
-          background-color: vars.$color-btn-cancel-hover;
+          background-color: variables.$color-btn-cancel-hover;
         }
       }
 
       &.confirm {
-        background-color: vars.$color-btn-confirm-bg;
-        color: vars.$color-bg-footer;
+        background-color: variables.$color-btn-confirm-bg;
+        color: variables.$color-bg-footer;
 
         &:hover {
-          background-color: vars.$color-btn-confirm-hover;
+          background-color: variables.$color-btn-confirm-hover;
         }
 
         &.danger {
-          background-color: vars.$color-btn-danger-bg;
+          background-color: variables.$color-btn-danger-bg;
 
           &:hover {
-            background-color: vars.$color-btn-danger-hover;
+            background-color: variables.$color-btn-danger-hover;
           }
         }
       }
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 0.25rem;
-      font-size: variable.$font-size-button;
+      font-size: variables.$font-size-button;
       cursor: pointer;
       @include mixins.transition(background-color);
 
       &.cancel {
-        background-color: variable.$color-btn-cancel-bg;
-        color: variable.$color-btn-cancel-text;
+        background-color: variables.$color-btn-cancel-bg;
+        color: variables.$color-btn-cancel-text;
 
         &:hover {
-          background-color: variable.$color-btn-cancel-hover;
+          background-color: variables.$color-btn-cancel-hover;
         }
       }
 
       &.confirm {
-        background-color: variable.$color-btn-confirm-bg;
-        color: variable.$color-btn-confirm-text;
+        background-color: variables.$color-btn-confirm-bg;
+        color: variables.$color-bg-footer;
 
         &:hover {
-          background-color: variable.$color-btn-confirm-hover;
+          background-color: variables.$color-btn-confirm-hover;
         }
 
         &.danger {
-          background-color: variable.$color-btn-danger-bg;
+          background-color: variables.$color-btn-danger-bg;
 
           &:hover {
-            background-color: variable.$color-btn-danger-hover;
+            background-color: variables.$color-btn-danger-hover;
           }
         }
       }
@@ -450,18 +413,18 @@ body::-webkit-scrollbar {
 
 // ====================== CREATE PROJECT PAGE ======================
 .project-create-page {
-  padding: vars.$padding-primary;
+  padding: variables.$padding-primary;
 }
 
 .breadcrumb {
   @include mixins.flex(flex-start);
   gap: 6px;
-  margin-bottom: vars.$padding-footer-sides;
-  font-size: vars.$font-size-error;
+  margin-bottom: variables.$padding-footer-sides;
+  font-size: variables.$font-size-error;
 
   .breadcrumb-link {
-    color: vars.$color-breadcrumb;
-    font-weight: vars.$font-weight-primary;
+    color: variables.$color-breadcrumb;
+    font-weight: variables.$font-weight-primary;
     cursor: pointer;
 
     &:hover {
@@ -470,43 +433,43 @@ body::-webkit-scrollbar {
   }
 
   .breadcrumb-current {
-    color: vars.$color-title;
-    font-weight: vars.$font-weight-primary;
+    color: variables.$color-title;
+    font-weight: variables.$font-weight-primary;
   }
 
   .breadcrumb-separator {
-    color: vars.$color-text-secondary;
+    color: variables.$color-text-secondary;
   }
 }
 
 .page-title {
-  font-family: vars.$font-family-primary;
-  font-size: vars.$font-size-page-title;
-  font-weight: vars.$font-weight-footer;
-  color: vars.$color-title;
-  margin-bottom: vars.$dialog-radius;
+  font-family: variables.$font-family-primary;
+  font-size: variables.$font-size-page-title;
+  font-weight: variables.$font-weight-footer;
+  color: variables.$color-title;
+  margin-bottom: variables.$dialog-radius;
 }
 
 .page-subtitle {
-  font-size: vars.$font-size-body;
-  color: vars.$color-subtitle;
+  font-size: variables.$font-size-body;
+  color: variables.$color-subtitle;
   margin-bottom: 36px;
 }
 
 .project-form-container {
-  background: vars.$color-bg-footer;
+  background: variables.$color-bg-footer;
   border: 1px solid #ededed;
-  border-radius: vars.$font-size-error;
+  border-radius: variables.$font-size-error;
   padding: 34px 60px 34px 40px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .form-title {
-  font-family: vars.$font-family-primary;
-  font-size: vars.$font-size-body;
-  font-weight: vars.$font-weight-primary;
-  color: vars.$color-subtitle;
+  font-family: variables.$font-family-primary;
+  font-size: variables.$font-size-body;
+  font-weight: variables.$font-weight-primary;
+  color: variables.$color-subtitle;
   margin-bottom: 24px;
   line-height: 1.4;
 }
@@ -529,22 +492,22 @@ body::-webkit-scrollbar {
 
 .char-counter {
   font-size: 12px;
-  color: vars.$color-text;
+  color: variables.$color-text;
 }
 
 .project-description {
   padding: 12px 14px;
-  border-radius: vars.$dialog-radius;
-  border: 1px solid vars.$border-color;
-  font-size: vars.$font-size-error;
+  border-radius: variables.$dialog-radius;
+  border: 1px solid variables.$border-color;
+  font-size: variables.$font-size-error;
   width: 100%;
   resize: vertical;
-  font-family: vars.$font-family-primary;
-  background-color: vars.$input-background;
+  font-family: variables.$font-family-primary;
+  background-color: variables.$input-background;
 
   &:focus {
-    background-color: vars.$color-bg-footer;
-    border-color: vars.$color-breadcrumb;
+    background-color: variables.$color-bg-footer;
+    border-color: variables.$color-breadcrumb;
     outline: none;
   }
 }
@@ -554,8 +517,8 @@ body::-webkit-scrollbar {
   flex-direction: column;
 
   .field-label {
-    font-size: vars.$font-size-error;
-    font-weight: vars.$font-weight-footer;
+    font-size: variables.$font-size-error;
+    font-weight: variables.$font-weight-footer;
     margin-bottom: 4px;
   }
 
@@ -568,15 +531,15 @@ body::-webkit-scrollbar {
   .field-select {
     width: 100%;
     padding: 12px 14px;
-    border-radius: vars.$dialog-radius;
-    border: 1px solid vars.$border-color;
-    background-color: vars.$input-background;
+    border-radius: variables.$dialog-radius;
+    border: 1px solid variables.$border-color;
+    background-color: variables.$input-background;
     font-size: 14px;
-    font-family: vars.$font-family-primary;
+    font-family: variables.$font-family-primary;
 
     &:focus {
-      background-color: vars.$color-bg-footer;
-      border-color: vars.$color-breadcrumb;
+      background-color: variables.$color-bg-footer;
+      border-color: variables.$color-breadcrumb;
       outline: none;
     }
   }
@@ -585,11 +548,11 @@ body::-webkit-scrollbar {
     background-color: #eeeeee;
     padding-bottom: 25px;
     font-size: 18px;
-    color: vars.$color-text;
+    color: variables.$color-text;
   }
 
   .error small {
-    color: vars.$color-error-text;
+    color: variables.$color-error-text;
     margin-top: 4px;
     font-size: 12px;
   }
@@ -603,7 +566,7 @@ body::-webkit-scrollbar {
 
   .btn {
     padding: 12px 28px;
-    font-size: vars.$font-size-error;
+    font-size: variables.$font-size-error;
     border-radius: 22px;
     border: none;
     cursor: pointer;
@@ -611,35 +574,35 @@ body::-webkit-scrollbar {
   }
 
   .btn-submit {
-    background-color: vars.$color-breadcrumb;
-    color: vars.$color-bg-footer;
+    background-color: variables.$color-breadcrumb;
+    color: variables.$color-bg-footer;
     width: 23.75rem;
 
     &:disabled {
-      background-color: vars.$disabled-bg-color;
+      background-color: variables.$disabled-bg-color;
       cursor: not-allowed;
     }
 
     &:hover:not(:disabled) {
-      background-color: darken(vars.$color-primary-hover, 6%);
+      background-color: darken(variables.$color-primary-hover, 6%);
     }
   }
 
   .btn-secondary {
-    background-color: vars.$btn-secondary-bg-color;
-    color: vars.$color-title;
+    background-color: variables.$btn-secondary-bg-color;
+    color: variables.$color-title;
     padding: 12px 22px;
 
     &:hover {
-      background-color: vars.$hover-bg-color;
+      background-color: variables.$hover-bg-color;
     }
   }
 }
 
 .success {
   text-align: center;
-  margin-top: vars.$font-size-title;
+  margin-top: variables.$font-size-title;
   color: #2e7d32;
-  font-size: vars.$font-size-error;
-  font-weight: vars.$font-weight-primary;
+  font-size: variables.$font-size-error;
+  font-weight: variables.$font-weight-primary;
 }

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../features/user-account-management/services/auth-service';
-
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -63,4 +62,7 @@ export class HeaderComponent implements OnInit {
     );
   }
   //#endregion
+   goToLogin() {
+  this.router.navigate(['/login']);
+}
 }

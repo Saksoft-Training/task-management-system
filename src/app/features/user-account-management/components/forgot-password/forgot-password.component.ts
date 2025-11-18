@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
@@ -24,12 +24,6 @@ export class ForgotPasswordComponent implements OnInit {
   //#endregion
 
   //#region Constructor
-  /**
-   * @summary Injects form builder, user storage service and router.
-   * @param formBuilder - Used to build reactive forms.
-   * @param userStorage - Handles local user data operations.
-   * @param router - Used for navigation.
-   */
   constructor(
     private formBuilder: FormBuilder,
     private userStorage: UserStorageService,
@@ -38,10 +32,6 @@ export class ForgotPasswordComponent implements OnInit {
   //#endregion
 
   //#region Lifecycle Hook
-  /**
-   * @summary Initializes reset-password form on component load.
-   * @returns void
-   */
   public ngOnInit(): void {
     this.resetForm = this.formBuilder.group(
       {
@@ -55,12 +45,12 @@ export class ForgotPasswordComponent implements OnInit {
   //#endregion
 
   //#region Validators
+
   /**
    * @summary Validates email to allow only Gmail addresses.
-   * @param control - Form control for email.
-   * @returns ValidationErrors | null
+   * @returns ValidatorFn
    */
-  private gmailValidator() {
+  private gmailValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const email = control.value;
       if (!email) return null;
@@ -76,6 +66,10 @@ export class ForgotPasswordComponent implements OnInit {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const email = (control.value || '').trim().toLowerCase();
       if (!email) return of(null);
+      /**
+      * Delay added to mimic an API call.
+      * Ensures Angular treats this as async and avoids instant UI flicker.
+      */
       return of(this.userStorage.isEmailExists(email)).pipe(
         delay(200),
         map(exists => (exists ? null : { emailNotFound: true }))
@@ -83,11 +77,10 @@ export class ForgotPasswordComponent implements OnInit {
     };
   }
   /**
-   * @summary Validates password strength (uppercase, number, special char).
-   * @param control - Form control for password.
-   * @returns ValidationErrors | null
+   * @summary Validates password strength.
+   * @returns ValidatorFn
    */
-  private passwordStrengthValidator() {
+  private passwordStrengthValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const password = control.value || '';
       const valid =
@@ -100,10 +93,9 @@ export class ForgotPasswordComponent implements OnInit {
   }
   /**
    * @summary Validates if new password matches confirm password.
-   * @param group - Form group containing password fields.
-   * @returns ValidationErrors | null
+   * @returns ValidatorFn
    */
-  private confirmPasswordValidator() {
+  private confirmPasswordValidator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const p1 = group.get('newPassword')?.value;
       const p2 = group.get('confirmPassword')?.value;
@@ -113,17 +105,9 @@ export class ForgotPasswordComponent implements OnInit {
   //#endregion
 
   //#region Helper Methods
-  /**
-   * @summary Getter for easy access to form controls.
-   * @returns FormGroup['controls']
-   */
   public get formControls(): FormGroup['controls'] {
     return this.resetForm.controls;
   }
-  /**
-   * @summary Forces the email input to lowercase.
-   * @returns void
-   */
   public forceLowercaseEmail(): void {
     const emailCtrl = this.resetForm.get('email');
     const value = emailCtrl?.value || '';
@@ -132,10 +116,6 @@ export class ForgotPasswordComponent implements OnInit {
   //#endregion
 
   //#region Form Submission
-  /**
-   * @summary Validates form, updates password if valid and handles messages.
-   * @returns void
-   */
   public submitReset(): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -155,7 +135,7 @@ export class ForgotPasswordComponent implements OnInit {
         this.isSubmitting = false;
         return;
       }
-      alert("Password reset successfully!");//alert for demo purposes
+      alert("Password reset successfully!"); // demo only
       this.successMessage = 'Password reset successfully. Redirecting to login…';
       this.resetForm.reset();
       setTimeout(() => {
@@ -167,10 +147,6 @@ export class ForgotPasswordComponent implements OnInit {
   //#endregion
 
   //#region Navigation
-  /**
-   * @summary Navigates user back to login screen.
-   * @returns void
-   */
   public goToLogin(): void {
     this.router.navigate(['/login']);
   }
