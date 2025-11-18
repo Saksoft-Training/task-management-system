@@ -1,4 +1,4 @@
-@use './variables' as vars;
+@use './variables' as variable;
 @use './mixins';
 
 // ====================== FOOTER ======================
@@ -19,9 +19,9 @@ html::-webkit-scrollbar {
 }
 
 body {
-  font-family: vars.$font-family-primary;
-  background-color: vars.$color-gray-50;
-  color: vars.$color-text-primary;
+  font-family: variable.$font-family-primary;
+  background-color: variable.$color-gray-50;
+  color: variable.$color-text-primary;
   line-height: 1.4;
   overflow-x: hidden !important;
   overflow-y: auto !important;
@@ -50,12 +50,12 @@ body::-webkit-scrollbar {
 .footer {
   @include mixins.fixed-bottom;
   @include mixins.flex-between;
-  border-top: 1px solid vars.$color-border;
-  background-color: vars.$color-bg-footer;
-  color: vars.$color-text-footer;
-  font-size: vars.$font-size-footer;
-  font-weight: vars.$font-weight-footer;
-  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-sides;
+  border-top: 1px solid variable.$color-border;
+  background-color: variable.$color-bg-footer;
+  color: variable.$color-text-footer;
+  font-size: variable.$font-size-footer;
+  font-weight: variable.$font-weight-footer;
+  padding: variable.$padding-footer-top variable.$padding-footer-sides variable.$padding-footer-sides;
 
   &-left,
   &-right {
@@ -69,19 +69,19 @@ body::-webkit-scrollbar {
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
-  @include mixins.font-primary(vars.$font-size-error);
-  @include mixins.box-shadow(vars.$error-shadow);
-  background-color: vars.$color-error-bg;
-  color: vars.$color-error-text;
-  border: 1px solid vars.$color-error-border;
-  padding: vars.$error-padding-y vars.$error-padding-x;
-  border-radius: vars.$error-border-radius;
-  margin: vars.$error-margin-y 0;
+  @include mixins.font-primary(variable.$font-size-error);
+  @include mixins.box-shadow(variable.$error-shadow);
+  background-color: variable.$color-error-bg;
+  color: variable.$color-error-text;
+  border: 1px solid variable.$color-error-border;
+  padding: variable.$error-padding-y variable.$error-padding-x;
+  border-radius: variable.$error-border-radius;
+  margin: variable.$error-margin-y 0;
   position: relative;
 
   .icon {
     margin-right: 0.625rem;
-    font-size: vars.$error-icon-size;
+    font-size: variable.$error-icon-size;
   }
 
   .message {
@@ -92,16 +92,16 @@ body::-webkit-scrollbar {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: vars.$font-size-title;
+    font-size: variable.$font-size-title;
     margin-left: 10px;
-    color: vars.$color-error-text;
+    color: variable.$color-error-text;
     @include mixins.transition(color);
     font-size: 1.125rem;
     margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
 
     &:hover {
-      color: vars.$color-error-hover;
+      color: variable.$color-error-hover;
     }
   }
 }
@@ -126,7 +126,7 @@ body::-webkit-scrollbar {
   height: 32px;
 
   border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: vars.$color-primary;
+  border-top-color: variable.$color-primary;
   border-radius: 50%;
 
   animation: spin 0.9s linear infinite;
@@ -147,7 +147,7 @@ body::-webkit-scrollbar {
   color: #fff;
   font-size: 0.9rem;
   text-align: center;
-  font-family: vars.$font-family-primary;
+  font-family: variable.$font-family-primary;
 }
 
 /* ========================================================= */
@@ -157,30 +157,30 @@ body::-webkit-scrollbar {
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: vars.$color-overlay-bg;
+  background: variable.$color-overlay-bg;
   @include mixins.flex();
-  z-index: vars.$dialog-overlay-z;
+  z-index: variable.$dialog-overlay-z;
 }
 
 .dialog-box {
-  background: vars.$color-bg-footer;
-  border-radius: vars.$dialog-radius;
-  width: vars.$dialog-width;
-  max-width: vars.$dialog-max-width;
-  @include mixins.box-shadow(vars.$dialog-shadow);
-  @include mixins.fade-in(vars.$dialog-fade-duration);
+  background: variable.$color-bg-footer;
+  border-radius: variable.$dialog-radius;
+  width: variable.$dialog-width;
+  max-width: variable.$dialog-max-width;
+  @include mixins.box-shadow(variable.$dialog-shadow);
+  @include mixins.fade-in(variable.$dialog-fade-duration);
   overflow: hidden;
 
   .dialog-header {
     @include mixins.flex-between;
-    padding: vars.$dialog-padding-header;
-    background-color: vars.$color-dialog-header-bg;
-    border-bottom: 1px solid vars.$color-dialog-border;
+    padding: variable.$dialog-padding-header;
+    background-color: variable.$color-dialog-header-bg;
+    border-bottom: 1px solid variable.$color-dialog-border;
 
     h3 {
       margin: 0;
-      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
-      color: vars.$color-text-primary;
+      @include mixins.font-primary(variable.$font-size-title, variable.$font-weight-footer);
+      color: variable.$color-text-primary;
     }
 
     .close-btn {
@@ -223,11 +223,11 @@ body::-webkit-scrollbar {
   }
 
   .dialog-body {
-    padding: vars.$dialog-padding-body;
+    padding: variable.$dialog-padding-body;
 
     p {
-      color: vars.$color-text-secondary;
-      font-size: vars.$font-size-body;
+      color: variable.$color-text-secondary;
+      font-size: variable.$font-size-body;
       line-height: 1.4;
     }
   }
@@ -235,40 +235,40 @@ body::-webkit-scrollbar {
   .dialog-actions {
     display: flex;
     justify-content: flex-end;
-    gap: vars.$dialog-gap-actions;
-    padding: vars.$dialog-padding-actions;
-    border-top: 1px solid vars.$color-dialog-border;
+    gap: variable.$dialog-gap-actions;
+    padding: variable.$dialog-padding-actions;
+    border-top: 1px solid variable.$color-dialog-border;
 
     .btn {
       padding: 8px 16px;
-      font-size: vars.$font-size-button;
+      font-size: variable.$font-size-button;
       border-radius: 4px;
       border: none;
       cursor: pointer;
       @include mixins.transition(background-color);
 
       &.cancel {
-        background-color: vars.$color-btn-cancel-bg;
-        color: vars.$color-bg-footer;
+        background-color: variable.$color-btn-cancel-bg;
+        color: variable.$color-bg-footer;
 
         &:hover {
-          background-color: vars.$color-btn-cancel-hover;
+          background-color: variable.$color-btn-cancel-hover;
         }
       }
 
       &.confirm {
-        background-color: vars.$color-btn-confirm-bg;
-        color: vars.$color-bg-footer;
+        background-color: variable.$color-btn-confirm-bg;
+        color: variable.$color-bg-footer;
 
         &:hover {
-          background-color: vars.$color-btn-confirm-hover;
+          background-color: variable.$color-btn-confirm-hover;
         }
 
         &.danger {
-          background-color: vars.$color-btn-danger-bg;
+          background-color: variable.$color-btn-danger-bg;
 
           &:hover {
-            background-color: vars.$color-btn-danger-hover;
+            background-color: variable.$color-btn-danger-hover;
           }
         }
       }
@@ -282,18 +282,18 @@ body::-webkit-scrollbar {
 
 // ====================== CREATE PROJECT PAGE ======================
 .project-create-page {
-  padding: vars.$padding-primary;
+  padding: variable.$padding-primary;
 }
 
 .breadcrumb {
   @include mixins.flex(flex-start);
   gap: 6px;
-  margin-bottom: vars.$padding-footer-sides;
-  font-size: vars.$font-size-error;
+  margin-bottom: variable.$padding-footer-sides;
+  font-size: variable.$font-size-error;
 
   .breadcrumb-link {
-    color: vars.$color-breadcrumb;
-    font-weight: vars.$font-weight-primary;
+    color: variable.$color-breadcrumb;
+    font-weight: variable.$font-weight-primary;
     cursor: pointer;
 
     &:hover {
@@ -302,43 +302,43 @@ body::-webkit-scrollbar {
   }
 
   .breadcrumb-current {
-    color: vars.$color-title;
-    font-weight: vars.$font-weight-primary;
+    color: variable.$color-title;
+    font-weight: variable.$font-weight-primary;
   }
 
   .breadcrumb-separator {
-    color: vars.$color-text-secondary;
+    color: variable.$color-text-secondary;
   }
 }
 
 .page-title {
-  font-family: vars.$font-family-primary;
-  font-size: vars.$font-size-page-title;
-  font-weight: vars.$font-weight-footer;
-  color: vars.$color-title;
-  margin-bottom: vars.$dialog-radius;
+  font-family: variable.$font-family-primary;
+  font-size: variable.$font-size-page-title;
+  font-weight: variable.$font-weight-footer;
+  color: variable.$color-title;
+  margin-bottom: variable.$dialog-radius;
 }
 
 .page-subtitle {
-  font-size: vars.$font-size-body;
-  color: vars.$color-subtitle;
+  font-size: variable.$font-size-body;
+  color: variable.$color-subtitle;
   margin-bottom: 36px;
 }
 
 .project-form-container {
-  background: vars.$color-bg-footer;
+  background: variable.$color-bg-footer;
   border: 1px solid #ededed;
-  border-radius: vars.$font-size-error;
+  border-radius: variable.$font-size-error;
   padding: 34px 60px 34px 40px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .form-title {
-  font-family: vars.$font-family-primary;
-  font-size: vars.$font-size-body;
-  font-weight: vars.$font-weight-primary;
-  color: vars.$color-subtitle;
+  font-family: variable.$font-family-primary;
+  font-size: variable.$font-size-body;
+  font-weight: variable.$font-weight-primary;
+  color: variable.$color-subtitle;
   margin-bottom: 24px;
   line-height: 1.4;
 }
@@ -361,22 +361,22 @@ body::-webkit-scrollbar {
 
 .char-counter {
   font-size: 12px;
-  color: vars.$color-text;
+  color: variable.$color-text;
 }
 
 .project-description {
   padding: 12px 14px;
-  border-radius: vars.$dialog-radius;
-  border: 1px solid vars.$border-color;
-  font-size: vars.$font-size-error;
+  border-radius: variable.$dialog-radius;
+  border: 1px solid variable.$border-color;
+  font-size: variable.$font-size-error;
   width: 100%;
   resize: vertical;
-  font-family: vars.$font-family-primary;
-  background-color: vars.$input-background;
+  font-family: variable.$font-family-primary;
+  background-color: variable.$input-background;
 
   &:focus {
-    background-color: vars.$color-bg-footer;
-    border-color: vars.$color-breadcrumb;
+    background-color: variable.$color-bg-footer;
+    border-color: variable.$color-breadcrumb;
     outline: none;
   }
 }
@@ -386,8 +386,8 @@ body::-webkit-scrollbar {
   flex-direction: column;
 
   .field-label {
-    font-size: vars.$font-size-error;
-    font-weight: vars.$font-weight-footer;
+    font-size: variable.$font-size-error;
+    font-weight: variable.$font-weight-footer;
     margin-bottom: 4px;
   }
 
@@ -400,15 +400,15 @@ body::-webkit-scrollbar {
   .field-select {
     width: 100%;
     padding: 12px 14px;
-    border-radius: vars.$dialog-radius;
-    border: 1px solid vars.$border-color;
-    background-color: vars.$input-background;
+    border-radius: variable.$dialog-radius;
+    border: 1px solid variable.$border-color;
+    background-color: variable.$input-background;
     font-size: 14px;
-    font-family: vars.$font-family-primary;
+    font-family: variable.$font-family-primary;
 
     &:focus {
-      background-color: vars.$color-bg-footer;
-      border-color: vars.$color-breadcrumb;
+      background-color: variable.$color-bg-footer;
+      border-color: variable.$color-breadcrumb;
       outline: none;
     }
   }
@@ -417,11 +417,11 @@ body::-webkit-scrollbar {
     background-color: #eeeeee;
     padding-bottom: 25px;
     font-size: 18px;
-    color: vars.$color-text;
+    color: variable.$color-text;
   }
 
   .error small {
-    color: vars.$color-error-text;
+    color: variable.$color-error-text;
     margin-top: 4px;
     font-size: 12px;
   }
@@ -435,7 +435,7 @@ body::-webkit-scrollbar {
 
   .btn {
     padding: 12px 28px;
-    font-size: vars.$font-size-error;
+    font-size: variable.$font-size-error;
     border-radius: 22px;
     border: none;
     cursor: pointer;
@@ -443,43 +443,43 @@ body::-webkit-scrollbar {
   }
 
   .btn-submit {
-    background-color: vars.$color-breadcrumb;
-    color: vars.$color-bg-footer;
+    background-color: variable.$color-breadcrumb;
+    color: variable.$color-bg-footer;
     width: 23.75rem;
 
     &:disabled {
-      background-color: vars.$disabled-bg-color;
+      background-color: variable.$disabled-bg-color;
       cursor: not-allowed;
     }
 
     &:hover:not(:disabled) {
-      background-color: darken(vars.$color-primary-hover, 6%);
+      background-color: darken(variable.$color-primary-hover, 6%);
     }
   }
 
   .btn-secondary {
-    background-color: vars.$btn-secondary-bg-color;
-    color: vars.$color-title;
+    background-color: variable.$btn-secondary-bg-color;
+    color: variable.$color-title;
     padding: 12px 22px;
 
     &:hover {
-      background-color: vars.$hover-bg-color;
+      background-color: variable.$hover-bg-color;
     }
   }
 }
 
 .success {
   text-align: center;
-  margin-top: vars.$font-size-title;
+  margin-top: variable.$font-size-title;
   color: #2e7d32;
-  font-size: vars.$font-size-error;
-  font-weight: vars.$font-weight-primary;
+  font-size: variable.$font-size-error;
+  font-weight: variable.$font-weight-primary;
 }
 
 /* ============= Project List Page ===============*/
 .project-list {
   padding: 2rem 5rem;
-  font-family: vars.$font-family-primary;
+  font-family: variable.$font-family-primary;
 
   .header {
     display: flex;
@@ -488,18 +488,18 @@ body::-webkit-scrollbar {
   }
 
   .create-btn {
-    background: vars.$create-btn-bg;
-    color: vars.$color-title;
+    background: variable.$create-btn-bg;
+    color: variable.$color-title;
     border: none;
     padding: 12px 22px;
-    border-radius: vars.$padding-footer-sides;
+    border-radius: variable.$padding-footer-sides;
     font-size: 1rem;
     cursor: pointer;
-    font-weight: vars.$font-weight-footer;
+    font-weight: variable.$font-weight-footer;
     transition: 0.2s ease;
 
     &:hover {
-      background: darken(vars.$create-btn-bg, 8%);
+      background: darken(variable.$create-btn-bg, 8%);
     }
   }
 
@@ -518,20 +518,20 @@ body::-webkit-scrollbar {
   .search-input {
     width: 100%;
     padding: 14px 18px 14px 42px;
-    background: vars.$input-background;
+    background: variable.$input-background;
     border: none;
     border-radius: 12px;
     font-size: 1rem;
     outline: none;
 
     &::placeholder {
-      color: vars.$color-gray-500;
+      color: variable.$color-gray-500;
     }
   }
 
   .search-icon {
     position: absolute;
-    left: vars.$font-size-error;
+    left: variable.$font-size-error;
     top: 50%;
     width: 1.125rem;
     transform: translateY(-50%);
@@ -544,14 +544,14 @@ body::-webkit-scrollbar {
 
   .sort-box {
     padding: 12px 16px;
-    background: vars.$input-background;
+    background: variable.$input-background;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 1rem;
     font-size: 0.9rem;
-    color: vars.$color-text-primary;
+    color: variable.$color-text-primary;
     justify-content: space-between;
     width: 11.25rem;
     white-space: nowrap;
@@ -559,7 +559,7 @@ body::-webkit-scrollbar {
   }
 
   .sort-box img {
-    width: vars.$font-size-error;
+    width: variable.$font-size-error;
     opacity: 0.6;
   }
 
@@ -568,7 +568,7 @@ body::-webkit-scrollbar {
     width: 10.625rem;
     top: 3rem;
     right: 0;
-    background: vars.$color-gray-100;
+    background: variable.$color-gray-100;
     border-radius: 12px;
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     padding: 8px 0;
@@ -579,11 +579,11 @@ body::-webkit-scrollbar {
     padding: 10px 16px;
     cursor: pointer;
     font-size: 0.9rem;
-    color: vars.$color-text-primary;
+    color: variable.$color-text-primary;
     transition: 0.2s ease;
 
     &:hover {
-      background: vars.$color-bg-footer;
+      background: variable.$color-bg-footer;
     }
   }
 
@@ -602,10 +602,10 @@ body::-webkit-scrollbar {
     position: absolute;
     top: calc(100% + 1rem);
     right: -80px;
-    background: vars.$color-bg-footer;
+    background: variable.$color-bg-footer;
     padding: 18px 22px;
     border-radius: 16px;
-    border: 1px solid vars.$color-gray-200;
+    border: 1px solid variable.$color-gray-200;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     z-index: 20;
     display: flex;
@@ -620,14 +620,14 @@ body::-webkit-scrollbar {
     gap: 1.25rem;
 
     padding: 10px 18px;
-    background: vars.$color-bg-footer;
+    background: variable.$color-bg-footer;
     border: 1px solid #d1d5db;
     border-radius: 12px;
 
     font-size: 0.9rem;
-    color: vars.$color-title;
+    color: variable.$color-title;
     cursor: pointer;
-    font-weight: vars.$font-weight-primary;
+    font-weight: variable.$font-weight-primary;
     transition: 0.2s ease;
 
     .filter-icon {
@@ -638,13 +638,13 @@ body::-webkit-scrollbar {
     }
 
     &:hover {
-      background: vars.$color-gray-400;
+      background: variable.$color-gray-400;
     }
 
     &.active {
-      border-color: vars.$color-text-footer;
-      color: vars.$color-bg-footer;
-      background: vars.$color-text-footer;
+      border-color: variable.$color-text-footer;
+      color: variable.$color-bg-footer;
+      background: variable.$color-text-footer;
 
       .filter-icon {
         filter: brightness(0) invert(1);
@@ -658,14 +658,14 @@ body::-webkit-scrollbar {
     display: flex;
     font-size: 0.9rem;
     position: absolute;
-    background: vars.$color-bg-footer;
+    background: variable.$color-bg-footer;
     border-radius: 8px;
     z-index: 50;
   }
 
   .filter-badge {
-    background: vars.$color-medium;
-    color: vars.$color-bg-footer;
+    background: variable.$color-medium;
+    color: variable.$color-bg-footer;
     font-size: 0.75rem;
     padding: 2px 6px;
     border-radius: 10px;
@@ -675,14 +675,14 @@ body::-webkit-scrollbar {
   .filter-header {
     display: flex;
     justify-content: flex-end;
-    font-weight: vars.$font-weight-footer;
-    color: vars.$color-text-secondary;
+    font-weight: variable.$font-weight-footer;
+    color: variable.$color-text-secondary;
     margin-bottom: 12px;
   }
 
   .filter-options {
     display: flex;
-    gap: vars.$font-size-title;
+    gap: variable.$font-size-title;
     align-items: center;
   }
 
@@ -702,44 +702,44 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     font-size: 10px;
-    color: vars.$color-bg-footer;
+    color: variable.$color-bg-footer;
     transition: 0.2s ease;
   }
 
   .checkbox.checked {
-    background: vars.$color-text-footer;
-    border-color: vars.$color-text-footer;
-    color: vars.$color-bg-footer;
+    background: variable.$color-text-footer;
+    border-color: variable.$color-text-footer;
+    color: variable.$color-bg-footer;
   }
 
   .status-pill {
     padding: 6px 12px;
-    border-radius: vars.$padding-footer-bottom;
+    border-radius: variable.$padding-footer-bottom;
     font-size: 0.85rem;
-    font-weight: vars.$font-weight-primary;
-    color: vars.$color-bg-footer;
+    font-weight: variable.$font-weight-primary;
+    color: variable.$color-bg-footer;
     white-space: nowrap;
   }
 
   .status-pill.planning {
-    background: vars.$planning-color;
+    background: variable.$planning-color;
   }
 
   .status-pill.in-progress {
-    background: vars.$progress-color;
+    background: variable.$progress-color;
   }
 
   .status-pill.completed {
-    background: vars.$completed-color;
+    background: variable.$completed-color;
   }
 
   .status-pill.on-hold {
-    background: vars.$onHold-color;
+    background: variable.$onHold-color;
   }
 
   .empty-state {
     margin-top: 2rem;
-    color: vars.$color-text-secondary;
+    color: variable.$color-text-secondary;
     font-size: 1rem;
     text-align: center;
   }
@@ -766,12 +766,12 @@ body::-webkit-scrollbar {
     margin-top: -0.5rem;
     margin-bottom: 1rem;
     font-size: 0.95rem;
-    color: vars.$color-text-primary;
+    color: variable.$color-text-primary;
   }
 
   .active-filters .label {
     font-weight: 600;
-    color: vars.$color-text-secondary;
+    color: variable.$color-text-secondary;
   }
 
   .active-pill {
@@ -781,24 +781,24 @@ body::-webkit-scrollbar {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: vars.$color-bg-footer;
-    font-weight: vars.$font-weight-primary;
+    color: variable.$color-bg-footer;
+    font-weight: variable.$font-weight-primary;
   }
 
   .active-pill.planning {
-    background: vars.$planning-color;
+    background: variable.$planning-color;
   }
 
   .active-pill.in-progress {
-    background: vars.$progress-color;
+    background: variable.$progress-color;
   }
 
   .active-pill.completed {
-    background: vars.$completed-color;
+    background: variable.$completed-color;
   }
 
   .active-pill.on-hold {
-    background: vars.$onHold-color;
+    background: variable.$onHold-color;
   }
 
   .active-pill .clear-icon {
@@ -815,8 +815,8 @@ body::-webkit-scrollbar {
   .clear-all {
     margin-left: 1rem;
     cursor: pointer;
-    color: vars.$color-text-secondary;
-    font-weight: vars.$font-weight-primary;
+    color: variable.$color-text-secondary;
+    font-weight: variable.$font-weight-primary;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -824,7 +824,7 @@ body::-webkit-scrollbar {
   }
 
   .clear-all:hover {
-    color: vars.$color-black;
+    color: variable.$color-black;
     text-decoration: underline;
   }
 
@@ -836,31 +836,31 @@ body::-webkit-scrollbar {
 
   .connect-title {
     font-size: 3.5rem;
-    font-weight: vars.$font-weight-primary;
-    color: vars.$color-black;
+    font-weight: variable.$font-weight-primary;
+    color: variable.$color-black;
     margin-bottom: 0.5rem;
   }
 
   .connect-subtitle {
     font-size: 1rem;
-    color: vars.$color-text;
+    color: variable.$color-text;
     margin-bottom: 2.5rem;
   }
 
   .connect-btn {
-    background: vars.$color-text-footer;
-    color: vars.$color-bg-footer;
+    background: variable.$color-text-footer;
+    color: variable.$color-bg-footer;
     padding: 16px 48px;
     border-radius: 999px;
     border: none;
     font-size: 1rem;
-    font-weight: vars.$font-weight-primary;
+    font-weight: variable.$font-weight-primary;
     cursor: pointer;
     transition: all 0.2s ease;
     width: 30%;
 
     &:hover {
-      background: darken(vars.$color-text-footer, 8%);
+      background: darken(variable.$color-text-footer, 8%);
       transform: translateY(-2px);
     }
   }
@@ -869,10 +869,10 @@ body::-webkit-scrollbar {
 
 /*============== Project Card ============*/
 .project-card {
-  background: vars.$color-bg-footer;
+  background: variable.$color-bg-footer;
   border-radius: 16px;
   padding: 18px 20px;
-  border: 1px solid vars.$hover-bg-color;
+  border: 1px solid variable.$hover-bg-color;
   position: relative;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
   transition: 0.2s ease;
@@ -891,14 +891,14 @@ body::-webkit-scrollbar {
 
 .project-title {
   font-size: 1.05rem;
-  font-weight: vars.$font-weight-footer;
+  font-weight: variable.$font-weight-footer;
   margin-bottom: 4px;
-  color: vars.$color-title;
+  color: variable.$color-title;
 }
 
 .project-desc {
   font-size: 0.85rem;
-  color: vars.$color-subtitle;
+  color: variable.$color-subtitle;
   margin-bottom: 8px;
   line-height: 1.3rem;
   max-height: 2.6rem;
@@ -909,21 +909,21 @@ body::-webkit-scrollbar {
   padding: 4px 12px;
   font-size: 0.75rem;
   border-radius: 20px;
-  color: vars.$color-bg-footer;
-  font-weight: vars.$font-weight-primary;
+  color: variable.$color-bg-footer;
+  font-weight: variable.$font-weight-primary;
   white-space: nowrap;
 }
 
 .status-pill.In\ Progress {
-  background: vars.$progress-color;
+  background: variable.$progress-color;
 }
 
 .status-pill.Planning {
-  background: vars.$planning-color;
+  background: variable.$planning-color;
 }
 
 .status-pill.Completed {
-  background: vars.$completed-color;
+  background: variable.$completed-color;
 }
 
 .card-details {
@@ -938,7 +938,7 @@ body::-webkit-scrollbar {
 
   span {
     font-size: 0.85rem;
-    color: vars.$color-text-secondary;
+    color: variable.$color-text-secondary;
   }
 }
 
@@ -966,26 +966,26 @@ body::-webkit-scrollbar {
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 500;
-  color: vars.$color-bg-footer;
+  color: variable.$color-bg-footer;
   text-transform: capitalize;
 }
 
 .status-badge.planning {
-  background: vars.$planning-color;
+  background: variable.$planning-color;
 }
 
 .status-badge.in-progress {
-  background: vars.$progress-color;
+  background: variable.$progress-color;
 }
 
 .status-badge.completed {
-  background: vars.$completed-color;
+  background: variable.$completed-color;
 }
 
 .status-badge.on-hold {
-  background: vars.$onHold-color;
+  background: variable.$onHold-color;
 }
 
 .status-badge.cancelled {
-  background: vars.$color-btn-danger-bg;
+  background: variable.$color-btn-danger-bg;
 }
