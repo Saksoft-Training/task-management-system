@@ -1,0 +1,27 @@
+<div class="project-card">
+  <span class="status-badge" [ngClass]="statusClass">
+    {{ project.status }}
+  </span>
+  <div class="card-header">
+    <div>
+      <h3 class="project-title">{{ project.name }}</h3>
+      <p class="project-desc">{{ project.description | truncatePipe:60}}</p>
+    </div>
+    <span class="status-pill" [ngClass]="project.status">
+      {{ project.status }}
+    </span>
+  </div>
+  <div class="card-details">
+    <div class="detail-row">
+      <img src="assets/icons/calendar-Icon.svg" class="icon" />
+      <span>{{ project.startDate }} - {{ project.endDate }}</span>
+    </div>
+    <div class="detail-row">
+      <img src="assets/icons/task-Icon.svg" class="icon" />
+      <span>tasks</span>
+    </div>
+  </div>
+  <div class="card-index">
+    {{ index | number:'2.0' }}
+  </div>
+</div>
