@@ -9,55 +9,56 @@ export class UserStorageService {
   //#region Get Users
   /**
    * @summary Retrieves all registered users from local storage.
-   * @returns User[] Array of all stored users.
+   * @returns User[] List of all stored users.
    */
   public getAllUsers(): User[] {
     const usersJson = localStorage.getItem(USERS_KEY);
     return usersJson ? JSON.parse(usersJson) : [];
   }
-  //#endregion 
+  //#endregion
 
   //#region Save Users
   /**
-   * @summary Saves the provided list of users to local storage.
-   * @param users Array of User objects to store.
+   * @summary Saves the list of users to local storage.
+   * @param users - Array of User objects to be stored.
    * @returns void
    */
   public saveAllUsers(users: User[]): void {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
-  //#endregion 
+  //#endregion
 
   //#region Email Check
   /**
-   * @summary Checks whether an email already exists in storage.
-   * @param email Email string to be checked.
-   * @returns boolean True if email exists.
+   * @summary Checks if an email already exists in local storage.
+   * @param email - Email string to search for.
+   * @returns boolean True if email exists, false otherwise.
    */
   public isEmailExists(email: string): boolean {
     const check = email.trim().toLowerCase();
     return this.getAllUsers().some(
-      user => user.email.trim().toLowerCase() === check
+      user => (user.email || '').trim().toLowerCase() === check
     );
   }
-  //#endregion 
+  //#endregion
 
   //#region Encode Password
+
   /**
-   * @summary Encodes (obfuscates) user password using base64.
-   * @param rawPassword Plain text password to encode.
+   * @summary Encodes raw password into base64 format along with a secret key.
+   * @param rawPassword - Plain password to encode.
    * @returns string Encoded password string.
    */
   public encodePassword(rawPassword: string): string {
     return btoa(`${PASSWORD_SECRET}:${rawPassword}`);
   }
-  //#endregion 
+  //#endregion
 
   //#region Decode Password
   /**
-   * @summary Decodes the encoded password back to plain text.
-   * @param obfuscatedPassword Encoded password string.
-   * @returns string Decoded raw password.
+   * @summary Decodes an encoded password back into plain text.
+   * @param obfuscatedPassword - Base64 encoded password string.
+   * @returns string Decoded raw password. Returns empty string if decoding fails.
    */
   public decodePassword(obfuscatedPassword: string): string {
     try {
@@ -67,5 +68,25 @@ export class UserStorageService {
       return '';
     }
   }
-  //#endregion 
+  //#endregion
+
+  //#region Update Password
+  /**
+   * @summary Updates a user's password based on their email address.
+   * @param email - User email 
+   * @param newRawPassword - New password in raw text form.
+   * @returns boolean True if update succeeded, false if user not found.
+   */
+  public updatePasswordForEmail(email: string, newRawPassword: string): boolean {
+    const normalized = email.trim().toLowerCase();
+    const users = this.getAllUsers();
+    const idx = users.findIndex(
+      u => (u.email || '').trim().toLowerCase() === normalized
+    );
+    if (idx === -1) return false;
+    users[idx].password = this.encodePassword(newRawPassword);
+    this.saveAllUsers(users);
+    return true;
+  }
+  //#endregion
 }
