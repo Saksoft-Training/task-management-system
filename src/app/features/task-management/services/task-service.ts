@@ -3,105 +3,113 @@ import { Injectable } from '@angular/core';
 import { Task } from '../../../../types/models/task';
 //#endregion
 
-//#region Service Decorator
 @Injectable({ providedIn: 'root' })
-//#endregion
-
-//#region TaskService
 export class TaskService {
 
-  //#region Local Storage Key
+  //#region Private Properties
   /**
-   * Storage key used to persist tasks in localStorage.
-   * This will be replaced 
+   * Key used for persisting tasks in localStorage.
    */
-  private readonly storageKey = 'tasks';
+  private readonly storageKey: string = 'tasks';
   //#endregion
 
-  //#region Get All Tasks
+  //#region Public API — Read Operations
+
   /**
    * Returns all tasks stored in localStorage.
    *
-   * @returns {Task[]} All saved tasks
+   * @returns {Task[]} List of all saved tasks
    */
-  public getAll(): Task[] {
-    const raw = localStorage.getItem(this.storageKey);
-    return raw ? JSON.parse(raw) : [];
+  public getAllTasks(): Task[] {
+    const rawData = localStorage.getItem(this.storageKey);
+    return rawData ? JSON.parse(rawData) : [];
   }
+
+  /**
+   * Retrieves a single task by its ID.
+   *
+   * @param id - The task ID
+   * @returns {Task | undefined} Matching task or undefined
+   */
+  public getTaskById(id: number): Task | undefined {
+    return this.getAllTasks().find(task => task.id === id);
+  }
+
+  /**
+   * Retrieves all tasks associated with a project.
+   *
+   * @param projectId - Project ID
+   * @returns {Task[]} Tasks that belong to the project
+   */
+  public getTasksByProjectId(projectId: number): Task[] {
+    return this.getAllTasks().filter(task => task.projectId === projectId);
+  }
+
   //#endregion
 
-  //#region Save Task
+  //#region Public API — Write Operations
+
   /**
-   * Adds a new task to localStorage.
+   * Saves a new task to localStorage.
    *
-   * @param task The task to save
+   * @param task - The task to store
+   * @returns {void}
    */
-  public save(task: Task): void {
-    const tasks = this.getAll();
+  public saveTask(task: Task): void {
+    const tasks = this.getAllTasks();
     tasks.push(task);
-    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+    this.writeTasks(tasks);
   }
-  //#endregion
 
-  //#region Update Task
   /**
-   * Updates an existing task by replacing it based on ID.
+   * Updates an existing task.
    *
-   * @param updated The task object containing the updated values
+   * @param updatedTask - Updated task object
+   * @returns {void}
    */
-  public update(updated: Task): void {
-    const tasks = this.getAll().map(t =>
-      t.id === updated.id ? updated : t
+  public updateTask(updatedTask: Task): void {
+    const updatedTasks = this.getAllTasks().map(task =>
+      task.id === updatedTask.id ? updatedTask : task
     );
 
-    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+    this.writeTasks(updatedTasks);
   }
-  //#endregion
 
-  //#region Delete Task
   /**
-   * Removes a task by its ID.
+   * Deletes a task by its ID.
    *
-   * @param id The ID of the task to delete
+   * @param id - Task ID to delete
+   * @returns {void}
    */
-  public delete(id: number): void {
-    const tasks = this.getAll().filter(t => t.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+  public deleteTask(id: number): void {
+    const filteredTasks = this.getAllTasks().filter(task => task.id !== id);
+    this.writeTasks(filteredTasks);
   }
-  //#endregion
 
-  //#region Get Task By Id
   /**
-   * Retrieves a task by its ID.
+   * Clears all stored tasks.
+   * Useful during development and debugging.
    *
-   * @param id The ID of the task
-   * @returns The matching task or undefined
+   * @returns {void}
    */
-  public getById(id: number): Task | undefined {
-    return this.getAll().find(t => t.id === id);
-  }
-  //#endregion
-
-  //#region Get Tasks By Project
-  /**
-   * Gets all tasks that belong to a specific project.
-   *
-   * @param projectId The project ID
-   * @returns Task[] List of tasks under that project
-   */
-  public getByProject(projectId: number): Task[] {
-    return this.getAll().filter(t => t.projectId === projectId);
-  }
-  //#endregion
-
-  //#region Clear Storage
-  /**
-   * Removes all stored tasks.
-   * Useful during development or for debugging.
-   */
-  public clear(): void {
+  public clearAllTasks(): void {
     localStorage.removeItem(this.storageKey);
   }
+
   //#endregion
+
+  //#region Private Utilities
+
+  /**
+   * Writes the given task list to localStorage.
+   *
+   * @param tasks - Array of tasks to persist
+   * @returns {void}
+   */
+  private writeTasks(tasks: Task[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+  }
+
+  //#endregion
+
 }
-//#endregion
