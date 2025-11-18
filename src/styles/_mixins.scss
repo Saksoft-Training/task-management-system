@@ -1,4 +1,4 @@
-@use './variables' as variable;
+@use './variables' ;
 
 @mixin flex($justify: center, $align: center, $direction: row) {
   display: flex;
@@ -21,7 +21,7 @@
 }
 
 @mixin font-primary($size: 1rem, $weight: normal) {
-  font-family: variable.$font-family-primary;
+  font-family: variables.$font-family-primary;
   font-size: $size;
   font-weight: $weight;
 }
