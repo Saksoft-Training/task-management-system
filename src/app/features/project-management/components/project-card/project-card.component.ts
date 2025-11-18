@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-project-card-component',
   imports: [CommonModule, TruncatePipePipe],
-  templateUrl: './project-card-component.html',
-  styleUrl: './project-card-component.scss',
+  templateUrl: './project-card.component.html',
+  styleUrl: './project-card.component.scss',
 })
 export class ProjectCardComponent {
   // #region Properties

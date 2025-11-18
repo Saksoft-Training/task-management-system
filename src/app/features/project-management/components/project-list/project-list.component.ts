@@ -3,7 +3,7 @@ import { Project } from '../../../../../types';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../user-account-management/services/auth-service';
-import { ProjectCardComponent } from '../project-card-component/project-card-component';
+import { ProjectCardComponent } from '../project-card/project-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -23,8 +23,8 @@ export class ReplaceSpacePipe implements PipeTransform {
 @Component({
   selector: 'app-project-list-component',
   imports: [ProjectCardComponent, CommonModule, FormsModule, ReplaceSpacePipe],
-  templateUrl: './project-list-component.html',
-  styleUrl: './project-list-component.scss',
+  templateUrl: './project-list.component.html',
+  styleUrl: './project-list.component.scss',
 })
 export class ProjectListComponent {
   //#region Properties
