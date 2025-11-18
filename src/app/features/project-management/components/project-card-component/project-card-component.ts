@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Project } from '../../../../../types';
 import { CommonModule } from '@angular/common';
 import { TruncatePipePipe } from '../../../../shared/pipes/truncate-pipe-pipe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-card-component',
@@ -21,6 +22,7 @@ export class ProjectCardComponent {
   @Input() project!: Project;
   // #endregion
 
+  constructor(private router: Router){}
   // #region Computed Getters
   /**
    * @summary Returns a formatted CSS class based on project status.
@@ -34,4 +36,7 @@ export class ProjectCardComponent {
       .replace(/\s+/g, '-');
   }
   // #endregion
+  public navigateToProject() :void{
+  this.router.navigate(['/projects', this.project.id]);
+}
 }

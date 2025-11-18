@@ -14,8 +14,5 @@ export const routes: Routes = [
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'projects/create/:id', component: ProjectCreateComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'projects', component: ProjectListComponent },
-  { path: '**', redirectTo: 'login' }
-
-
+  { path: 'projects', component: ProjectListComponent }
 ];
