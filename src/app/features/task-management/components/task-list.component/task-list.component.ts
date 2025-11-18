@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { Task } from '../../../../../types';
-import { TaskService } from '../../services/task-service';
-import { ProjectService } from '../../../project-management/services/project-service';
 import { TaskCardComponent } from '../task-card.component/task-card.component';
 import { TaskBoardComponent } from "../task-board.component/task-board.component";
+import { ProjectService } from '../../../project-management/services/project.service';
+import { TaskService } from '../../services/task-service';
 
 @Component({
   selector: 'app-task-list',
@@ -59,7 +59,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.taskSub = this.taskService.tasks$
       .subscribe(tasks => this.applyTaskLoad(tasks));
 
-    this.applyTaskLoad(this.taskService.getAll());
+    this.applyTaskLoad(this.taskService.getAllTasks());
   }
 
   /** Clean up subscriptions to avoid memory leaks. */
@@ -226,7 +226,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     if (!task) return;
 
     if (confirm(`Delete task "${task.title}"?`)) {
-      this.taskService.delete(task.id);
+      this.taskService.deleteTask(task.id);
     }
   }
 

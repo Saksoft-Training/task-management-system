@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Task } from '../../../../../types';
-import { ProjectService } from '../../../project-management/services/project-service';
+import { ProjectService } from '../../../project-management/services/project.service';
+
 
 @Component({
   selector: 'app-task-card-component',
