@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ProjectCreateComponent } from './features/project-management/components/project-create/project-create.component';
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 import { LoginComponent } from './features/user-account-management/components/login/login.component';
 import { TaskListComponent } from './features/task-management/components/task-list.component/task-list.component';
@@ -7,7 +8,7 @@ import { TastCreateComponent } from './features/task-management/components/tast-
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'register', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'projects/:id', component: TaskListComponent },

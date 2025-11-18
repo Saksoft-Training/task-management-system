@@ -1,0 +1,205 @@
+import { Component } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../../../../types/models/project';
+import { FooterComponent } from '../../../../shared/components/footer-component/footer-component';
+import { AuthService } from '../../../user-account-management/services/auth-service';
+
+@Component({
+  selector: 'app-project-create-component',
+  imports: [ReactiveFormsModule],
+  templateUrl: './project-create.component.html',
+  styleUrl: './project-create.component.scss',
+})
+export class ProjectCreateComponent {
+  //#region Properties
+  /** Reactive form for creating or editing a project */
+  public projectForm: FormGroup;
+  /** Available project status options */
+  public statuses: string[] = ['Planning', 'In Progress', 'Completed', 'On Hold'];
+  /** Message shown after creating a project successfully */
+  public successMessage: string = '';
+  /** Project ID when editing an existing project */
+  public editProjectId: number | null = null;
+  /** Logged-in user name */
+  public currentUser: string = '';
+  /** Minimum date allowed for date fields (today) */
+  public minDate: string = new Date().toISOString().split('T')[0];
+  // #endregion
+
+  //#region Constructor
+  /**
+   * @summary Initializes the component, form controls, validators, and validates route param.
+   * @param formBuilder - Angular FormBuilder service
+   * @param router - Angular Router service for navigation
+   * @param projectService - Custom project service for CRUD operations
+   * @param route - ActivatedRoute to read route parameters
+   */
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private projectService: ProjectService,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {
+    this.projectForm = this.formBuilder.group({
+      description: ['', [Validators.maxLength(500)]],
+      endDate: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      startDate: ['', [Validators.required, this.futureOrTodayValidator.bind(this)]],
+      status: ['', [Validators.required]]
+    }, {
+      validators: this.endDateAfterStartDateValidator.bind(this)
+    });
+  }
+  //#endregion
+
+  ngOnInit() {
+    const user = this.authService.getCurrentUser();
+    this.currentUser = user?.email || '';
+    this.validateProjectId();
+  }
+
+  //#region Private Utility Methods
+  /**
+   * @summary Validates project ID from route. Redirects to project list if ID invalid.
+   * @returns {void}
+   */
+  private validateProjectId(): void {
+    const projectIdParam = this.route.snapshot.paramMap.get('id');
+
+    if (!projectIdParam) {
+      return;
+    }
+    const projectId = Number(projectIdParam);
+    if (!Number.isInteger(projectId) || projectId <= 0) {
+      this.router.navigate(['/projects']);
+      return;
+    }
+    const project = this.projectService.getById(projectId, this.currentUser);
+    if (!project) {
+      this.router.navigate(['/projects']);
+      return;
+    }
+    this.editProjectId = projectId;
+  }
+  /**
+   * @summary Converts various date formats into a Date object without time.
+   * @param value - Input date value
+   * @returns {Date | null} Normalized date object or null
+   */
+  private toLocalDateOnly(value: any): Date | null {
+    if (!value) return null;
+    if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      const [y, m, d] = value.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return null;
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+  // #endregion
+
+  // #region Validators
+  /**
+   * @summary Validator ensuring selected date is today or in the future.
+   * @param control - Form control to validate
+   * @returns {ValidationErrors | null} Error object if past date, otherwise null
+   */
+  public futureOrTodayValidator = (control: AbstractControl): ValidationErrors | null => {
+    const inputDateOnly = this.toLocalDateOnly(control.value);
+    if (!inputDateOnly) return null;
+    const today = new Date();
+    const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return inputDateOnly < todayOnly ? { pastDate: true } : null;
+  };
+  /**
+   * @summary Validator ensuring end date is not before start date.
+   * @param group - Form group containing startDate and endDate fields
+   * @returns {ValidationErrors | null} Error object if invalid range, else null
+   */
+  public endDateAfterStartDateValidator(group: AbstractControl): ValidationErrors | null {
+    const startVal = group.get('startDate')?.value;
+    const endVal = group.get('endDate')?.value;
+    const startDateOnly = this.toLocalDateOnly(startVal);
+    const endDateOnly = this.toLocalDateOnly(endVal);
+    if (!startDateOnly || !endDateOnly) return null;
+    return endDateOnly < startDateOnly ? { endBeforeStart: true } : null;
+  }
+  // #endregion
+
+  // #region Getters
+  /**
+   * @summary Computes minimum allowed end date after selecting start date.
+   * @returns {string} Minimum end date
+   */
+  public get minEndDate(): string {
+    return this.projectForm.get('startDate')?.value || '';
+  }
+  // #endregion
+
+  // #region Form Actions
+  /**
+   * @summary Handles project creation or update logic.
+   * @description If form is invalid, marks all fields and stops. Creates new project or updates existing one.
+   * @returns {void}
+   */
+  public onSubmit(): void {
+    if (this.projectForm.invalid) {
+      this.projectForm.markAllAsTouched();
+      return;
+    }
+    const form = this.projectForm.value;
+    const now = new Date();
+    // Update project
+    if (this.editProjectId) {
+      const updatedProject: Project = {
+        ...this.projectService.getById(this.editProjectId, this.currentUser)!,
+        ...form,
+        updatedAt: now.toISOString()
+      };
+      this.projectService.update(updatedProject, this.currentUser);
+      this.router.navigate(['/projects', this.editProjectId]);
+      return;
+    }
+    // Create project
+    const newProject: Project = {
+      id: Date.now(),
+      name: form.name,
+      description: form.description,
+      startDate: form.startDate,
+      endDate: form.endDate,
+      status: form.status,
+      createdBy: this.currentUser,
+      createdAt: now.toISOString().split('T')[0],
+      updatedAt: now.toISOString()
+    };
+    this.projectService.save(newProject, this.currentUser);
+    this.successMessage = 'Project created successfully!';
+    setTimeout(() => this.router.navigate(['/projects', newProject.id]), 1000);
+  }
+  /**
+   * @summary Resets form values and clears success message.
+   * @returns {void}
+   */
+  public onReset(): void {
+    this.projectForm.reset();
+    this.successMessage = '';
+  }
+  /**
+  * @summary Navigates back to project list without saving.
+  * @returns {void}
+  */
+  public onCancel(): void {
+    this.router.navigate(['/projects']);
+  }
+  /**
+  * @summary Navigates to the list of all projects.
+  * @returns {void}
+  */
+  public goToProjects(): void {
+    this.router.navigate(['/projects']);
+  }
+  // #endregion
+}
