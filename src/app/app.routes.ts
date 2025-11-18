@@ -10,6 +10,5 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
-  { path: 'login', component: LoginComponent },
 
 ];
