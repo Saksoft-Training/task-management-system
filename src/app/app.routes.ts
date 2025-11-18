@@ -22,13 +22,14 @@ export const routes: Routes = [
 // },
 // {
 //     path:'notificationitem',component:NotificationItemComponent
-// },{
+// },
+//{
 //     path:'toastnotification',component:ToastNotificationComponent
 // },
 // {
 //     path:'notificationdropdown',component:NotificationDropdownComponent
 // },
-// {
-//     path:'ds',component:DashboardNotificationsComponent
-// }
+{
+    path:'ds',component:DashboardNotificationsComponent
+}
 ];

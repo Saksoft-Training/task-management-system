@@ -1,0 +1,61 @@
+// .notification-item {
+//   display: flex;
+//   gap: 0.5rem;
+//   padding: 0.5rem 0.75rem;
+//   cursor: pointer;
+//   border-radius: 4px;
+
+//   &.unread {
+//     background-color: #f5f7ff;
+//   }
+
+//   &:hover {
+//     background-color: #eef1ff;
+//   }
+// }
+
+// .icon {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 28px;
+// }
+
+// .severity-success { color: #2e7d32; }
+// .severity-warning { color: #f9a825; }
+// .severity-critical { color: #d32f2f; }
+// .severity-info    { color: #1565c0; }
+
+// .content {
+//   flex: 1;
+// }
+
+// .title {
+//   font-weight: 600;
+//   margin-bottom: 0.15rem;
+// }
+
+// .message {
+//   font-size: 0.85rem;
+//   color: #555;
+// }
+
+// .timestamp {
+//   font-size: 0.75rem;
+//   color: #888;
+// }
+
+// .actions {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0.25rem;
+
+//   button {
+//     border: none;
+//     background: transparent;
+//     padding: 0;
+//     font-size: 0.75rem;
+//     color: #555;
+//     cursor: pointer;
+//   }
+// }

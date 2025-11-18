@@ -89,15 +89,25 @@ this.notifications$.subscribe(notifications => {
   }
 
     toggleNotifications() {
-    console.log('🔔 Bell clicked! Current state:', this.showNotifications);
+    
     this.showNotifications = !this.showNotifications;
-    console.log('🔔 New state:', this.showNotifications);
+   
     
     // Debug: Check notifications data
     this.notifications$.subscribe(notifications => {
       console.log('📋 Notifications data:', notifications);
       console.log('📋 Notifications count:', notifications?.length);
     }).unsubscribe();
+  }
+
+   onMarkAllRead() {
+    
+    this.notificationService.markAllAsRead(); // This method exists in your service
+  }
+
+  onClearAll() {
+    
+    this.notificationService.clearAll(); // Use clearAll() instead of clearAllNotifications()
   }
   
 }

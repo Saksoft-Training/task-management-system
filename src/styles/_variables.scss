@@ -357,3 +357,90 @@ $dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
 
 $dialog-fade-duration: 0.3s;
 
+//====== Dashboard Notification Component =======
+// Colors
+$color-white: #ffffff;
+$color-light-grey: #f0f0f0;
+$color-scroll-thumb: #9da4ad;
+$color-border: #e2e8f0;
+$color-border-hover: #cbd5e1;
+$color-unread-bg: #f0f7ff;
+$color-primary-blue: #3b82f6;
+$color-header: #1e293b;
+$color-text: #475569;
+$color-timestamp: #64748b;
+$color-success: #10b981;
+
+// Sizes
+$notification-gap: 12px;
+$notification-padding: 12px 14px;
+$border-radius: 8px;
+
+// Scrollbar
+$scrollbar-width: 6px;
+$scrollbar-radius: 50px;
+
+//====notification bell component==========
+// Colors
+$color-bell-badge-bg: #e53935;
+$color-bell-badge-text: #ffffff;
+
+// Font sizes
+$font-size-bell-icon: 1.5rem;
+$font-size-badge: 0.7rem;
+
+// Spacing
+$padding-bell-btn: 0.25rem;
+$badge-padding: 0 0.35rem;
+
+// Shapes
+$badge-radius: 999px;
+
+//======notification item component==========
+// Colors
+$color-unread-bg: #f5f7ff;
+$color-hover-bg: #eef1ff;
+$color-success: #2e7d32;
+$color-warning: #f9a825;
+$color-critical: #d32f2f;
+$color-info: #1565c0;
+$color-message-text: #555;
+$color-timestamp-text: #888;
+
+// Spacing & sizing
+$notification-gap: 0.5rem;
+$notification-padding: 0.5rem 0.75rem;
+$icon-size: 28px;
+$actions-gap: 0.25rem;
+
+// Typography
+$title-weight: 600;
+$message-font-size: 0.85rem;
+$timestamp-font-size: 0.75rem;
+$action-font-size: 0.75rem;
+
+// Shapes
+$notification-radius: 4px;
+
+//======toast notification=========
+// Colors
+$color-toast-text: #ffffff;
+$color-success: #2e7d32;
+$color-warning: #f9a825;
+$color-critical: #d32f2f;
+$color-info: #1565c0;
+
+// Layout & spacing
+$toast-bottom: 1.5rem;
+$toast-right: 1.5rem;
+$toast-padding: 0.75rem 1rem;
+$toast-gap: 0.75rem;
+
+// Shadows & effects
+$toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+// Shape
+$toast-radius: 6px;
+
+// Font sizes
+$close-btn-size: 1rem;

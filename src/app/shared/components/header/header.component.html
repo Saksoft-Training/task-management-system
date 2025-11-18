@@ -5,11 +5,7 @@
     <nav class="nav-links">
       @for (link of navLinks; track link.label) {
       <a [routerLink]="link.path" routerLinkActive="active">
-         @if (link.icon) {
-          <img [src]="link.icon" alt="nav-icon" class="nav-icon" />
-        } @else {
           {{ link.label }}
-        }
       </a>
       }
     </nav>
@@ -31,7 +27,9 @@
   <div class="notification-dropdown">
     <app-dashboard-notifications-component
       [notifications]="(notifications$ | async) || []"
-      (markAsRead)="onMarkAsRead($event)">
+      (markAsRead)="onMarkAsRead($event)"
+       (markAllRead)="onMarkAllRead()"
+      (clearAll)="onClearAll()">
     </app-dashboard-notifications-component>
   </div>
 }

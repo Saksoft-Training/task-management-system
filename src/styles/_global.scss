@@ -1,5 +1,6 @@
 @use './variables' as vars;
 @use './mixins';
+@import 'variables';
  
 // ====================== FOOTER ======================
 * {
@@ -474,4 +475,238 @@ body::-webkit-scrollbar {
   color: #2e7d32;
   font-size: vars.$font-size-error;
   font-weight: vars.$font-weight-primary;
+}
+
+//=====dashboard notifications component======
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: $notification-gap;
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 5px;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: $scrollbar-width;
+  }
+  &::-webkit-scrollbar-track {
+    background: $color-light-grey;
+    border-radius: $scrollbar-radius;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color-scroll-thumb;
+    border-radius: $scrollbar-radius;
+  }
+
+  .notification-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    padding: $notification-padding;
+    transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $color-border-hover;
+      background: #f9fafb;
+    }
+
+    &.unread {
+      background: $color-unread-bg;
+      border-left: 4px solid $color-primary-blue;
+    }
+
+    .notification-content {
+      flex: 1;
+
+      h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: $color-header;
+        margin: 0 0 4px;
+      }
+
+      p {
+        font-size: 13px;
+        color: $color-text;
+        margin: 0 0 6px;
+      }
+
+      .timestamp {
+        font-size: 11px;
+        color: $color-timestamp;
+      }
+    }
+
+    .mark-read-btn {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      color: $color-success;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+
+      &:hover {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .no-notifications {
+    text-align: center;
+    padding: 20px;
+    color: $color-timestamp;
+    height: 200px;
+    width: 378px;
+
+    img {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 10px;
+      opacity: 0.6;
+    }
+  }
+}
+
+
+//===============notifications bell component=====
+
+.bell-btn {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: $padding-bell-btn;
+  font-size: $font-size-bell-icon;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: $color-bell-badge-bg;
+  color: $color-bell-badge-text;
+  border-radius: $badge-radius;
+  font-size: $font-size-badge;
+  padding: $badge-padding;
+}
+
+//============notification item component===========
+
+.notification-item {
+  display: flex;
+  gap: $notification-gap;
+  padding: $notification-padding;
+  cursor: pointer;
+  border-radius: $notification-radius;
+
+  &.unread {
+    background-color: $color-unread-bg;
+  }
+
+  &:hover {
+    background-color: $color-hover-bg;
+  }
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $icon-size;
+}
+
+.severity-success { color: $color-success; }
+.severity-warning { color: $color-warning; }
+.severity-critical { color: $color-critical; }
+.severity-info    { color: $color-info; }
+
+.content {
+  flex: 1;
+}
+
+.title {
+  font-weight: $title-weight;
+  margin-bottom: 0.15rem;
+}
+
+.message {
+  font-size: $message-font-size;
+  color: $color-message-text;
+}
+
+.timestamp {
+  font-size: $timestamp-font-size;
+  color: $color-timestamp-text;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $actions-gap;
+
+  button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    font-size: $action-font-size;
+    color: $color-message-text;
+    cursor: pointer;
+  }
+}
+
+//==========toast notification===========
+
+.toast-container {
+  position: fixed;
+  bottom: $toast-bottom;
+  right: $toast-right;
+  padding: $toast-padding;
+  border-radius: $toast-radius;
+  color: $color-toast-text;
+  display: flex;
+  align-items: center;
+  gap: $toast-gap;
+  box-shadow: $toast-shadow;
+  z-index: 2000;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+
+  strong {
+    margin-bottom: 0.15rem;
+  }
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: $close-btn-size;
+}
+
+.toast-success {
+  background-color: $color-success;
+}
+
+.toast-warning {
+  background-color: $color-warning;
+}
+
+.toast-critical {
+  background-color: $color-critical;
+}
+
+.toast-info {
+  background-color: $color-info;
 }

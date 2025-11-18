@@ -4,10 +4,10 @@
 
   <div class="icon" [ngClass]="severityClass">
     <ng-container [ngSwitch]="notification.severity">
-      <span *ngSwitchCase="'success'">✅</span>
-      <span *ngSwitchCase="'warning'">⚠️</span>
-      <span *ngSwitchCase="'critical'">⛔</span>
-      <span *ngSwitchDefault>🔔</span>
+      <span *ngSwitchCase="'success'"><img src="/assets/icons/right-Icon.svg"></span>
+      <span *ngSwitchCase="'warning'"><img src="/assets/icons/warning.svg"></span>
+      <span *ngSwitchCase="'critical'"><img src="/assets/icons/red-warning.svg"></span>
+      <span *ngSwitchDefault><img src="/assets/icons/Bell-Icon.svg"></span>
     </ng-container>
   </div>
 
@@ -23,7 +23,7 @@
       Mark as read
     </button>
     <button (click)="onDismiss($event)">
-      ✕
+      <img src="/assets/icons/cross-Icon.svg">
     </button>
   </div>
 </div>
