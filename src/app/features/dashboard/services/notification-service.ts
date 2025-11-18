@@ -11,24 +11,24 @@ export class NotificationService {
   private readonly STORAGE_KEY = 'notifications';
 
   private notificationsSubject = new BehaviorSubject<AppNotification[]>(this.loadFromStorage());
-  notifications$ = this.notificationsSubject.asObservable();
+  public notifications$ = this.notificationsSubject.asObservable();
 
-  unreadCount$ = this.notifications$.pipe(
+ public unreadCount$ = this.notifications$.pipe(
     map(list => list.filter(n => !n.isRead).length),
     shareReplay(1)
   );
 
   // For toast/snackbar
   private toastSubject = new Subject<AppNotification>();
-  toast$ = this.toastSubject.asObservable();
+ public toast$ = this.toastSubject.asObservable();
 
   constructor() {}
 
   // ========= CRUD on notifications =========
 
-  addNotification(
+  public addNotification(
     data: Omit<AppNotification, 'id' | 'isRead' | 'timestamp'> & { showToast?: boolean }
-  ) {
+  ):void {
     const notification: AppNotification = {
       id: this.generateId(),
       isRead: false,
@@ -46,7 +46,7 @@ export class NotificationService {
     }
   }
 
-  markAsRead(id: string) {
+  public markAsRead(id: string):void {
     const updated = this.notificationsSubject.value.map(n =>
       n.id === id ? { ...n, isRead: true } : n
     );
@@ -54,26 +54,26 @@ export class NotificationService {
     this.saveToStorage(updated);
   }
 
-  markAllAsRead() {
+  public markAllAsRead():void {
     const updated = this.notificationsSubject.value.map(n => ({ ...n, isRead: true }));
     this.notificationsSubject.next(updated);
     this.saveToStorage(updated);
   }
 
-  dismiss(id: string) {
+  public dismiss(id: string):void {
     const updated = this.notificationsSubject.value.filter(n => n.id !== id);
     this.notificationsSubject.next(updated);
     this.saveToStorage(updated);
   }
 
-  clearAll() {
+  public clearAll():void {
     this.notificationsSubject.next([]);
     this.saveToStorage([]);
   }
 
   // ========= Domain helpers (types in AC) =========
 
-  notifyTaskDue(task: Task, kind: NotificationKind) {
+  public notifyTaskDue(task: Task, kind: NotificationKind):void {
     let severity: NotificationSeverity;
     let title: string;
 
@@ -112,7 +112,7 @@ export class NotificationService {
     });
   }
 
-  notifyTaskCompleted(task: Task) {
+  public notifyTaskCompleted(task: Task):void {
     this.addNotification({
       kind: 'task-completed',
       severity: 'success',
@@ -125,7 +125,7 @@ export class NotificationService {
     });
   }
 
-  notifyTaskAssigned(task: Task) {
+  public notifyTaskAssigned(task: Task):void {
     this.addNotification({
       kind: 'task-assigned',
       severity: 'info',
@@ -138,7 +138,7 @@ export class NotificationService {
     });
   }
 
-  notifyProjectStatusChanged(project: Project) {
+ public notifyProjectStatusChanged(project: Project):void {
     this.addNotification({
       kind: 'project-status-changed',
       severity: 'info',
@@ -156,7 +156,7 @@ export class NotificationService {
    * - Task due tomorrow
    * - Task overdue
    */
-  checkDueDates(tasks: Task[]) {
+  public checkDueDates(tasks: Task[]):void {
     const today = this.stripTime(new Date());
     const tomorrow = this.addDays(today, 1);
 
@@ -193,7 +193,7 @@ export class NotificationService {
     }
   }
 
-  private saveToStorage(list: AppNotification[]) {
+  private saveToStorage(list: AppNotification[]):void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(list));
   }
 
@@ -224,5 +224,5 @@ export class NotificationService {
     });
   }
 
-  
+
 }

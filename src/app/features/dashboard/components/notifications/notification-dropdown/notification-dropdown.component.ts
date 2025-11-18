@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AppNotification } from '../../../../../../types/models/notifications';
-import { NotificationItemComponent } from '../notification-item.component/notification-item.component';
+import { NotificationItemComponent } from '../notification-item/notification-item.component';
 import { CommonModule } from '@angular/common';
 
 @Component({

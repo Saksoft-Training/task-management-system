@@ -1,0 +1,19 @@
+<div class="notifications-list">
+  @for (notification of notifications; track notification.id) {
+  <div class="notification-item" [class.unread]="!notification.isRead">
+    <div class="notification-content">
+      <h4>{{ notification.title }}</h4>
+      <p>{{ notification.message }}</p>
+      <span class="timestamp">{{ notification.timestamp | date:'short' }}</span>
+    </div>
+    <button class="mark-read-btn" (click)="markAsRead.emit(notification.id)">
+      <img src="assets/icons/right-Icon.svg"> Mark as Read
+    </button>
+  </div>
+  } @empty {
+  <div class="no-notifications">
+    <img src="assets/icons/Bell-Icon.svg"><br>
+    No Notifications
+  </div>
+  }
+</div>

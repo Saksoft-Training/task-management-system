@@ -6,9 +6,9 @@ import { NotificationService } from '../../../features/dashboard/services/notifi
 
 import { AppNotification } from '../../../../types/models/notifications';
 import { Observable } from 'rxjs';
-import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications.component/dashboard-notifications.component';
-import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell.component/notification-bell.component';
-import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown.component/notification-dropdown.component';
+import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
+import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
+import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
 
 @Component({
   selector: 'app-header',

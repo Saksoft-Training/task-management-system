@@ -18,7 +18,7 @@ current: AppNotification | null = null;
 
   constructor(private notificationService: NotificationService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.sub = this.notificationService.toast$.subscribe(n => {
       this.current = n;
       this.hideSub?.unsubscribe();
@@ -26,18 +26,16 @@ current: AppNotification | null = null;
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.sub?.unsubscribe();
     this.hideSub?.unsubscribe();
   }
 
-  close() {
+public  close():void {
     this.current = null;
   }
 
-  get severityClass() {
+ public get severityClass():string {
     return this.current ? `toast-${this.current.severity}` : '';
   }
-
- 
 }

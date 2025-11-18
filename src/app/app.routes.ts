@@ -4,11 +4,11 @@ import { ProjectCreateComponent } from './features/project-management/components
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 import { LoginComponent } from './features/user-account-management/components/login/login.component';
 
-import { ToastNotificationComponent } from './features/dashboard/components/notifications/toast-notification.component/toast-notification.component';
-import { NotificationItemComponent } from './features/dashboard/components/notifications/notification-item.component/notification-item.component';
-import { NotificationBellComponent } from './features/dashboard/components/notifications/notification-bell.component/notification-bell.component';
-import { NotificationDropdownComponent } from './features/dashboard/components/notifications/notification-dropdown.component/notification-dropdown.component';
-import { DashboardNotificationsComponent } from './features/dashboard/components/notifications/dashboard-notifications.component/dashboard-notifications.component';
+import { ToastNotificationComponent } from './features/dashboard/components/notifications/toast-notification/toast-notification.component';
+import { NotificationItemComponent } from './features/dashboard/components/notifications/notification-item/notification-item.component';
+import { NotificationBellComponent } from './features/dashboard/components/notifications/notification-bell/notification-bell.component';
+import { NotificationDropdownComponent } from './features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
+import { DashboardNotificationsComponent } from './features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
 export const routes: Routes = [
      { path: '', redirectTo: 'register', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },

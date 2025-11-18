@@ -15,21 +15,21 @@ export class NotificationItemComponent {
   @Output() markRead = new EventEmitter<AppNotification>();
   @Output() dismiss = new EventEmitter<AppNotification>();
 
-  onNavigate() {
+  public onNavigate():void {
     this.navigate.emit(this.notification);
   }
 
-  onMarkRead(event: MouseEvent) {
+  public onMarkRead(event: MouseEvent):void {
     event.stopPropagation();
     this.markRead.emit(this.notification);
   }
 
-  onDismiss(event: MouseEvent) {
+  public onDismiss(event: MouseEvent):void {
     event.stopPropagation();
     this.dismiss.emit(this.notification);
   }
 
-  get severityClass() {
+  public get severityClass():string {
     return `severity-${this.notification.severity}`;
   }
 }

@@ -13,7 +13,7 @@ export class DashboardService {
   constructor(private notificationService: NotificationService) {}
 
   // Call this after loading tasks from localStorage / API
-  setTasks(tasks: Task[]) {
+ public setTasks(tasks: Task[]):void {
     this.tasks = tasks;
 
     // initial check
@@ -26,7 +26,7 @@ export class DashboardService {
     );
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.dueCheckSub?.unsubscribe();
   }
 }

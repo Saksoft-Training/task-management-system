@@ -8,10 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./notification-bell.component.scss']
 })
 export class NotificationBellComponent {
-  @Input() unreadCount = 0;
-  @Output() bellClick = new EventEmitter<void>();
+  @Input() public unreadCount = 0;
+  @Output() public bellClick = new EventEmitter<void>();
 
-  onClick() {
+  public onClick():void {
     this.bellClick.emit();
   }
 }
