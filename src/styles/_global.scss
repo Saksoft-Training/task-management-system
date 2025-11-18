@@ -2,16 +2,61 @@
 @use './variables' as vars;
 @use './mixins';
 
-// ====== FOOTER STYLES ======
+// ====================== FOOTER ======================
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  overflow-y: auto !important;
+  scrollbar-width: none !important;  
+}
+
+html::-webkit-scrollbar {
+  display: none !important;
+}
+
+body {
+  font-family: vars.$font-family-primary;
+  background-color: vars.$color-gray-50;
+  color: vars.$color-text-primary;
+  line-height: 1.4;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+body::-webkit-scrollbar {
+  display: none !important;
+}
+
+.main-content {
+  overflow-y: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.main-content::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* ========================================================= */
+/* FOOTER */
+/* ========================================================= */
+
 .footer {
   @include mixins.fixed-bottom;
+  @include mixins.flex-between;
   border-top: 1px solid vars.$color-border;
   background-color: vars.$color-bg-footer;
   color: vars.$color-text-footer;
   font-size: vars.$font-size-footer;
   font-weight: vars.$font-weight-footer;
-  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-bottom;
-  @include mixins.flex-between;
+  padding: vars.$padding-footer-top vars.$padding-footer-sides vars.$padding-footer-sides;
 
   &-left,
   &-right {
@@ -19,22 +64,24 @@
   }
 }
 
-// ERROR MESSAGE STYLES
+/* ========================================================= */
+/* ERROR MESSAGE */
+/* ========================================================= */
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
+  @include mixins.font-primary(vars.$font-size-error);
+  @include mixins.box-shadow(vars.$error-shadow);
   background-color: vars.$color-error-bg;
   color: vars.$color-error-text;
   border: 1px solid vars.$color-error-border;
   padding: vars.$error-padding-y vars.$error-padding-x;
   border-radius: vars.$error-border-radius;
-  @include mixins.font-primary(vars.$font-size-error);
-  @include mixins.box-shadow(vars.$error-shadow);
-  position: relative;
   margin: vars.$error-margin-y 0;
+  position: relative;
 
   .icon {
-    margin-right: 10px;
+    margin-right: 0.625rem;
     font-size: vars.$error-icon-size;
   }
 
@@ -45,10 +92,13 @@
   .close-btn {
     background: none;
     border: none;
-    color: vars.$color-error-text;
     cursor: pointer;
-    font-size: 18px;
+    font-size: vars.$font-size-title;
     margin-left: 10px;
+    color: vars.$color-error-text;
+    @include mixins.transition(color);
+    font-size: 1.125rem;
+    margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
 
     &:hover {
@@ -57,58 +107,112 @@
   }
 }
 
-// DIALOG COMPONENT STYLES
+/* ========================================================= */
+/* LOADING OVERLAY */
+/* ========================================================= */
 
-.dialog-overlay {
+.loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  @include mixins.flex(center, center, column);
+  z-index: 9999;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: vars.$color-primary;
+  border-radius: 50%;
+
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinner-text {
+  margin-top: 1rem;
+  color: #fff;
+  font-size: 0.9rem;
+  text-align: center;
+  font-family: vars.$font-family-primary;
+}
+
+/* ========================================================= */
+/* DIALOG */
+/* ========================================================= */
+
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
   background: vars.$color-overlay-bg;
   @include mixins.flex();
   z-index: vars.$dialog-overlay-z;
 }
 
 .dialog-box {
-  background: vars.$color-dialog-bg;
+  background: vars.$color-bg-footer;
   border-radius: vars.$dialog-radius;
   width: vars.$dialog-width;
   max-width: vars.$dialog-max-width;
   @include mixins.box-shadow(vars.$dialog-shadow);
-  overflow: hidden;
   @include mixins.fade-in(vars.$dialog-fade-duration);
+  overflow: hidden;
 
   .dialog-header {
     @include mixins.flex-between;
     padding: vars.$dialog-padding-header;
-    border-bottom: 1px solid vars.$color-dialog-border;
     background-color: vars.$color-dialog-header-bg;
+    border-bottom: 1px solid vars.$color-dialog-border;
 
     h3 {
       margin: 0;
-      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-title);
+      @include mixins.font-primary(vars.$font-size-title, vars.$font-weight-footer);
       color: vars.$color-text-primary;
     }
 
     .close-btn {
       background: none;
       border: none;
-      cursor: pointer;
       padding: 4px;
+      cursor: pointer;
       @include mixins.flex();
-      @include mixins.transition(transform, 0.2s);
+      @include mixins.transition(transform);
 
       img {
         width: 18px;
         height: 18px;
-        filter: brightness(0) saturate(100%) invert(14%) sepia(89%)
-          saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+        cursor: pointer;
+        padding: 0.25rem;
+        @include mixins.flex();
+        @include mixins.transition(transform, 0.2s);
+
+        img {
+          width: 1.125rem;
+          height: 1.125rem;
+          filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+        }
+      padding: 0.25rem;
+      @include mixins.flex();
+      @include mixins.transition(transform, 0.2s);
+
+      img {
+        width: 1.125rem;
+        height: 1.125rem;
       }
 
-      &:hover {
-        opacity: 0.8;
-        transform: scale(1.1);
+        &:hover {
+          opacity: 0.8;
+          transform: scale(1.1);
+        }
       }
     }
   }
@@ -117,8 +221,8 @@
     padding: vars.$dialog-padding-body;
 
     p {
-      font-size: vars.$font-size-body;
       color: vars.$color-text-secondary;
+      font-size: vars.$font-size-body;
       line-height: 1.4;
     }
   }
@@ -132,15 +236,15 @@
 
     .btn {
       padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
       font-size: vars.$font-size-button;
+      border-radius: 4px;
+      border: none;
       cursor: pointer;
       @include mixins.transition(background-color);
 
       &.cancel {
         background-color: vars.$color-btn-cancel-bg;
-        color: vars.$color-btn-cancel-text;
+        color: vars.$color-bg-footer;
 
         &:hover {
           background-color: vars.$color-btn-cancel-hover;
@@ -149,7 +253,7 @@
 
       &.confirm {
         background-color: vars.$color-btn-confirm-bg;
-        color: vars.$color-btn-confirm-text;
+        color: vars.$color-bg-footer;
 
         &:hover {
           background-color: vars.$color-btn-confirm-hover;
@@ -163,9 +267,13 @@
           }
         }
       }
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
     }
   }
 }
+
 
 // ====== NOTIFICATION BELL STYLES ======
 .notification-bell {
@@ -477,9 +585,196 @@
 
     &:hover {
       color: vars.$color-toast-close-hover;
+=======
+// ====================== CREATE PROJECT PAGE ======================
+.project-create-page {
+  padding: vars.$padding-primary;
+}
+
+.breadcrumb {
+  @include mixins.flex(flex-start);
+  gap: 6px;
+  margin-bottom: vars.$padding-footer-sides;
+  font-size: vars.$font-size-error;
+
+  .breadcrumb-link {
+    color: vars.$color-breadcrumb;
+    font-weight: vars.$font-weight-primary;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .breadcrumb-current {
+    color: vars.$color-title;
+    font-weight: vars.$font-weight-primary;
+  }
+
+  .breadcrumb-separator {
+    color: vars.$color-text-secondary;
+  }
+}
+
+.page-title {
+  font-family: vars.$font-family-primary;
+  font-size: vars.$font-size-page-title;
+  font-weight: vars.$font-weight-footer;
+  color: vars.$color-title;
+  margin-bottom: vars.$dialog-radius;
+}
+
+.page-subtitle {
+  font-size: vars.$font-size-body;
+  color: vars.$color-subtitle;
+  margin-bottom: 36px;
+}
+
+.project-form-container {
+  background: vars.$color-bg-footer;
+  border: 1px solid #ededed;
+  border-radius: vars.$font-size-error;
+  padding: 34px 60px 34px 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-title {
+  font-family: vars.$font-family-primary;
+  font-size: vars.$font-size-body;
+  font-weight: vars.$font-weight-primary;
+  color: vars.$color-subtitle;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.formProject {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem 2.5rem;
+}
+
+.description-group {
+  grid-column: span 2;
+}
+
+.description-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-counter {
+  font-size: 12px;
+  color: vars.$color-text;
+}
+
+.project-description {
+  padding: 12px 14px;
+  border-radius: vars.$dialog-radius;
+  border: 1px solid vars.$border-color;
+  font-size: vars.$font-size-error;
+  width: 100%;
+  resize: vertical;
+  font-family: vars.$font-family-primary;
+  background-color: vars.$input-background;
+
+  &:focus {
+    background-color: vars.$color-bg-footer;
+    border-color: vars.$color-breadcrumb;
+    outline: none;
+  }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+
+  .field-label {
+    font-size: vars.$font-size-error;
+    font-weight: vars.$font-weight-footer;
+    margin-bottom: 4px;
+  }
+
+  .field-label.required::after {
+    content: " *";
+    color: red;
+  }
+
+  .field-input,
+  .field-select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: vars.$dialog-radius;
+    border: 1px solid vars.$border-color;
+    background-color: vars.$input-background;
+    font-size: 14px;
+    font-family: vars.$font-family-primary;
+
+    &:focus {
+      background-color: vars.$color-bg-footer;
+      border-color: vars.$color-breadcrumb;
+      outline: none;
+    }
+  }
+
+  .status-options {
+    background-color: #eeeeee;
+    padding-bottom: 25px;
+    font-size: 18px;
+    color: vars.$color-text;
+  }
+
+  .error small {
+    color: vars.$color-error-text;
+    margin-top: 4px;
+    font-size: 12px;
+  }
+}
+
+.buttons {
+  grid-column: span 2;
+  @include mixins.flex(center);
+  gap: 14px;
+  margin-top: 10px;
+
+  .btn {
+    padding: 12px 28px;
+    font-size: vars.$font-size-error;
+    border-radius: 22px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .btn-submit {
+    background-color: vars.$color-breadcrumb;
+    color: vars.$color-bg-footer;
+    width: 23.75rem;
+
+    &:disabled {
+      background-color: vars.$disabled-bg-color;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: darken(vars.$color-primary-hover, 6%);
+    }
+  }
+
+  .btn-secondary {
+    background-color: vars.$btn-secondary-bg-color;
+    color: vars.$color-title;
+    padding: 12px 22px;
+
+    &:hover {
+      background-color: vars.$hover-bg-color;
+>>>>>>> 29413163485ac7c3b38f12c2efce0a60ece7b04b
     }
   }
 }
+
 
 //====dashboard-notifications-component styles=====
 .dashboard-notifications {
@@ -565,12 +860,19 @@
   }
 }
 
-// Optional: subtle hover for child notification items
-app-notification-item-component {
+
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: vars.$item-hover-shadow;
   }
+
+.success {
+  text-align: center;
+  margin-top: vars.$font-size-title;
+  color: #2e7d32;
+  font-size: vars.$font-size-error;
+  font-weight: vars.$font-weight-primary;
+}
 }

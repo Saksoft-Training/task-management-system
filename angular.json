@@ -37,7 +37,11 @@
               ],
             "styles": [
               "src/styles/app.scss"
-            ]
+            ],
+
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            }
           },
           "configurations": {
             "production": {
@@ -81,6 +85,7 @@
         "test": {
           "builder": "@angular/build:karma",
           "options": {
+            "browser": "src/main.ts",
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -91,7 +96,10 @@
             ],
             "styles": [
               "src/styles/app.scss"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            }
           }
         }
       }

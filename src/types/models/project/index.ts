@@ -1,5 +1,5 @@
 export interface Project {
- createdAt: string;
+    createdAt: string;
     createdBy: string;
     description?: string;
     endDate: string;
@@ -8,4 +8,7 @@ export interface Project {
     startDate: string;
     status: 'Planning' | 'In Progress' | 'Completed' | 'On Hold';
     updatedAt: string;
+
 }
+
+

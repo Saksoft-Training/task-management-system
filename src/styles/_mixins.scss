@@ -1,4 +1,5 @@
 @use './variables' as vars;
+
 // ====== FLEX HELPERS ======
 @mixin flex($justify: center, $align: center, $direction: row) {
   display: flex;
@@ -11,24 +12,22 @@
   @include flex(space-between, center);
 }
 
-// ====== POSITION HELPERS ======
 @mixin fixed-bottom($z-index: 1000) {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  z-index: $z-index;
   box-sizing: border-box;
+  z-index: $z-index;
 }
 
 // ====== FONT HELPERS ======
-@mixin font-primary($size: 14px, $weight: normal) {
+@mixin font-primary($size: 1rem, $weight: normal) {
   font-family: vars.$font-family-primary;
   font-size: $size;
   font-weight: $weight;
 }
 
-// ====== EFFECTS ======
 @mixin box-shadow($shadow) {
   box-shadow: $shadow;
 }
@@ -37,17 +36,16 @@
   transition: $props $duration $ease;
 }
 
-// ====== ANIMATION ======
 @mixin fade-in($duration: 0.3s) {
   animation: fadeIn $duration ease;
 }
 
-// ====== KEYFRAMES ======
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
