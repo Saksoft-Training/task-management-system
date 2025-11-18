@@ -2,16 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../features/user-account-management/services/auth-service';
+import { NotificationService } from '../../../features/dashboard/services/notification-service';
+import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications.component/dashboard-notifications.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,DashboardNotificationsComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  //#region Properties
+   showNotifications = false;
+   unreadCount = 0;
   /**
    * @summary Logged-in user's email displayed in the header.
    */
@@ -36,10 +39,10 @@ export class HeaderComponent implements OnInit {
    */
   public constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
   //#endregion
-
   //#region Lifecycle Hook
   /**
    * @summary Loads the logged-in user's email on component initialization.
@@ -48,6 +51,9 @@ export class HeaderComponent implements OnInit {
   public ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     this.userEmail = user?.email || null;
+     this.notificationService.unreadCount$.subscribe(count => {
+      this.unreadCount = count;
+    });
   }
   //#endregion
 
@@ -64,4 +70,8 @@ export class HeaderComponent implements OnInit {
     );
   }
   //#endregion
+
+  toggleNotifications() {
+     this.showNotifications = !this.showNotifications;
+  }
 }

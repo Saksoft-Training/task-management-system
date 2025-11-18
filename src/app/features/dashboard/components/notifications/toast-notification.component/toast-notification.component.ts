@@ -4,9 +4,6 @@ import { AppNotification } from '../../../../../../types/models/notifications';
 import { Subscription, timer } from 'rxjs';
 import { NotificationService } from '../../../services/notification-service';
 
-interface ToastNotification extends Notification {
-  visible: boolean;
-}
 @Component({
   selector: 'app-toast-notification-component',
    standalone: true,

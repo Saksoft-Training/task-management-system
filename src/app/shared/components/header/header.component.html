@@ -20,6 +20,19 @@
         <span>{{ userEmail }}</span>
       </div>
       }
+      <div class="notification-container">
+        <button class="bell-button" (click)="toggleNotifications()" type="button">
+          <img src="assets/icons/Bell-Icon.svg" alt="notifications" class="bell-icon" />
+          @if ((unreadCount | async) > 0) {
+          <span class="notification-badge">{{ unreadCount | async }}</span>
+          }
+        </button>
+        @if (showNotifications) {
+        <div class="notification-dropdown">
+          <app-dashboard-notifications-component></app-dashboard-notifications-component>
+        </div>
+        }
+      </div>
       <img src="assets/icons/logout-Icon.svg" alt="logout"
         class="logout-icon" />
     </div>

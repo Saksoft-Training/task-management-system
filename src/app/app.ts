@@ -7,7 +7,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HeaderComponent,FooterComponent,RouterOutlet, ToastNotificationComponent],
+  imports: [RouterOutlet,HeaderComponent,FooterComponent, ToastNotificationComponent],
 
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
