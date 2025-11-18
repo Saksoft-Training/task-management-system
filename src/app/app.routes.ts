@@ -14,22 +14,4 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'login', component: LoginComponent },
-// {
-//     path:'notifications',component:NotificationBellComponent,
-// },
-// {
-//     path:'dashboard',component:DashboardNotificationsComponent
-// },
-// {
-//     path:'notificationitem',component:NotificationItemComponent
-// },
-//{
-//     path:'toastnotification',component:ToastNotificationComponent
-// },
-// {
-//     path:'notificationdropdown',component:NotificationDropdownComponent
-// },
-// {
-//     path:'ds',component:DashboardNotificationsComponent
-// }
 ];
