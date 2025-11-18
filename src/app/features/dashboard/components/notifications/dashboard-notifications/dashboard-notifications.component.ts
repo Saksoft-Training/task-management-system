@@ -10,16 +10,16 @@ import { ToastNotificationComponent } from "../toast-notification/toast-notifica
 @Component({
   selector: 'app-dashboard-notifications-component',
   standalone: true,
-  imports: [CommonModule,NotificationItemComponent,ToastNotificationComponent],
+  imports: [CommonModule],
   templateUrl: './dashboard-notifications.component.html',
   styleUrl: './dashboard-notifications.component.scss',
 })
 export class DashboardNotificationsComponent {
 
-   @Input() notifications: AppNotification[] | null = [];
+  @Input() notifications: AppNotification[] | null = [];
   @Output() markAsRead = new EventEmitter<string>();
 
-  public onMarkAsRead(notificationId: string):void {
+  public onMarkAsRead(notificationId: string): void {
     this.markAsRead.emit(notificationId);
   }
 }

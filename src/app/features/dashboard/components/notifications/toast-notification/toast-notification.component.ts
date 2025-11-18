@@ -6,24 +6,25 @@ import { NotificationService } from '../../../services/notification-service';
 
 @Component({
   selector: 'app-toast-notification-component',
-   standalone: true,
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './toast-notification.component.html',
   styleUrl: './toast-notification.component.scss',
 })
 export class ToastNotificationComponent implements OnInit, OnDestroy {
-current: AppNotification | null = null;
+  current: AppNotification | null = null;
   private sub?: Subscription;
   private hideSub?: Subscription;
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService) { }
 
   public ngOnInit(): void {
-    this.sub = this.notificationService.toast$.subscribe(n => {
-      this.current = n;
+    this.sub = this.notificationService.toastNotification$.subscribe((notification: AppNotification) => {
+      this.current = notification;
       this.hideSub?.unsubscribe();
       this.hideSub = timer(4000).subscribe(() => (this.current = null));
     });
+
   }
 
   public ngOnDestroy(): void {
@@ -31,11 +32,11 @@ current: AppNotification | null = null;
     this.hideSub?.unsubscribe();
   }
 
-public  close():void {
+  public close(): void {
     this.current = null;
   }
 
- public get severityClass():string {
+  public get severityClass(): string {
     return this.current ? `toast-${this.current.severity}` : '';
   }
 }

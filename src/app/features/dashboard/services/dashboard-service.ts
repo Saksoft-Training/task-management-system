@@ -7,19 +7,16 @@ import { interval, Subscription } from 'rxjs';
   providedIn: 'root',
 })
 export class DashboardService {
-   private tasks: Task[] = [];
+  private tasks: Task[] = [];
   private dueCheckSub?: Subscription;
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService) { }
 
-  // Call this after loading tasks from localStorage / API
- public setTasks(tasks: Task[]):void {
+  public setTasks(tasks: Task[]): void {
     this.tasks = tasks;
 
-    // initial check
     this.notificationService.checkDueDates(this.tasks);
 
-    // optional: recheck every minute
     this.dueCheckSub?.unsubscribe();
     this.dueCheckSub = interval(60_000).subscribe(() =>
       this.notificationService.checkDueDates(this.tasks)

@@ -11,7 +11,7 @@ export class NotificationBellComponent {
   @Input() public unreadCount = 0;
   @Output() public bellClick = new EventEmitter<void>();
 
-  public onClick():void {
+  public onClick(): void {
     this.bellClick.emit();
   }
 }
