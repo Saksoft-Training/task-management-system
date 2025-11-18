@@ -23,7 +23,8 @@ export class HeaderComponent implements OnInit {
     { label: 'Dashboard', path: '/dashboard' },
     { label: 'Projects', path: '/projects' },
     { label: 'Tasks', path: '/tasks' },
-    { label: 'Board', path: '/board' }
+    { label: 'Board', path: '/board' },
+     { label: '', path: '/notifications', isIcon: true, icon: '/assets/icons/Bell-Icon.svg' }
   ];
   //#endregion
 
