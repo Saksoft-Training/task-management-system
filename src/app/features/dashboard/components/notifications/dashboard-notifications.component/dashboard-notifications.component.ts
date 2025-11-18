@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { NotificationItemComponent } from "../notification-item.component/notification-item.component";
 import { NotificationService } from "../../../services/notification-service";
 import { AppNotification } from "../../../../../../types/models/notifications";
@@ -9,25 +9,17 @@ import { ToastNotificationComponent } from "../toast-notification.component/toas
 
 @Component({
   selector: 'app-dashboard-notifications-component',
+  standalone: true,
   imports: [CommonModule,NotificationItemComponent,ToastNotificationComponent],
   templateUrl: './dashboard-notifications.component.html',
   styleUrl: './dashboard-notifications.component.scss',
 })
 export class DashboardNotificationsComponent {
-notifications$!: Observable<AppNotification[]>;
 
-  constructor(
-    private notificationService: NotificationService,
-    private router: Router
-  ) {}
-   ngOnInit(): void {
-    this.notifications$ = this.notificationService.notifications$;
-  }
+   @Input() notifications: AppNotification[] | null = [];
+  @Output() markAsRead = new EventEmitter<string>();
 
-  onNavigate(n: AppNotification) {
-    if (n.route) {
-      this.notificationService.markAsRead(n.id);
-      this.router.navigateByUrl(n.route);
-    }
+  onMarkAsRead(notificationId: string) {
+    this.markAsRead.emit(notificationId);
   }
 }

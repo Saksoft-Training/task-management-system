@@ -3,18 +3,24 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../features/user-account-management/services/auth-service';
 import { NotificationService } from '../../../features/dashboard/services/notification-service';
+
+import { AppNotification } from '../../../../types/models/notifications';
+import { Observable } from 'rxjs';
 import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications.component/dashboard-notifications.component';
+import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell.component/notification-bell.component';
+import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown.component/notification-dropdown.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule,DashboardNotificationsComponent],
+  imports: [CommonModule, RouterModule,DashboardNotificationsComponent,NotificationBellComponent,NotificationDropdownComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
    showNotifications = false;
    unreadCount = 0;
+   notifications$!: Observable<AppNotification[]>; 
   /**
    * @summary Logged-in user's email displayed in the header.
    */
@@ -27,7 +33,7 @@ export class HeaderComponent implements OnInit {
     { label: 'Projects', path: '/projects' },
     { label: 'Tasks', path: '/tasks' },
     { label: 'Board', path: '/board' },
-     { label: '', path: '/notifications', isIcon: true, icon: '/assets/icons/Bell-Icon.svg' }
+     
   ];
   //#endregion
 
@@ -51,8 +57,13 @@ export class HeaderComponent implements OnInit {
   public ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     this.userEmail = user?.email || null;
-     this.notificationService.unreadCount$.subscribe(count => {
-      this.unreadCount = count;
+     this.notifications$ = this.notificationService.notifications$;
+this.notifications$.subscribe(notifications => {
+      console.log('📋 Notifications loaded:', notifications?.length, 'items');
+      console.log('📋 Notifications:', notifications);
+    });
+  this.notificationService.unreadCount$.subscribe(count => {
+    this.unreadCount = count;
     });
   }
   //#endregion
@@ -71,7 +82,22 @@ export class HeaderComponent implements OnInit {
   }
   //#endregion
 
-  toggleNotifications() {
-     this.showNotifications = !this.showNotifications;
+ 
+   onMarkAsRead(notificationId: string) {
+    // Call your notification service to mark as read
+    this.notificationService.markAsRead(notificationId);
   }
+
+    toggleNotifications() {
+    console.log('🔔 Bell clicked! Current state:', this.showNotifications);
+    this.showNotifications = !this.showNotifications;
+    console.log('🔔 New state:', this.showNotifications);
+    
+    // Debug: Check notifications data
+    this.notifications$.subscribe(notifications => {
+      console.log('📋 Notifications data:', notifications);
+      console.log('📋 Notifications count:', notifications?.length);
+    }).unsubscribe();
+  }
+  
 }

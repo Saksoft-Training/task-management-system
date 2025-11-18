@@ -1,27 +1,19 @@
-<div class="notifications-card">
-  <h3>Recent Notifications</h3>
-
-  <div *ngIf="(notifications$ | async) as list">
-    <div *ngIf="list.length; else empty">
-      <div *ngFor="let n of list | slice:0:5"
-           class="row"
-           [class.unread]="!n.isRead"
-           (click)="onNavigate(n)">
-        <span class="dot" [ngClass]="'dot-' + n.severity"></span>
-        <div class="text">
-          <div class="title">{{ n.title }}</div>
-          <div class="msg">{{ n.message }}</div>
-          <div class="time">{{ n.timestamp | date: 'short' }}</div>
-        </div>
+<!-- dashboard-notifications.component.html -->
+<div class="notifications-list">
+  @for (notification of notifications; track notification.id) {
+    <div class="notification-item" [class.unread]="!notification.isRead">
+      <div class="notification-content">
+        <h4>{{ notification.title }}</h4>
+        <p>{{ notification.message }}</p>
+        <span class="timestamp">{{ notification.timestamp | date:'short' }}</span>
       </div>
+      <button class="mark-read-btn" (click)="markAsRead.emit(notification.id)">
+        ✓
+      </button>
     </div>
-  </div>
-
-  <ng-template #empty>
-      <div class="empty">
-    <img src="/assets/icons/Bell-Icon.svg" alt="" />
-    <span>No notifications</span>
-    <span>you're all caught up</span>
-  </div>
-  </ng-template>
+  } @empty {
+    <div class="no-notifications">
+      No new notifications
+    </div>
+  }
 </div>
