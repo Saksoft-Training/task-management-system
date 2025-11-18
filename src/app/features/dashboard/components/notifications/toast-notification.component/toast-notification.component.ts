@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppNotification } from '../../../../../../types/models/notifications';
 import { Subscription, timer } from 'rxjs';
 import { NotificationService } from '../../../services/notification-service';
@@ -13,7 +13,7 @@ interface ToastNotification extends Notification {
   templateUrl: './toast-notification.component.html',
   styleUrl: './toast-notification.component.scss',
 })
-export class ToastNotificationComponent {
+export class ToastNotificationComponent implements OnInit, OnDestroy {
 current: AppNotification | null = null;
   private sub?: Subscription;
   private hideSub?: Subscription;
