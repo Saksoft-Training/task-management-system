@@ -61,8 +61,12 @@ export class HeaderComponent implements OnInit {
       url.includes('/register')
     );
   }
-  //#endregion
-   goToLogin() {
+   /**
+   * @summary Navigates the user to the login page.
+   * @returns void
+   */
+   public goToLogin(): void{
   this.router.navigate(['/login']);
 }
+  //#endregion
 }
