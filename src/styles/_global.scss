@@ -12,10 +12,12 @@ html {
   font-size: 16px;
   overflow-y: auto !important;
   scrollbar-width: none !important;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
 
 html::-webkit-scrollbar {
-  display: none !important;
+  display: none;
 }
 
 body {
@@ -23,32 +25,39 @@ body {
   background-color: variable.$color-gray-50;
   color: variable.$color-text-primary;
   line-height: 1.4;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 body::-webkit-scrollbar {
-  display: none !important;
+  display: none;
 }
 
 .main-content {
-  overflow-y: auto !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-
 .main-content::-webkit-scrollbar {
-  display: none !important;
+  display: none;
 }
 
-/* ========================================================= */
-/* FOOTER */
-/* ========================================================= */
+/* ========================================= */
+/* FOOTER STYLES */
+/* ========================================= */
 
 .footer {
   @include mixins.fixed-bottom;
+  border-top: 1px solid variable.$color-border;
+  background-color: variable.$color-bg-footer;
+  color: variable.$color-text-footer;
+  font-size: variable.$font-size-footer;
+  font-weight: variable.$font-weight-footer;
+  padding: variable.$padding-footer-top variable.$padding-footer-sides variable.$padding-footer-bottom;
+  @include mixins.flex-between;
   @include mixins.flex-between;
   border-top: 1px solid variable.$color-border;
   background-color: variable.$color-bg-footer;
@@ -63,9 +72,9 @@ body::-webkit-scrollbar {
   }
 }
 
-/* ========================================================= */
+/* ========================================= */
 /* ERROR MESSAGE */
-/* ========================================================= */
+/* ========================================= */
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
@@ -77,6 +86,22 @@ body::-webkit-scrollbar {
   padding: variable.$error-padding-y variable.$error-padding-x;
   border-radius: variable.$error-border-radius;
   margin: variable.$error-margin-y 0;
+  @include mixins.font-primary(variable.$font-size-error);
+  @include mixins.box-shadow(variable.$error-shadow);
+  position: relative;
+  margin: variable.$error-margin-y 0;
+
+  .icon {
+    margin-right: 0.625rem;
+    font-size: variable.$error-icon-size;
+  @include mixins.font-primary(vars.$font-size-error);
+  @include mixins.box-shadow(vars.$error-shadow);
+  background-color: vars.$color-error-bg;
+  color: vars.$color-error-text;
+  border: 1px solid vars.$color-error-border;
+  padding: vars.$error-padding-y vars.$error-padding-x;
+  border-radius: vars.$error-border-radius;
+  margin: vars.$error-margin-y 0;
   position: relative;
 
   .icon {
@@ -91,6 +116,7 @@ body::-webkit-scrollbar {
   .close-btn {
     background: none;
     border: none;
+    color: variable.$color-error-text;
     cursor: pointer;
     font-size: variable.$font-size-title;
     margin-left: 10px;
@@ -106,9 +132,105 @@ body::-webkit-scrollbar {
   }
 }
 
-/* ========================================================= */
-/* LOADING OVERLAY */
-/* ========================================================= */
+/* ========================================= */
+/* GLOBAL HEADER */
+/* ========================================= */
+
+.app-header {
+  width: 79.9375rem;
+  display: flex;
+  justify-content: center;
+  background: variable.$color-white;
+  border-bottom: 0.0625rem solid variable.$color-gray-200;
+  height: 6.25rem;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: variable.$font-family-primary;
+}
+
+.header-container {
+  width: 75rem;
+  height: 6.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.logo {
+  width: 9.4375rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: -5%;
+  line-height: 120%;
+  color: variable.$color-black;
+}
+
+.nav-links {
+  position: absolute;
+  top: 2.25rem;
+  left: 31.40625rem;
+  transform: translateX(-50%);
+  width: 19.375rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.1875rem;
+
+  a {
+    width: 4.5rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 140%;
+    color: variable.$color-black;
+    text-decoration: none;
+  }
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.user-email {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  height: 2.25rem;
+  padding: 0.875rem 1.375rem;
+  background: #dfecc6;
+  border-radius: 62.5rem;
+  width: fit-content;
+  font-family: variable.$font-family-primary;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: variable.$color-black;
+  white-space: nowrap;
+}
+
+.email-icon {
+  font-size: 0.875rem;
+  color: variable.$color-black;
+}
+
+.logout-icon {
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+/* ========================================= */
+/* MODERN SPINNER */
+/* ========================================= */
 
 .loading-overlay {
   position: fixed;
@@ -124,11 +246,9 @@ body::-webkit-scrollbar {
 .spinner {
   width: 32px;
   height: 32px;
-
   border: 4px solid rgba(255, 255, 255, 0.3);
   border-top-color: variable.$color-primary;
   border-radius: 50%;
-
   animation: spin 0.9s linear infinite;
 }
 
@@ -140,6 +260,8 @@ body::-webkit-scrollbar {
   to {
     transform: rotate(360deg);
   }
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
 }
 
 .spinner-text {
@@ -150,12 +272,17 @@ body::-webkit-scrollbar {
   font-family: variable.$font-family-primary;
 }
 
-/* ========================================================= */
+/* ========================================= */
 /* DIALOG */
-/* ========================================================= */
+/* ========================================= */
 
 .dialog-overlay {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: variable.$color-overlay-bg;
   inset: 0;
   background: variable.$color-overlay-bg;
   @include mixins.flex();
@@ -164,11 +291,31 @@ body::-webkit-scrollbar {
 
 .dialog-box {
   background: variable.$color-bg-footer;
+  background: variable.$color-dialog-bg;
   border-radius: variable.$dialog-radius;
   width: variable.$dialog-width;
   max-width: variable.$dialog-max-width;
   @include mixins.box-shadow(variable.$dialog-shadow);
   @include mixins.fade-in(variable.$dialog-fade-duration);
+  overflow: hidden;
+  @include mixins.fade-in(variable.$dialog-fade-duration);
+
+  .dialog-header {
+    @include mixins.flex-between;
+    padding: variable.$dialog-padding-header;
+    border-bottom: 1px solid variable.$color-dialog-border;
+    background-color: variable.$color-dialog-header-bg;
+
+    h3 {
+      margin: 0;
+      @include mixins.font-primary(variable.$font-size-title, variable.$font-weight-title);
+      color: variable.$color-text-primary;
+  background: vars.$color-bg-footer;
+  border-radius: vars.$dialog-radius;
+  width: vars.$dialog-width;
+  max-width: vars.$dialog-max-width;
+  @include mixins.box-shadow(vars.$dialog-shadow);
+  @include mixins.fade-in(vars.$dialog-fade-duration);
   overflow: hidden;
 
   .dialog-header {
@@ -213,6 +360,13 @@ body::-webkit-scrollbar {
           width: 1.125rem;
           height: 1.125rem;
         }
+      img {
+        width: 1.125rem;
+        height: 1.125rem;
+        filter: brightness(0) saturate(100%)
+          invert(14%) sepia(89%) saturate(5500%)
+          hue-rotate(354deg) brightness(91%) contrast(92%);
+      }
 
         &:hover {
           opacity: 0.8;
@@ -224,6 +378,11 @@ body::-webkit-scrollbar {
 
   .dialog-body {
     padding: variable.$dialog-padding-body;
+
+    p {
+      font-size: variable.$font-size-body;
+      color: variable.$color-text-secondary;
+    padding: vars.$dialog-padding-body;
 
     p {
       color: variable.$color-text-secondary;
@@ -274,8 +433,37 @@ body::-webkit-scrollbar {
       }
 
       padding: 0.5rem 1rem;
+      border: none;
       border-radius: 0.25rem;
+      font-size: variable.$font-size-button;
       cursor: pointer;
+      @include mixins.transition(background-color);
+
+      &.cancel {
+        background-color: variable.$color-btn-cancel-bg;
+        color: variable.$color-btn-cancel-text;
+
+        &:hover {
+          background-color: variable.$color-btn-cancel-hover;
+        }
+      }
+
+      &.confirm {
+        background-color: variable.$color-btn-confirm-bg;
+        color: variable.$color-btn-confirm-text;
+
+        &:hover {
+          background-color: variable.$color-btn-confirm-hover;
+        }
+
+        &.danger {
+          background-color: variable.$color-btn-danger-bg;
+
+          &:hover {
+            background-color: variable.$color-btn-danger-hover;
+          }
+        }
+      }
     }
   }
 }
