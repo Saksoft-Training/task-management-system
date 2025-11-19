@@ -1,12 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, HostListener } from '@angular/core';
+//#region Imports
+import { Component, Input, OnDestroy, OnInit, HostListener, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Task } from '../../../../../types';
 import { TaskCardComponent } from '../task-card.component/task-card.component';
-import { TaskBoardComponent } from "../task-board.component/task-board.component";
+import { TaskBoardComponent } from '../task-board.component/task-board.component';
 import { ProjectService } from '../../../project-management/services/project.service';
 import { TaskService } from '../../services/task-service';
+//#endregion
 
 @Component({
   selector: 'app-task-list',
@@ -15,96 +17,159 @@ import { TaskService } from '../../services/task-service';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent implements OnInit, OnDestroy {
+export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   /* --------------------------------------
-   * Inputs
+   * INPUTS
    * -------------------------------------- */
+
+  /** Incoming project ID (optional: used in all project-specific views) */
   @Input() projectId?: number | null;
 
   /* --------------------------------------
-   * View Mode State
+   * VIEW MODE STATE
    * -------------------------------------- */
+
+  /**
+   * Determines which UI layout to render:
+   * - "project": tasks under a specific project
+   * - "list": global list mode
+   * - "board": board/Kanban mode
+   * - "global": fallback for all tasks
+   */
   public mode: 'project' | 'list' | 'board' | 'global' = 'project';
 
   /* --------------------------------------
-   * Task Data
+   * TASK DATA
    * -------------------------------------- */
+
+  /** All tasks (filtered by project when applicable) */
   public tasks: Task[] = [];
+
+  /** Tasks after sorting + filtering applied */
   public filtered: Task[] = [];
+
+  /** Currently opened task card in popup */
   public selectedTask: Task | null = null;
 
   /* --------------------------------------
-   * Subscription
+   * DATA SUBSCRIPTIONS
    * -------------------------------------- */
+
+  /** Task observable subscription for live updates */
   private taskSub!: Subscription;
 
   /* --------------------------------------
-   * Sorting Controls
+   * SORTING STATE
    * -------------------------------------- */
+
+  /** Controls dropdown visibility */
   public showSortMenu = false;
+
+  /** Current sorting field */
   public sortField: keyof Task = 'dueDate';
+
+  /** Sorting direction: true = ascending */
   public sortAsc = true;
 
+  /* --------------------------------------
+   * CONSTRUCTOR
+   * -------------------------------------- */
   constructor(
+    private readonly route: ActivatedRoute,
     private readonly taskService: TaskService,
     private readonly projectService: ProjectService,
     private readonly router: Router
-  ) { }
+  ) {}
 
-  /** Initialize component, detect mode, and load tasks. */
+  //#region Lifecycle Methods
+
+  /** OnInit → detect route, determine mode, load tasks, subscribe for updates */
   public ngOnInit(): void {
+    console.log('ROUTER URL =', this.router.url);
+
+    // Listen for route param changes
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+
+      // If projectId exists, store it
+      this.projectId = id ? Number(id) : null;
+
+      // Filter tasks accordingly
+      this.applyTaskLoad(this.taskService.getAllTasks());
+    });
+
+    // Determine mode based on URL
     this.detectViewMode();
 
+    // Subscribe to task updates
     this.taskSub = this.taskService.tasks$
       .subscribe(tasks => this.applyTaskLoad(tasks));
-
-    this.applyTaskLoad(this.taskService.getAllTasks());
   }
 
-  /** Clean up subscriptions to avoid memory leaks. */
+  /** Unsubscribe to prevent memory leaks */
   public ngOnDestroy(): void {
     this.taskSub?.unsubscribe();
   }
 
+  /** React to input changes like new projectId from parent component */
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['projectId']) {
+      this.applyTaskLoad(this.taskService.getAllTasks());
+    }
+  }
+
+  //#endregion
+
+  /* --------------------------------------
+   * VIEW MODE DETECTION
+   * -------------------------------------- */
+
   /**
-   * Determines whether the component is in:
-   *  - project mode
-   *  - global list mode
-   *  - board mode
+   * Detects the correct display mode based on the current URL.
+   * Handles:
+   * - /projects/:id/board
+   * - /projects/:id
+   * - /tasks/board
+   * - /tasks (global)
    */
   private detectViewMode(): void {
-  const url = this.router.url.toLowerCase();
+    const url = this.router.url.toLowerCase();
 
-  // Project board: /projects/:id/board
-  if (url.includes('/projects') && url.includes('/board')) {
-    this.mode = 'board';
-    return;
+    // Project board mode
+    if (url.match(/^\/projects\/\d+\/board$/)) {
+      this.mode = 'board';
+      return;
+    }
+
+    // Project list mode
+    if (url.match(/^\/projects\/\d+$/)) {
+      this.mode = 'project';
+      return;
+    }
+
+    // Global board
+    if (url === '/tasks/board') {
+      this.mode = 'board';
+      this.projectId = null;
+      return;
+    }
+
+    // Global list
+    if (url === '/tasks' || url.startsWith('/tasks?')) {
+      this.mode = 'list';
+      this.projectId = null;
+      return;
+    }
   }
 
-  // Global board: /tasks/board
-  if (url === '/tasks/board') {
-    this.mode = 'board';
-    this.projectId = null;   // IMPORTANT
-    return;
-  }
-
-  // Global list
-  if (url === '/tasks' || url.startsWith('/tasks?')) {
-    this.mode = 'list';
-    this.projectId = null;
-    return;
-  }
-
-  // Project list
-  if (url.includes('/projects')) {
-    this.mode = 'project';
-    return;
-  }
-}
+  /* --------------------------------------
+   * LOADING & FILTERING TASKS
+   * -------------------------------------- */
 
   /**
-   * Loads tasks and applies project filtering.
+   * Loads all tasks and applies project filtering
+   * when projectId is active.
    */
   private applyTaskLoad(allTasks: Task[]): void {
     this.tasks = this.projectId
@@ -114,24 +179,30 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.applySorting();
   }
 
-  /** Toggle the sort options popup menu. */
+  /* --------------------------------------
+   * SORTING CONTROLS
+   * -------------------------------------- */
+
+  /** Toggle sort dropdown menu */
   public toggleSortMenu(): void {
     this.showSortMenu = !this.showSortMenu;
   }
 
-  /** Update which field is used for sorting. */
+  /** Set sorting field and close dropdown */
   public setSortField(field: keyof Task): void {
     this.sortField = field;
     this.applySorting();
+    this.showSortMenu = false;
   }
 
-  /** Update sorting direction (ascending/descending). */
+  /** Set sorting direction and close dropdown */
   public setSortDirection(isAscending: boolean): void {
     this.sortAsc = isAscending;
     this.applySorting();
+    this.showSortMenu = false;
   }
 
-  /** Returns human-friendly text for the currently selected sort field. */
+  /** Returns readable label for sort controls */
   public getSortLabel(): string {
     switch (this.sortField) {
       case 'dueDate': return 'Due Date';
@@ -143,38 +214,38 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Returns indicators for UI. */
+  /** Arrow indicator for active sort field in UI */
   public getArrow(field: keyof Task): string {
     if (this.sortField !== field) return '↕';
     return this.sortAsc ? '↑' : '↓';
   }
 
   /**
-   * Sort tasks using:
-   *  - date sorting for dueDate / createdAt
-   *  - localeCompare for strings
-   *  - numeric comparison for numbers
+   * Sorting logic:
+   * - Date sorting for dueDate / createdAt
+   * - Lexical sorting for strings
+   * - Numeric sorting for numbers
    */
   private applySorting(): void {
     this.filtered = [...this.tasks].sort((a, b) => {
-      let A: any = a[this.sortField] ?? '';
-      let B: any = b[this.sortField] ?? '';
+      const A: any = a[this.sortField] ?? '';
+      const B: any = b[this.sortField] ?? '';
 
-      // Date Sorting
+      // Date fields
       if (this.sortField === 'dueDate' || this.sortField === 'createdAt') {
-        const dateA = new Date(A).getTime();
-        const dateB = new Date(B).getTime();
-        return this.sortAsc ? dateA - dateB : dateB - dateA;
+        const dA = new Date(A).getTime();
+        const dB = new Date(B).getTime();
+        return this.sortAsc ? dA - dB : dB - dA;
       }
 
-      // String Sorting
+      // Strings
       if (typeof A === 'string' || typeof B === 'string') {
         return this.sortAsc
           ? String(A).localeCompare(String(B))
           : String(B).localeCompare(String(A));
       }
 
-      // Numeric Sorting
+      // Numbers
       if (typeof A === 'number' && typeof B === 'number') {
         return this.sortAsc ? A - B : B - A;
       }
@@ -183,7 +254,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     });
   }
 
-  /** Change sort field or toggle sort direction. Used by UI. */
+  /** Quick sort toggle for UI list headers */
   public changeSort(field: keyof Task): void {
     if (this.sortField === field) {
       this.sortAsc = !this.sortAsc;
@@ -191,20 +262,30 @@ export class TaskListComponent implements OnInit, OnDestroy {
       this.sortField = field;
       this.sortAsc = true;
     }
+
     this.applySorting();
+    this.showSortMenu = false;
   }
 
-  /** Opens the selected task card popup. */
+  /* --------------------------------------
+   * TASK CARD POPUP HANDLING
+   * -------------------------------------- */
+
+  /** Open task card modal */
   public openCard(task: Task): void {
     this.selectedTask = task;
   }
 
-  /** Closes the popup card. */
+  /** Close task card modal */
   public closeCard(): void {
     this.selectedTask = null;
   }
 
-  /** Hide sort menu when clicking outside. */
+  /* --------------------------------------
+   * CLICK OUTSIDE HANDLING
+   * -------------------------------------- */
+
+  /** Auto-close sort dropdown when clicked outside */
   @HostListener('document:click', ['$event'])
   public handleOutsideClick(event: Event): void {
     const clickedInside = (event.target as HTMLElement)
@@ -215,13 +296,16 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
+  /* --------------------------------------
+   * CRUD OPERATIONS
+   * -------------------------------------- */
 
-  /** Navigate to edit screen for a given task. */
+  /** Navigate to edit screen */
   public editTask(task: Task): void {
     this.router.navigate(['/tasks/edit', task.id]);
   }
 
-  /** Delete a task after confirmation. */
+  /** Delete task after confirmation */
   public deleteTask(task: Task): void {
     if (!task) return;
 
@@ -230,13 +314,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /* ======================================
-   *   VIEW MODE SWITCHING
-   * ====================================== */
+  /* --------------------------------------
+   * MODE SWITCHING
+   * -------------------------------------- */
 
   /**
-   * Switch between list and board views,
-   * and navigate accordingly.
+   * Switch between list mode and board mode,
+   * and navigate to appropriate route.
    */
   public setMode(view: 'list' | 'board'): void {
     this.mode = view;
@@ -255,25 +339,30 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Navigate to create-task page with optional project ID. */
+  /** Navigate to create-task page */
   public createTask(): void {
     this.router.navigate(['/tasks/create'], {
       queryParams: { projectId: this.projectId }
     });
   }
 
-  /** Returns project name for display. */
+  /** Returns readable project name */
   public getProjectName(id: number): string {
     const email = localStorage.getItem('loggedUserEmail') || '';
     return this.projectService.getById(id, email)?.name || 'Unknown';
   }
 
-  /** Display text like "Showing X of Y tasks". */
+  /* --------------------------------------
+   * DISPLAY HELPERS
+   * -------------------------------------- */
+
+  /** Returns text like "Showing X of Y tasks" */
   public getShowingText(): string {
     return `Showing ${this.filtered.length} of ${this.tasks.length} tasks`;
   }
-  /** Used by the board to show tasks grouped by status */
-  public getTasks(status: string) {
+
+  /** Used by task board → returns tasks under specific status */
+  public getTasks(status: string): Task[] {
     return this.filtered.filter(t => t.status === status);
   }
 }

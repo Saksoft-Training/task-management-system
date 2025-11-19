@@ -8,223 +8,264 @@
   ===================================================== -->
   <div class="top-header">
 
-    <!-- Dynamic title based on view mode -->
+    <!-- Dynamic page title based on current view mode -->
     @if (mode === 'project') {
-    <h2 class="project-title">Tasks</h2>
+      <h2 class="project-title">Tasks</h2>
     }
 
     @if (mode === 'list') {
-    <h2 class="global-title">All Tasks</h2>
+      <h2 class="global-title">All Tasks</h2>
     }
 
-    <!-- Right-side control group -->
+    <!-- ============================================
+         RIGHT CONTROLS : VIEW TOGGLE + CREATE BUTTON
+    ================================================ -->
     <div class="right-controls">
 
-      <!-- View Mode Toggle (List / Board) -->
+      <!-- --------------------------
+           LIST / BOARD VIEW TOGGLE
+      --------------------------- -->
       <div class="middle-toggle">
 
-        <!-- List View Button -->
-        <button class="toggle-btn" [class.active]="mode === 'list'" (click)="setMode('list')">
+        <!-- List Mode Toggle Button -->
+        <button class="toggle-btn"
+                [class.active]="mode === 'list'"
+                (click)="setMode('list')">
           <img src="assets/icons/list-Icon.svg" class="icon" alt="List" />
           List
         </button>
 
-        <!-- Board View Button -->
-        <button class="toggle-btn" [class.active]="mode === 'board'" (click)="setMode('board')">
+        <!-- Board Mode Toggle Button -->
+        <button class="toggle-btn"
+                [class.active]="mode === 'board'"
+                (click)="setMode('board')">
           <img src="assets/icons/board-Icon.svg" class="icon" alt="Board" />
           Board
         </button>
+
       </div>
 
-      <!-- Create Task Button -->
+      <!-- --------------------------
+           CREATE TASK BUTTON
+      --------------------------- -->
       <button class="create-btn" (click)="createTask()">
         Create New Task
       </button>
+
     </div>
   </div>
 
 
 
-  <!-- ==================================================
-       PROJECT MODE : COMPACT CARD-LIST VIEW
-  ======================================================= -->
+  <!-- =======================================================
+       PROJECT MODE : COMPACT CARD-LIST VIEW FOR ONE PROJECT
+  ============================================================ -->
   @if (mode === 'project') {
-  <div class="task-list project">
+    <div class="task-list project">
 
-    <!-- Single task row -->
-    @for (t of filtered; track t.id) {
-    <div class="task-row" (click)="openCard(t)">
-      <div class="left">
-        <h4>{{ t.title }}</h4>
-        <p>Due: {{ t.dueDate }} • Assigned to: {{ t.assignee }}</p>
-      </div>
+      <!-- Loop through each task under selected project -->
+      @for (t of filtered; track t.id) {
 
-      <div class="right">
-        <span class="status {{ t.status.toLowerCase().replace(' ', '-') }}">
-          {{ t.status }}
-        </span>
+        <!-- Task Card (click opens popup) -->
+        <div class="task-card-wrapper" (click)="openCard(t)">
 
-        <span class="priority {{ t.priority.toLowerCase().replace(' ', '-') }}">
-          {{ t.priority }}
-        </span>
-      </div>
+          <!-- Left Side : Title + Due Date + Assignee -->
+          <div class="task-card-left">
+            <h4 class="task-title">{{ t.title }}</h4>
+            <p class="task-sub">{{ t.dueDate }} • Assigned to: {{ t.assignee }}</p>
+          </div>
+
+          <!-- Right Side : Status & Priority Tags -->
+          <div class="task-card-right">
+            <span class="status {{ t.status.toLowerCase().replace(' ', '-') }}">
+              {{ t.status }}
+            </span>
+            <span class="priority {{ t.priority.toLowerCase().replace(' ', '-') }}">
+              {{ t.priority }}
+            </span>
+          </div>
+
+        </div>
+      }
+
+      <!-- Popup Overlay for Task Details -->
+      @if (selectedTask) {
+        <app-task-card-component
+          [task]="selectedTask"
+          (close)="closeCard()">
+        </app-task-card-component>
+      }
+
     </div>
-    }
-
-    <!-- Task popup card -->
-    @if (selectedTask) {
-    <app-task-card-component [task]="selectedTask" (close)="closeCard()">
-    </app-task-card-component>
-    }
-
-  </div>
   }
 
 
 
   <!-- ================================================
-       GLOBAL LIST MODE : TABLE VIEW (All Tasks)
+       GLOBAL LIST MODE : TABLE VIEW FOR ALL TASKS
   ================================================= -->
   @if (mode === 'list') {
-  <div class="task-list global">
 
-    <!-- Global Controls (Filters, Sorting, Count) -->
-    <div class="global-controls">
+    <div class="task-list global">
 
-      <!-- Filter Button -->
-      <button class="filter-btn">
-        <img src="assets/icons/filter-Icon.svg" alt="Filter" class="filter-icon" />
-        Filters
-      </button>
+      <!-- =======================================
+           GLOBAL CONTROLS : FILTERS + SORT + COUNT
+      ======================================== -->
+      <div class="global-controls">
 
-      <!-- Sort selector -->
-      <div class="sort-box" (click)="toggleSortMenu()">
-        <img src="assets/icons/sort-Icon.svg" alt="Sort" class="sort-icon" />
-        Sort: {{ getSortLabel() }}
+        <!-- Filter Button (future use) -->
+        <button class="filter-btn">
+          <img src="assets/icons/filter-Icon.svg"
+               alt="Filter"
+               class="filter-icon" />
+          Filters
+        </button>
+
+        <!-- Sort Trigger Button -->
+        <div class="sort-box" (click)="toggleSortMenu()">
+          <img src="assets/icons/sort-Icon.svg"
+               alt="Sort"
+               class="sort-icon" />
+          Sort: {{ getSortLabel() }}
+        </div>
+
+        <!-- Task Count Display -->
+        <span class="count">
+          Showing {{ filtered.length }} of {{ tasks.length }} tasks
+        </span>
+
+        <!-- Sorting Dropdown -->
+        @if (showSortMenu) {
+          <div class="sort-menu">
+
+            <!-- Sorting Direction -->
+            <button (click)="setSortDirection(true)">↑ Ascending</button>
+            <button (click)="setSortDirection(false)">↓ Descending</button>
+
+            <!-- Sorting Fields -->
+            <button (click)="setSortField('dueDate')">Due Date</button>
+            <button (click)="setSortField('priority')">Priority</button>
+            <button (click)="setSortField('status')">Status</button>
+            <button (click)="setSortField('title')">Title</button>
+
+          </div>
+        }
       </div>
 
-      <!-- Count -->
-      <span class="count">
-        Showing {{ filtered.length }} of {{ tasks.length }} tasks
-      </span>
 
-      <!-- Sorting dropdown -->
-      @if (showSortMenu) {
-      <div class="sort-menu">
-        <button (click)="setSortDirection(true)">↑ Ascending</button>
-        <button (click)="setSortDirection(false)">↓ Descending</button>
 
-        <button (click)="setSortField('dueDate')">Due Date</button>
-        <button (click)="setSortField('priority')">Priority</button>
-        <button (click)="setSortField('status')">Status</button>
-        <button (click)="setSortField('title')">Title</button>
+      <!-- ==================================================
+           TASK TABLE : EXCEL-LIKE STRUCTURED LIST VIEW
+      =================================================== -->
+      <div class="task-card">
+        <table>
+
+          <!-- TABLE HEADERS with click-to-sort -->
+          <thead>
+            <tr>
+              <th (click)="changeSort('title')">Title ⇅</th>
+              <th (click)="changeSort('status')">Status ⇅</th>
+              <th (click)="changeSort('priority')">Priority ⇅</th>
+              <th (click)="changeSort('assignee')">Assignee ⇅</th>
+              <th (click)="changeSort('dueDate')">Due Date ⇅</th>
+              <th>Project</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <!-- TABLE BODY : Task Rows -->
+          <tbody>
+            @for (t of filtered; track t.id) {
+
+              <tr (click)="openCard(t)">
+
+                <!-- Task Title -->
+                <td class="title">{{ t.title }}</td>
+
+                <!-- Status -->
+                <td>
+                  <span class="status {{ t.status.toLowerCase().replace(' ', '-') }}">
+                    {{ t.status }}
+                  </span>
+                </td>
+
+                <!-- Priority -->
+                <td>
+                  <span class="priority {{ t.priority.toLowerCase().replace(' ', '-') }}">
+                    {{ t.priority }}
+                  </span>
+                </td>
+
+                <!-- Assignee (with avatar letters) -->
+                <td>
+                  <div class="assignee">
+                    <div class="avatar">
+                      {{ t.assignee[0] }}{{ t.assignee.split(' ')[1]?.[0] || '' }}
+                    </div>
+                    <span class="assignee-name">{{ t.assignee }}</span>
+                  </div>
+                </td>
+
+                <!-- Due Date -->
+                <td class="date">{{ t.dueDate | date }}</td>
+
+                <!-- Project Name -->
+                <td class="project">{{ getProjectName(t.projectId) }}</td>
+
+                <!-- Inline Edit/Delete Actions -->
+                <td class="actions">
+
+                  <!-- Edit -->
+                  <img src="assets/icons/edit-Icon.svg"
+                       alt="Edit"
+                       class="action-icon"
+                       (click)="editTask(t); $event.stopPropagation()" />
+
+                  <!-- Delete -->
+                  <img src="assets/icons/delete-Icon.svg"
+                       alt="Delete"
+                       class="action-icon"
+                       (click)="deleteTask(t); $event.stopPropagation()" />
+
+                </td>
+
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <!-- POPUP PANEL (Task Details) -->
+        @if (selectedTask) {
+          <app-task-card-component
+              [task]="selectedTask"
+              (close)="closeCard()">
+          </app-task-card-component>
+        }
+
       </div>
-      }
-    </div>
-
-
-
-    <!-- ==========================================
-           TASK TABLE (Excel-like structured view)
-      =========================================== -->
-    <div class="task-card">
-      <table>
-        <thead>
-          <tr>
-            <th (click)="changeSort('title')">Title ⇅</th>
-            <th (click)="changeSort('status')">Status ⇅</th>
-            <th (click)="changeSort('priority')">Priority ⇅</th>
-            <th (click)="changeSort('assignee')">Assignee ⇅</th>
-            <th (click)="changeSort('dueDate')">Due Date ⇅</th>
-            <th>Project</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          @for (t of filtered; track t.id) {
-          <tr (click)="openCard(t)">
-
-            <!-- Title -->
-            <td class="title">{{ t.title }}</td>
-
-            <!-- Status Tag -->
-            <td>
-              <span class="status {{ t.status.toLowerCase().replace(' ', '-') }}">
-                {{ t.status }}
-              </span>
-            </td>
-
-            <!-- Priority Tag -->
-            <td>
-              <span class="priority {{ t.priority.toLowerCase().replace(' ', '-') }}">
-                {{ t.priority }}
-              </span>
-            </td>
-
-            <!-- Assignee -->
-            <td>
-              <div class="assignee">
-                <div class="avatar">
-                  {{ t.assignee[0] }}{{ t.assignee.split(' ')[1]?.[0] || '' }}
-                </div>
-                <span class="assignee-name">{{ t.assignee }}</span>
-              </div>
-            </td>
-
-            <!-- Due Date -->
-            <td class="date">{{ t.dueDate | date }}</td>
-
-            <!-- Project Name -->
-            <td class="project">{{ getProjectName(t.projectId) }}</td>
-
-            <!-- Actions -->
-            <td class="actions">
-              <img src="assets/icons/edit-Icon.svg" alt="Edit" class="action-icon"
-                (click)="editTask(t); $event.stopPropagation()" />
-
-              <img src="assets/icons/delete-Icon.svg" alt="Delete" class="action-icon"
-                (click)="deleteTask(t); $event.stopPropagation()" />
-            </td>
-
-          </tr>
-          }
-        </tbody>
-      </table>
-
-      <!-- ============================
-     BOARD VIEW (USING COMPONENT)
-=============================== -->
-
-
-      <!-- Task popup panel -->
-      @if (selectedTask) {
-      <app-task-card-component [task]="selectedTask" (close)="closeCard()">
-      </app-task-card-component>
-      }
 
     </div>
-
-
-  </div>
   }
 
 </div>
-<!-- ==========================================
-     BOARD MODE (GLOBAL / PROJECT)
-=========================================== -->
+
+
+
+<!-- ====================================================
+     BOARD MODE (KANBAN BOARD FOR GLOBAL / PROJECT VIEW)
+===================================================== -->
 @if (mode === 'board') {
 
-<!-- Project Board Header -->
-@if (projectId) {
-<app-task-board [tasks]="filtered" [projectId]="projectId" [title]="getProjectName(projectId)">
-</app-task-board>
-}
+  <!-- PROJECT-BASED BOARD -->
+  @if (projectId) {
+    <app-task-board [title]="getProjectName(projectId)">
+    </app-task-board>
+  }
 
-<!-- Global Board Header -->
-@if (!projectId) {
-<app-task-board [tasks]="filtered" title="All Board">
-</app-task-board>
-}
+  <!-- GLOBAL BOARD -->
+  @if (!projectId) {
+    <app-task-board [title]="'All Board'">
+    </app-task-board>
+  }
 
 }

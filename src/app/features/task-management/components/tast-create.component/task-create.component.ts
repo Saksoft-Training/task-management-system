@@ -23,7 +23,7 @@ export class TaskCreateComponent implements OnInit {
 
   //#region Public Properties
 
-  /** Reactive form used for creating tasks */
+  /** Reactive form used for creating or editing tasks */
   public form!: FormGroup;
 
   /** Predefined list of task statuses */
@@ -35,72 +35,93 @@ export class TaskCreateComponent implements OnInit {
   /** List of all available projects */
   public projects: Project[] = [];
 
-  /** Selected project if provided via route */
+  /** Selected project (from route or edit mode) */
   public selectedProject?: Project;
 
-  /** If false, do not show project dropdown (route provided projectId) */
+  /** If false, hides project dropdown */
   public showProjectDropdown: boolean = true;
 
-  /** Success message shown after creating a task */
+  /** Success message shown after create/update */
   public successMessage: string = '';
 
-  /** Max description characters allowed */
+  /** Maximum description length allowed */
   public readonly maxDescription: number = 500;
 
-  /** List of users loaded from local storage */
+  /** All users (from storage) */
   public users: User[] = [];
 
-  /** Mock logged-in user */
+  /** Logged-in user email */
   public currentUser: string = '';
 
+  /** Edit mode flag */
+  public isEdit: boolean = false;
+
+  /** ID of task being edited */
+  public editTaskId?: number;
+
+  /** Existing task loaded for editing */
+  public taskToEdit?: Task;
 
   //#endregion
 
   //#region Constructor
+
   constructor(
-  private readonly fb: FormBuilder,
-  private readonly route: ActivatedRoute,
-  private readonly router: Router,
-  private readonly projectService: ProjectService,
-  private readonly taskService: TaskService,
-  private readonly userStorageService: UserStorageService,
-  private readonly authService: AuthService
-) {}
+    private readonly fb: FormBuilder,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly projectService: ProjectService,
+    private readonly taskService: TaskService,
+    private readonly userStorageService: UserStorageService,
+    private readonly authService: AuthService
+  ) {}
+
   //#endregion
 
   //#region Lifecycle Methods
 
-  /**
-   * Initializes component: loads projects, users, detects project from route,
-   * builds reactive form, and attaches listeners.
-   */
- public ngOnInit(): void {
-  const user = this.authService.getCurrentUser();
-  this.currentUser = user?.email || '';
+  /** Initializes component: loads data, detects edit mode, builds form */
+  public ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    this.currentUser = user?.email || '';
 
-  this.loadProjects();
-  this.loadUsers();
-  this.detectProjectFromRoute();
-  this.buildTaskForm();
-  this.subscribeToProjectChange();
-}
+    this.loadProjects();
+    this.loadUsers();
+    this.detectProjectFromRoute();
+    this.detectEditMode();
+
+    this.buildTaskForm();
+    this.subscribeToProjectChange();
+
+    // Patch form after form creation in edit mode
+    if (this.isEdit && this.taskToEdit) {
+      this.form.patchValue(this.taskToEdit);
+    }
+  }
 
   //#endregion
 
   //#region Initialization Helpers
 
+  /** Loads projects created by current user */
   private loadProjects(): void {
     this.projects = this.projectService.getAll(this.currentUser);
   }
 
+  /** Loads all users from storage */
   private loadUsers(): void {
     this.users = this.userStorageService.getAllUsers();
   }
 
+  /** Detects projectId passed via route or query params */
   private detectProjectFromRoute(): void {
-    const projectIdParam =
+    let projectIdParam =
       this.route.snapshot.paramMap.get('id') ||
       this.route.snapshot.paramMap.get('projectId');
+
+    if (!projectIdParam) {
+      projectIdParam = this.route.snapshot.queryParamMap.get('projectId');
+    }
 
     if (projectIdParam) {
       const projectId = Number(projectIdParam);
@@ -111,10 +132,29 @@ export class TaskCreateComponent implements OnInit {
     }
   }
 
+  /** Detects edit mode and loads task to be edited */
+  private detectEditMode(): void {
+    const editId = this.route.snapshot.paramMap.get('id');
+
+    if (editId) {
+      this.isEdit = true;
+      this.editTaskId = Number(editId);
+      this.taskToEdit = this.taskService.getTaskById(this.editTaskId);
+
+      if (this.taskToEdit) {
+        this.selectedProject =
+          this.projectService.getById(this.taskToEdit.projectId, this.currentUser) ?? undefined;
+
+        this.showProjectDropdown = false;
+      }
+    }
+  }
+
+  /** Builds reactive form structure */
   private buildTaskForm(): void {
     this.form = this.fb.group({
       projectId: [
-        this.selectedProject?.id || null,
+        { value: this.selectedProject?.id || null, disabled: !this.showProjectDropdown },
         this.showProjectDropdown ? Validators.required : []
       ],
       title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
@@ -126,6 +166,7 @@ export class TaskCreateComponent implements OnInit {
     });
   }
 
+  /** Subscribes to project selection changes and updates due date validation */
   private subscribeToProjectChange(): void {
     this.form.get('projectId')?.valueChanges.subscribe(value => {
       this.selectedProject = value
@@ -140,9 +181,7 @@ export class TaskCreateComponent implements OnInit {
 
   //#region Validators
 
-  /**
-   * Validates if due date is not in the past and lies within selected project date range.
-   */
+  /** Validates due date inside project date range & prevents past date in create mode */
   private validateDueDate(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
@@ -153,7 +192,8 @@ export class TaskCreateComponent implements OnInit {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    if (selected < today) return { pastDate: true };
+    // Past date only blocked for create mode
+    if (!this.isEdit && selected < today) return { pastDate: true };
 
     if (this.selectedProject) {
       const start = new Date(this.selectedProject.startDate);
@@ -188,7 +228,7 @@ export class TaskCreateComponent implements OnInit {
     return this.selectedProject?.endDate ?? '';
   }
 
-  /** Character count for description */
+  /** Description character count */
   public get descriptionCount(): number {
     return this.form.get('description')?.value?.length ?? 0;
   }
@@ -197,40 +237,52 @@ export class TaskCreateComponent implements OnInit {
 
   //#region Form Actions
 
-  /**
-   * Validates the form, constructs a new Task object, saves it,
-   * shows a success message, and navigates appropriately.
-   */
+  /** Creates or updates a task depending on mode */
   public onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const formValue = this.form.value;
+    const formValue = this.form.getRawValue();
     const timestamp = new Date().toISOString();
 
-    const newTask: Task = {
-      id: Date.now(),
-      title: formValue.title,
-      description: formValue.description,
-      status: formValue.status,
-      priority: formValue.priority,
-      assignee: formValue.assignee,
-      assigneeEmail: '',
-      dueDate: formValue.dueDate, 
-      projectId: Number(this.selectedProject?.id ?? formValue.projectId),
-      createdBy: this.currentUser,
-      createdAt: timestamp,
-      updatedAt: timestamp
-    };
+    if (this.isEdit && this.taskToEdit) {
+      /** Update existing task */
+      const updatedTask: Task = {
+        ...this.taskToEdit,
+        ...formValue,
+        projectId: Number(this.selectedProject?.id ?? formValue.projectId),
+        updatedAt: timestamp
+      };
 
-    this.taskService.saveTask(newTask);
-    this.successMessage = 'Task created successfully!';
+      this.taskService.updateTask(updatedTask);
+      this.successMessage = 'Task updated successfully!';
+    } else {
+      /** Create new task */
+      const newTask: Task = {
+        id: Date.now(),
+        title: formValue.title,
+        description: formValue.description,
+        status: formValue.status,
+        priority: formValue.priority,
+        assignee: formValue.assignee,
+        assigneeEmail: '',
+        dueDate: formValue.dueDate,
+        projectId: Number(this.selectedProject?.id ?? formValue.projectId),
+        createdBy: this.currentUser,
+        createdAt: timestamp,
+        updatedAt: timestamp
+      };
+
+      this.taskService.saveTask(newTask);
+      this.successMessage = 'Task created successfully!';
+    }
 
     setTimeout(() => this.navigateAfterSave(), 900);
   }
 
+  /** Navigation after create/update */
   private navigateAfterSave(): void {
     if (this.selectedProject) {
       this.router.navigate(['/projects', this.selectedProject.id]);
@@ -239,10 +291,18 @@ export class TaskCreateComponent implements OnInit {
     }
   }
 
-  /**
-   * Resets form fields while keeping project selection.
-   */
+  /** Deletes task in edit mode */
+  public onDelete(): void {
+    if (confirm('Delete this task?') && this.editTaskId) {
+      this.taskService.deleteTask(this.editTaskId);
+      this.router.navigate(['/tasks']);
+    }
+  }
+
+  /** Resets form in create mode (no reset allowed in edit mode) */
   public onReset(): void {
+    if (this.isEdit) return;
+
     this.form.reset({
       projectId: this.selectedProject?.id || null,
       status: 'To Do',
@@ -252,9 +312,7 @@ export class TaskCreateComponent implements OnInit {
     this.successMessage = '';
   }
 
-  /**
-   * Navigates the user back to the relevant previous page.
-   */
+  /** Cancels and navigates back */
   public onCancel(): void {
     if (this.selectedProject) {
       this.router.navigate(['/projects', this.selectedProject.id]);
@@ -262,6 +320,13 @@ export class TaskCreateComponent implements OnInit {
       this.router.navigate(['/tasks']);
     }
   }
+  /** Opens date picker programmatically */
+  public openDatePicker(): void {
+  const element = document.querySelector<HTMLInputElement>('input[formControlName="dueDate"]');
+  if (element) {
+    element.showPicker(); 
+  }
+}
 
   //#endregion
 }

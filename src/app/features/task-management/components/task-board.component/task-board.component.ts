@@ -1,159 +1,333 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+//#region Imports
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { Task } from '../../../../../types';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Task, TaskStatus } from '../../../../../types';
+import { TaskService } from '../../services/task-service';
+import { ProjectService } from '../../../project-management/services/project.service';
+
+import {
+  DragDropModule,
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
+//#endregion
 
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DragDropModule, RouterLink],
   templateUrl: './task-board.component.html',
-  styleUrls: ['./task-board.component.scss'],
+  styleUrls: ['./task-board.component.scss']
 })
-export class TaskBoardComponent implements OnInit, OnChanges {
+export class TaskBoardComponent implements OnInit, OnDestroy {
 
-  /**
-   * @summary The list of tasks to display in the board view.
-   */
-  @Input() public tasks: Task[] = [];
+  /* --------------------------------------
+   * TASK DATA (RAW & FILTERED)
+   * -------------------------------------- */
 
-  /**
-   * @summary The ID of the project these tasks belong to (optional).
-   */
-  @Input() public projectId?: number | null;
+  /** All tasks loaded from TaskService */
+  public tasks: Task[] = [];
 
-  /**
-   * @summary Title displayed at the top of the board.
-   */
-  @Input() public title: string = 'All Board';
+  /** Tasks filtered by project (if project board) */
+  public filtered: Task[] = [];
 
-  // #endregion
+  /* --------------------------------------
+   * PROJECT + BOARD MODE METADATA
+   * -------------------------------------- */
 
-  /**
-   * @summary Current view mode of the board.
-   * - "project": Board inside a project context
-   * - "global": Board from global Tasks page
-   */
-  public mode: 'project' | 'global' = 'project';
+  /** ID of project when on /projects/:id/board */
+  public projectId: number | null = null;
 
-  /**
-   * @summary Predefined task statuses used to group tasks.
-   */
-  public readonly statuses: string[] = ['To Do', 'In Progress', 'Completed'];
+  /** True when viewing a specific project's board */
+  public isProjectBoard = false;
 
-  /**
-   * @summary Stores tasks grouped by status columns.
-   */
-  public columns: Record<string, Task[]> = {
+  /** Project details loaded when in project board mode */
+  public projectDetails: any = null;
+
+  /** Total tasks in this project (filtered count) */
+  public projectTasksCount = 0;
+
+  /* --------------------------------------
+   * SORTING
+   * -------------------------------------- */
+
+  /** Which field tasks should be sorted by */
+  public sortField: keyof Task = 'dueDate';
+
+  /** Sorting direction: true = ascending */
+  public sortAsc = true;
+
+  /** Controls visibility of sort dropdown menu */
+  public toggleSortMenu = false;
+
+  /* --------------------------------------
+   * STATUSES + COLUMN STRUCTURE
+   * -------------------------------------- */
+
+  /** All possible task statuses represented on the board */
+  public readonly statuses: TaskStatus[] = [
+    'To Do',
+    'In Progress',
+    'Completed'
+  ];
+
+  /** Kanban columns keyed by task status */
+  public columns: Record<TaskStatus, Task[]> = {
     'To Do': [],
     'In Progress': [],
-    'Completed': [],
+    'Completed': []
   };
 
-  /**
-   * @summary Controls whether the sort dropdown is visible.
-   */
-  public toggleSortMenu: boolean = false;
+  /** Drag-drop connected container names */
+  public connectedLists = ['todo', 'inprogress', 'completed'];
 
-  // #endregion
+  /* --------------------------------------
+   * SUBSCRIPTIONS
+   * -------------------------------------- */
 
-  constructor(private router: Router) {}
+  /** Subscription to task updates */
+  private sub!: Subscription;
 
-  // #endregion
+  //#region Constructor
 
-  /**
-   * @summary Initializes the component by detecting mode and grouping tasks.
-   */
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly taskService: TaskService,
+    private readonly projectService: ProjectService
+  ) {}
+
+  //#endregion
+
+  //#region Lifecycle Methods
+
+  /** Initialize board: detect project, subscribe to tasks, load project details */
   public ngOnInit(): void {
-    this.detectMode();
+    // Detect project ID from route
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.projectId = id ? Number(id) : null;
+      this.isProjectBoard = !!this.projectId;
+    });
+
+    // Subscribe to live task updates
+    this.sub = this.taskService.tasks$
+      .subscribe(tasks => {
+        this.tasks = tasks;
+
+        // Load project details only if board belongs to a project
+        if (this.isProjectBoard && this.projectId !== null) {
+
+          // Retrieve logged-in user email safely
+          const user =
+            JSON.parse(localStorage.getItem('currentUser') || 'null') ||
+            JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+
+          const email = user?.email || '';
+
+          // Load only this user's projects
+          const allProjects = this.projectService.getAll(email);
+
+          // Match project with board ID
+          this.projectDetails =
+            allProjects.find(p => Number(p.id) === this.projectId);
+
+          console.log('FOUND PROJECT DETAILS:', this.projectDetails);
+        }
+
+        // Apply filters + sorting + grouping
+        this.applyFiltering();
+      });
+  }
+
+  /** Clean up observable subscription */
+  public ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  //#endregion
+
+  /* --------------------------------------
+   * FILTERING & SORTING
+   * -------------------------------------- */
+
+  /** Filters tasks by project and then sorts and groups them */
+  private applyFiltering(): void {
+    this.filtered = this.isProjectBoard
+      ? this.tasks.filter(t => t.projectId === this.projectId)
+      : [...this.tasks];
+
+    this.projectTasksCount = this.filtered.length;
+
+    this.applySorting();
     this.groupTasks();
   }
 
-  /**
-   * @summary Automatically triggered when @Input properties change.
-   * Regroups tasks based on updated data.
-   */
-  public ngOnChanges(): void {
-    this.groupTasks();
-  }
-
-  // #endregion
-
-  /**
-   * @summary Detects whether the board is loaded from project or global route.
-   */
-  private detectMode(): void {
-    const url = this.router.url.toLowerCase();
-    this.mode = url === '/tasks/board' ? 'global' : 'project';
-  }
-
-  /**
-   * @summary Groups tasks into "To Do", "In Progress", and "Completed" columns.
-   */
+  /** Groups filtered tasks into their status columns */
   private groupTasks(): void {
+    // Reset all columns
     this.columns = {
       'To Do': [],
       'In Progress': [],
-      'Completed': [],
+      'Completed': []
     };
 
-    this.tasks.forEach(task => {
-      const matchedStatus =
-        this.statuses.find(
-          status => status.toLowerCase() === task.status.toLowerCase()
-        ) || 'To Do';
-
-      this.columns[matchedStatus].push(task);
+    // Distribute tasks by status
+    this.filtered.forEach(task => {
+      this.columns[task.status].push(task);
     });
   }
 
-  // #endregion
-
   /**
-   * @summary Generates initials from a user's name.
-   * @param name Full name of the user.
-   * @returns Two-letter initials.
+   * Sort tasks by:
+   *  - dueDate (date sorting)
+   *  - strings (localeCompare)
    */
-  public initials(name: string): string {
-    if (!name) return '';
-    const parts = name.split(' ');
-    return (parts[0][0] || '') + (parts[1]?.[0] || '');
+  private applySorting(): void {
+    this.filtered.sort((a, b) => {
+      let A: any = a[this.sortField] ?? '';
+      let B: any = b[this.sortField] ?? '';
+
+      // Date sorting
+      if (this.sortField === 'dueDate') {
+        return this.sortAsc
+          ? new Date(A).getTime() - new Date(B).getTime()
+          : new Date(B).getTime() - new Date(A).getTime();
+      }
+
+      // String sorting
+      return this.sortAsc
+        ? String(A).localeCompare(String(B))
+        : String(B).localeCompare(String(A));
+    });
   }
 
-  /**
-   * @summary Returns a lowercase priority class for CSS styling.
-   */
-  public priorityClass(priority: string): string {
-    return priority.toLowerCase();
+  /** Set new sorting field */
+  public setSortField(field: keyof Task): void {
+    this.sortField = field;
+    this.applySorting();
+    this.groupTasks();
+    this.toggleSortMenu = false;
   }
 
-  /**
-   * @summary Formats a given date to a readable locale string.
-   */
-  public formatDate(date: any): string {
-    return new Date(date).toLocaleDateString();
+  /** Set sorting direction (ascending or descending) */
+  public setSortDirection(asc: boolean): void {
+    this.sortAsc = asc;
+    this.applySorting();
+    this.groupTasks();
+    this.toggleSortMenu = false;
   }
-  // #endregion
+
+  /** Returns the user-friendly label for current sorting field */
+  public get sortLabel(): string {
+    switch (this.sortField) {
+      case 'dueDate': return 'Due Date';
+      case 'priority': return 'Priority';
+      case 'status': return 'Status';
+      case 'title': return 'Title';
+      default: return 'Sort';
+    }
+  }
+
+  /* --------------------------------------
+   * DRAG & DROP OPERATIONS
+   * -------------------------------------- */
 
   /**
-   * @summary Navigates to list view either for project or global tasks.
+   * Handles task movement across columns.
+   * Automatically updates task status and re-groups.
    */
+  public drop(
+    event: CdkDragDrop<Task[]>,
+    newStatus: TaskStatus
+  ): void {
+
+    const previousList = event.previousContainer.data;
+    const currentList = event.container.data;
+
+    // Reorder inside same column
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        currentList,
+        event.previousIndex,
+        event.currentIndex
+      );
+      return;
+    }
+
+    // Move between columns
+    transferArrayItem(
+      previousList,
+      currentList,
+      event.previousIndex,
+      event.currentIndex
+    );
+
+    // Update actual task status
+    const movedTask = currentList[event.currentIndex];
+    movedTask.status = newStatus;
+
+    this.taskService.updateTaskStatus(movedTask.id, newStatus);
+
+    // Refilter & regroup
+    setTimeout(() => this.applyFiltering(), 0);
+  }
+
+  /* --------------------------------------
+   * NAVIGATION HELPERS
+   * -------------------------------------- */
+
+  /** Navigate back to project list or global list */
   public goList(): void {
-    if (this.projectId) {
+    if (this.isProjectBoard) {
       this.router.navigate([`/projects/${this.projectId}`]);
     } else {
       this.router.navigate(['/tasks']);
     }
   }
 
-  /**
-   * @summary Opens create task page with optional projectId as query param.
-   */
+  /** Navigate to task creation screen */
   public createTask(): void {
     this.router.navigate(['/tasks/create'], {
-      queryParams: { projectId: this.projectId ?? null },
+      queryParams: { projectId: this.projectId ?? null }
     });
   }
 
-  // #endregion
+  /* --------------------------------------
+   * UI HELPERS
+   * -------------------------------------- */
+
+  /** Convert user name to initials (e.g., "John Doe" → "JD") */
+  public initials(name: string): string {
+    const parts = name.split(' ');
+    return (parts[0][0] || '') + (parts[1]?.[0] || '');
+  }
+
+  /** Lowercase priority for using CSS classes */
+  public priorityClass(priority: string): string {
+    return priority.toLowerCase();
+  }
+
+  /** Format date into readable string */
+  public formatDate(date: any): string {
+    return new Date(date).toLocaleDateString();
+  }
+
+  /* --------------------------------------
+   * CLOSE SORT MENU ON OUTSIDE CLICK
+   * -------------------------------------- */
+
+  /** Automatically close sort dropdown when clicking outside */
+  @HostListener('document:click', ['$event'])
+  public closeSortMenu(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.sort-box') &&
+        !target.closest('.sort-menu')) {
+      this.toggleSortMenu = false;
+    }
+  }
 }
