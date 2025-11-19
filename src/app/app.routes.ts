@@ -14,7 +14,9 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'projects/create/:id', component: ProjectCreateComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'projects', component: ProjectListComponent }
+
 ];
