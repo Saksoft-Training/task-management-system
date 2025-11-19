@@ -5,6 +5,7 @@ import { Activity } from '../../../../types/activity/activity.model';
 import { ChartConfiguration } from 'chart.js';
 
 
+
 export interface OverdueInfo {
   count: number;
   tasks: Task[];
@@ -13,7 +14,7 @@ export interface OverdueInfo {
 @Injectable({
   providedIn: 'root'
 })
-export class DashboardService {
+export class chartDashboardService {
   private readonly TASKS_KEY = 'tasks';
   private readonly ACTIVITIES_KEY = 'activities';
 
