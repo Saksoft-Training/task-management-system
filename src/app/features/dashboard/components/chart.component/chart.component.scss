@@ -1,12 +1,20 @@
-chart-wrapper {
-    position: relative;
-    width: 100%;
-    min-height: 260px;
+// variables.scss
+
+$chart-min-height: 260px;
+$chart-loading-font-size: 0.9rem;
+$chart-loading-opacity: 0.7;
+$chart-loading-padding: 0.5rem;
+
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: variables.$chart-min-height;
 }
 
 .chart-loading {
-    text-align: center;
-    padding: 0.5rem;
-    font-size: 0.9rem;
-    opacity: 0.7;
+  text-align: center;
+  padding: variables.$chart-loading-padding;
+  font-size: variables.$chart-loading-font-size;
+  opacity: variables.$chart-loading-opacity;
 }

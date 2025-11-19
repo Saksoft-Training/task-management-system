@@ -1,6 +1,10 @@
+// ===========================
+// GLOBAL VARIABLES
+// ===========================
+
+// Animation
 $dialog-fade-duration: 0.3s;
 
-//===========Activity feed=======
 // Colors
 $color-white: #ffffff;
 $color-black: #000000;
@@ -8,68 +12,38 @@ $color-border: #eee;
 $color-hover: #fafafa;
 $color-avatar-bg: #2196f3;
 $color-avatar-text: #fff;
+$color-danger: #f44336;
+$color-success: #4caf50;
 
 // Spacing
+$space-xxs: 0.2rem;
 $space-xs: 0.4rem;
 $space-sm: 0.5rem;
 $space-md: 0.75rem;
 $space-lg: 1rem;
+$space-xl: 1.25rem;
+$space-xxl: 1.5rem;
 
 // Border radius
 $radius-lg: 0.75rem;
-$radius-round: 50%;
-
-// Shadows
-$shadow-card: 0 2px 6px rgba(0, 0, 0, 0.06);
-
-// Font sizes
-$font-xs: 0.8rem;
-$font-sm: 0.9rem;
-$font-md: 1rem;
-
-//======Chart=========
-// Spacing
-$space-xs: 0.5rem;
-$space-sm: 1rem;
-
-// Minimum height values
-$min-height-chart: 260px;
-
-// Font sizes
-$font-sm: 0.9rem;
-
-// Opacity
-$opacity-light: 0.7;
-
-//==========dashboard-chart=========
-// Colors
-$color-white: #ffffff;
-$color-danger: #f44336;
-$color-success: #4caf50;
-$color-border: #eee;
-
-// Shadows
-$shadow-card: 0 2px 6px rgba(0, 0, 0, 0.06);
-
-// Border Radius
 $radius-md: 0.75rem;
+$radius-round: 50%;
 $radius-full: 999px;
 
-// Font Sizes
+// Shadows
+$shadow-card: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+// Font sizes
 $font-xs: 0.8rem;
 $font-sm: 0.9rem;
 $font-md: 1rem;
 $font-lg: 1.25rem;
 
-// Spacing
-$space-xs: 0.2rem;
-$space-sm: 0.4rem;
-$space-md: 0.5rem;
-$space-lg: 0.7rem;
-$space-xl: 1rem;
-$space-xxl: 1.5rem;
+// Chart
+$min-height-chart: 260px;
+$opacity-light: 0.7;
 
-// Component Sizes
+// Dashboard sizes
 $card-height: 350px;
 $card-width: 494px;
 $activity-height: 292px;
@@ -78,16 +52,17 @@ $activity-width: 394px;
 // Breakpoints
 $bp-tablet: 900px;
 $bp-desktop-lg: 1400px;
-//============Activity feed===========
+
+
 
 .activity-feed {
-    background: $color-white;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-card;
-    padding: $space-lg;
+    background: variables.$color-white;
+    border-radius: variables.$radius-lg;
+    box-shadow: variables.$shadow-card;
+    padding: variables.$space-lg;
     display: flex;
     flex-direction: column;
-    gap: $space-md;
+    gap: variables.$space-md;
 }
 
 .header-row {
@@ -97,7 +72,7 @@ $bp-desktop-lg: 1400px;
 
     h2 {
         margin: 0;
-        font-size: $font-md;
+        font-size: variables.$font-md;
     }
 }
 
@@ -109,10 +84,10 @@ $bp-desktop-lg: 1400px;
 
 .activity-item {
     display: flex;
-    gap: $space-md;
+    gap: variables.$space-md;
     align-items: center;
-    padding: $space-sm 0;
-    border-bottom: 1px solid $color-border;
+    padding: variables.$space-sm 0;
+    border-bottom: 1px solid variables.$color-border;
     cursor: pointer;
 
     &:last-child {
@@ -120,20 +95,20 @@ $bp-desktop-lg: 1400px;
     }
 
     &:hover {
-        background: $color-hover;
+        background: variables.$color-hover;
     }
 }
 
 .avatar {
     width: 32px;
     height: 32px;
-    border-radius: $radius-round;
-    background: $color-avatar-bg;
+    border-radius: variables.$radius-round;
+    background: variables.$color-avatar-bg;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $color-avatar-text;
-    font-size: $font-xs;
+    color: variables.$color-avatar-text;
+    font-size: variables.$font-xs;
     font-weight: 600;
 }
 
@@ -143,8 +118,8 @@ $bp-desktop-lg: 1400px;
     .line1 {
         display: flex;
         flex-wrap: wrap;
-        gap: $space-xs;
-        font-size: $font-sm;
+        gap: variables.$space-xs;
+        font-size: variables.$font-sm;
 
         .action {
             font-weight: 600;
@@ -158,37 +133,42 @@ $bp-desktop-lg: 1400px;
     .line2 {
         display: flex;
         flex-wrap: wrap;
-        gap: $space-md;
-        font-size: $font-xs;
+        gap: variables.$space-md;
+        font-size: variables.$font-xs;
         opacity: 0.8;
     }
 }
 
 .info {
-    font-size: $font-sm;
+    font-size: variables.$font-sm;
     opacity: 0.7;
 }
 
-//======Chart========
+// ===========================
+// Chart
+// ===========================
+
 .chart-wrapper {
     position: relative;
     width: 100%;
-    min-height: $min-height-chart;
+    min-height: variables.$min-height-chart;
 }
 
 .chart-loading {
     text-align: center;
-    padding: $space-xs;
-    font-size: $font-sm;
-    opacity: $opacity-light;
+    padding: variables.$space-xs;
+    font-size: variables.$font-sm;
+    opacity: variables.$opacity-light;
 }
 
-//========dashboard-chart===========
+// ===========================
+// Dashboard Charts
+// ===========================
 
 .dashboard-charts {
     display: flex;
     flex-direction: column;
-    gap: $space-xxl;
+    gap: variables.$space-xxl;
 }
 
 .top-row {
@@ -198,40 +178,40 @@ $bp-desktop-lg: 1400px;
 
     h1 {
         margin: 0;
-        font-size: $font-lg;
+        font-size: variables.$font-lg;
     }
 
     button {
-        padding: $space-sm $space-xl;
-        border-radius: $radius-md;
+        padding: variables.$space-sm variables.$space-xl;
+        border-radius: variables.$radius-md;
         border: none;
         cursor: pointer;
     }
 }
 
 .loading {
-    padding: $space-xl;
+    padding: variables.$space-xl;
     text-align: center;
 }
 
 .card {
-    height: $card-height;
-    width: $card-width;
-    background: $color-white;
-    border-radius: $radius-md;
-    box-shadow: $shadow-card;
-    padding: $space-xl;
+    height: variables.$card-height;
+    width: variables.$card-width;
+    background: variables.$color-white;
+    border-radius: variables.$radius-md;
+    box-shadow: variables.$shadow-card;
+    padding: variables.$space-xl;
     display: flex;
     flex-direction: column;
-    gap: $space-md;
+    gap: variables.$space-md;
 
     h2 {
         margin: 0;
-        font-size: $font-md;
+        font-size: variables.$font-md;
     }
 
     .empty {
-        font-size: $font-sm;
+        font-size: variables.$font-sm;
         opacity: 0.7;
     }
 }
@@ -239,23 +219,23 @@ $bp-desktop-lg: 1400px;
 .charts-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: $space-xl;
+    gap: variables.$space-xl;
 }
 
-@media (max-width: $bp-tablet) {
+@media (max-width: variables.$bp-tablet) {
     .charts-grid {
         grid-template-columns: repeat(1, 1fr);
     }
 }
 
-@media (min-width: $bp-desktop-lg) {
+@media (min-width: variables.$bp-desktop-lg) {
     .charts-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
 .overdue {
-    border-left: 4px solid $color-danger;
+    border-left: 4px solid variables.$color-danger;
 }
 
 .overdue-header {
@@ -264,14 +244,14 @@ $bp-desktop-lg: 1400px;
     align-items: center;
 
     .badge {
-        padding: $space-xs $space-lg;
-        border-radius: $radius-full;
-        background: $color-danger;
-        color: $color-white;
-        font-size: $font-xs;
+        padding: variables.$space-xs variables.$space-lg;
+        border-radius: variables.$radius-full;
+        background: variables.$color-danger;
+        color: variables.$color-white;
+        font-size: variables.$font-xs;
 
         &.ok {
-            background: $color-success;
+            background: variables.$color-success;
         }
     }
 }
@@ -279,11 +259,11 @@ $bp-desktop-lg: 1400px;
 .overdue-list {
     list-style: none;
     padding: 0;
-    margin: $space-lg 0 0;
+    margin: variables.$space-lg 0 0;
 
     li {
-        padding: $space-md 0;
-        border-bottom: 1px solid $color-border;
+        padding: variables.$space-md 0;
+        border-bottom: 1px solid variables.$color-border;
 
         &:last-child {
             border-bottom: none;
@@ -294,17 +274,17 @@ $bp-desktop-lg: 1400px;
         }
 
         .meta {
-            font-size: $font-xs;
+            font-size: variables.$font-xs;
             opacity: 0.8;
             display: flex;
             flex-wrap: wrap;
-            gap: $space-lg;
+            gap: variables.$space-lg;
         }
     }
 }
 
 .activity-section {
-    margin-top: $space-lg;
-    height: $activity-height;
-    width: $activity-width;
+    margin-top: variables.$space-lg;
+    height: variables.$activity-height;
+    width: variables.$activity-width;
 }
