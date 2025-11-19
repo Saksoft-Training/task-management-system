@@ -1,0 +1,93 @@
+<div class="project-list">
+    <div class="header">
+        <div>
+            <h2 class="page-title">Projects</h2>
+            <p class="page-subtitle">Manage your projects and tasks</p>
+        </div>
+        <button class="create-btn" (click)="goToCreate()">Create New Project</button>
+    </div>
+    <div class="toolbar">
+        <div class="search-wrapper">
+            <input type="text" class="search-input" placeholder="Search projects by name..." [(ngModel)]="searchTerm"
+                (input)="applyFilters()" />
+            <img src="assets/icons/search-Icon.svg" class="search-icon" />
+        </div>
+        <div class="sort-wrapper">
+            <div class="sort-box" (click)="toggleSort()">
+                {{ getSortLabel() }}
+                <img src="assets/icons/dropdown-Icon.svg" />
+            </div>
+            @if (showSort) {
+            <div class="sort-dropdown">
+                <div class="sort-option" (click)="setSort('newest')">Newest First</div>
+                <div class="sort-option" (click)="setSort('name')">Name A–Z</div>
+                <div class="sort-option" (click)="setSort('endingSoon')">Ending Soon</div>
+            </div>
+            }
+        </div>
+        <div class="filter-wrapper">
+            <button class="filter-btn" [class.active]="showFilters || selectedStatuses.length > 0"
+                (click)="toggleFilterPanel()">
+                <img src="assets/icons/filter-Icon.svg" class="filter-icon" />
+                Filter
+                @if (selectedStatuses.length > 0) {
+                <span class="filter-badge">{{ selectedStatuses.length }}</span>
+                }
+            </button>
+            @if (selectedStatuses.length > 0 && !showFilters) {
+            <div class="clear-filters" (click)="clearFilters()">
+                <img src="assets/icons/cross-Icon.svg" class="clear-icon" />
+                Clear Filters
+            </div>
+            }
+            @if (showFilters) {
+            <div class="filter-panel">
+                <div class="filter-header">Status</div>
+                <div class="filter-options">
+                    @for (status of statusOptions; track status) {
+                    <div class="filter-item" [class.active]="selectedStatuses.includes(status)"
+                        (click)="toggleStatusFilter(status)">
+                        <div class="checkbox" [class.checked]="selectedStatuses.includes(status)">
+                            @if (selectedStatuses.includes(status)) {
+                            <span>
+                                <img src="assets/icons/right-Icon.svg" alt="correct">
+                            </span>
+                            }
+                        </div>
+                        <span class="status-pill" [class]="status | lowercase | replaceSpace">
+                            {{ status }}
+                        </span>
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    @if (selectedStatuses.length > 0) {
+    <div class="active-filters">
+        <span class="label">Active filters:</span>
+        @for (status of selectedStatuses; track status) {
+        <span class="active-pill {{ status | lowercase | replaceSpace }}">
+            {{ status }}
+            <img src="assets/icons/cross-Icon.svg" class="clear-icon" (click)="toggleStatusFilter(status)" />
+        </span>
+        }
+    </div>
+    }
+    @if (filteredProjects.length === 0) {
+    <p class="empty-state">No projects found. Try adjusting filters or search.</p>
+    }
+    <div class="grid">
+        @for (project of filteredProjects; let i = $index; track project.id) {
+        <app-project-card-component [project]="project" [index]="i + 1" >
+        </app-project-card-component>
+        }
+    </div>
+    <div class="connect-section">
+        <h2 class="connect-title">Connect with us</h2>
+        <p class="connect-subtitle">Raise a ticket for any query.</p>
+        <button class="connect-btn">Learn More ↗</button>
+    </div>
+
+</div>

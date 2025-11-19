@@ -2,52 +2,52 @@
   <div class="page-title">Register</div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="card">
     <div class="header">
+
+      
       <div class="header-content">
-        <img src="assets/icons/create-account-Icon.svg" alt="create" />
+        <img src="assets/icons/create-account-Icon.svg" alt="create account" />
         <h2>Create Account</h2>
       </div>
-      <p>
-        Register for an account to access the<br />
-        task management application
-      </p>
+      <p>Register for an account to access the task management application</p>
     </div>
     <div class="input-group">
       <label>Name</label>
-      <input
-        formControlName="name"
-        placeholder="Enter your full name"
-        [ngClass]="{
-          'invalid-input': formControls['name'].invalid &&
-            (formControls['name'].dirty || formControls['name'].touched)
-        }" />
-      @if (formControls['name'].invalid && (formControls['name'].dirty ||
-      formControls['name'].touched)) {
+      <input formControlName="name" placeholder="Enter your full name"
+        [ngClass]="{ 'invalid-input': formControls['name'].invalid && formControls['name'].touched }" />
+      @if (formControls['name'].touched && formControls['name'].invalid) {
       <div class="error">
         @if (formControls['name'].errors?.['required']) {
         <p>Please enter your name.</p>
         }
-        @else if (formControls['name'].errors?.['invalidName']) {
-        <p>Name can only contain letters and spaces.</p>
+        @if (formControls['name'].errors?.['invalidName']) {
+        <p>Name must contain only letters.</p>
         }
-        @else if (formControls['name'].errors?.['minlength']) {
+        @if (!formControls['name'].errors?.['invalidName'] &&
+        formControls['name'].errors?.['minlength']) {
         <p>Name must be at least 3 characters.</p>
         }
       </div>
       }
     </div>
+
     <div class="input-group">
       <label>Email</label>
       <input
         formControlName="email"
         placeholder="Enter your email"
+        autocomplete="new-email"
+        autocorrect="off"
+        autocapitalize="none"
+        spellcheck="false"
         (input)="forceLowercaseEmail()"
         [ngClass]="{
-          'invalid-input': formControls['email'].invalid && formControls['email'].touched
-        }" />
+    'invalid-input': formControls['email'].invalid && formControls['email'].touched
+  }" />
+
       @if (formControls['email'].touched && formControls['email'].invalid) {
       <div class="error">
-        @if (formControls['email'].errors?.['required']) { <p>Please enter your
-          email address.</p> }
+        @if (formControls['email'].errors?.['required']) { <p>Email is
+          required.</p> }
         @if (formControls['email'].errors?.['invalidEmail']) { <p>Enter a valid
           Gmail address.</p> }
         @if (formControls['email'].errors?.['emailTaken']) { <p>Email already
@@ -57,30 +57,23 @@
     </div>
     <div class="input-group">
       <label>Password</label>
-      <input
-        type="password"
-        formControlName="password"
+      <input type="password" formControlName="password"
         placeholder="Create a strong password"
-        [ngClass]="{
-          'invalid-input': formControls['password'].invalid && formControls['password'].touched
-        }" />
-
+        [ngClass]="{ 'invalid-input': formControls['password'].invalid && formControls['password'].touched }" />
       @if (formControls['password'].touched && formControls['password'].invalid)
       {
-      <div class="error"><p>Password must be at least 8 characters</p></div>
+      <div class="error"><p>Password must be atleast 8 characters.</p></div>
       }
     </div>
     @if (formControls['password'].value) {
     <div class="strength-info">
       <span>Password strength:</span>
-      <strong [ngClass]="getPasswordStrengthClass()">
-        {{ getPasswordStrengthLabel() }}
-      </strong>
+      <strong [ngClass]="getPasswordStrengthClass()">{{
+        getPasswordStrengthLabel() }}</strong>
     </div>
     <div class="password-meter">
       <div class="meter-bar">
-        <div
-          class="meter-fill"
+        <div class="meter-fill"
           [style.width.%]="getPasswordStrengthPercentage()"
           [ngClass]="getPasswordStrengthClass()"></div>
       </div>
@@ -111,14 +104,9 @@
     }
     <div class="input-group">
       <label>Confirm Password</label>
-      <input
-        type="password"
-        formControlName="confirmPassword"
+      <input type="password" formControlName="confirmPassword"
         placeholder="Re-enter your password"
-        [ngClass]="{
-          'invalid-input': formControls['confirmPassword'].invalid &&
-            formControls['confirmPassword'].touched
-        }" />
+        [ngClass]="{ 'invalid-input': formControls['confirmPassword'].invalid && formControls['confirmPassword'].touched }" />
       @if (formControls['confirmPassword'].touched &&
       formControls['confirmPassword'].invalid) {
       <div class="error"><p>Passwords do not match.</p></div>
@@ -131,7 +119,7 @@
         (click)="onReset()">Cancel</button>
     </div>
     <div class="back-login">
-      <img src="assets/icons/back-to-login.svg" alt="back" />
+      <img src="assets/icons/back-to-login.svg" alt="back to login" />
       <button type="button" (click)="goToLogin()">Back to Login</button>
     </div>
     <div class="messages">
