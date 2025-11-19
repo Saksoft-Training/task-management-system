@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { ProjectCreateComponent } from './features/project-management/components/project-create/project-create.component';
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 import { LoginComponent } from './features/user-account-management/components/login/login.component';
@@ -8,6 +9,7 @@ import { ProjectListComponent } from './features/project-management/components/p
 import { ProjectDetailComponent } from './features/project-management/components/project-detail/project-detail.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'register', pathMatch: 'full' },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
@@ -17,4 +19,5 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/:id', component: ProjectDetailComponent }
+
 ];
