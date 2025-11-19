@@ -3,6 +3,8 @@ import { ProjectCreateComponent } from './features/project-management/components
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 import { LoginComponent } from './features/user-account-management/components/login/login.component';
 import { ForgotPasswordComponent } from './features/user-account-management/components/forgot-password/forgot-password.component';
+import { ProfileComponent } from './features/project-management/components/profile/profile.component';
+import { ProjectListComponent } from './features/project-management/components/project-list/project-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,7 +13,9 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'login', component: LoginComponent },
-  { path: '**', redirectTo: 'login' }
-
+  { path: 'projects/create', component: ProjectCreateComponent },
+  { path: 'projects/create/:id', component: ProjectCreateComponent },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'projects', component: ProjectListComponent }
 
 ];
