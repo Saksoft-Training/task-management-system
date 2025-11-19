@@ -1,5 +1,11 @@
+// ===========================
+// Statistic Card Variables
+// ===========================
+
+// Base colors
 $white: #fff;
 
+// Color variants
 $color-blue-bg: #e5f0ff;
 $color-blue-border: #d3e3ff;
 
@@ -15,41 +21,47 @@ $color-neutral-border: #ececff;
 $color-red-bg: #ffecec;
 $color-red-border: #ffd5d5;
 
+// Borders
 $border-light: rgba(0, 0, 0, 0.06);
 
-/* ---- Spacing ---- */
+// Spacing
 $card-padding: 14px;
 $gap-medium: 12px;
 $gap-small: 8px;
 
-/* ---- Sizing ---- */
+// Sizing
 $stat-card-radius: 12px;
 $stat-card-width: 288px;
 $stat-card-height: 166px;
 $stat-card-min-height: 84px;
 
-/* ---- Typography ---- */
+// Typography
 $font-large: 20px;
 $font-medium: 18px;
 $font-small: 12px;
 $font-icon-size: 22px;
 
-/* ---- Icon ---- */
+// Icons
 $icon-size: 16px;
 $icon-offset-right: 220px;
 $icon-offset-top: 40px;
 
+
+// ===========================
+// Statistic Card Styles
+// ===========================
+
 .stat-card {
   display: flex;
   align-items: center;
-  gap: $gap-medium;
-  padding: $card-padding;
-  border-radius: $stat-card-radius;
-  border: 1px solid $border-light;
-  background: $white;
-  min-height: $stat-card-min-height;
-  width: $stat-card-width;
-  height: $stat-card-height;
+  gap: variables.$gap-medium;
+  padding: variables.$card-padding;
+  border-radius: variables.$stat-card-radius;
+  border: 1px solid variables.$border-light;
+  background: variables.$white;
+  min-height: variables.$stat-card-min-height;
+  width: variables.$stat-card-width;
+  height: variables.$stat-card-height;
   text-align: left;
   cursor: pointer;
 }
@@ -61,14 +73,14 @@ $icon-offset-top: 40px;
 
 .icon {
   font-weight: 700;
-  font-size: $font-icon-size;
+  font-size: variables.$font-icon-size;
 }
 
 img {
-  margin-left: $icon-offset-right;
-  margin-top: $icon-offset-top;
-  width: $icon-size;
-  height: $icon-size;
+  margin-left: variables.$icon-offset-right;
+  margin-top: variables.$icon-offset-top;
+  width: variables.$icon-size;
+  height: variables.$icon-size;
 }
 
 .content {
@@ -76,60 +88,64 @@ img {
 }
 
 .label {
-  font-size: $font-medium;
-  margin-bottom: $icon-offset-top;
+  font-size: variables.$font-medium;
+  margin-bottom: variables.$icon-offset-top;
 }
 
 .value {
-  font-size: $font-large;
+  font-size: variables.$font-large;
   font-weight: 700;
 }
 
 .status-badge {
-  font-size: $font-small;
+  font-size: variables.$font-small;
   font-weight: 400;
   margin-bottom: 20px;
 }
 
 .meta {
-  font-size: $font-small;
+  font-size: variables.$font-small;
   justify-content: space-between;
 }
 
-/* ---- Card Color Variants ---- */
+// ===========================
+// Color Variants
+// ===========================
 
 .blue {
-  background: $color-blue-bg;
-  border-color: $color-blue-border;
+  background: variables.$color-blue-bg;
+  border-color: variables.$color-blue-border;
 }
 
 .purple,
 .amber {
-  background: $color-purple-bg;
-  border-color: $color-purple-border;
+  background: variables.$color-purple-bg;
+  border-color: variables.$color-purple-border;
 }
 
 .green {
-  background: $color-green-bg;
-  border-color: $color-green-border;
+  background: variables.$color-green-bg;
+  border-color: variables.$color-green-border;
 }
 
 .neutral {
-  background: $color-neutral-bg;
-  border-color: $color-neutral-border;
+  background: variables.$color-neutral-bg;
+  border-color: variables.$color-neutral-border;
 }
 
 .red {
-  background: $color-red-bg;
-  border-color: $color-red-border;
+  background: variables.$color-red-bg;
+  border-color: variables.$color-red-border;
 }
 
-/* ---- Skeleton ---- */
+// ===========================
+// Skeleton Loader
+// ===========================
 
 .skeleton {
   display: flex;
   flex-direction: column;
-  gap: $gap-small;
+  gap: variables.$gap-small;
   width: 100%;
 }
 
