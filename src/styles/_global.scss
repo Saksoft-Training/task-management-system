@@ -122,7 +122,7 @@ body::-webkit-scrollbar {
 /* ========================================= */
 
 .app-header {
-  width: 79.9375rem;
+  width: 100%;
   display: flex;
   justify-content: center;
   background: variables.$color-white;
@@ -1010,6 +1010,7 @@ body::-webkit-scrollbar {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
       transition: 0.2s ease;
       cursor: pointer;
+      height: 11rem;
 
       &:hover {
         transform: translateY(-3px);

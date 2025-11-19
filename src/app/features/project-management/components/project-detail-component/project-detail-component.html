@@ -1,0 +1,101 @@
+<div class="project-detail-page">
+
+    <div class="breadcrumb">
+        <a class="breadcrumb-link" (click)="goToProjects()">Projects</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{{ project?.name }}</span>
+    </div>
+
+    <!-- TOP BAR: Title + badge + actions -->
+    <div class="top-header">
+        <div class="left-section">
+
+            <div class="title-row">
+                <h1 class="page-title">{{ project?.name }}</h1>
+                <span class="status-badge-detail" [ngClass]="statusClass">
+                    {{ project?.status }}
+                </span>
+            </div>
+            <p class="page-subtitle">{{ project?.description }}</p>
+        </div>
+        <div class="actions-right">
+            <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
+            <button class="edit-task-btn" (click)="onEditProject()">Edit Project
+                
+            </button>
+            <button class="delete-task-btn" (click)="onDeleteProject()">Delete Project</button>
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- Decorative banner image (uploaded file) -->
+<div class="banner">
+    <img src="/mnt/data/1aee3772-a0b0-4007-b98a-32150b3ec0da.png" alt="project-banner" />
+</div>
+
+<!-- Meta & progress -->
+<div class="meta-grid">
+    <div class="timeline">
+        <div class="label">Project Timeline</div>
+        <div class="dates">{{ project?.startDate || 'Nov 20, 2025' }} - {{ project?.endDate || 'Nov 27, 2025' }}</div>
+
+
+        <div class="progress-row">
+            <div class="progress-label">Progress</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">Day 0 of 7 (0%)</div>
+        </div>
+    </div>
+
+
+    <div class="meta-right">
+        <div class="meta-item"><strong>Created By</strong>
+            <div>{{ project?.createdBy || 'John Smith' }}</div>
+        </div>
+        <div class="meta-item"><strong>Created</strong>
+            <div>{{ project?.createdAt || 'Nov 5, 2025, 09:10 PM' }}</div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Status summary boxes (static counts) -->
+<div class="status-summaries">
+    <div class="status-card">
+        <div class="status-title">To Do</div>
+        <div class="status-count">{{ todoCount }}</div>
+    </div>
+
+
+    <div class="status-card in-progress">
+        <div class="status-title">In Progress</div>
+        <div class="status-count">{{ inProgressCount }}</div>
+    </div>
+
+
+    <div class="status-card completed">
+        <div class="status-title">Completed</div>
+        <div class="status-count">{{ completedCount }}</div>
+    </div>
+
+
+    <div class="status-card overdue">
+        <div class="status-title">Overdue</div>
+        <div class="status-count">{{ overdueCount }}</div>
+    </div>
+</div>
+
+
+<!-- Tasks section (empty state) -->
+<div class="tasks-panel">
+    <h3>Tasks</h3>
+    <div class="tasks-empty">
+        <p>No tasks yet</p>
+        <button class="btn create" (click)="onCreateTask()">Create New Task</button>
+    </div>
+</div>

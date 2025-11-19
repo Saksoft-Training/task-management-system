@@ -36,7 +36,4 @@ export class ProjectCardComponent {
       .replace(/\s+/g, '-');
   }
   // #endregion
-  public navigateToProject() :void{
-  this.router.navigate(['/projects', this.project.id]);
-}
 }
