@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { Task, TaskPriority, TaskStatus} from '../../../../types/models/task';
+import { Task, TaskPriority, TaskStatus } from '../../../../types/models/task';
 import { Activity } from '../../../../types/activity/activity.model';
 import { ChartConfiguration } from 'chart.js';
-
-
 
 export interface OverdueInfo {
   count: number;
@@ -14,7 +12,7 @@ export interface OverdueInfo {
 @Injectable({
   providedIn: 'root'
 })
-export class chartDashboardService {
+export class chartsDashboardService {
   private readonly TASKS_KEY = 'tasks';
   private readonly ACTIVITIES_KEY = 'activities';
 

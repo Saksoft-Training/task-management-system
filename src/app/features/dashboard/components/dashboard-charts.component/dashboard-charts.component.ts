@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DashboardService, OverdueInfo } from '../../services/dashboard-service';
+
 import { ChartComponent } from '../chart.component/chart.component';
 import { ActivityFeedComponent } from '../activity-feed.component/activity-feed.component';
 import { ChartConfiguration, TooltipItem } from 'chart.js';
 import { combineLatest, Observable } from 'rxjs';
+import { chartsDashboardService, OverdueInfo } from '../../services/charts-dashboard-service';
 
 @Component({
   selector: 'app-dashboard-charts',
@@ -27,7 +28,7 @@ export class DashboardChartsComponent implements OnInit {
   trendOptions: ChartConfiguration['options'] = {};
   priorityOptions: ChartConfiguration['options'] = {};
 
-  constructor(private ds: DashboardService) {}
+  constructor(private ds: chartsDashboardService) { }
 
   ngOnInit(): void {
 

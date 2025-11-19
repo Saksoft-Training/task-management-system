@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { Activity } from '../../../../../types/activity/activity.model';
-import { chartDashboardService } from '../../services/charts-dashboard-service';
+import { chartsDashboardService } from '../../services/charts-dashboard-service';
 
 @Component({
   selector: 'app-activity-feed',
@@ -15,9 +15,9 @@ import { chartDashboardService } from '../../services/charts-dashboard-service';
   styleUrl: './activity-feed.component.scss',
 })
 export class ActivityFeedComponent {
- activities$!: Observable<Activity[]>;
+  activities$!: Observable<Activity[]>;
 
-  constructor(private ds: chartDashboardService, private router: Router) {}
+  constructor(private ds: chartsDashboardService, private router: Router) { }
 
   ngOnInit(): void {
     this.activities$ = this.ds.recentActivities$;

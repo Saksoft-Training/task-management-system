@@ -1,0 +1,23 @@
+<div class="notification-item" [class.unread]="!notification.isRead" (click)="onNavigate()">
+  <div class="icon" [ngClass]="severityClass">
+    <ng-container [ngSwitch]="notification.severity">
+      <span *ngSwitchCase="'success'"><img src="/assets/icons/right-Icon.svg"></span>
+      <span *ngSwitchCase="'warning'"><img src="/assets/icons/warning.svg"></span>
+      <span *ngSwitchCase="'critical'"><img src="/assets/icons/red-warning.svg"></span>
+      <span *ngSwitchDefault><img src="/assets/icons/Bell-Icon.svg"></span>
+    </ng-container>
+  </div>
+  <div class="content">
+    <div class="title">{{ notification.title }}</div>
+    <div class="message">{{ notification.message }}</div>
+    <div class="timestamp">{{ notification.timestamp | date: 'short' }}</div>
+  </div>
+  <div class="actions">
+    <button *ngIf="!notification.isRead" (click)="onMarkRead($event)">
+      Mark as read
+    </button>
+    <button (click)="onDismiss($event)">
+      <img src="/assets/icons/cross-Icon.svg">
+    </button>
+  </div>
+</div>

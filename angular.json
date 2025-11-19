@@ -31,6 +31,10 @@
                 "output": "/assets"
               }
             ],
+            "assets": [
+                 "src/favicon.ico",
+                 "src/assets"
+              ],
             "styles": [
               "src/styles/app.scss"
             ],
@@ -102,6 +106,6 @@
     }
   },
   "cli": {
-    "analytics": "0569cdbc-e8ae-4272-ae2a-af78d7d8fc54"
+    "analytics": "69a8b816-6ec9-4162-b847-a6a185de912e"
   }
 }

@@ -1,0 +1,42 @@
+<header class="app-header">
+  <div class="header-container">
+    <div class="logo">SakNgTrain</div>
+    @if (!isAuthMinimal()) {
+    <nav class="nav-links">
+      @for (link of navLinks; track link.label) {
+      <a [routerLink]="link.path" routerLinkActive="active">
+          {{ link.label }}
+      </a>
+      }
+    </nav>
+    <div class="user-section">
+      @if (userEmail) {
+      <div class="user-email" (click)="goToLogin()">
+        <img src="assets/icons/profile-Icon.svg" alt="profile" />
+        <span>{{ userEmail }}</span>
+      </div>
+      }
+      <div class="notification-container">
+        <button class="bell-button" (click)="toggleNotifications()" type="button">
+          <img src="assets/icons/Bell-Icon.svg" alt="notifications" class="bell-icon" />
+          @if (unreadCount  > 0) {
+          <span class="notification-badge">{{ unreadCount }}</span>
+          }
+        </button>
+       @if (showNotifications) {
+  <div class="notification-dropdown">
+    <app-dashboard-notifications-component
+      [notifications]="(notifications$ | async) || []"
+      (markAsRead)="onMarkAsRead($event)"
+       (markAllRead)="onMarkAllRead()"
+      (clearAll)="onClearAll()">
+    </app-dashboard-notifications-component>
+  </div>
+}
+      </div>
+      <img src="assets/icons/logout-Icon.svg" alt="logout"
+        class="logout-icon" />
+    </div>
+    }
+  </div>
+</header>

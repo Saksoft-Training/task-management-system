@@ -4,12 +4,17 @@ export type TaskPriority = 'Low' | 'Medium' | 'High' | 'Urgent';
 export interface Task {
   id: number;
   title: string;
+  description?: string;
   status: TaskStatus;
   priority: TaskPriority;
-  dueDate: string;      // ISO string
-  completedAt?: string; // ISO string (for completed tasks)
+  assignee: string;       
+  assigneeEmail: string;  
+  dueDate: string;
+  projectId: number;
+  createdBy: string;
   createdAt: string;
   updatedAt: string;
-  projectId?: number;
-  assignee?: string;
+  completedAt?: string | null;
+
 }
+

@@ -2,15 +2,10 @@
   <div class="header-row">
     <h2>Recent Activity</h2>
   </div>
-
   <ng-container *ngIf="activities$ | async as activities; else loadingTpl">
     <ng-container *ngIf="activities.length > 0; else emptyTpl">
       <ul class="activity-list">
-        <li
-          class="activity-item"
-          *ngFor="let activity of activities"
-          (click)="onActivityClick(activity)"
-        >
+        <li class="activity-item" *ngFor="let activity of activities" (click)="onActivityClick(activity)">
           <div class="avatar">
             <span>{{ getInitials(activity.user) }}</span>
           </div>

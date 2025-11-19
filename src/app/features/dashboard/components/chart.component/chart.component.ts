@@ -8,8 +8,8 @@ Chart.register(...registerables);
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss',
 })
-export class ChartComponent  implements AfterViewInit, OnChanges,OnDestroy{
- @ViewChild('canvas', { static: false }) canvas!: ElementRef<HTMLCanvasElement>;
+export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  @ViewChild('canvas', { static: false }) canvas!: ElementRef<HTMLCanvasElement>;
 
   @Input() type: ChartType = 'bar';
   @Input() data!: ChartConfiguration['data'];
