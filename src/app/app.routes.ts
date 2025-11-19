@@ -5,7 +5,7 @@ import { LoginComponent } from './features/user-account-management/components/lo
 import { ForgotPasswordComponent } from './features/user-account-management/components/forgot-password/forgot-password.component';
 import { ProfileComponent } from './features/user-account-management/components/profile/profile.component';
 import { ProjectListComponent } from './features/project-management/components/project-list/project-list.component';
-import { ProjectDetailComponent } from './features/project-management/components/project-detail-component/project-detail-component';
+import { ProjectDetailComponent } from './features/project-management/components/project-detail/project-detail.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

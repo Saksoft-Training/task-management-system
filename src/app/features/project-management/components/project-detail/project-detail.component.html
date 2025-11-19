@@ -6,65 +6,77 @@
         <span class="breadcrumb-current">{{ project?.name }}</span>
     </div>
 
-    <!-- TOP BAR: Title + badge + actions -->
+    <!-- Top header -->
     <div class="top-header">
         <div class="left-section">
-
             <div class="title-row">
                 <h1 class="page-title">{{ project?.name }}</h1>
                 <span class="status-badge-detail" [ngClass]="statusClass">
                     {{ project?.status }}
                 </span>
             </div>
+
             <p class="page-subtitle">{{ project?.description }}</p>
         </div>
+
         <div class="actions-right">
-            <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
-            <button class="edit-task-btn" (click)="onEditProject()">Edit Project
-                
-            </button>
-            <button class="delete-task-btn" (click)="onDeleteProject()">Delete Project</button>
+            <button class="create-task-btn">Create New Task</button>
+            <button class="edit-task-btn">Edit Project <img src="assets/icons/edit-Icon.svg"></button>
+            <button class="delete-task-btn">Delete Project <img src="assets/icons/delete-Icon.svg"></button>
         </div>
     </div>
 
-</div>
+    <!-- Meta area under header -->
+    <div class="meta-grid">
 
-
-
-<!-- Decorative banner image (uploaded file) -->
-<div class="banner">
-    <img src="/mnt/data/1aee3772-a0b0-4007-b98a-32150b3ec0da.png" alt="project-banner" />
-</div>
-
-<!-- Meta & progress -->
-<div class="meta-grid">
-    <div class="timeline">
-        <div class="label">Project Timeline</div>
-        <div class="dates">{{ project?.startDate || 'Nov 20, 2025' }} - {{ project?.endDate || 'Nov 27, 2025' }}</div>
-
-
-        <div class="progress-row">
-            <div class="progress-label">Progress</div>
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: 0%"></div>
+        <div class="timeline">
+<div class="progress-row"><div class="label">
+                <img src="assets/icons/calendar-Icon.svg">
+                Project Timeline
             </div>
-            <div class="progress-text">Day 0 of 7 (0%)</div>
+            <div class="dates">
+                {{ project?.startDate }} - {{ project?.endDate }}
+            </div></div>
+            
+
+            <div class="progress-row">
+                <div class="progress-label">
+                    <img src="assets/icons/progress-Icon.svg">
+                    Progress
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <div class="progress-text">Day 0 of 7 (0%)</div>
+            </div>
+
         </div>
+
+        <div class="meta-right">
+
+            <div class="label">
+                <img src="assets/icons/createdBy-Icon.svg">
+                Created By
+            </div>
+            <div class="dates">{{ project?.createdBy }}</div>
+
+            <div class="label">
+                <img src="assets/icons/clock-Icon.svg">
+                Created
+            </div>
+            <div class="dates">
+                <div>{{ project?.createdAt }}</div>
+                <div class="label">Last updated: {{ project?.updatedAt }}</div>
+            </div>
+
+        </div>
+
     </div>
 
-
-    <div class="meta-right">
-        <div class="meta-item"><strong>Created By</strong>
-            <div>{{ project?.createdBy || 'John Smith' }}</div>
-        </div>
-        <div class="meta-item"><strong>Created</strong>
-            <div>{{ project?.createdAt || 'Nov 5, 2025, 09:10 PM' }}</div>
-        </div>
-    </div>
 </div>
 
-
-<!-- Status summary boxes (static counts) -->
 <div class="status-summaries">
     <div class="status-card">
         <div class="status-title">To Do</div>

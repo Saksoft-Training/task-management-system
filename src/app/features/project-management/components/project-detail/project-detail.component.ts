@@ -8,8 +8,8 @@ import { CommonModule, DatePipe } from '@angular/common';
 @Component({
   selector: 'app-project-detail-component',
   imports: [DatePipe, CommonModule],
-  templateUrl: './project-detail-component.html',
-  styleUrl: './project-detail-component.scss',
+  templateUrl: './project-detail.component.html',
+  styleUrl: './project-detail.component.scss',
 })
 export class ProjectDetailComponent implements OnInit {
   public project?: Project;
