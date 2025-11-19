@@ -5,14 +5,16 @@ import { Project } from '../../../../types/models/project';
   providedIn: 'root',
 })
 export class ProjectService {
-  // #region Properties 
+  // #region Properties
   /**
-   * @summary Key used to store all project data inside localStorage.
+   * @summary Generates a unique key per user so each user has independent project storage
    */
-  private readonly storageKey: string = 'projects';
+  private getStorageKey(email: string): string {
+    return `projects_${email}`;
+  }
   // #endregion
 
-  // #region CRUD Methods 
+  // #region CRUD Methods
   /**
    * @summary Retrieves all projects stored for a user.
    * @description Fetches all projects saved in localStorage. If no records exist, returns an empty array.
@@ -20,7 +22,8 @@ export class ProjectService {
    * @returns {Project[]} List of all saved projects.
    */
   public getAll(email: string): Project[] {
-    const data = localStorage.getItem(this.storageKey);
+    const key = this.getStorageKey(email);
+    const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : [];
   }
   /**
@@ -31,9 +34,10 @@ export class ProjectService {
    * @returns {void}
    */
   public save(project: Project, email: string): void {
+    const key = this.getStorageKey(email);
     const projects = this.getAll(email);
     projects.push(project);
-    localStorage.setItem(this.storageKey, JSON.stringify(projects));
+    localStorage.setItem(key, JSON.stringify(projects));
   }
   /**
    * @summary Updates an existing project.
@@ -43,8 +47,9 @@ export class ProjectService {
    * @returns {void}
    */
   public update(project: Project, email: string): void {
+    const key = this.getStorageKey(email);
     const projects = this.getAll(email).map(p => p.id === project.id ? project : p);
-    localStorage.setItem(this.storageKey, JSON.stringify(projects));
+    localStorage.setItem(key, JSON.stringify(projects));
   }
   /**
    * @summary Retrieves a project by its unique ID.
@@ -64,20 +69,24 @@ export class ProjectService {
    * @returns {void}
    */
   public delete(id: number, email: string): void {
+    const key = this.getStorageKey(email);
     const projects = this.getAll(email).filter(p => p.id !== id);
-    localStorage.setItem(this.storageKey, JSON.stringify(projects));
+    localStorage.setItem(key, JSON.stringify(projects));
   }
   // #endregion
 
-  // #region Utility Methods 
+  // #region Utility Methods
   /**
    * @summary Clears all stored project data.
    * @description Removes the localStorage key completely.
    * @param username - Username of the user (currently unused)
    * @returns {void}
    */
-  public clear(username: string): void {
-    localStorage.removeItem(this.storageKey);
+  public clear(email: string): void {
+    const key = this.getStorageKey(email);
+    localStorage.removeItem(key);
   }
   // #endregion
 }
+
+

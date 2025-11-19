@@ -11,7 +11,7 @@
     </nav>
     <div class="user-section">
       @if (userEmail) {
-      <div class="user-email">
+      <div class="user-email" (click)="goToLogin()">
         <img src="assets/icons/profile-Icon.svg" alt="profile" />
         <span>{{ userEmail }}</span>
       </div>

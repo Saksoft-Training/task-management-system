@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../features/user-account-management/services/auth-service';
+
 import { NotificationService } from '../../../features/dashboard/services/notification-service';
 
 import { AppNotification } from '../../../../types/models/notifications';
@@ -9,6 +10,7 @@ import { Observable } from 'rxjs';
 import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
 import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
 import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
+
 
 @Component({
   selector: 'app-header',
@@ -92,6 +94,7 @@ export class HeaderComponent implements OnInit {
     );
   }
   //#endregion
+
   //#region Event Handlers
   /**
   * @summary Marks a specific notification as read
@@ -130,4 +133,9 @@ export class HeaderComponent implements OnInit {
     this.notificationService.clearAll(); // Use clearAll() instead of clearAllNotifications()
   }
   //#endregion
+
+   goToLogin() {
+  this.router.navigate(['/login']);
+}
+
 }

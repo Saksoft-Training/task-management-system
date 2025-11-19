@@ -2,8 +2,10 @@
   <div class="page-title">Register</div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="card">
     <div class="header">
+
+      
       <div class="header-content">
-        <img src="assets/icons/create-account-Icon.svg" alt="create" />
+        <img src="assets/icons/create-account-Icon.svg" alt="create account" />
         <h2>Create Account</h2>
       </div>
       <p>Register for an account to access the task management application</p>
@@ -30,9 +32,18 @@
 
     <div class="input-group">
       <label>Email</label>
-      <input formControlName="email" placeholder="Enter your email"
+      <input
+        formControlName="email"
+        placeholder="Enter your email"
+        autocomplete="new-email"
+        autocorrect="off"
+        autocapitalize="none"
+        spellcheck="false"
         (input)="forceLowercaseEmail()"
-        [ngClass]="{ 'invalid-input': formControls['email'].invalid && formControls['email'].touched }" />
+        [ngClass]="{
+    'invalid-input': formControls['email'].invalid && formControls['email'].touched
+  }" />
+
       @if (formControls['email'].touched && formControls['email'].invalid) {
       <div class="error">
         @if (formControls['email'].errors?.['required']) { <p>Email is
@@ -108,7 +119,7 @@
         (click)="onReset()">Cancel</button>
     </div>
     <div class="back-login">
-      <img src="assets/icons/back-to-login.svg" alt="back" />
+      <img src="assets/icons/back-to-login.svg" alt="back to login" />
       <button type="button" (click)="goToLogin()">Back to Login</button>
     </div>
     <div class="messages">
