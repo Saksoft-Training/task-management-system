@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.isFormSubmitting = false;
         this.loginAttempted = false;
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.isFormSubmitting = false;
