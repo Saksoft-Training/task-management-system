@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Statistics } from '../../../../../types/models/statistics';
 import { DashboardService } from '../../services/dashboard-service';
 import { StatisticsCardComponent } from '../statistics-card.component/statistics-card.component';
@@ -13,12 +13,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-  stats$: Observable<Statistics>;
+   stats$!: Observable<Statistics>;
   loading = true;
+
   constructor(private dashboardService: DashboardService) {
     this.stats$ = this.dashboardService.getStatistics();
-    this.stats$.subscribe(() => (this.loading = false));
+
+    this.stats$.subscribe(() => {
+      this.loading = false;
+    });
   }
+
   refresh() {
     this.dashboardService.refresh();
   }

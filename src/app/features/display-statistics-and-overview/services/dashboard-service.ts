@@ -3,55 +3,64 @@ import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import { Statistics } from '../../../../types/models/statistics';
 import { Project } from '../../../../types/models/project';
 import { Task } from '../../../../types/models/task';
+import { AuthService } from '../../user-account-management/services/auth-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  private storageKeyProjects = 'projects';
-  private storageKeyTasks = 'tasks';
+ 
+   private storageKeyTasks = 'tasks';
 
+  // 👇 ALWAYS initialize with valid Statistics (no null)
+  private stats$ = new BehaviorSubject<Statistics>(this.emptyStats());
 
-  // BehaviorSubject keeps the latest statistics and emits immediately for new subscribers
-  private stats$ = new BehaviorSubject<Statistics>(this.computeStatistics());
+  constructor(private authService: AuthService) {
+    // Compute once the user loads
+    setTimeout(() => {
+      this.refresh();
+    }, 150);
 
-
-  constructor() {
-    // Listen for cross-tab storage changes
     fromEvent<StorageEvent>(window, 'storage').subscribe(() => this.refresh());
   }
 
+  // 👇 VALID fallback object (never null)
+  private emptyStats(): Statistics {
+    return {
+      totalProjects: 0,
+      activeProjects: 0,
+      completedProjects: 0,
+      totalTasks: 0,
+      completedTasks: 0,
+      inProgressTasks: 0,
+      overdueTasks: 0,
+      overallCompletionRate: 0,
+      updatedAt: new Date().toISOString(),
+    };
+  }
 
-  // Public Observable as requested
+  private getStorageKeyProjects(): string {
+    const email = this.authService.getCurrentUser()?.email || '';
+    return `projects_${email}`;
+  }
+
   getStatistics(): Observable<Statistics> {
     return this.stats$.asObservable();
   }
 
-
-  // Call this when app mutates projects/tasks in the same tab
   refresh(): void {
     const stats = this.computeStatistics();
     this.stats$.next(stats);
   }
 
-
-  // Convenience: helper to set seed data (useful in dev / tests)
-  seedData(projects: Project[], tasks: Task[]) {
-    localStorage.setItem(this.storageKeyProjects, JSON.stringify(projects));
-    localStorage.setItem(this.storageKeyTasks, JSON.stringify(tasks));
-    this.refresh();
-  }
-
-
   private readProjects(): Project[] {
     try {
-      const raw = localStorage.getItem(this.storageKeyProjects);
+      const raw = localStorage.getItem(this.getStorageKeyProjects());
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
     }
   }
-
 
   private readTasks(): Task[] {
     try {
@@ -62,22 +71,18 @@ export class DashboardService {
     }
   }
 
-
   private computeStatistics(): Statistics {
     const projects = this.readProjects();
     const tasks = this.readTasks();
     const now = new Date();
 
-
     const totalProjects = projects.length;
     const activeProjects = projects.filter(p => p.status === 'In Progress').length;
     const completedProjects = projects.filter(p => p.status === 'Completed').length;
 
-
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.status === 'Completed').length;
     const inProgressTasks = tasks.filter(t => t.status === 'In Progress').length;
-
 
     const overdueTasks = tasks.filter(t => {
       if (!t.dueDate) return false;
@@ -85,9 +90,8 @@ export class DashboardService {
       return due < now && t.status !== 'Completed';
     }).length;
 
-
-    const overallCompletionRate = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
-
+    const overallCompletionRate =
+      totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
     return {
       totalProjects,
