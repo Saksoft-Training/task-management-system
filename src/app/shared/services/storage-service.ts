@@ -3,24 +3,20 @@ import { User } from '../../../types/models/user';
 
 const USERS_KEY = 'users';
 const PASSWORD_SECRET = 'MyAppSecret@2025';
-
 @Injectable({ providedIn: 'root' })
 export class UserStorageService {
-  //#region Get Users
+  //#region User Retrieval
   /**
-   * @summary Retrieves all registered users from local storage.
-   * @returns User[] List of all stored users.
+   * @summary Retrieves all stored users from localStorage.
+   * @returns User[] Array of stored user objects.
    */
   public getAllUsers(): User[] {
     const usersJson = localStorage.getItem(USERS_KEY);
     return usersJson ? JSON.parse(usersJson) : [];
   }
-  //#endregion
-
-  //#region Save Users
   /**
-   * @summary Saves the list of users to local storage.
-   * @param users - Array of User objects to be stored.
+   * @summary Saves the updated array of users back to localStorage.
+   * @param users Array of users to be saved.
    * @returns void
    */
   public saveAllUsers(users: User[]): void {
@@ -28,41 +24,37 @@ export class UserStorageService {
   }
   //#endregion
 
-  //#region Email Check
+  //#region Email Helpers
   /**
-   * @summary Checks if an email already exists in local storage.
-   * @param email - Email string to search for.
-   * @returns boolean True if email exists, false otherwise.
+   * @summary Checks if a given email already exists in stored users.
+   * @param email Email address to check.
+   * @returns boolean True if email exists.
    */
   public isEmailExists(email: string): boolean {
     const check = email.trim().toLowerCase();
     return this.getAllUsers().some(
-      user => (user.email || '').trim().toLowerCase() === check
+      user => user.email.trim().toLowerCase() === check
     );
   }
   //#endregion
 
-  //#region Encode Password
-
+  //#region Password Encoding
   /**
-   * @summary Encodes raw password into base64 format along with a secret key.
-   * @param rawPassword - Plain password to encode.
-   * @returns string Encoded password string.
+   * @summary Encrypts raw password using base64 + secret prefix.
+   * @param raw Raw password string.
+   * @returns string Encoded password.
    */
-  public encodePassword(rawPassword: string): string {
-    return btoa(`${PASSWORD_SECRET}:${rawPassword}`);
+  public encodePassword(raw: string): string {
+    return btoa(`${PASSWORD_SECRET}:${raw}`);
   }
-  //#endregion
-
-  //#region Decode Password
   /**
-   * @summary Decodes an encoded password back into plain text.
-   * @param obfuscatedPassword - Base64 encoded password string.
-   * @returns string Decoded raw password. Returns empty string if decoding fails.
+   * @summary Decodes an encoded password back to plain text.
+   * @param encoded Encoded password string.
+   * @returns string Decoded raw password.
    */
-  public decodePassword(obfuscatedPassword: string): string {
+  public decodePassword(encoded: string): string {
     try {
-      const decoded = atob(obfuscatedPassword);
+      const decoded = atob(encoded);
       return decoded.split(':')[1];
     } catch {
       return '';
@@ -70,21 +62,43 @@ export class UserStorageService {
   }
   //#endregion
 
-  //#region Update Password
+  //#region Password Update
   /**
-   * @summary Updates a user's password based on their email address.
-   * @param email - User email 
-   * @param newRawPassword - New password in raw text form.
-   * @returns boolean True if update succeeded, false if user not found.
+   * @summary Updates password for a specific user by email.
+   * @param email User's email to update password for.
+   * @param newPass New raw password.
+   * @returns boolean True if update succeeded.
    */
-  public updatePasswordForEmail(email: string, newRawPassword: string): boolean {
+  public updatePasswordForEmail(email: string, newPass: string): boolean {
     const normalized = email.trim().toLowerCase();
     const users = this.getAllUsers();
     const idx = users.findIndex(
       u => (u.email || '').trim().toLowerCase() === normalized
     );
     if (idx === -1) return false;
-    users[idx].password = this.encodePassword(newRawPassword);
+    users[idx].password = this.encodePassword(newPass);
+    this.saveAllUsers(users);
+    return true;
+  }
+  //#endregion
+
+  //#region User Update
+  /**
+   * @summary Updates stored user data. Required when profile email changes.
+   * @param updatedUser Updated user object.
+   * @param oldEmail Optional old email reference before updating.
+   * @returns boolean True if update succeeded.
+   */
+  public updateUser(updatedUser: User, oldEmail?: string): boolean {
+    const users = this.getAllUsers();
+    const matchEmail = (oldEmail || updatedUser.email)
+      .trim()
+      .toLowerCase();
+    const index = users.findIndex(
+      u => (u.email || '').trim().toLowerCase() === matchEmail
+    );
+    if (index === -1) return false;
+    users[index] = { ...users[index], ...updatedUser };
     this.saveAllUsers(users);
     return true;
   }

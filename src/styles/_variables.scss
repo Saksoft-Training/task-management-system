@@ -166,8 +166,32 @@ $dialog-gap-actions: 0.625rem;
 // =========================================
 
 $error-icon-size: 1.25rem;
-
 $padding-primary: 2.5rem;
+
+/* PROFILE PAGE COLORS */
+/* PROFILE PAGE COLORS */
+$profile-card-bg: $color-white;
+$profile-card-border: $color-border;
+
+$profile-edit-btn-bg: #deebc9;
+$profile-edit-btn-text: #314f00;
+
+$profile-avatar-bg: #e6e6e6;
+$profile-avatar-placeholder-bg: #e7e7e7;
+$profile-avatar-text: #555;
+
+$profile-label-text: $color-text-secondary;
+$profile-value-text: $color-text-primary;
+
+
+
+/* ADDED NEW VARIABLES */
+$color-password-hint: #6A7282;
+$color-label-dark: #0A0A0A;
+$color-btn-primary-hover: #97a67b;
+$color-btn-secondary-hover-strong: #8a9a6a;
+
+
 
 // ====== SIZES ======
 $error-icon-size: 1.25rem;

@@ -1,0 +1,127 @@
+<div class="profile-page">
+  <div class="container">
+    <div class="header-section">
+      <div class="header-left">
+        <h1 class="title">My Profile</h1>
+        <p class="subtitle">Manage your profile and details</p>
+      </div>
+      @if (!isEditing) {
+      <button class="edit-btn" (click)="enterEditMode()">Edit Profile</button>
+      } @else {
+      <button class="edit-btn" (click)="goToCreateProject()">Edit
+        Profile</button>
+      }
+    </div>
+    <div class="card">
+      <div class="card-header-row">
+        <div class="info-title">Profile Information</div>
+        <div class="info-subtitle">View and manage your account details</div>
+      </div>
+      @if (!isEditing) {
+      <div class="content-block">
+        <div class="avatar-row">
+          <div class="avatar-area">
+            @if (currentUser?.photo) {
+            <img [src]="currentUser.photo" class="avatar" />
+            } @else {
+            <div class="avatar-placeholder">
+              {{ currentUser?.name?.charAt(0) || 'U' }}
+            </div>
+            }
+          </div>
+        </div>
+        <div class="content-divider"></div>
+        <div class="details-view">
+          <div class="field">
+            <label class="field-label">Name</label>
+            <p>{{ currentUser?.name }}</p>
+          </div>
+          <div class="field">
+            <label class="field-label">Email</label>
+            <p>{{ currentUser?.email }}</p>
+          </div>
+          <div class="field">
+            <label class="field-label">Account Created</label>
+            <p>{{ currentUser?.createdAt | date:'medium' }}</p>
+          </div>
+        </div>
+      </div>
+      } @else {
+      <form [formGroup]="editForm" (ngSubmit)="saveProfile()" novalidate>
+        <div class="content-block">
+          <div class="avatar-row">
+            <div class="avatar-area">
+              @if (previewImage) {
+              <img [src]="previewImage" class="avatar" />
+              } @else {
+              <div class="avatar-placeholder">
+                {{ currentUser?.name?.charAt(0) || 'U' }}
+              </div>
+              }
+              <input id="fileInput" type="file" accept="image/*"
+                (change)="onFileChange($event)" />
+              <label for="fileInput" class="upload-btn">
+                <img src="assets/icons/upload-picture.svg"
+                  class="upload-icon" />
+                Upload Picture
+              </label>
+              <small class="upload-hint">Max size: 2MB. Formats: JPG, PNG,
+                GIF</small>
+            </div>
+          </div>
+          <div class="content-divider"></div>
+          <div class="form-fields">
+            <div class="label-with-icon">
+              <label for="name">Name</label>
+              <img src="assets/icons/ProfilePage.svg" class="label-icon" />
+            </div>
+            <input id="name" formControlName="name"
+              placeholder="Enter your name" />
+            @if (editForm.get('name')?.errors?.['required'] &&
+            editForm.get('name')?.touched) {
+            <div class="error">Name is required.</div> }
+            @if (editForm.get('name')?.errors?.['minlength'] &&
+            editForm.get('name')?.touched) {
+            <div class="error">Name must be at least 3 characters.</div> }
+            @if (editForm.get('name')?.errors?.['invalidName'] &&
+            editForm.get('name')?.touched) {
+            <div class="error">Name should contain only letters.</div> }
+            <div class="label-with-icon">
+              <label for="email">Email</label>
+              <img src="assets/icons/ProfilePage.svg" class="label-icon" />
+            </div>
+            <input id="email" formControlName="email"
+              placeholder="Enter your email" />
+            @if (editForm.get('email')?.invalid &&
+            editForm.get('email')?.touched) {
+            <div class="error">Enter a valid email address.</div> }
+            <div class="password-label-row">
+              <label class="password-label">New Password</label>
+              <label class="optional-label">(optional)</label>
+            </div>
+            <input id="password" type="password" formControlName="password"
+              placeholder="Enter new password" />
+            @if (!editForm.get('password')?.value) {
+            <div class="password-help">Leave blank if you don't want to change
+              your password</div>
+            }
+            @if (editForm.get('password')?.touched &&
+            editForm.get('password')?.invalid &&
+            editForm.get('password')?.value) {
+            <div class="error">Password must be at least 8 characters.</div>
+            }
+            <label class="account-created-label">Account Created</label>
+            <div class="static-text">{{ currentUser?.createdAt | date:'medium'
+              }}</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn-primary">Save Changes</button>
+          <button type="button" class="btn-secondary"
+            (click)="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+</div>

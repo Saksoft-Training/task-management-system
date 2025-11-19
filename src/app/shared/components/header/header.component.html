@@ -10,12 +10,15 @@
       }
     </nav>
     <div class="user-section">
-      @if (userEmail) {
+      @if (user?.email) {
       <div class="user-email" (click)="goToLogin()">
         <img src="assets/icons/profile-Icon.svg" alt="profile" />
-        <span>{{ userEmail }}</span>
+        <span>{{ user.email }}</span>
       </div>
       }
+      <img
+        src="assets/icons/logout-Icon.svg"
+        alt="logout"
       <div class="notification-container">
         <button class="bell-button" (click)="toggleNotifications()" type="button">
           <img src="assets/icons/Bell-Icon.svg" alt="notifications" class="bell-icon" />
