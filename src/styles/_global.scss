@@ -1,9 +1,47 @@
-@use './variables' ;
+@use './variables';
 @use './mixins';
 
-/* ========================================================= */
-/* FOOTER */
-/* ========================================================= */
+// ====================== FOOTER ======================
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  overflow-y: auto;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  font-family: variables.$font-family-primary;
+  background-color: variables.$color-gray-50;
+  color: variables.$color-text-primary;
+  line-height: 1.4;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.main-content {
+  overflow-y: auto;
+  -ms-overflow-style: none;
+}
+.main-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* ========================================= */
+/* FOOTER STYLES */
+/* ========================================= */
 
 .footer {
   @include mixins.fixed-bottom;
@@ -34,15 +72,15 @@
 
 .error-message-container {
   @include mixins.flex(flex-start, center);
+  @include mixins.font-primary(variables.$font-size-error);
+  @include mixins.box-shadow(variables.$error-shadow);
   background-color: variables.$color-error-bg;
   color: variables.$color-error-text;
   border: 1px solid variables.$color-error-border;
   padding: variables.$error-padding-y variables.$error-padding-x;
   border-radius: variables.$error-border-radius;
-  @include mixins.font-primary(variables.$font-size-error);
-  @include mixins.box-shadow(variables.$error-shadow);
-  position: relative;
   margin: variables.$error-margin-y 0;
+  position: relative;
 
   .icon {
     margin-right: 0.625rem;
@@ -72,9 +110,106 @@
   }
 }
 
-/* ========================================================= */
-/* DIALOG BOX */
-/* ========================================================= */
+/* ========================================= */
+/* GLOBAL HEADER */
+/* ========================================= */
+
+.app-header {
+  width: 79.9375rem;
+  display: flex;
+  justify-content: center;
+  background: variables.$color-white;
+  border-bottom: 0.0625rem solid variables.$color-gray-200;
+  height: 6.25rem;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: variables.$font-family-primary;
+}
+
+.header-container {
+  width: 75rem;
+  height: 6.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.logo {
+  width: 9.4375rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: -5%;
+  line-height: 120%;
+  color: variables.$color-black;
+}
+
+.nav-links {
+  position: absolute;
+  top: 2.25rem;
+  left: 31.40625rem;
+  transform: translateX(-50%);
+  width: 19.375rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.1875rem;
+
+  a {
+    width: 4.5rem;
+    height: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 140%;
+    color: variables.$color-black;
+    text-decoration: none;
+  }
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+}
+
+.user-email {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  height: 2.25rem;
+  padding: 0.875rem 1.375rem;
+  background: #dfecc6;
+  border-radius: 62.5rem;
+  width: fit-content;
+  font-family: variables.$font-family-primary;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: variables.$color-black;
+  white-space: nowrap;
+}
+
+.email-icon {
+  font-size: 0.875rem;
+  color: variables.$color-black;
+}
+
+.logout-icon {
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+/* ========================================= */
+/* MODERN SPINNER */
+/* ========================================= */
 
 .loading-overlay {
   position: fixed;
@@ -97,8 +232,21 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner-text {
@@ -120,16 +268,19 @@
   width: 100%;
   height: 100%;
   background: variables.$color-overlay-bg;
+  inset: 0;
+  background: variables.$color-overlay-bg;
   @include mixins.flex();
   z-index: variables.$dialog-overlay-z;
 }
 
 .dialog-box {
-  background: variables.$color-dialog-bg;
+  background: variables.$color-bg-footer;
   border-radius: variables.$dialog-radius;
   width: variables.$dialog-width;
   max-width: variables.$dialog-max-width;
   @include mixins.box-shadow(variables.$dialog-shadow);
+  @include mixins.fade-in(variables.$dialog-fade-duration);
   overflow: hidden;
   @include mixins.fade-in(variables.$dialog-fade-duration);
 
@@ -143,107 +294,125 @@
       margin: 0;
       @include mixins.font-primary(variables.$font-size-title, variables.$font-weight-title);
       color: variables.$color-text-primary;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      padding: 4px;
-      cursor: pointer;
-      @include mixins.flex();
-      @include mixins.transition(transform);
+      background: variables.$color-bg-footer;
+      border-radius: variables.$dialog-radius;
+      width: variables.$dialog-width;
+      max-width: variables.$dialog-max-width;
+      @include mixins.box-shadow(variables.$dialog-shadow);
+      @include mixins.fade-in(variables.$dialog-fade-duration);
+      overflow: hidden;
+        .close-btn {
+          background: none;
+          border: none;
+          padding: 4px;
+          cursor: pointer;
+          @include mixins.flex();
+          @include mixins.transition(transform);
 
       img {
         width: 18px;
         height: 18px;
-        filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(5500%)
+        cursor: pointer;
+        padding: 0.25rem;
+        @include mixins.flex();
+        @include mixins.transition(transform, 0.2s);
+
+        img {
+          width: 1.125rem;
+          height: 1.125rem;
+          filter: brightness(0) saturate(100%) invert(14%) sepia(89%) saturate(5500%) hue-rotate(354deg) brightness(91%) contrast(92%);
+        }
+      padding: 0.25rem;
+      @include mixins.flex();
+      @include mixins.transition(transform, 0.2s);
+
+      img {
+        width: 1.125rem;
+        height: 1.125rem;
+        filter: brightness(0) saturate(100%)
+          invert(14%) sepia(89%) saturate(5500%)
           hue-rotate(354deg) brightness(91%) contrast(92%);
       }
 
-        &:hover {
-          opacity: 0.8;
-          transform: scale(1.1);
-        }
-      }
-    }
-  }
-
-  .dialog-body {
-    padding: variables.$dialog-padding-body;
-
-    p {
-      font-size: variables.$font-size-body;
-      color: variables.$color-text-secondary;
-      line-height: 1.4;
-    }
-  }
-
-  .dialog-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: variables.$dialog-gap-actions;
-    padding: variables.$dialog-padding-actions;
-    border-top: 1px solid variables.$color-dialog-border;
-
-    .btn {
-      padding: 8px 16px;
-      font-size: variables.$font-size-button;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      @include mixins.transition(background-color);
-
-      &.cancel {
-        background-color: variables.$color-btn-cancel-bg;
-        color: variables.$color-bg-footer;
-
-        &:hover {
-          background-color: variables.$color-btn-cancel-hover;
-        }
-      }
-
-      &.confirm {
-        background-color: variables.$color-btn-confirm-bg;
-        color: variables.$color-bg-footer;
-
-        &:hover {
-          background-color: variables.$color-btn-confirm-hover;
-        }
-
-        &.danger {
-          background-color: variables.$color-btn-danger-bg;
-
-          &:hover {
-            background-color: variables.$color-btn-danger-hover;
+            &:hover {
+              opacity: 0.8;
+              transform: scale(1.1);
+            }
           }
         }
       }
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 0.25rem;
-      font-size: variables.$font-size-button;
-      cursor: pointer;
-      @include mixins.transition(background-color);
 
-      &.cancel {
-        background-color: variables.$color-btn-cancel-bg;
-        color: variables.$color-btn-cancel-text;
+      .dialog-body {
+        padding: variables.$dialog-padding-body;
 
-        &:hover {
-          background-color: variables.$color-btn-cancel-hover;
+        p {
+          color: variables.$color-text-secondary;
+          font-size: variables.$font-size-body;
+          line-height: 1.4;
         }
       }
 
-      &.confirm {
-        background-color: variables.$color-btn-confirm-bg;
-        color: variables.$color-bg-footer;
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: variables.$dialog-gap-actions;
+        padding: variables.$dialog-padding-actions;
+        border-top: 1px solid variables.$color-dialog-border;
 
-        &:hover {
-          background-color: variables.$color-btn-confirm-hover;
-        }
+        .btn {
+          padding: 8px 16px;
+          font-size: variables.$font-size-button;
+          border-radius: 4px;
+          border: none;
+          cursor: pointer;
+          @include mixins.transition(background-color);
 
-        &.danger {
-          background-color: variables.$color-btn-danger-bg;
+          &.cancel {
+            background-color: variables.$color-btn-cancel-bg;
+            color: variables.$color-bg-footer;
+
+            &:hover {
+              background-color: variables.$color-btn-cancel-hover;
+            }
+          }
+
+          &.confirm {
+            background-color: variables.$color-btn-confirm-bg;
+            color: variables.$color-bg-footer;
+
+            &:hover {
+              background-color: variables.$color-btn-confirm-hover;
+            }
+
+            &.danger {
+              background-color: variables.$color-btn-danger-bg;
+
+              &:hover {
+                background-color: variables.$color-btn-danger-hover;
+              }
+            }
+          }
+
+          &.cancel {
+            background-color: variables.$color-btn-cancel-bg;
+            color: variables.$color-btn-cancel-text;
+
+            &:hover {
+              background-color: variables.$color-btn-cancel-hover;
+            }
+          }
+
+          &.confirm {
+            background-color: variables.$color-btn-confirm-bg;
+            color:  variables.$color-bg-footer;
+;
+
+            &:hover {
+              background-color: variables.$color-btn-confirm-hover;
+            }
+
+            &.danger {
+              background-color: variables.$color-btn-danger-bg;
 
           &:hover {
             background-color: variables.$color-btn-danger-hover;
@@ -253,207 +422,199 @@
     }
   }
 }
-// Task Create form global css
-
-// Page main container 
-.create-task-page {
-  padding: vars.$padding-primary;
+}
+// ====================== CREATE PROJECT PAGE ======================
+.project-create-page {
+  padding: variables.$padding-primary;
 }
 
-// Page title 
+.breadcrumb {
+  @include mixins.flex(flex-start);
+  gap: 6px;
+  margin-bottom: variables.$padding-footer-sides;
+  font-size: variables.$font-size-error;
+
+  .breadcrumb-link {
+    color: variables.$color-breadcrumb;
+    font-weight: variables.$font-weight-primary;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .breadcrumb-current {
+    color: variables.$color-title;
+    font-weight: variables.$font-weight-primary;
+  }
+
+  .breadcrumb-separator {
+    color: variables.$color-text-secondary;
+  }
+}
+
 .page-title {
-  font-family: vars.$font-family-primary;
-  font-size: vars.$font-size-page-title;
-  font-weight: vars.$font-weight-footer;
-  color: vars.$color-title;
-  margin-bottom: 6px;
+  font-family: variables.$font-family-primary;
+  font-size: variables.$font-size-page-title;
+  font-weight: variables.$font-weight-footer;
+  color: variables.$color-title;
+  margin-bottom: variables.$dialog-radius;
 }
 
-// Small subtitle under title 
 .page-subtitle {
   font-size: variables.$font-size-body;
   color: variables.$color-subtitle;
   margin-bottom: 36px;
 }
 
-// Main white box of the form 
 .project-form-container {
   background: variables.$color-bg-footer;
   border: 1px solid #ededed;
-  border-radius: 10px;
+  border-radius: variables.$font-size-error;
   padding: 34px 60px 34px 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-// Two-column form layout 
+.form-title {
+  font-family: variables.$font-family-primary;
+  font-size: variables.$font-size-body;
+  font-weight: variables.$font-weight-primary;
+  color: variables.$color-subtitle;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
 .formProject {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 28px 40px;
+  gap: 1.75rem 2.5rem;
 }
 
-// Label + input wrapper 
-.field-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.description-group {
+  grid-column: span 2;
 }
 
-// Label style 
-.field-label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-// For labels that need a required icon 
-.field-label.required {
-  position: relative;
-  padding-right: 40px;
-}
-
-// The required icon 
-.field-label.required::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  right: 36.95px;
-  width: 6.52px;
-  height: 14px;
-  background-image: url('/assets/icons/required-Icon.svg');
-  background-repeat: no-repeat;
-  background-size: 6.52px 14px;
-}
-
-// Inputs, selects, textarea 
-.field-input,
-.field-select,
-.project-description {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: vars.$dialog-radius;
-  border: 1px solid vars.$border-color;
-  background: vars.$input-background;
-  font-size: 14px;
-  font-family: vars.$font-family-primary;
-  transition: 0.2s ease;
-}
-
-// Highlight on focus 
-.field-input:focus,
-.field-select:focus,
-.project-description:focus {
-  background: white !important;
-  border-color: vars.$color-breadcrumb;
-}
-
-// Dropdown arrow 
-.field-select {
-  appearance: none;
-  background-image: url('/assets/icons/drop-down-Icon.svg');
-  background-repeat: no-repeat;
-  background-position: right 36.95px center;
-  background-size: 6.52px 14px;
-  padding-right: 50px;
-}
-
-// Description section header + character count 
 .description-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: -4px;
 }
 
-// Character count text 
 .char-counter {
   font-size: 12px;
-  color: vars.$color-text-secondary;
+  color: variables.$color-text;
 }
 
-// Textarea minimum size 
 .project-description {
+  padding: 12px 14px;
+  border-radius: variables.$dialog-radius;
+  border: 1px solid variables.$border-color;
+  font-size: variables.$font-size-error;
+  width: 100%;
   resize: vertical;
-  min-height: 90px;
-  background: vars.$input-background;
+  font-family: variables.$font-family-primary;
+  background-color: variables.$input-background;
+
+  &:focus {
+    background-color: variables.$color-bg-footer;
+    border-color: variables.$color-breadcrumb;
+    outline: none;
+  }
 }
 
-// Error text message 
-.error small {
-  color: vars.$color-error-text;
-  font-size: 12px;
-  margin-top: -4px;
+.field-group {
+  display: flex;
+  flex-direction: column;
+
+  .field-label {
+    font-size: variables.$font-size-error;
+    font-weight: variables.$font-weight-footer;
+    margin-bottom: 4px;
+  }
+
+  .field-label.required::after {
+    content: " *";
+    color: red;
+  }
+
+  .field-input,
+  .field-select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: variables.$dialog-radius;
+    border: 1px solid variables.$border-color;
+    background-color: variables.$input-background;
+    font-size: 14px;
+    font-family: variables.$font-family-primary;
+
+    &:focus {
+      background-color: variables.$color-bg-footer;
+      border-color: variables.$color-breadcrumb;
+      outline: none;
+    }
+  }
+
+  .status-options {
+    background-color: #eeeeee;
+    padding-bottom: 25px;
+    font-size: 18px;
+    color: variables.$color-text;
+  }
+
+  .error small {
+    color: variables.$color-error-text;
+    margin-top: 4px;
+    font-size: 12px;
+  }
 }
 
-// Red border for invalid fields 
-.field-input.ng-invalid.ng-touched,
-.field-select.ng-invalid.ng-touched {
-  border-color: red !important;
-}
-
-// Small helper text under date fields 
-.project-dates {
-  font-size: 12px;
-  color: vars.$color-subtitle;
-  margin-top: -4px;
-}
-
-// Calendar icon inside date input 
-.date-wrapper {
-  position: relative;
-}
-
-.date-wrapper::after {
-  content: "";
-  position: absolute;
-  right: 36.95px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6.52px;
-  height: 14px;
-  background-image: url('/assets/icons/calendar-Icon.svg');
-  background-repeat: no-repeat;
-  background-size: 6.52px 14px;
-  pointer-events: none;
-}
-
-// Buttons container 
 .buttons {
   grid-column: span 2;
-  display: flex;
-  justify-content: center;
-  gap: 18px;
+  @include mixins.flex(center);
+  gap: 14px;
   margin-top: 10px;
+
+  .btn {
+    padding: 12px 28px;
+    font-size: variables.$font-size-error;
+    border-radius: 22px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .btn-submit {
+    background-color: variables.$color-breadcrumb;
+    color: variables.$color-bg-footer;
+    width: 23.75rem;
+
+    &:disabled {
+      background-color: variables.$disabled-bg-color;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: darken(variables.$color-primary-hover, 6%);
+    }
+  }
+
+  .btn-secondary {
+    background-color: variables.$btn-secondary-bg-color;
+    color: variables.$color-title;
+    padding: 12px 22px;
+
+    &:hover {
+      background-color: variables.$hover-bg-color;
+    }
+  }
 }
 
-// Base button style 
-.btn {
-  padding: 12px 28px;
-  border-radius: 22px;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-// Main submit button 
-.btn-submit {
-  background: vars.$color-breadcrumb;
-  color: white;
-  width: 380px;
-}
-
-// Disabled submit 
-.btn-submit:disabled {
-  background: vars.$disabled-bg-color;
-  cursor: not-allowed;
-}
-
-// Cancel button 
-.btn-secondary {
-  background: vars.$btn-secondary-bg-color;
-  color: #000;
-}
-
-// Hover for secondary button 
-.btn-secondary:hover {
-  background: vars.$hover-bg-color;
+.success {
+  text-align: center;
+  margin-top: variables.$font-size-title;
+  color: #2e7d32;
+  font-size: variables.$font-size-error;
+  font-weight: variables.$font-weight-primary;
 }

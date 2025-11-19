@@ -6,9 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Project } from '../../../../../types/models/project';
 import { Task, TaskPriority, TaskStatus } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
-import { ProjectService } from '../../../project-management/services/project-service';
-import { UserStorageService } from '../../../../shared/services/user-storage-service';
+import { AuthService } from '../../../user-account-management/services/auth-service';
 import { User } from '../../../../../types/models/user';
+import { ProjectService } from '../../../project-management/services/project.service';
+import { UserStorageService } from '../../../../shared/services/storage-service';
 //#endregion
 
 @Component({
@@ -50,19 +51,21 @@ export class TaskCreateComponent implements OnInit {
   public users: User[] = [];
 
   /** Mock logged-in user */
-  public readonly currentUser: string = 'demoUser';
+  public currentUser: string = '';
+
 
   //#endregion
 
   //#region Constructor
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly projectService: ProjectService,
-    private readonly taskService: TaskService,
-    private readonly userStorageService: UserStorageService
-  ) {}
+  private readonly fb: FormBuilder,
+  private readonly route: ActivatedRoute,
+  private readonly router: Router,
+  private readonly projectService: ProjectService,
+  private readonly taskService: TaskService,
+  private readonly userStorageService: UserStorageService,
+  private readonly authService: AuthService
+) {}
   //#endregion
 
   //#region Lifecycle Methods
@@ -71,13 +74,16 @@ export class TaskCreateComponent implements OnInit {
    * Initializes component: loads projects, users, detects project from route,
    * builds reactive form, and attaches listeners.
    */
-  public ngOnInit(): void {
-    this.loadProjects();
-    this.loadUsers();
-    this.detectProjectFromRoute();
-    this.buildTaskForm();
-    this.subscribeToProjectChange();
-  }
+ public ngOnInit(): void {
+  const user = this.authService.getCurrentUser();
+  this.currentUser = user?.email || '';
+
+  this.loadProjects();
+  this.loadUsers();
+  this.detectProjectFromRoute();
+  this.buildTaskForm();
+  this.subscribeToProjectChange();
+}
 
   //#endregion
 
@@ -211,8 +217,8 @@ export class TaskCreateComponent implements OnInit {
       status: formValue.status,
       priority: formValue.priority,
       assignee: formValue.assignee,
-      assigneeEmail: formValue.assigneeEmail,
-      dueDate: formValue.dueDate,
+      assigneeEmail: '',
+      dueDate: formValue.dueDate, 
       projectId: Number(this.selectedProject?.id ?? formValue.projectId),
       createdBy: this.currentUser,
       createdAt: timestamp,
