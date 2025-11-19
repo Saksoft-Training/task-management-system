@@ -247,6 +247,9 @@
     font-size: 0.875rem;
     cursor: pointer;
   }
+  .btn-primary:hover {
+    background: variables.$color-btn-primary-hover;
+  }
   .btn-secondary {
     padding: 0.875rem 1.375rem;
     background: variables.$color-btn-cancel-bg;
@@ -256,5 +259,9 @@
     font-size: 0.875rem;
     color: variables.$color-black;
     border: none;
+  }
+  .btn-secondary:hover {
+    background-color: variables.$color-btn-secondary-hover-strong;
+    border: 1px solid variables.$color-gray-200;
   }
 }

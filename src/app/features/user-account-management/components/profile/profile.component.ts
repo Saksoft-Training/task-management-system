@@ -172,6 +172,8 @@ export class ProfileComponent implements OnInit {
       email: this.currentUser.email,
       password: ''
     });
+      this.router.navigate(['/dashboard']);
+
   }
   //#endregion
 
@@ -234,7 +236,7 @@ export class ProfileComponent implements OnInit {
     this.isEditing = false;
     this.previewImage = null;
     alert('Profile updated successfully!');
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/profile']);
   }
   //#endregion
 }
