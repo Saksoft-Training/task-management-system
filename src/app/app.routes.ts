@@ -15,13 +15,10 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   {path:'dashboard-comp',component:DashboardComponent},
-];
-=======
-  { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'projects/create/:id', component: ProjectCreateComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'projects', component: ProjectListComponent }
 ];
-
