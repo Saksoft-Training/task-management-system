@@ -9,3 +9,5 @@ export interface Project {
     status: 'Planning' | 'In Progress' | 'Completed' | 'On Hold';
     updatedAt: string;
 }
+
+
