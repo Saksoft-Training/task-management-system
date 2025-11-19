@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   {path:'tasks',component:TaskCreateComponent},
-  {path:'dashboard-comp',component:DashboardComponent},
+  {path:'dashboard',component:DashboardComponent},
     { path: 'login', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
