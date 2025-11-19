@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { delay, tap } from 'rxjs/operators';
 import { User } from '../../../../types/models/user';
 import { UserStorageService } from '../../../shared/services/storage-service';
 
@@ -10,23 +10,38 @@ const AUTH_TOKEN_KEY = 'authToken';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  //#region Properties
+  /**
+   * @summary Holds the current authenticated user and allows subscription.
+   */
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  /**
+   * @summary Observable stream of auth user used for header updates.
+   */
+  public currentUser$ = this.currentUserSubject.asObservable();
+  //#endregion
+
   //#region Constructor
   /**
-   * @summary Injects router and user storage service used for login operations.
-   * @param router Handles navigation after login/logout.
-   * @param userStorage Provides access to stored user data.
+   * @summary Loads saved login state and injects required services.
+   * @param router - Handles navigation on login/logout.
+   * @param userStorage - Provides access to stored user accounts.
    */
-  public constructor(
-    private readonly router: Router,
-    private readonly userStorage: UserStorageService
-  ) {}
-  //#endregion 
+  constructor(
+    private router: Router,
+    private userStorage: UserStorageService
+  ) {
+    // Load saved user on app startup
+    const savedUser = this.getCurrentUser();
+    this.currentUserSubject.next(savedUser);
+  }
+  //#endregion
 
   //#region Login
   /**
-   * @summary Validates user credentials and logs user in.
-   * @param credentials Object containing email, password, and rememberMe flag.
-   * @returns Observable<User> Emits authenticated user or error.
+   * @summary Validates credentials and logs in the user.
+   * @param credentials Contains email, password, and rememberMe flag.
+   * @returns Observable<User> Authenticated user or error.
    */
   public login(credentials: {
     email: string;
@@ -42,7 +57,8 @@ export class AuthService {
     if (!user) {
       return throwError(() => new Error('Invalid email or password'));
     }
-    const token = 'token_' + Date.now() + '_' + Math.random().toString(36).substring(2);
+    const token =
+      'token_' + Date.now() + '_' + Math.random().toString(36).substring(2);
     if (rememberMe) {
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
       localStorage.setItem(AUTH_TOKEN_KEY, token);
@@ -54,14 +70,17 @@ export class AuthService {
       localStorage.removeItem(CURRENT_USER_KEY);
       localStorage.removeItem(AUTH_TOKEN_KEY);
     }
-    return of(user).pipe(delay(500));
+    return of(user).pipe(
+      delay(500),
+      tap(() => this.currentUserSubject.next(user))
+    );
   }
-  //#endregion 
+  //#endregion
 
-  //#region 
+  //#region Authentication Helpers
   /**
    * @summary Checks if authentication token exists.
-   * @returns boolean Returns true if user is logged in.
+   * @returns boolean True if logged in.
    */
   public isLoggedIn(): boolean {
     return !!(
@@ -70,19 +89,18 @@ export class AuthService {
     );
   }
   /**
-   * @summary Retrieves the currently logged-in user.
-   * @returns User|null The logged-in user or null if not found.
+   * @summary Retrieves the currently authenticated user.
+   * @returns User | null
    */
   public getCurrentUser(): User | null {
     const data =
       sessionStorage.getItem(CURRENT_USER_KEY) ||
       localStorage.getItem(CURRENT_USER_KEY);
-
     return data ? JSON.parse(data) : null;
   }
   /**
-   * @summary Retrieves stored authentication token.
-   * @returns string|null Auth token string.
+   * @summary Retrieves authentication token.
+   * @returns string | null
    */
   public getAuthToken(): string | null {
     return (
@@ -90,17 +108,16 @@ export class AuthService {
       localStorage.getItem(AUTH_TOKEN_KEY)
     );
   }
-  //#endregion 
+  //#endregion
 
-  //#region 
+  //#region User Sync With Header / Profile
   /**
-   * @summary Logs user out, clears storage, and redirects to login page.
+   * @summary Updates the BehaviorSubject so UI (header/profile) refreshes after user updates.
+   * @param user Updated user object.
    * @returns void
    */
-  public logout(): void {
-    sessionStorage.clear();
-    localStorage.clear();
-    this.router.navigate(['/login'], { replaceUrl: true });
+  public updateCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
   }
-  //#endregion 
+  //#endregion
 }

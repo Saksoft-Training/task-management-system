@@ -10,13 +10,15 @@
       }
     </nav>
     <div class="user-section">
-      @if (userEmail) {
+      @if (user?.email) {
       <div class="user-email" (click)="goToLogin()">
         <img src="assets/icons/profile-Icon.svg" alt="profile" />
-        <span>{{ userEmail }}</span>
+        <span>{{ user.email }}</span>
       </div>
       }
-      <img src="assets/icons/logout-Icon.svg" alt="logout"
+      <img
+        src="assets/icons/logout-Icon.svg"
+        alt="logout"
         class="logout-icon" />
     </div>
     }
