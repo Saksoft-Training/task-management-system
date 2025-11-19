@@ -186,7 +186,7 @@ body::-webkit-scrollbar {
   gap: 0.625rem;
   height: 2.25rem;
   padding: 0.875rem 1.375rem;
-  background: #dfecc6;
+  background:variables.$create-btn-bg;
   border-radius: 62.5rem;
   width: fit-content;
   font-family: variables.$font-family-primary;
@@ -252,7 +252,7 @@ body::-webkit-scrollbar {
 
 .spinner-text {
   margin-top: 1rem;
-  color: #fff;
+  color:variables.$color-white;
   font-size: 0.9rem;
   text-align: center;
   font-family: variables.$font-family-primary;
