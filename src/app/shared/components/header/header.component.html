@@ -1,3 +1,4 @@
+
 <header class="app-header">
   <div class="header-container">
     <div class="logo">SakNgTrain</div>
@@ -10,15 +11,12 @@
       }
     </nav>
     <div class="user-section">
-      @if (user?.email) {
+      @if (userEmail) {
       <div class="user-email" (click)="goToLogin()">
         <img src="assets/icons/profile-Icon.svg" alt="profile" />
-        <span>{{ user.email }}</span>
+        <span>{{ userEmail }}</span>
       </div>
       }
-      <img
-        src="assets/icons/logout-Icon.svg"
-        alt="logout"
       <div class="notification-container">
         <button class="bell-button" (click)="toggleNotifications()" type="button">
           <img src="assets/icons/Bell-Icon.svg" alt="notifications" class="bell-icon" />

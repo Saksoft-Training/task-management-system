@@ -39,11 +39,11 @@ export class HeaderComponent implements OnInit {
    */
   public notifications$!: Observable<AppNotification[]>;
   /**
-   * @summary Stores the currently logged-in user for header display.
+   * @summary Logged-in user's email displayed in the header.
    */
-  public user: any = null;
+  public userEmail: string | null = null;
   /**
-   * @summary Navigation links shown in the header.
+   * @summary Navigation menu items shown in the header.
    */
   public navLinks = [
     { label: 'Dashboard', path: '/dashboard' },
@@ -55,35 +55,22 @@ export class HeaderComponent implements OnInit {
   //#endregion
   //#region Constructor
   /**
-   * @summary Injects services for authentication & navigation.
-   * @param authService Provides current user observable and auth state.
-   * @param router Manages application routing.
+   * @summary Injects required services.
+   * @param authService Provides logged-in user information.
+   * @param router Helps determine current route for UI logic.
    */
-  constructor(
+  public constructor(
     private authService: AuthService,
-    private router: Router
-  ) { }
-  //#endregion
-
-  //#region Lifecycle
     private router: Router,
     private notificationService: NotificationService
   ) { }
   //#endregion
   //#region Lifecycle Hook
   /**
-   * @summary Subscribes to user observable and loads initial user.
+   * @summary Loads the logged-in user's email on component initialization.
    * @returns void
    */
   public ngOnInit(): void {
-    this.authService.currentUser$.subscribe(current => {
-      this.user = current;
-    });
-    this.user = this.authService.getCurrentUser();
-  }
-  //#endregion
-
-  //#region UI Helpers
     const user = this.authService.getCurrentUser();
     this.userEmail = user?.email || null;
     this.notifications$ = this.notificationService.notifications$;
@@ -96,22 +83,15 @@ export class HeaderComponent implements OnInit {
   //#endregion
   //#region Methods
   /**
-   * @summary Determines whether to show a minimal header (login/register pages).
-   * @returns boolean
+   * @summary Determines whether to show minimal header
+   * @returns boolean True if on login or registration page.
    */
   public isAuthMinimal(): boolean {
     const url = this.router.url;
-    return url.includes('/login') || url.includes('/register');
-  }
-  //#endregion
-
-  //#region Navigation
-  /**
-   * @summary Navigates user to login page.
-   * @returns void
-   */
-  public goToLogin(): void {
-    this.router.navigate(['/login']);
+    return (
+      url.includes('/login') ||
+      url.includes('/register')
+    );
   }
   //#endregion
 
