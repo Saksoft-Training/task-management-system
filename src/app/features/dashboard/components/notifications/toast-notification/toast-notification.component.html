@@ -1,0 +1,7 @@
+<div class="toast-container" *ngIf="current" [ngClass]="severityClass">
+  <div class="toast-content">
+    <strong>{{ current.title }}</strong>
+    <span>{{ current.message }}</span>
+  </div>
+  <button class="close-btn" (click)="close()">✕</button>
+</div>
