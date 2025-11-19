@@ -12,7 +12,6 @@ export class DashboardService {
  
    private storageKeyTasks = 'tasks';
 
-  // 👇 ALWAYS initialize with valid Statistics (no null)
   private stats$ = new BehaviorSubject<Statistics>(this.emptyStats());
 
   constructor(private authService: AuthService) {
@@ -24,7 +23,6 @@ export class DashboardService {
     fromEvent<StorageEvent>(window, 'storage').subscribe(() => this.refresh());
   }
 
-  // 👇 VALID fallback object (never null)
   private emptyStats(): Statistics {
     return {
       totalProjects: 0,
