@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../../../../types/models/project';
 import { FooterComponent } from '../../../../shared/components/footer-component/footer-component';
-import { AuthService } from '../../../user-account-management/services/auth-service';
 
 @Component({
   selector: 'app-project-create-component',
-  imports: [ReactiveFormsModule],
+  imports: [FooterComponent, ReactiveFormsModule],
   templateUrl: './project-create.component.html',
   styleUrl: './project-create.component.scss',
 })
@@ -23,7 +22,7 @@ export class ProjectCreateComponent {
   /** Project ID when editing an existing project */
   public editProjectId: number | null = null;
   /** Logged-in user name */
-  public currentUser: string = '';
+  public currentUser: string = 'demoUser';
   /** Minimum date allowed for date fields (today) */
   public minDate: string = new Date().toISOString().split('T')[0];
   // #endregion
@@ -40,26 +39,20 @@ export class ProjectCreateComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private projectService: ProjectService,
-    private route: ActivatedRoute,
-    private authService: AuthService
+    private route: ActivatedRoute
   ) {
     this.projectForm = this.formBuilder.group({
       description: ['', [Validators.maxLength(500)]],
       endDate: ['', [Validators.required]],
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-      startDate: ['', [Validators.required, this.futureOrTodayValidator.bind(this)]],
+      startDate: ['', [Validators.required, this.futureOrTodayValidator]],
       status: ['', [Validators.required]]
     }, {
       validators: this.endDateAfterStartDateValidator.bind(this)
     });
-  }
-  //#endregion
-
-  ngOnInit() {
-    const user = this.authService.getCurrentUser();
-    this.currentUser = user?.email || '';
     this.validateProjectId();
   }
+  //#endregion
 
   //#region Private Utility Methods
   /**
@@ -70,6 +63,7 @@ export class ProjectCreateComponent {
     const projectIdParam = this.route.snapshot.paramMap.get('id');
 
     if (!projectIdParam) {
+      this.router.navigate(['/projects']);
       return;
     }
     const projectId = Number(projectIdParam);
@@ -101,19 +95,19 @@ export class ProjectCreateComponent {
   }
   // #endregion
 
-  // #region Validators
+  // #region Validators 
   /**
    * @summary Validator ensuring selected date is today or in the future.
    * @param control - Form control to validate
    * @returns {ValidationErrors | null} Error object if past date, otherwise null
    */
-  public futureOrTodayValidator = (control: AbstractControl): ValidationErrors | null => {
+  public futureOrTodayValidator(control: AbstractControl): ValidationErrors | null {
     const inputDateOnly = this.toLocalDateOnly(control.value);
     if (!inputDateOnly) return null;
     const today = new Date();
     const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     return inputDateOnly < todayOnly ? { pastDate: true } : null;
-  };
+  }
   /**
    * @summary Validator ensuring end date is not before start date.
    * @param group - Form group containing startDate and endDate fields
@@ -129,7 +123,7 @@ export class ProjectCreateComponent {
   }
   // #endregion
 
-  // #region Getters
+  // #region Getters 
   /**
    * @summary Computes minimum allowed end date after selecting start date.
    * @returns {string} Minimum end date
@@ -139,7 +133,7 @@ export class ProjectCreateComponent {
   }
   // #endregion
 
-  // #region Form Actions
+  // #region Form Actions 
   /**
    * @summary Handles project creation or update logic.
    * @description If form is invalid, marks all fields and stops. Creates new project or updates existing one.
