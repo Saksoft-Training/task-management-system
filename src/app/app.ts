@@ -1,7 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
-import { FooterComponent } from './shared/components/footer-component/footer-component';
+import { FooterComponent } from './shared/components/footer.component/footer.component';
+import { ToastNotificationComponent } from './features/dashboard/components/notifications/toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-root',

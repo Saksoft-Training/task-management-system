@@ -15,6 +15,5 @@ export interface Task {
   createdAt: string;
   updatedAt: string;
   completedAt?: string | null;
-
 }
->>>>>>> 86730bd4d6033a8347fea1c10e19184c71bd3c24
+
