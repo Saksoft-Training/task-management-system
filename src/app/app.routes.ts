@@ -10,6 +10,8 @@ import { ForgotPasswordComponent } from './features/user-account-management/comp
 import { ProjectListComponent } from './features/project-management/components/project-list/project-list.component';
 import { TaskDetailPageComponent } from './features/task-management/components/task-detail-page.component/task-detail-page.component';
 import { ProfileComponent } from './features/user-account-management/components/profile/profile.component';
+import { ProjectDetailComponent } from './features/project-management/components/project-detail/project-detail.component';
+import { TaskCreateComponent } from './features/task-management/components/tast-create.component/task-create.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
@@ -30,4 +32,8 @@ export const routes: Routes = [
   { path: "tasks/edit/:id", component: TaskCreateComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'tasks/:id', component: TaskDetailPageComponent },
+  { path: 'projects', component: ProjectListComponent },
+  { path: 'projects/:id', component: ProjectDetailComponent },
+  { path: 'tasks/create', component: TaskCreateComponent }
+
 ];
