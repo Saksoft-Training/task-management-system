@@ -10,12 +10,13 @@ import { AuthService } from '../../../user-account-management/services/auth-serv
 import { User } from '../../../../../types/models/user';
 import { ProjectService } from '../../../project-management/services/project.service';
 import { UserStorageService } from '../../../../shared/services/storage-service';
+import { DeleteConfirmModalComponent } from "../delete-confirm-modal.component/delete-confirm-modal.component";
 //#endregion
 
 @Component({
   selector: 'app-create-task',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DeleteConfirmModalComponent],
   templateUrl: './task-create.component.html',
   styleUrls: ['./task-create.component.scss']
 })
@@ -62,6 +63,9 @@ export class TaskCreateComponent implements OnInit {
   /** Existing task loaded for editing */
   public taskToEdit?: Task;
 
+  public showDeleteModal = false;
+  public taskToDelete: Task | null = null;
+
   //#endregion
 
   //#region Constructor
@@ -74,7 +78,7 @@ export class TaskCreateComponent implements OnInit {
     private readonly taskService: TaskService,
     private readonly userStorageService: UserStorageService,
     private readonly authService: AuthService
-  ) {}
+  ) { }
 
   //#endregion
 
@@ -293,11 +297,10 @@ export class TaskCreateComponent implements OnInit {
 
   /** Deletes task in edit mode */
   public onDelete(): void {
-    if (confirm('Delete this task?') && this.editTaskId) {
-      this.taskService.deleteTask(this.editTaskId);
-      this.router.navigate(['/tasks']);
-    }
+    this.taskToDelete = this.taskToEdit || null;
+    this.showDeleteModal = true;
   }
+
 
   /** Resets form in create mode (no reset allowed in edit mode) */
   public onReset(): void {
@@ -322,11 +325,28 @@ export class TaskCreateComponent implements OnInit {
   }
   /** Opens date picker programmatically */
   public openDatePicker(): void {
-  const element = document.querySelector<HTMLInputElement>('input[formControlName="dueDate"]');
-  if (element) {
-    element.showPicker(); 
+    const element = document.querySelector<HTMLInputElement>('input[formControlName="dueDate"]');
+    if (element) {
+      element.showPicker();
+    }
   }
+
+  public onConfirmDelete(): void {
+  if (this.taskToDelete) {
+    this.taskService.deleteTask(this.taskToDelete.id);
+  }
+
+  this.showDeleteModal = false;
+  this.taskToDelete = null;
+
+  this.router.navigate(['/tasks']);
 }
+
+public onCancelDelete(): void {
+  this.showDeleteModal = false;
+  this.taskToDelete = null;
+}
+
 
   //#endregion
 }

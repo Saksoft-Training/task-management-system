@@ -1,0 +1,171 @@
+/* ===========================
+   OVERLAY
+=========================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(1px);
+  z-index: 900;
+}
+
+/* ===========================
+   FILTER PANEL CONTAINER
+=========================== */
+.filter-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 380px;
+  height: 80%;
+  background: #DFECC6; 
+  padding: 22px;
+  overflow-y: auto;
+  border-radius: 0 0 0 20px;
+
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  z-index: 999;
+
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+/* ===========================
+   HEADER
+=========================== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+/* ===========================
+   FILTER BLOCK / BOX
+=========================== */
+.box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.08);
+
+  .box-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+
+    span {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .clear {
+      background: none;
+      border: none;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+
+  /* checkbox list */
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 30px;
+
+    label {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+
+      input {
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  /* DATE ROW */
+  .date-row {
+    display: flex;
+    gap: 12px;
+
+    div {
+      flex: 1;
+
+      label {
+        font-size: 12px;
+        color: #555;
+        margin-bottom: 4px;
+        display: block;
+      }
+
+      input {
+        width: 62%;
+        height: 24px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid #bbb;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+/* ===========================
+   CLEAR ALL BUTTON
+=========================== */
+.clear-all {
+  width: 100%;
+  padding: 14px 0;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 15px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  transition: 0.2s;
+
+  &:hover {
+    color: #000;
+  }
+}

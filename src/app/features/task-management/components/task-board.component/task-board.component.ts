@@ -6,6 +6,8 @@ import { Subscription } from 'rxjs';
 import { Task, TaskStatus } from '../../../../../types';
 import { TaskService } from '../../services/task-service';
 import { ProjectService } from '../../../project-management/services/project.service';
+import { FilterPanelComponent } from "../filter-panel.component/filter-panel.component";
+import { UserStorageService } from '../../../../shared/services/storage-service';
 
 import {
   DragDropModule,
@@ -18,7 +20,7 @@ import {
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [CommonModule, DragDropModule, RouterLink],
+  imports: [CommonModule, DragDropModule, RouterLink, FilterPanelComponent],
   templateUrl: './task-board.component.html',
   styleUrls: ['./task-board.component.scss']
 })
@@ -81,6 +83,16 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     'Completed': []
   };
 
+  public showFilter = false;
+  public allUsers: string[] = [];
+
+  public activeFilters: any = {
+    status: [],
+    priority: [],
+    assignee: [],
+    fromDate: null,
+    toDate: null,
+  };
   /** Drag-drop connected container names */
   public connectedLists = ['todo', 'inprogress', 'completed'];
 
@@ -97,8 +109,9 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly taskService: TaskService,
-    private readonly projectService: ProjectService
-  ) {}
+    private readonly projectService: ProjectService,
+    private readonly userStorage: UserStorageService,
+  ) { }
 
   //#endregion
 
@@ -106,6 +119,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   /** Initialize board: detect project, subscribe to tasks, load project details */
   public ngOnInit(): void {
+
     // Detect project ID from route
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -116,22 +130,27 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     // Subscribe to live task updates
     this.sub = this.taskService.tasks$
       .subscribe(tasks => {
+
         this.tasks = tasks;
 
-        // Load project details only if board belongs to a project
+        // -------------------------------------
+        // Load all users for filter (from storage)
+        // -------------------------------------
+        const users = this.userStorage.getAllUsers();
+        this.allUsers = users.map(u => u.name);
+        // -------------------------------------
+
+        // Load project details only in project board mode
         if (this.isProjectBoard && this.projectId !== null) {
 
-          // Retrieve logged-in user email safely
           const user =
             JSON.parse(localStorage.getItem('currentUser') || 'null') ||
             JSON.parse(sessionStorage.getItem('currentUser') || 'null');
 
           const email = user?.email || '';
 
-          // Load only this user's projects
           const allProjects = this.projectService.getAll(email);
 
-          // Match project with board ID
           this.projectDetails =
             allProjects.find(p => Number(p.id) === this.projectId);
 
@@ -142,6 +161,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
         this.applyFiltering();
       });
   }
+
 
   /** Clean up observable subscription */
   public ngOnDestroy(): void {
@@ -156,15 +176,43 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   /** Filters tasks by project and then sorts and groups them */
   private applyFiltering(): void {
-    this.filtered = this.isProjectBoard
+    let list = this.isProjectBoard
       ? this.tasks.filter(t => t.projectId === this.projectId)
       : [...this.tasks];
 
-    this.projectTasksCount = this.filtered.length;
+    // ---------- FILTERS ----------
+
+    if (this.activeFilters.status.length > 0) {
+      list = list.filter(t => this.activeFilters.status.includes(t.status));
+    }
+
+    if (this.activeFilters.priority.length > 0) {
+      list = list.filter(t => this.activeFilters.priority.includes(t.priority));
+    }
+
+    if (this.activeFilters.assignee.length > 0) {
+      list = list.filter(t => this.activeFilters.assignee.includes(t.assignee));
+    }
+
+    if (this.activeFilters.fromDate) {
+      list = list.filter(t =>
+        new Date(t.dueDate) >= new Date(this.activeFilters.fromDate)
+      );
+    }
+
+    if (this.activeFilters.toDate) {
+      list = list.filter(t =>
+        new Date(t.dueDate) <= new Date(this.activeFilters.toDate)
+      );
+    }
+
+    this.filtered = list;
+    this.projectTasksCount = list.length;
 
     this.applySorting();
     this.groupTasks();
   }
+
 
   /** Groups filtered tasks into their status columns */
   private groupTasks(): void {
@@ -326,8 +374,13 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     const target = event.target as HTMLElement;
 
     if (!target.closest('.sort-box') &&
-        !target.closest('.sort-menu')) {
+      !target.closest('.sort-menu')) {
       this.toggleSortMenu = false;
     }
+  }
+
+  public applyFilters(f: any) {
+    this.activeFilters = f;
+    this.applyFiltering();
   }
 }

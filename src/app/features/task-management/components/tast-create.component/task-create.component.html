@@ -19,11 +19,19 @@
   <button class="delete-btn" (click)="onDelete()">Delete Task 🗑</button>
   }
 
+  <app-delete-confirm-modal
+    [visible]="showDeleteModal"
+    [itemName]="taskToDelete?.title"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </app-delete-confirm-modal>
+
   <div class="project-form-container">
 
     <!-- 🔹 FORM TITLE -->
     <p class="form-title">
-      {{ isEdit ? 'Update your task details' : 'Add a new task to track progress on your project' }}
+      {{ isEdit ? 'Update your task details' :
+      'Add a new task to track progress on your project' }}
     </p>
 
     <!-- ==================================
@@ -39,11 +47,13 @@
 
         <!-- If project is fixed (passed via route or editing), show readonly input -->
         @if (!showProjectDropdown) {
-        <input title="project" class="field-input readonly" [value]="selectedProject?.name" readonly />
+        <input title="project" class="field-input readonly"
+          [value]="selectedProject?.name" readonly />
         }
         <!-- Else show dropdown to select project -->
         @else {
-        <select title="project" class="field-select" formControlName="projectId">
+        <select title="project" class="field-select"
+          formControlName="projectId">
           <option disabled value>Select project</option>
           @for (p of projects; track p.id) {
           <option [value]="p.id">{{ p.name }}</option>
@@ -63,7 +73,8 @@
       <div class="field-group">
         <label class="field-label required">Title</label>
 
-        <input class="field-input" formControlName="title" placeholder="Enter task title" />
+        <input class="field-input" formControlName="title"
+          placeholder="Enter task title" />
 
         <!-- Error Messages -->
         @if (form.get('title')?.touched && form.get('title')?.invalid) {
@@ -100,7 +111,8 @@
       <div class="field-group">
         <label class="field-label required">Priority</label>
 
-        <select title="priority" class="field-select" formControlName="priority">
+        <select title="priority" class="field-select"
+          formControlName="priority">
           @for (p of priorities; track p) {
           <option [value]="p">{{ p }}</option>
           }
@@ -120,7 +132,8 @@
           </span>
         </div>
 
-        <textarea class="project-description" maxlength="500" formControlName="description"
+        <textarea class="project-description" maxlength="500"
+          formControlName="description"
           placeholder="Enter project description (optional)"></textarea>
 
         <!-- Error -->
@@ -135,7 +148,8 @@
       <div class="field-group">
         <label class="field-label required">Assignee</label>
 
-        <select title="assignee" class="field-select" formControlName="assignee">
+        <select title="assignee" class="field-select"
+          formControlName="assignee">
           <option disabled value>Select an assignee</option>
 
           @for (u of users; track u.email) {
@@ -156,13 +170,15 @@
         <label class="field-label required">Due Date</label>
 
         <div class="date-wrapper" (click)="openDatePicker()">
-          <input #dueDateInput title="due date" type="date" class="field-input" formControlName="dueDate"
+          <input #dueDateInput title="due date" type="date" class="field-input"
+            formControlName="dueDate"
             [min]="minDate" [max]="maxDate" />
         </div>
 
         @if (selectedProject) {
         <div class="project-dates">
-          Project dates: {{ selectedProject.startDate }} to {{ selectedProject.endDate }}
+          Project dates: {{ selectedProject.startDate }} to {{
+          selectedProject.endDate }}
         </div>
         }
 
@@ -183,7 +199,6 @@
         </div>
         }
       </div>
-
 
       <!-- ==================================
            FORM BUTTONS

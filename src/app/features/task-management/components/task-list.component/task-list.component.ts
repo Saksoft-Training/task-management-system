@@ -8,12 +8,15 @@ import { TaskCardComponent } from '../task-card.component/task-card.component';
 import { TaskBoardComponent } from '../task-board.component/task-board.component';
 import { ProjectService } from '../../../project-management/services/project.service';
 import { TaskService } from '../../services/task-service';
+import { FilterPanelComponent } from "../filter-panel.component/filter-panel.component";
+import { UserStorageService } from '../../../../shared/services/storage-service';
+import { DeleteConfirmModalComponent } from "../delete-confirm-modal.component/delete-confirm-modal.component";
 //#endregion
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, TaskCardComponent, TaskBoardComponent],
+  imports: [CommonModule, TaskCardComponent, TaskBoardComponent, FilterPanelComponent, DeleteConfirmModalComponent],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
@@ -49,6 +52,8 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   /** Tasks after sorting + filtering applied */
   public filtered: Task[] = [];
 
+  public allUsers: string[] = [];
+
   /** Currently opened task card in popup */
   public selectedTask: Task | null = null;
 
@@ -79,8 +84,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     private readonly route: ActivatedRoute,
     private readonly taskService: TaskService,
     private readonly projectService: ProjectService,
+    private readonly userStorage: UserStorageService,
     private readonly router: Router
-  ) {}
+  ) { }
 
   //#region Lifecycle Methods
 
@@ -88,24 +94,23 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit(): void {
     console.log('ROUTER URL =', this.router.url);
 
+    // Load users for Assignee filter
+    const users = this.userStorage.getAllUsers();
+    this.allUsers = users.map(u => u.name);
+
     // Listen for route param changes
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
-
-      // If projectId exists, store it
       this.projectId = id ? Number(id) : null;
-
-      // Filter tasks accordingly
       this.applyTaskLoad(this.taskService.getAllTasks());
     });
 
-    // Determine mode based on URL
     this.detectViewMode();
 
-    // Subscribe to task updates
     this.taskSub = this.taskService.tasks$
       .subscribe(tasks => this.applyTaskLoad(tasks));
   }
+
 
   /** Unsubscribe to prevent memory leaks */
   public ngOnDestroy(): void {
@@ -227,25 +232,65 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * - Numeric sorting for numbers
    */
   private applySorting(): void {
-    this.filtered = [...this.tasks].sort((a, b) => {
+    let list = [...this.tasks];
+
+    // ---------------- FILTERS -------------------
+
+    // Status filters
+    if (this.activeFilters.status.length > 0) {
+      list = list.filter(t =>
+        this.activeFilters.status.includes(t.status)
+      );
+    }
+
+    // Priority filters
+    if (this.activeFilters.priority.length > 0) {
+      list = list.filter(t =>
+        this.activeFilters.priority.includes(t.priority)
+      );
+    }
+
+    // Assignee filters
+    if (this.activeFilters.assignee.length > 0) {
+      list = list.filter(t =>
+        this.activeFilters.assignee.includes(t.assignee)
+      );
+    }
+
+    // From date filter
+    if (this.activeFilters.fromDate) {
+      list = list.filter(t =>
+        new Date(t.dueDate) >= new Date(this.activeFilters.fromDate)
+      );
+    }
+
+    // To date filter
+    if (this.activeFilters.toDate) {
+      list = list.filter(t =>
+        new Date(t.dueDate) <= new Date(this.activeFilters.toDate)
+      );
+    }
+
+    // ---------------- SORTING -------------------
+    this.filtered = [...list].sort((a, b) => {
       const A: any = a[this.sortField] ?? '';
       const B: any = b[this.sortField] ?? '';
 
-      // Date fields
+      // Date sorting
       if (this.sortField === 'dueDate' || this.sortField === 'createdAt') {
         const dA = new Date(A).getTime();
         const dB = new Date(B).getTime();
         return this.sortAsc ? dA - dB : dB - dA;
       }
 
-      // Strings
+      // String sorting
       if (typeof A === 'string' || typeof B === 'string') {
         return this.sortAsc
           ? String(A).localeCompare(String(B))
           : String(B).localeCompare(String(A));
       }
 
-      // Numbers
+      // Number sorting
       if (typeof A === 'number' && typeof B === 'number') {
         return this.sortAsc ? A - B : B - A;
       }
@@ -306,13 +351,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /** Delete task after confirmation */
-  public deleteTask(task: Task): void {
-    if (!task) return;
-
-    if (confirm(`Delete task "${task.title}"?`)) {
-      this.taskService.deleteTask(task.id);
-    }
-  }
 
   /* --------------------------------------
    * MODE SWITCHING
@@ -365,4 +403,43 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public getTasks(status: string): Task[] {
     return this.filtered.filter(t => t.status === status);
   }
+
+  public showFilter = false;
+
+  public activeFilters: any = {
+    status: [],
+    priority: [],
+    assignee: [],
+    fromDate: null,
+    toDate: null,
+  };
+  public applyFilters(f: any) {
+    this.activeFilters = f;
+    this.applySorting();  // refresh after filters
+  }
+
+  public showDeleteModal = false;
+public taskToDelete: Task | null = null;
+
+public deleteTask(task: Task) {
+  this.taskToDelete = task;
+  this.showDeleteModal = true;
+}
+
+public onConfirmDelete() {
+  if (this.taskToDelete) {
+    this.taskService.deleteTask(this.taskToDelete.id);
+  }
+  this.showDeleteModal = false;
+  this.taskToDelete = null;
+}
+
+
+public onCancelDelete(): void {
+  this.showDeleteModal = false;
+  this.taskToDelete = null;
+  this.selectedTask = null;  
+  this.router.navigate(['/tasks']);
+}
+
 }
