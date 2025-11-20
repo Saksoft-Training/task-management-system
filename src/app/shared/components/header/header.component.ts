@@ -18,7 +18,7 @@ import { User } from '../../../../types/models/user';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
+ 
   //#region Component Properties
   /**
    * @summary Controls the visibility state of the notifications dropdown panel
@@ -30,28 +30,28 @@ export class HeaderComponent implements OnInit {
  * @description Used to show a numeric badge on the notification bell icon
  */
   public unreadCount = 0;
-
+ 
   /**
    * @summary Observable stream of notifications from the notification service
    * @description Provides reactive updates whenever notifications change in the system
    */
   public notifications$!: Observable<AppNotification[]>;
-
+ 
   //#region UI State
   /**
    * @summary Controls visibility of the logout confirmation dialog.
    * When true → dialog is shown. When false → dialog is hidden.
-   * 
+   *
    */
   public showLogoutDialog: boolean = false;
   //#endregion
-
+ 
   /**
    * @summary Logged-in user's email displayed in the header.
    */
   public user: User | null = null;
   public userEmail: string | null = null;
-
+ 
   /**
    * @summary Navigation menu items shown in the header.
    */
@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
     { label: 'Projects', path: '/projects' },
     { label: 'Tasks', path: '/tasks' },
     { label: 'Board', path: '/board' },
-
+ 
   ];
   //#endregion
   //#region Constructor
@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit {
     );
   }
   //#endregion
-
+ 
   //#region Event Handlers
   /**
   * @summary Marks a specific notification as read
@@ -144,9 +144,9 @@ export class HeaderComponent implements OnInit {
     this.notificationService.clearAll(); // Use clearAll() instead of clearAllNotifications()
   }
   //#endregion
-
+ 
   //#region Logout Dialog Actions
-
+ 
   /**
    * @summary Opens the logout confirmation dialog.
    * @returns {void}
@@ -154,7 +154,7 @@ export class HeaderComponent implements OnInit {
   public openLogoutDialog(): void {
     this.showLogoutDialog = true;
   }
-
+ 
   /**
    * @summary Confirms logout action and triggers AuthService logout.
    * @returns {void}
@@ -163,7 +163,7 @@ export class HeaderComponent implements OnInit {
     this.showLogoutDialog = false;
     this.authService.logout();
   }
-
+ 
   /**
    * @summary Cancels the logout dialog and closes it.
    * @returns {void}
@@ -171,11 +171,11 @@ export class HeaderComponent implements OnInit {
   public cancelLogout(): void {
     this.showLogoutDialog = false;
   }
-
+ 
   //#endregion
-
+ 
   //#region Navigation
-
+ 
   /**
    * @summary Navigates the user to the login page.
    * @returns {void}
@@ -185,3 +185,4 @@ export class HeaderComponent implements OnInit {
   }
   //#endregion
 }
+ 

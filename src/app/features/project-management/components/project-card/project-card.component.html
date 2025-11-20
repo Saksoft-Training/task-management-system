@@ -4,12 +4,12 @@
   </span>
   <div class="card-header">
     <div>
-      <h3 class="project-title">{{ project.name }}</h3>
+      <h3 class="project-title">{{ project.name | truncate:30 }}</h3>
       <p class="project-desc">{{ project.description | truncate:60}}</p>
     </div>
-    <span class="status-pill" [ngClass]="project.status">
+    <!-- <span class="status-pill" [ngClass]="project.status">
       {{ project.status }}
-    </span>
+    </span> -->
   </div>
   <div class="card-details">
     <div class="detail-row">

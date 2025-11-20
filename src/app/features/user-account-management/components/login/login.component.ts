@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   public loginErrorMessage = '';
   public loginAttempted = false;
   //#endregion
-
+ 
   //#region Constructor
   /**
    * @summary Injects form builder, authentication service and router.
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {}
   //#endregion
-
+ 
   //#region Lifecycle Hook
   /**
    * @summary Initializes login form on component load.
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
     this.initializeLoginForm();
   }
   //#endregion
-
+ 
   //#region Form Initialization
   /**
    * @summary Creates login form with Gmail validation rule.
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     });
   }
   //#endregion
-
+ 
   //#region Validators
   /**
    * @summary Validates email to accept only Gmail.
@@ -67,13 +67,13 @@ export class LoginComponent implements OnInit {
     return (control: AbstractControl): ValidationErrors | null => {
       const email = control.value;
       if (!email) return null;
-
+ 
       const pattern = /^[a-z0-9._%+-]+@gmail\.com$/;
       return pattern.test(email) ? null : { invalidEmail: true };
     };
   }
   //#endregion
-
+ 
   //#region Helper Methods
   /**
    * @summary Forces email input to lowercase for consistency.
@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
     const val = emailCtrl?.value || '';
     emailCtrl?.setValue(val.toLowerCase(), { emitEvent: true });
   }
-
+ 
   /**
    * @summary Shortcut getter for form controls.
    * @returns any
@@ -93,7 +93,7 @@ export class LoginComponent implements OnInit {
     return this.loginFormGroup.controls;
   }
   //#endregion
-
+ 
   //#region Form Submission
   /**
    * @summary Validates form, calls login API, and handles success/error.
@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
   public submitLoginForm(): void {
     this.loginErrorMessage = '';
     this.loginAttempted = true;
-
+ 
     if (this.loginFormGroup.invalid) {
       this.loginFormGroup.markAllAsTouched();
       return;
@@ -122,10 +122,10 @@ export class LoginComponent implements OnInit {
     });
   }
   //#endregion
-
+ 
   //#region Navigation
   /**
-   * @summary Navigates to given route path 
+   * @summary Navigates to given route path
    * @param path - Router path to navigate.
    * @returns void
    */
@@ -134,3 +134,4 @@ export class LoginComponent implements OnInit {
   }
   //#endregion
 }
+ 
