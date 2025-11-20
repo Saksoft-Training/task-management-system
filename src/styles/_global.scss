@@ -1,18 +1,15 @@
-
 @use "./variables";
 @use "./mixins";
 @use "sass:color";
- 
+
 // ====================== FOOTER ======================
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
-
-html,body {
-
+html,
+body {
   height: auto;
   min-height: 100%;
   overflow-y: auto;
@@ -24,15 +21,11 @@ html,body {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-
 html::-webkit-scrollbar,
-
 body::-webkit-scrollbar {
   width: 0;
   height: 0;
-
 }
-
 .main-content {
   flex: 1;
   display: block;
@@ -43,19 +36,15 @@ body::-webkit-scrollbar {
   padding-bottom: 120px;
   scrollbar-width: none;
   -ms-overflow-style: none;
-
   &::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
-
 }
-
 
 /* ========================================= */
 /* FOOTER STYLES */
 /* ========================================= */
-
 .footer {
   border-top: 1px solid variables.$color-border;
   background-color: variables.$color-bg-footer;
@@ -69,13 +58,9 @@ body::-webkit-scrollbar {
     flex-shrink: 0;
   }
 }
-
-
 /* ========================================================= */
 /* ERROR MESSAGES */
 /* ========================================================= */
-
-
 .error-message-container {
   @include mixins.flex(flex-start, center);
   @include mixins.font-primary(variables.$font-size-error);
@@ -87,16 +72,13 @@ body::-webkit-scrollbar {
   border-radius: variables.$error-border-radius;
   margin: variables.$error-margin-y 0;
   position: relative;
-
   .icon {
     margin-right: 0.625rem;
     font-size: variables.$error-icon-size;
   }
- 
   .message {
     flex-grow: 1;
   }
- 
   .close-btn {
     background: none;
     border: none;
@@ -110,12 +92,9 @@ body::-webkit-scrollbar {
     }
   }
 }
-
- 
 /* ========================================= */
 /*  HEADER component */
 /* ========================================= */
-
 .app-header {
   width: 79.9375rem;
   display: flex;
@@ -127,7 +106,6 @@ body::-webkit-scrollbar {
   box-sizing: border-box;
   font-family: variables.$font-family-primary;
 }
-
 .header-container {
   width: 75rem;
   height: 6.25rem;
@@ -136,7 +114,6 @@ body::-webkit-scrollbar {
   justify-content: space-between;
   position: relative;
 }
-
 .logo {
   width: 9.4375rem;
   height: 2.25rem;
@@ -148,7 +125,6 @@ body::-webkit-scrollbar {
   line-height: 120%;
   color: variables.$color-black;
 }
-
 .nav-links {
   position: absolute;
   top: 2.25rem;
@@ -160,7 +136,6 @@ body::-webkit-scrollbar {
   align-items: center;
   justify-content: center;
   gap: 2.1875rem;
-
   a {
     width: 4.5rem;
     height: 1.25rem;
@@ -175,14 +150,12 @@ body::-webkit-scrollbar {
     text-decoration: none;
   }
 }
-
 .user-section {
   display: flex;
   align-items: center;
   gap: 0.625rem;
   cursor: pointer;
 }
-
 .user-email {
   display: flex;
   align-items: center;
@@ -199,45 +172,35 @@ body::-webkit-scrollbar {
   white-space: nowrap;
   cursor: pointer;
 }
-
 .email-icon {
   font-size: 0.875rem;
   color: variables.$color-black;
   cursor: pointer;
 }
-
 .logout-icon {
   font-size: 1.125rem;
   cursor: pointer;
 }
-
-
-
-
-
 /* ========================================= */
 /* MODERN SPINNER */
 /* ========================================= */
-
 .loading-overlay {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  background: variables.$color-overlay-dark;   
+  background: variables.$color-overlay-dark;
   @include mixins.flex(center, center, column);
   z-index: 9999;
 }
-
 .spinner {
   width: 32px;
   height: 32px;
-  border: 4px solid variables.$color-spinner-border;  
-  border-top-color: variables.$color-primary;        
+  border: 4px solid variables.$color-spinner-border;
+  border-top-color: variables.$color-primary;
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -246,7 +209,6 @@ body::-webkit-scrollbar {
     transform: rotate(360deg);
   }
 }
-
 .spinner-text {
   margin-top: 1rem;
   color: variables.$color-white;
@@ -254,13 +216,9 @@ body::-webkit-scrollbar {
   text-align: center;
   font-family: variables.$font-family-primary;
 }
-
-
-
 /* ========================================================= */
 /* DIALOG */
 /* ========================================================= */
- 
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -272,7 +230,6 @@ body::-webkit-scrollbar {
   @include mixins.flex();
   z-index: variables.$dialog-overlay-z;
 }
- 
 .dialog-box {
   background: variables.$color-bg-footer;
   border-radius: variables.$dialog-radius;
@@ -280,13 +237,11 @@ body::-webkit-scrollbar {
   max-width: variables.$dialog-max-width;
   @include mixins.box-shadow(variables.$dialog-shadow);
   overflow: hidden;
- 
   .dialog-header {
     @include mixins.flex-between;
     padding: variables.$dialog-padding-header;
     border-bottom: 1px solid variables.$color-dialog-border;
     background-color: variables.$color-dialog-header-bg;
- 
     h3 {
       margin: 0;
       @include mixins.font-primary(variables.$font-size-title, variables.$font-weight-title);
@@ -297,7 +252,6 @@ body::-webkit-scrollbar {
       max-width: variables.$dialog-max-width;
       @include mixins.box-shadow(variables.$dialog-shadow);
       overflow: hidden;
- 
       .close-btn {
         background: none;
         border: none;
@@ -305,7 +259,6 @@ body::-webkit-scrollbar {
         cursor: pointer;
         @include mixins.flex();
         @include mixins.transition(transform);
- 
         img {
           width: 18px;
           height: 18px;
@@ -313,7 +266,6 @@ body::-webkit-scrollbar {
           padding: 0.25rem;
           @include mixins.flex();
           @include mixins.transition(transform, 0.2s);
- 
           &:hover {
             opacity: 0.8;
             transform: scale(1.1);
@@ -321,24 +273,20 @@ body::-webkit-scrollbar {
         }
       }
     }
- 
     .dialog-body {
       padding: variables.$dialog-padding-body;
- 
       p {
         color: variables.$color-text-secondary;
         font-size: variables.$font-size-body;
         line-height: 1.4;
       }
     }
- 
     .dialog-actions {
       display: flex;
       justify-content: flex-end;
       gap: variables.$dialog-gap-actions;
       padding: variables.$dialog-padding-actions;
       border-top: 1px solid variables.$color-dialog-border;
- 
       .btn {
         padding: 8px 16px;
         font-size: variables.$font-size-button;
@@ -346,53 +294,41 @@ body::-webkit-scrollbar {
         border: none;
         cursor: pointer;
         @include mixins.transition(background-color);
- 
         &.cancel {
           background-color: variables.$color-btn-cancel-bg;
           color: variables.$color-bg-footer;
- 
           &:hover {
             background-color: variables.$color-btn-cancel-hover;
           }
         }
- 
         &.confirm {
           background-color: variables.$color-btn-confirm-bg;
           color: variables.$color-bg-footer;
- 
           &:hover {
             background-color: variables.$color-btn-confirm-hover;
           }
- 
           &.danger {
             background-color: variables.$color-btn-danger-bg;
- 
             &:hover {
               background-color: variables.$color-btn-danger-hover;
             }
           }
         }
- 
         &.cancel {
           background-color: variables.$color-btn-cancel-bg;
           color: variables.$color-btn-cancel-text;
- 
           &:hover {
             background-color: variables.$color-btn-cancel-hover;
           }
         }
- 
         &.confirm {
           background-color: variables.$color-btn-confirm-bg;
           color: variables.$color-bg-footer;
- 
           &:hover {
             background-color: variables.$color-btn-confirm-hover;
           }
- 
           &.danger {
             background-color: variables.$color-btn-danger-bg;
- 
             &:hover {
               background-color: variables.$color-btn-danger-hover;
             }
@@ -402,7 +338,6 @@ body::-webkit-scrollbar {
     }
   }
 }
-
 //=====dashboard notifications component======
 .notifications-list {
   display: flex;
@@ -411,8 +346,6 @@ body::-webkit-scrollbar {
   max-height: 350px;
   overflow-y: auto;
   padding-right: 5px;
-
-  // Custom scrollbar
   &::-webkit-scrollbar {
     width: variables.$scrollbar-width;
   }
@@ -424,7 +357,6 @@ body::-webkit-scrollbar {
     background: variables.$color-scroll-thumb;
     border-radius: variables.$scrollbar-radius;
   }
-
   .notification-item {
     display: flex;
     justify-content: space-between;
@@ -433,41 +365,36 @@ body::-webkit-scrollbar {
     border: 1px solid variables.$color-border;
     border-radius: variables.$border-radius;
     padding: variables.$notification-padding;
-    transition: background 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    transition:
+      background 0.2s ease-in-out,
+      border-color 0.2s ease-in-out;
     cursor: pointer;
-
     &:hover {
       border-color: variables.$color-border-hover;
       background: #f9fafb;
     }
-
     &.unread {
       background: variables.$color-unread-bg;
       border-left: 4px solid variables.$color-primary-blue;
     }
-
     .notification-content {
       flex: 1;
-
       h4 {
         font-size: 14px;
         font-weight: 600;
         color: variables.$color-header;
         margin: 0 0 4px;
       }
-
       p {
         font-size: 13px;
         color: variables.$color-text-notification;
         margin: 0 0 6px;
       }
-
       .timestamp {
         font-size: 11px;
         color: variables.$color-timestamp;
       }
     }
-
     .mark-read-btn {
       background: transparent;
       border: none;
@@ -476,22 +403,21 @@ body::-webkit-scrollbar {
       cursor: pointer;
       padding: 4px;
       line-height: 1;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
       &:hover {
         transform: scale(1.2);
         opacity: 0.8;
       }
     }
   }
-
   .no-notifications {
     text-align: center;
     padding: 20px;
     color: variables.$color-timestamp;
     height: 200px;
     width: 378px;
-
     img {
       width: 48px;
       height: 48px;
@@ -500,12 +426,7 @@ body::-webkit-scrollbar {
     }
   }
 }
-
-
-
-
 //===============notifications bell component=====
-
 .bell-btn {
   position: relative;
   border: none;
@@ -514,7 +435,6 @@ body::-webkit-scrollbar {
   padding: variables.$padding-bell-btn;
   font-size: variables.$font-size-bell-icon;
 }
-
 .badge {
   position: absolute;
   top: 0;
@@ -524,89 +444,82 @@ body::-webkit-scrollbar {
   border-radius: variables.$badge-radius;
   font-size: variables.$font-size-badge;
   padding: variables.$badge-padding;
-  min-width: 18px;  
+  min-width: 18px;
   height: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 600;
 }
-
 //============notification item component===========
-
 .notification-item {
   display: flex;
   gap: variables.$notification-gap;
   padding: variables.$notification-padding;
   cursor: pointer;
   border-radius: variables.$notification-radius;
-
   &.unread {
     background-color: variables.$color-unread-bg;
   }
-
   &:hover {
     background-color: variables.$color-hover-bg;
   }
 }
-
 .icon {
   display: flex;
   align-items: center;
   justify-content: center;
   width: variables.$icon-size;
 }
-
-.severity-success { color: variables.$color-success; }
-.severity-warning { color: variables.$color-warning; }
-.severity-critical { color: variables.$color-critical; }
-.severity-info    { color: variables.$color-info; }
-
+.severity-success {
+  color: variables.$color-success;
+}
+.severity-warning {
+  color: variables.$color-warning;
+}
+.severity-critical {
+  color: variables.$color-critical;
+}
+.severity-info {
+  color: variables.$color-info;
+}
 .content {
   flex: 1;
 }
-
 .title {
   font-weight: variables.$title-weight;
   margin-bottom: 0.15rem;
 }
-
 .message {
   font-size: variables.$message-font-size;
   color: variables.$color-message-text;
 }
-
 .timestamp {
   font-size: variables.$timestamp-font-size;
   color: variables.$color-timestamp-text;
 }
-
 .actions {
   display: flex;
   flex-direction: column;
   gap: variables.$actions-gap;
-
- button {
-      border: none;
-      padding: 0.25rem 0.5rem;
-      font-size: variables.$action-font-size;
-      color: variables.$color-message-text;
-      cursor: pointer;
-      display: flex;
-      font-size: 0.9rem;
-      position: absolute;
-      background: variables.$color-bg-footer;
-      border-radius: 8px;
-      z-index: 50;
-      &:hover {
-        background-color: variables.$color-hover-bg;
-      }
+  button {
+    border: none;
+    padding: 0.25rem 0.5rem;
+    font-size: variables.$action-font-size;
+    color: variables.$color-message-text;
+    cursor: pointer;
+    display: flex;
+    font-size: 0.9rem;
+    position: absolute;
+    background: variables.$color-bg-footer;
+    border-radius: 8px;
+    z-index: 50;
+    &:hover {
+      background-color: variables.$color-hover-bg;
     }
   }
-
-
+}
 //==========toast notification===========
-
 .toast-container {
   position: fixed;
   bottom: variables.$toast-bottom;
@@ -620,16 +533,13 @@ body::-webkit-scrollbar {
   box-shadow: variables.$toast-shadow;
   z-index: 2000;
 }
-
 .toast-content {
   display: flex;
   flex-direction: column;
-
   strong {
     margin-bottom: 0.15rem;
   }
 }
-
 .close-btn {
   background: transparent;
   border: none;
@@ -637,23 +547,18 @@ body::-webkit-scrollbar {
   color: inherit;
   font-size: variables.$close-btn-size;
 }
-
 .toast-success {
   background-color: variables.$color-success;
 }
-
 .toast-warning {
   background-color: variables.$color-warning;
 }
-
 .toast-critical {
   background-color: variables.$color-critical;
 }
-
 .toast-info {
   background-color: variables.$color-info;
 }
-
 //============dropdown notification===========
 .dropdown-container {
   width: variables.$dropdown-width;
@@ -665,8 +570,6 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
 }
-
-
 /* ---------- HEADER ---------- */
 .dropdown-header {
   display: flex;
@@ -677,11 +580,9 @@ body::-webkit-scrollbar {
   background: variables.$header-bg;
   font-weight: variables.$header-font-weight;
   font-size: variables.$header-font-size;
-
   .header-actions {
     display: flex;
     gap: variables.$action-gap;
-
     button {
       border: none;
       background: transparent;
@@ -689,19 +590,16 @@ body::-webkit-scrollbar {
       font-size: variables.$action-font-size;
       cursor: pointer;
       padding: 0;
-
       &:disabled {
         opacity: variables.$action-disabled-opacity;
         pointer-events: none;
       }
-
       &:hover {
         text-decoration: underline;
       }
     }
   }
 }
-
 /* ---------- BODY ---------- */
 .dropdown-body {
   max-height: variables.$body-max-height;
@@ -712,7 +610,6 @@ body::-webkit-scrollbar {
   gap: variables.$body-gap;
   scrollbar-width: thin;
   scrollbar-color: variables.$scrollbar-thumb variables.$scrollbar-track;
-
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -724,9 +621,6 @@ body::-webkit-scrollbar {
     border-radius: 10px;
   }
 }
-
-
-
 /* ---------- EMPTY ---------- */
 .empty {
   padding: variables.$empty-padding;
@@ -734,20 +628,16 @@ body::-webkit-scrollbar {
   color: variables.$empty-color;
   font-size: variables.$empty-font-size;
 }
-
 /* ---------- CARD BACKGROUND COLORS ---------- */
 .notification-item.success {
   background: variables.$notification-success-bg;
 }
-
 .notification-item.warning {
   background: variables.$notification-warning-bg;
 }
-
 .notification-item.critical {
   background: variables.$notification-critical-bg;
 }
-
 .clear-all {
   margin-left: 1rem;
   cursor: pointer;
@@ -758,23 +648,18 @@ body::-webkit-scrollbar {
   gap: 4px;
   transition: 0.2s;
 }
-
 .clear-all:hover {
   color: variables.$color-black;
   text-decoration: underline;
 }
-
 .notification-item.info {
   background: variables.$notification-info-bg;
 }
-
-
 /* Rounded Cards */
 .notification-item {
   border-radius: variables.$notification-border-radius;
   border: 1px solid variables.$notification-border;
 }
-
 /* ============= Register Page ===============*/
 :host {
   display: flex;
@@ -786,7 +671,6 @@ body::-webkit-scrollbar {
   padding-bottom: 6rem;
   width: 100%;
 }
-
 .register-page {
   display: flex;
   flex-direction: column;
@@ -798,8 +682,7 @@ body::-webkit-scrollbar {
   padding: 1rem 0;
   margin: 0 auto;
   box-sizing: border-box;
-
-  .page-title-register{
+  .page-title-register {
     width: 100%;
     max-width: 50rem;
     margin-bottom: 2.5rem;
@@ -810,7 +693,6 @@ body::-webkit-scrollbar {
     color: variables.$color-black;
     text-align: center;
   }
-
   .card {
     background: variables.$color-white;
     width: 28rem;
@@ -821,7 +703,6 @@ body::-webkit-scrollbar {
     align-items: flex-start;
     padding: 1.25rem 1.5rem 2rem;
     box-sizing: border-box;
-
     .strength-weak {
       color: variables.$color-weak;
     }
@@ -834,7 +715,6 @@ body::-webkit-scrollbar {
     .strength-very-strong {
       color: variables.$color-very-strong;
     }
-
     .meter-fill.strength-weak {
       background-color: variables.$color-weak;
     }
@@ -847,23 +727,19 @@ body::-webkit-scrollbar {
     .meter-fill.strength-very-strong {
       background-color: variables.$color-very-strong;
     }
-
     .header {
       display: grid;
       grid-template-rows: auto auto;
       row-gap: 0.375rem;
       width: 100%;
       margin-bottom: 0.5rem;
-
       .header-content {
         @include mixins.flex(flex-start, center);
         gap: 0.5rem;
-
         img {
           width: 1.5rem;
           height: 1.5rem;
         }
-
         h2 {
           font-size: 1rem;
           font-weight: 500;
@@ -871,27 +747,23 @@ body::-webkit-scrollbar {
           margin: 0;
         }
       }
-
       p {
         font-size: 1rem;
         color: variables.$color-gray-500;
         margin: 0;
       }
     }
-
     .input-group {
       display: flex;
       flex-direction: column;
       width: 100%;
       gap: 0.375rem;
       margin-bottom: 1rem;
-
       label {
         font-size: 0.875rem;
         font-weight: 500;
         color: variables.$color-black;
       }
-
       input {
         width: 100%;
         height: 2.25rem;
@@ -903,7 +775,6 @@ body::-webkit-scrollbar {
         outline: none;
         box-shadow: none;
         caret-color: variables.$color-black;
-
         &:-webkit-autofill,
         &:-webkit-autofill:hover,
         &:-webkit-autofill:focus {
@@ -911,35 +782,29 @@ body::-webkit-scrollbar {
           background-color: variables.$color-gray-400;
           -webkit-text-fill-color: variables.$color-black;
         }
-
         &:focus {
           background-color: variables.$color-gray-400;
           outline: none;
           box-shadow: none;
         }
-
         &:not(:placeholder-shown) {
           background-color: variables.$color-gray-400;
           outline: none;
           box-shadow: none;
         }
-
         &.invalid-input {
           border: 1px solid variables.$color-error-text;
           background: variables.$color-error-extra-light;
         }
       }
     }
-
     .error {
       color: variables.$color-weak;
       font-size: 0.875rem;
-
       p {
         margin: 0;
       }
     }
-
     .strength-info {
       font-size: 0.8rem;
       color: variables.$color-gray-600;
@@ -949,17 +814,14 @@ body::-webkit-scrollbar {
       display: flex;
       gap: 0.5rem;
     }
-
     .password-meter {
       width: 100%;
       margin-bottom: 0.75rem;
-
       .meter-bar {
         height: 0.5rem;
         background: variables.$color-gray-200;
         border-radius: 0.25rem;
         overflow: hidden;
-
         .meter-fill {
           height: 100%;
           width: 0%;
@@ -971,7 +833,6 @@ body::-webkit-scrollbar {
       font-size: 0.85rem;
       margin-bottom: 1rem;
       line-height: 1.4;
-
       .rule {
         display: flex;
         align-items: center;
@@ -979,19 +840,18 @@ body::-webkit-scrollbar {
         color: variables.$color-gray-600;
         margin-bottom: 0.375rem;
         transition: color 0.3s ease;
-
         img {
           width: 0.875rem;
           height: 0.875rem;
           opacity: 0.8;
           filter: grayscale(1);
-          transition: transform 0.3s ease, opacity 0.3s ease;
+          transition:
+            transform 0.3s ease,
+            opacity 0.3s ease;
         }
-
         &.valid {
           color: variables.$color-gray-800;
           font-weight: 500;
-
           img {
             transform: scale(1.1);
             opacity: 1;
@@ -1000,7 +860,6 @@ body::-webkit-scrollbar {
         }
       }
     }
-
     .actions-register {
       display: flex;
       justify-content: space-between;
@@ -1008,7 +867,6 @@ body::-webkit-scrollbar {
       width: 100%;
       gap: 0.75rem;
       margin-top: 0.75rem;
-
       .register-btn {
         width: 19.3125rem;
         height: 2.25rem;
@@ -1019,7 +877,6 @@ body::-webkit-scrollbar {
         font-size: 0.875rem;
         border: none;
       }
-
       .cancel-btn {
         @include mixins.flex(center, center);
         height: 2.25rem;
@@ -1031,14 +888,12 @@ body::-webkit-scrollbar {
         font-size: 0.875rem;
         cursor: pointer;
         border: none;
-
         &:hover {
           background-color: variables.$color-btn-secondary-hover-strong;
           border: 1px solid variables.$color-gray-200;
         }
       }
     }
-
     .back-login {
       width: 100%;
       height: 2.75rem;
@@ -1049,12 +904,10 @@ body::-webkit-scrollbar {
       border-radius: 6.25rem;
       background-color: variables.$color-white;
       cursor: pointer;
-
       img {
         width: 1rem;
         height: 1rem;
       }
-
       button {
         background: none;
         border: none;
@@ -1064,12 +917,10 @@ body::-webkit-scrollbar {
         cursor: pointer;
       }
     }
-
     .messages {
       width: 100%;
       margin-top: 1.25rem;
       text-align: center;
-
       .success {
         background-color: variables.$color-success-bg;
         color: variables.$color-success-text;
@@ -1077,10 +928,9 @@ body::-webkit-scrollbar {
         padding: 0.625rem 0.75rem;
         border-radius: 0.5rem;
       }
-
       .error {
         background-color: variables.$color-error-light;
-        color:variables.$color-error-dark;
+        color: variables.$color-error-dark;
         border: 1px solid variables.$color-error-medium;
         padding: 0.625rem 0.75rem;
         border-radius: 0.5rem;
@@ -1304,9 +1154,7 @@ body::-webkit-scrollbar {
     }
   }
 }
-
 /* ============= Forgot Password Page ===============*/
-
 .forgot-page {
   display: flex;
   flex-direction: column;
@@ -1339,13 +1187,11 @@ body::-webkit-scrollbar {
     position: relative;
     padding-bottom: 1.5rem;
     margin-bottom: 4rem;
-
     .card-header {
       width: 100%;
       height: 8.75rem;
       position: relative;
     }
-
     .icon-circle {
       width: 3rem;
       height: 3rem;
@@ -1357,13 +1203,11 @@ body::-webkit-scrollbar {
       display: flex;
       align-items: center;
       justify-content: center;
-
       img {
         width: 1.5rem;
         height: 1.5rem;
       }
     }
-
     .title-reset {
       position: absolute;
       top: 5.375rem;
@@ -1373,7 +1217,6 @@ body::-webkit-scrollbar {
       font-weight: 500;
       color: variables.$color-black;
     }
-
     .sub {
       position: absolute;
       top: 7.25rem;
@@ -1383,9 +1226,7 @@ body::-webkit-scrollbar {
       color: variables.$color-gray-600;
       border: none;
       padding: 12px 22px;
-  }
-
-  
+    }
     form {
       width: 100%;
       padding: 0.75rem 1.5rem 1.5rem;
@@ -1393,7 +1234,6 @@ body::-webkit-scrollbar {
       flex-direction: column;
       align-items: center;
     }
-
     .label {
       width: 100%;
       max-width: 24.875rem;
@@ -1402,7 +1242,6 @@ body::-webkit-scrollbar {
       color: variables.$color-forgot-label;
       margin-bottom: 0.5rem;
     }
-
     .input {
       width: 100%;
       max-width: 24.875rem;
@@ -1415,14 +1254,12 @@ body::-webkit-scrollbar {
       margin-bottom: 0.375rem;
       appearance: none;
       background-clip: padding-box;
-
       &:focus {
         outline: none;
         border: none;
         background: variables.$color-forgot-input-bg;
         box-shadow: none;
       }
-
       &:-webkit-autofill,
       &:-webkit-autofill:hover,
       &:-webkit-autofill:focus {
@@ -1431,7 +1268,6 @@ body::-webkit-scrollbar {
         transition: background-color 9999s ease-in-out 0s;
       }
     }
-
     .hint {
       width: 100%;
       max-width: 24.875rem;
@@ -1443,7 +1279,6 @@ body::-webkit-scrollbar {
       margin-bottom: 0.625rem;
       letter-spacing: -0.15px;
     }
-
     .error {
       width: 100%;
       max-width: 24.875rem;
@@ -1453,7 +1288,6 @@ body::-webkit-scrollbar {
       margin-bottom: 0.5rem;
       text-align: left;
     }
-
     .btn {
       width: 100%;
       max-width: 24.875rem;
@@ -1468,13 +1302,11 @@ body::-webkit-scrollbar {
       margin-bottom: 0.75rem;
       cursor: pointer;
     }
-
     .back {
       width: 100%;
       display: flex;
       justify-content: center;
       margin-top: 1rem;
-
       a {
         display: flex;
         align-items: center;
@@ -1484,13 +1316,11 @@ body::-webkit-scrollbar {
         text-decoration: none;
         cursor: pointer;
       }
-
       .back-icon {
         width: 1rem;
         height: 1rem;
       }
     }
-
     .messages {
       width: 100%;
       padding: 0 1.5rem;
@@ -1498,7 +1328,6 @@ body::-webkit-scrollbar {
     }
   }
 }
-
 /* ============= Profile Page ===============*/
 .profile-page {
   width: 100%;
@@ -1765,40 +1594,32 @@ body::-webkit-scrollbar {
     border: 1px solid variables.$color-gray-200;
   }
 }
- 
-
- 
 // ====================== CREATE PROJECT PAGE ======================
 .project-create-page {
   padding: variables.$padding-primary;
 }
- 
+
 .breadcrumb {
   @include mixins.flex(flex-start);
   gap: 6px;
   margin-bottom: variables.$padding-footer-sides;
   font-size: variables.$font-size-error;
- 
   .breadcrumb-link {
     color: variables.$color-breadcrumb;
     font-weight: variables.$font-weight-primary;
     cursor: pointer;
- 
     &:hover {
       text-decoration: underline;
     }
   }
- 
   .breadcrumb-current {
     color: variables.$color-title;
     font-weight: variables.$font-weight-primary;
   }
- 
   .breadcrumb-separator {
     color: variables.$color-text-secondary;
   }
 }
- 
 .page-title {
   font-family: variables.$font-family-primary;
   font-size: variables.$font-size-page-title;
@@ -1806,13 +1627,11 @@ body::-webkit-scrollbar {
   color: variables.$color-title;
   margin-bottom: variables.$dialog-radius;
 }
- 
 .page-subtitle {
   font-size: variables.$font-size-body;
   color: variables.$color-subtitle;
   margin-bottom: 36px;
 }
- 
 .project-form-container {
   background: variables.$color-bg-footer;
   border: 1px solid #ededed;
@@ -1821,7 +1640,6 @@ body::-webkit-scrollbar {
   width: 100%;
   box-sizing: border-box;
 }
- 
 .form-title {
   font-family: variables.$font-family-primary;
   font-size: variables.$font-size-body;
@@ -1830,28 +1648,23 @@ body::-webkit-scrollbar {
   margin-bottom: 24px;
   line-height: 1.4;
 }
- 
 .formProject {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.75rem 2.5rem;
 }
- 
 .description-group {
   grid-column: span 2;
 }
- 
 .description-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
- 
 .char-counter {
   font-size: 12px;
   color: variables.$color-text;
 }
- 
 .project-description {
   padding: 12px 14px;
   border-radius: variables.$dialog-radius;
@@ -1861,29 +1674,24 @@ body::-webkit-scrollbar {
   resize: vertical;
   font-family: variables.$font-family-primary;
   background-color: variables.$input-background;
- 
   &:focus {
     background-color: variables.$color-bg-footer;
     border-color: variables.$color-breadcrumb;
     outline: none;
   }
 }
- 
 .field-group {
   display: flex;
   flex-direction: column;
- 
   .field-label {
     font-size: variables.$font-size-error;
     font-weight: variables.$font-weight-footer;
     margin-bottom: 4px;
   }
- 
   .field-label.required::after {
     content: " *";
     color: red;
   }
- 
   .field-input,
   .field-select {
     width: 100%;
@@ -1893,34 +1701,29 @@ body::-webkit-scrollbar {
     background-color: variables.$input-background;
     font-size: 14px;
     font-family: variables.$font-family-primary;
- 
     &:focus {
       background-color: variables.$color-bg-footer;
       border-color: variables.$color-breadcrumb;
       outline: none;
     }
   }
- 
   .status-options {
     background-color: #eeeeee;
     padding-bottom: 25px;
     font-size: 18px;
     color: variables.$color-text;
   }
- 
   .error small {
     color: variables.$color-error-text;
     margin-top: 4px;
     font-size: 12px;
   }
 }
- 
 .buttons {
   grid-column: span 2;
   @include mixins.flex(center);
   gap: 14px;
   margin-top: 10px;
- 
   .btn {
     padding: 12px 28px;
     font-size: variables.$font-size-error;
@@ -1929,33 +1732,27 @@ body::-webkit-scrollbar {
     cursor: pointer;
     transition: 0.2s ease;
   }
- 
   .btn-submit {
     background-color: variables.$color-breadcrumb;
     color: variables.$color-bg-footer;
     width: 23.75rem;
- 
     &:disabled {
       background-color: variables.$disabled-bg-color;
       cursor: not-allowed;
     }
- 
     &:hover:not(:disabled) {
-      background-color: color.adjust(variables.$color-primary-hover,$lightness: -6%);
+      background-color: color.adjust(variables.$color-primary-hover, $lightness: -6%);
     }
   }
- 
   .btn-secondary {
     background-color: variables.$btn-secondary-bg-color;
     color: variables.$color-title;
     padding: 12px 22px;
- 
     &:hover {
       background-color: variables.$hover-bg-color;
     }
   }
 }
- 
 .success {
   text-align: center;
   margin-top: variables.$font-size-title;
@@ -1963,18 +1760,15 @@ body::-webkit-scrollbar {
   font-size: variables.$font-size-error;
   font-weight: variables.$font-weight-primary;
 }
- 
 /* ============= Project List Page ===============*/
 .project-list {
   padding: 2rem 5rem;
   font-family: variables.$font-family-primary;
- 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
- 
   .create-btn {
     background: variables.$create-btn-bg;
     color: variables.$color-title;
@@ -1985,24 +1779,20 @@ body::-webkit-scrollbar {
     cursor: pointer;
     font-weight: variables.$font-weight-footer;
     transition: 0.2s ease;
- 
     &:hover {
-      background: color.adjust(variables.$create-btn-bg,$lightness: -8%);
+      background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
     }
   }
- 
   .toolbar {
     display: flex;
     align-items: center;
     gap: 3.52rem;
     margin-bottom: 2rem;
   }
- 
   .search-wrapper {
     position: relative;
     flex: 0 1 90rem;
   }
- 
   .search-input {
     width: 100%;
     padding: 14px 18px 14px 42px;
@@ -2011,12 +1801,10 @@ body::-webkit-scrollbar {
     border-radius: 12px;
     font-size: 1rem;
     outline: none;
- 
     &::placeholder {
       color: variables.$color-gray-500;
     }
   }
- 
   .search-icon {
     position: absolute;
     left: variables.$font-size-error;
@@ -2025,11 +1813,9 @@ body::-webkit-scrollbar {
     transform: translateY(-50%);
     opacity: 0.55;
   }
- 
   .sort-wrapper {
     position: relative;
   }
- 
   .sort-box {
     padding: 12px 16px;
     background: variables.$input-background;
@@ -2045,12 +1831,10 @@ body::-webkit-scrollbar {
     white-space: nowrap;
     border: none;
   }
- 
   .sort-box img {
     width: variables.$font-size-error;
     opacity: 0.6;
   }
- 
   .sort-dropdown {
     position: absolute;
     width: 10.625rem;
@@ -2062,30 +1846,25 @@ body::-webkit-scrollbar {
     padding: 8px 0;
     z-index: 10;
   }
- 
   .sort-option {
     padding: 10px 16px;
     cursor: pointer;
     font-size: 0.9rem;
     color: variables.$color-text-primary;
     transition: 0.2s ease;
- 
     &:hover {
       background: variables.$color-bg-footer;
     }
   }
- 
   .sort-filter-wrapper {
     display: flex;
     align-items: center;
     gap: 1rem;
     position: relative;
   }
- 
   .filter-wrapper {
     position: relative;
   }
- 
   .filter-panel {
     position: absolute;
     top: calc(100% + 1rem);
@@ -2101,45 +1880,37 @@ body::-webkit-scrollbar {
     border-bottom: 1rem;
     transform: translateX(-80px);
   }
- 
   .filter-btn {
     display: flex;
     align-items: center;
     gap: 1.25rem;
- 
     padding: 10px 18px;
     background: variables.$color-bg-footer;
     border: 1px solid #d1d5db;
     border-radius: 12px;
- 
     font-size: 0.9rem;
     color: variables.$color-title;
     cursor: pointer;
     font-weight: variables.$font-weight-primary;
     transition: 0.2s ease;
- 
     .filter-icon {
       width: 16px;
       height: 16px;
       opacity: 0.7;
       transition: 0.2s ease;
     }
- 
     &:hover {
       background: variables.$color-gray-400;
     }
- 
     &.active {
       border-color: variables.$color-text-footer;
       color: variables.$color-bg-footer;
       background: variables.$color-text-footer;
- 
       .filter-icon {
         filter: brightness(0) invert(1);
       }
     }
   }
- 
   .clear-filters {
     margin-top: 1rem;
     cursor: pointer;
@@ -2150,7 +1921,6 @@ body::-webkit-scrollbar {
     border-radius: 8px;
     z-index: 50;
   }
- 
   .filter-badge {
     background: variables.$color-medium;
     color: variables.$color-bg-footer;
@@ -2159,7 +1929,6 @@ body::-webkit-scrollbar {
     border-radius: 10px;
     margin-left: 4px;
   }
- 
   .filter-header {
     display: flex;
     justify-content: flex-end;
@@ -2167,20 +1936,17 @@ body::-webkit-scrollbar {
     color: variables.$color-text-secondary;
     margin-bottom: 12px;
   }
- 
   .filter-options {
     display: flex;
     gap: variables.$font-size-title;
     align-items: center;
   }
- 
   .filter-item {
     display: flex;
     align-items: center;
     gap: 6px;
     cursor: pointer;
   }
- 
   .checkbox {
     width: 16px;
     height: 16px;
@@ -2193,13 +1959,11 @@ body::-webkit-scrollbar {
     color: variables.$color-bg-footer;
     transition: 0.2s ease;
   }
- 
   .checkbox.checked {
     background: variables.$color-text-footer;
     border-color: variables.$color-text-footer;
     color: variables.$color-bg-footer;
   }
- 
   .status-pill {
     padding: 6px 12px;
     border-radius: variables.$padding-footer-bottom;
@@ -2208,45 +1972,37 @@ body::-webkit-scrollbar {
     color: variables.$color-bg-footer;
     white-space: nowrap;
   }
- 
   .status-pill.planning {
     background: variables.$planning-color;
   }
- 
   .status-pill.in-progress {
     background: variables.$progress-color;
   }
- 
   .status-pill.completed {
     background: variables.$completed-color;
   }
- 
   .status-pill.on-hold {
     background: variables.$onHold-color;
   }
- 
   .empty-state {
     margin-top: 2rem;
     color: variables.$color-text-secondary;
     font-size: 1rem;
     text-align: center;
   }
- 
   .grid {
     margin-top: 1.5rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
     gap: 1.5rem;
   }
- 
   app-project-card-component {
     transition: 0.2s ease;
- 
+
     &:hover {
       transform: translateY(-3px);
     }
   }
- 
   .active-filters {
     display: flex;
     align-items: center;
@@ -2256,12 +2012,10 @@ body::-webkit-scrollbar {
     font-size: 0.95rem;
     color: variables.$color-text-primary;
   }
- 
   .active-filters .label {
     font-weight: 600;
     color: variables.$color-text-secondary;
   }
- 
   .active-pill {
     border-radius: 12px;
     padding: 4px 10px;
@@ -2272,34 +2026,27 @@ body::-webkit-scrollbar {
     color: variables.$color-bg-footer;
     font-weight: variables.$font-weight-primary;
   }
- 
   .active-pill.planning {
     background: variables.$planning-color;
   }
- 
   .active-pill.in-progress {
     background: variables.$progress-color;
   }
- 
   .active-pill.completed {
     background: variables.$completed-color;
   }
- 
   .active-pill.on-hold {
     background: variables.$onHold-color;
   }
- 
   .active-pill .clear-icon {
     width: 12px;
     cursor: pointer;
     opacity: 0.7;
     transition: 0.2s;
   }
- 
   .active-pill .clear-icon:hover {
     opacity: 1;
   }
- 
   .clear-all {
     margin-left: 1rem;
     cursor: pointer;
@@ -2310,31 +2057,26 @@ body::-webkit-scrollbar {
     gap: 4px;
     transition: 0.2s;
   }
- 
   .clear-all:hover {
     color: variables.$color-black;
     text-decoration: underline;
   }
- 
   .connect-section {
     margin-top: 1rem;
     padding: 4rem 2rem;
     text-align: center;
   }
- 
   .connect-title {
     font-size: 3.5rem;
     font-weight: variables.$font-weight-primary;
     color: variables.$color-black;
     margin-bottom: 0.5rem;
   }
- 
   .connect-subtitle {
     font-size: 1rem;
     color: variables.$color-text;
     margin-bottom: 2.5rem;
   }
- 
   .connect-btn {
     background: variables.$color-text-footer;
     color: variables.$color-bg-footer;
@@ -2346,15 +2088,12 @@ body::-webkit-scrollbar {
     cursor: pointer;
     transition: all 0.2s ease;
     width: 30%;
- 
     &:hover {
-      background: color.adjust(variables.$color-text-footer,$lightness: -8%);
+      background: color.adjust(variables.$color-text-footer, $lightness: -8%);
       transform: translateY(-2px);
     }
   }
- 
 }
- 
 /*============== Project Card ============*/
 .project-card {
   background: variables.$color-bg-footer;
@@ -2366,25 +2105,21 @@ body::-webkit-scrollbar {
   transition: 0.2s ease;
   cursor: pointer;
   height: 11rem;
- 
   &:hover {
     transform: translateY(-3px);
   }
 }
- 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
- 
 .project-title {
   font-size: 1.05rem;
   font-weight: variables.$font-weight-footer;
   margin-bottom: 4px;
   color: variables.$color-title;
 }
- 
 .project-desc {
   font-size: 0.85rem;
   color: variables.$color-subtitle;
@@ -2393,7 +2128,6 @@ body::-webkit-scrollbar {
   max-height: 2.6rem;
   overflow: hidden;
 }
- 
 .status-pill {
   padding: 4px 12px;
   font-size: 0.75rem;
@@ -2402,40 +2136,32 @@ body::-webkit-scrollbar {
   font-weight: variables.$font-weight-primary;
   white-space: nowrap;
 }
- 
 .status-pill.In\ Progress {
   background: variables.$progress-color;
 }
- 
 .status-pill.Planning {
   background: variables.$planning-color;
 }
- 
 .status-pill.Completed {
   background: variables.$completed-color;
 }
- 
 .card-details {
   margin-top: 10px;
 }
- 
 .detail-row {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 6px;
- 
   span {
     font-size: 0.85rem;
     color: variables.$color-text-secondary;
   }
 }
- 
 .icon {
   width: 16px;
   opacity: 0.7;
 }
- 
 .card-index {
   position: absolute;
   bottom: -25px;
@@ -2445,12 +2171,10 @@ body::-webkit-scrollbar {
   color: rgba(0, 0, 0, 0.06);
   pointer-events: none;
 }
- 
 .status-badge {
   position: absolute;
   top: 14px;
   right: 16px;
- 
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -2458,49 +2182,39 @@ body::-webkit-scrollbar {
   color: variables.$color-bg-footer;
   text-transform: capitalize;
 }
- 
 .status-badge.planning {
   background: variables.$planning-color;
 }
- 
 .status-badge.in-progress {
   background: variables.$progress-color;
 }
- 
 .status-badge.completed {
   background: variables.$completed-color;
 }
- 
 .status-badge.on-hold {
   background: variables.$onHold-color;
 }
- 
 .status-badge.cancelled {
   background: variables.$color-btn-danger-bg;
 }
- 
 /* ============= Project Detail Page ===============*/
 .project-detail-page {
   padding: 2rem 5rem;
   font-family: variables.$font-family-primary;
- 
   .top-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-top: 1rem;
   }
- 
   .left-section {
     display: flex;
     flex-direction: column;
- 
     .title-row {
       display: flex;
       align-items: self-start;
       gap: 2rem;
     }
- 
     .status-badge-detail {
       display: inline-block;
       padding: 5px 14px;
@@ -2510,31 +2224,24 @@ body::-webkit-scrollbar {
       color: variables.$color-bg-footer;
     }
   }
- 
   .status-badge-detail.planning {
     background: variables.$planning-color;
   }
- 
   .status-badge-detail.in-progress {
     background: variables.$progress-color;
   }
- 
   .status-badge-detail.completed {
     background: variables.$completed-color;
   }
- 
   .status-badge-detail.on-hold {
     background: variables.$onHold-color;
   }
- 
   .status-badge-detail.cancelled {
     background: variables.$color-btn-danger-bg;
   }
- 
   .actions-right {
     display: flex;
     gap: 1rem;
- 
     .create-task-btn {
       background: variables.$create-btn-bg;
       color: variables.$color-title;
@@ -2543,12 +2250,10 @@ body::-webkit-scrollbar {
       border: none;
       font-size: 0.875rem;
       cursor: pointer;
- 
       &:hover {
-        background: color.adjust(variables.$create-btn-bg,$lightness: -8%);
+        background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
       }
     }
- 
     .edit-task-btn {
       background: variables.$color-bg-footer;
       color: variables.$color-title;
@@ -2556,12 +2261,10 @@ body::-webkit-scrollbar {
       padding: 10px 22px;
       border-radius: 24px;
       font-size: 0.875rem;
- 
       &:hover {
         background: variables.$btn-secondary-bg-color;
       }
     }
- 
     .delete-task-btn {
       background: variables.$color-btn-danger-bg;
       color: variables.$color-bg-footer;
@@ -2569,13 +2272,11 @@ body::-webkit-scrollbar {
       border-radius: 24px;
       border: none;
       font-size: 0.875rem;
- 
       &:hover {
-        background: color.adjust(variables.$color-btn-danger-bg,$lightness: -8%);
+        background: color.adjust(variables.$color-btn-danger-bg, $lightness: -8%);
       }
     }
   }
- 
   .meta-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2583,13 +2284,11 @@ body::-webkit-scrollbar {
     margin-top: 3rem;
     align-items: start;
   }
- 
   .timeline {
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
- 
   .label {
     display: flex;
     align-items: center;
@@ -2598,29 +2297,24 @@ body::-webkit-scrollbar {
     font-size: 0.9rem;
     font-weight: 500;
   }
- 
   .dates {
     font-size: 14px;
     font-weight: 600;
     color: variables.$color-btn-cancel-text;
   }
- 
   .progress-row .dates {
     margin-left: 1.8rem;
   }
- 
   .meta-grid .timeline .progress-row .dates,
   .meta-grid .timeline .progress-row .progress-bar,
   .meta-grid .timeline .progress-row .progress-text {
     margin-left: 1.5rem;
   }
- 
   .meta-grid .timeline .progress-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
- 
   .progress-label {
     display: flex;
     align-items: center;
@@ -2629,7 +2323,6 @@ body::-webkit-scrollbar {
     font-size: 0.9rem;
     font-weight: 500;
   }
- 
   .progress-bar {
     width: 100%;
     height: 8px;
@@ -2638,32 +2331,27 @@ body::-webkit-scrollbar {
     margin: 6px 0;
     overflow: hidden;
   }
- 
   .progress-fill {
     width: 0%;
     height: 100%;
     background: variables.$progress-color;
     border-radius: 6px;
   }
- 
   .progress-text {
     font-size: 0.85rem;
     color: variables.$color-gray-600;
   }
- 
   .meta-right {
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
- 
   .status-summaries {
     display: flex;
     justify-content: space-between;
     gap: 1.5rem;
     margin-top: 2rem;
   }
- 
   .status-card {
     flex: 1;
     background: variables.$color-gray-50;
@@ -2676,36 +2364,30 @@ body::-webkit-scrollbar {
     min-height: 8.125rem;
     transition: 0.2s ease;
   }
- 
   .status-title {
     font-size: 1rem;
     font-weight: 500;
     color: variables.$color-gray-600;
   }
- 
   .status-count {
     font-size: 2rem;
     font-weight: variables.$font-weight-footer;
     color: variables.$color-title;
     margin-top: 1rem;
   }
- 
   /* Color Variants */
   .status-card.in-progress {
     background: variables.$status-in-progress;
     border-color: variables.$color-gray-200;
   }
- 
   .status-card.completed {
     background: variables.$status-completed;
     border-color: variables.$status-completed-border;
   }
- 
   .status-card.overdue {
     background: variables.$status-overdue;
     border-color: variables.$status-overdue-border;
   }
- 
   .tasks-panel {
     margin-top: 2rem;
     width: 100%;
@@ -2717,13 +2399,11 @@ body::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
   }
- 
   .tasks-title {
     font-size: 1.1rem;
     font-weight: variables.$font-weight-footer;
     margin-bottom: 1.5rem;
   }
- 
   .tasks-empty {
     flex: 1;
     display: flex;
@@ -2734,7 +2414,6 @@ body::-webkit-scrollbar {
     color: variables.$color-gray-600;
     font-size: 1rem;
   }
- 
   .create-task-btn {
     background: variables.$color-bg-footer;
     color: variables.$color-title;
@@ -2743,15 +2422,11 @@ body::-webkit-scrollbar {
     border: none;
     font-size: 0.875rem;
     cursor: pointer;
- 
     &:hover {
-      background: color.adjust(variables.$color-bg-footer,$lightness: -8%);
+      background: color.adjust(variables.$color-bg-footer, $lightness: -8%);
     }
   }
 }
- 
-
-
 /* =========================
    Dialog Overlay
    ========================= */
@@ -2763,25 +2438,20 @@ body::-webkit-scrollbar {
   align-items: center;
   z-index: 9999;
 }
-
-
 .dialog-box {
   width: 471px;
   height: 293px;
-  background: variables.$create-btn-bg;     
+  background: variables.$create-btn-bg;
   border-radius: 14px;
   padding: 24px 16px;
   box-sizing: border-box;
   position: relative;
 }
-
-
 .dialog-header-green {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-
   h3 {
     margin: 0;
     font-size: 18px;
@@ -2791,8 +2461,6 @@ body::-webkit-scrollbar {
     text-transform: uppercase;
   }
 }
-
-/* Close icon */
 .logout-close-icon {
   position: absolute;
   top: 24px;
@@ -2803,45 +2471,37 @@ body::-webkit-scrollbar {
   border: none;
   padding: 0;
   cursor: pointer;
-
   img {
     width: 24px;
     height: 24px;
     display: block;
   }
 }
-
-
 .dialog-inner {
   width: 439px;
   height: 197px;
-  background: variables.$color-dialog-bg;     
+  background: variables.$color-dialog-bg;
   border-radius: 12px;
   padding: 24px 16px;
   box-sizing: border-box;
 }
-
 .dialog-body {
   width: 389px;
   height: 77px;
   margin-bottom: 26px;
-
   p {
     margin: 0 0 6px 0;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     letter-spacing: -0.15px;
-    color: variables.$color-gray-500;   
+    color: variables.$color-gray-500;
   }
-
   p:first-child {
     margin-bottom: 14px;
   }
 }
-
-
 .dialog-actions {
   width: 389px;
   height: 48px;
@@ -2849,10 +2509,8 @@ body::-webkit-scrollbar {
   justify-content: space-between;
   align-items: center;
 }
-
-
 .dialog-actions .confirm {
-  background: variables.$color-primary;         
+  background: variables.$color-primary;
   color: variables.$color-white;
   width: 282px;
   height: 48px;
@@ -2866,15 +2524,13 @@ body::-webkit-scrollbar {
   align-items: center;
   gap: 2px;
   cursor: pointer;
-
   &:hover {
-    background: variables.$color-btn-primary-hover;   
+    background: variables.$color-btn-primary-hover;
   }
 }
-
 .dialog-actions .dialog-cancel {
-  background: variables.$color-dialog-cancel-bg;      
-  color: variables.$color-btn-cancel-text;            
+  background: variables.$color-dialog-cancel-bg;
+  color: variables.$color-btn-cancel-text;
   min-width: 91px;
   height: 48px;
   padding: 14px 22px;
@@ -2887,9 +2543,222 @@ body::-webkit-scrollbar {
   align-items: center;
   gap: 2px;
   cursor: pointer;
-
   &:hover {
-    background: variables.$color-btn-secondary-hover-strong; 
+    background: variables.$color-btn-secondary-hover-strong;
   }
 }
 
+//---activity----
+
+.activity-feed {
+    background: variables.$color-bg-footer;
+    border-radius: variables.$radius-lg;
+    box-shadow: variables.$shadow-card;
+    padding: variables.$space-lg;
+    display: flex;
+    flex-direction: column;
+    gap: variables.$space-md;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        margin: 0;
+        font-size: variables.$font-md;
+    }
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-item {
+    display: flex;
+    gap: variables.$space-md;
+    align-items: center;
+    padding: variables.$notification-gap-item,0;
+    border-bottom: 1px solid variables.$color-border;
+    cursor: pointer;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: variables.$color-hover;
+    }
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: variables.$radius-round;
+    background: variables.$color-avatar-bg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: variables.$color-avatar-text;
+    font-size: variables.$font-xs;
+    font-weight: 600;
+}
+
+.content {
+    flex: 1;
+
+    .line1 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: variables.$space-xs;
+        font-size: variables.$font-sm;
+
+        .action {
+            font-weight: 600;
+        }
+
+        .item-name {
+            opacity: 0.8;
+        }
+    }
+
+    .line2 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: variables.$space-md;
+        font-size: variables.$font-xs;
+        opacity: 0.8;
+    }
+}
+
+.info {
+    font-size: variables.$font-sm;
+    opacity: 0.7;
+}
+
+//========dashboard Component=======
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: variables.$chart-min-height;
+}
+
+.chart-loading {
+  text-align: center;
+  padding: variables.$chart-loading-padding;
+  font-size: variables.$chart-loading-font-size;
+  opacity: variables.$chart-loading-opacity;
+}
+
+//========dashboard component=========
+
+.dashboard-charts {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-large;
+}
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    margin: 0;
+    font-size: variables.$font-h1;
+  }
+
+  button {
+    padding: variables.$btn-padding;
+    border-radius: variables.$btn-radius;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.loading {
+  padding: variables.$card-padding;
+  text-align: center;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: variables.$gap-medium;
+}
+
+.card {
+  background: variables.$color-avatar-text;
+  border-radius: variables.$card-radius;
+  box-shadow: 0 2px 6px variables.$color-shadow;
+  padding: variables.$card-padding;
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-small;
+
+  h2 {
+    margin: 0;
+    font-size: variables.$font-h2;
+  }
+
+  .empty {
+    font-size: variables.$font-empty;
+    opacity: 0.7;
+  }
+}
+
+.overdue {
+  border-left: 4px solid variables.$color-overdue;
+}
+
+.overdue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: variables.$color-overdue;
+    color: variables.$color-avatar-text;
+    font-size: variables.$font-meta;
+  }
+
+  .badge.ok {
+    background: variables.$color-ok;
+  }
+}
+
+.overdue-list {
+  list-style: none;
+  padding: 0;
+  margin: variables.$gap-small 0 0;
+
+  li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid variables.$color-muted-border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .title {
+      font-weight: 600;
+    }
+
+    .meta {
+      font-size: variables.$font-meta;
+      opacity: 0.8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+  }
+}
+
+.activity-section {
+  margin-top: variables.$gap-small;
+}
