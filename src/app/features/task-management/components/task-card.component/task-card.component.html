@@ -1,0 +1,62 @@
+<div class="task-card-expanded-backdrop">
+  <!-- Background overlay -->
+
+  <div class="task-card-expanded">
+    <!-- Main expanded task card -->
+
+    <div class="header">
+      <h3>{{ task.title }}</h3>
+
+      <div class="header-actions">
+        <!-- Edit & Close buttons -->
+        <button class="edit-btn" (click)="goToTaskDetails(task.id)">Edit/Modify ↗</button>
+        <button class="close-btn" (click)="closeCard()">✕</button>
+      </div>
+    </div>
+
+    <div class="details">
+
+      <div class="badges">
+        <!-- Status & Priority -->
+        <span class="status-badge">{{ task.status }}</span>
+        <span class="priority-badge">{{ task.priority }}</span>
+      </div>
+
+      <div class="info-grid">
+        <!-- Task info list -->
+
+        <div class="info-row">
+          <label>Due Date</label>
+          <span>{{ task.dueDate | date }}</span>
+        </div>
+
+        <div class="info-row">
+          <label>Project</label>
+          <span>{{ projectName }}</span>
+        </div>
+
+        <div class="info-row">
+          <label>Assignee</label>
+          <span>{{ task.assignee }}</span>
+        </div>
+
+        <div class="info-row">
+          <label>Created By</label>
+          <span>{{ task.createdBy }}</span>
+        </div>
+
+        <div class="info-row">
+          <label>Created At</label>
+          <span>{{ task.createdAt }}</span>
+        </div>
+
+        <div class="info-row">
+          <label>Last Updated</label>
+          <span>{{ task.updatedAt }}</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
