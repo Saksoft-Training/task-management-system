@@ -15,4 +15,5 @@ export interface Task {
   status: TaskStatus;
   title: string;
   updatedAt: string;
+
 }

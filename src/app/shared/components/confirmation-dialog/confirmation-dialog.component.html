@@ -1,0 +1,25 @@
+<div class="dialog-overlay">
+  <div class="dialog-box">
+    <div class="dialog-header-green">
+      <h3>{{ title }}</h3>
+      <button class="logout-close-icon" (click)="onCancel()">
+        <img src="assets/icons/cross-Icon.svg" alt="Close" />
+      </button>
+    </div>
+    <div class="dialog-inner">
+      <div class="dialog-body">
+        @for (line of message.split('\n'); track $index) {
+        <p>{{ line }}</p>
+        }
+      </div>
+      <div class="dialog-actions">
+        <button class="btn confirm" (click)="onConfirm()">
+          {{ confirmText }}
+        </button>
+        <button class="btn dialog-cancel" (click)="onCancel()">
+          {{ cancelText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
