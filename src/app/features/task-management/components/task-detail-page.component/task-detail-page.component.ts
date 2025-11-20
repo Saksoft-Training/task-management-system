@@ -5,49 +5,58 @@ import { FormsModule } from '@angular/forms';
 import { Task } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
 import { ProjectService } from '../../../project-management/services/project.service';
-import { DeleteConfirmModalComponent } from "../delete-confirm-modal.component/delete-confirm-modal.component";
+import { ConfirmationDialogComponent } from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 
 /**
  * @summary
- * Task detail page component — shows a single task, allows editing,
- * status/priority updates and deletion via a confirmation modal.
+ * Displays detailed information about a single task, including:
+ * - project name
+ * - status and priority
+ * - status history
+ * Provides options to:
+ * - edit the task
+ * - update status or priority
+ * - delete the task with confirmation
  */
 @Component({
   selector: 'app-task-detail-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, DeleteConfirmModalComponent],
+  imports: [CommonModule, FormsModule, ConfirmationDialogComponent],
   templateUrl: './task-detail-page.component.html',
   styleUrls: ['./task-detail-page.component.scss']
 })
 export class TaskDetailPageComponent implements OnInit {
 
-  //#region ─────────────── Component State / Inputs ───────────────
+  // #region ─────────────── Component State ───────────────
 
-  /** The currently displayed task. `null` when not found. */
+  /** The task currently being displayed. Null if not found. */
   public task: Task | null = null;
 
-  /** Human-readable project name for the task. */
+  /** Name of the project this task belongs to. Loaded dynamically. */
   public projectName: string = '';
 
-  /** Lightweight status change history for UI display. */
+  /** Minimal history of task updates for UI display. */
   public statusHistory: { status: string; date: string }[] = [];
 
-  /** Controls the visibility of the delete confirmation modal. */
+  /** Toggle for delete confirmation modal visibility. */
   public showDeleteModal: boolean = false;
 
-  /** Holds a reference to the task being deleted while modal is open. */
+  /** Stores task reference while the delete modal is open. */
   public taskToDelete: Task | null = null;
 
-  /** Allowed priority options for select controls. */
+  /** Fixed set of task priority options. */
   public readonly priorityOptions: string[] = ['Low', 'Medium', 'High', 'Urgent'];
 
-  /** Allowed status options for select controls. */
+  /** Fixed set of task status options. */
   public readonly statusOptions: string[] = ['To Do', 'In Progress', 'Completed'];
 
-  //#endregion
+  // #endregion
 
-  //#region ─────────────── Constructor / DI ───────────────
+  // #region ─────────────── Constructor ───────────────
 
+  /**
+   * @summary Injects required services for task loading, navigation, and project lookup.
+   */
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -55,136 +64,133 @@ export class TaskDetailPageComponent implements OnInit {
     private readonly projectService: ProjectService
   ) { }
 
-  //#endregion
+  // #endregion
 
-  //#region ─────────────── Lifecycle Hooks ───────────────
+  // #region ─────────────── Lifecycle Hooks ───────────────
 
   /**
-   * Initialize component: read route id, fetch task and project information,
-   * and build a minimal status history for display.
+   * @summary
+   * Loads task from the route parameter and initializes:
+   * - project name
+   * - status history
    */
   public ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam ? Number(idParam) : NaN;
 
+    // Invalid or missing ID → redirect back
     if (Number.isNaN(id)) {
-      // If id is invalid, navigate back to list (defensive fallback).
       this.router.navigate(['/tasks']);
       return;
     }
 
+    // Load task
     this.task = this.taskService.getTaskById(id) ?? null;
-
     if (!this.task) {
-      // Task not found — navigate back to tasks list.
       this.router.navigate(['/tasks']);
       return;
     }
 
-    // Load project name (safely retrieve logged user email if present)
+    // Load project name based on logged user email
     const email = localStorage.getItem('loggedUserEmail') ?? '';
     const project = this.projectService.getById(this.task.projectId, email);
     this.projectName = project?.name ?? 'Unknown Project';
 
-    // Build a lightweight status history (most recent first)
+    // Build simple status history
     this.statusHistory = [
       { status: this.task.status ?? 'Unknown', date: this.task.updatedAt ?? this.task.createdAt ?? '' },
       { status: 'Created', date: this.task.createdAt ?? '' }
     ];
   }
 
-  //#endregion
+  // #endregion
 
-  //#region ─────────────── Navigation / Edit / Delete Handlers ───────────────
+  // #region ─────────────── Edit / Delete Actions ───────────────
 
   /**
-   * Navigate to edit page for the current task.
+   * @summary Navigates to the Edit Task page.
    */
   public onEdit(): void {
-    if (!this.task) {
-      return;
-    }
-
-    // Using navigate without awaiting; it returns a Promise<boolean>.
+    if (!this.task) return;
     this.router.navigate(['/tasks/edit', this.task.id]);
   }
 
   /**
-   * Open delete confirmation modal for the current task.
+   * @summary Opens modal asking user to confirm deletion.
    */
   public onDelete(): void {
-    if (!this.task) {
-      return;
-    }
+    if (!this.task) return;
     this.taskToDelete = this.task;
     this.showDeleteModal = true;
   }
 
   /**
-   * Confirm deletion, call the service to delete and navigate away.
+   * @summary Permanently deletes the task and redirects to task list.
    */
   public onConfirmDelete(): void {
     if (this.taskToDelete) {
       this.taskService.deleteTask(this.taskToDelete.id);
     }
 
-    // Reset modal state and navigate back to tasks list.
     this.showDeleteModal = false;
     this.taskToDelete = null;
+
     this.router.navigate(['/tasks']);
   }
 
   /**
-   * Close the delete modal without deleting.
+   * @summary Closes the deletion confirmation modal.
    */
   public onCancelDelete(): void {
     this.showDeleteModal = false;
     this.taskToDelete = null;
   }
 
-  //#endregion
+  // #endregion
 
-  //#region ─────────────── Task Updates (Status / Priority) ───────────────
+  // #region ─────────────── Task Updates (Status / Priority) ───────────────
 
   /**
-   * Update task status and persist change.
-   * @param newStatus New status string selected by the user.
+   * @summary Updates the task's status and saves the change.
+   * @param newStatus - The selected status value.
    */
   public updateStatus(newStatus: string): void {
-    if (!this.task) {
-      return;
-    }
+    if (!this.task) return;
 
     this.task.status = newStatus as any;
     this.task.updatedAt = new Date().toISOString();
     this.taskService.updateTask(this.task);
 
-    // update local status history (prepend new status)
+    // Add new record to top of history list
     this.statusHistory.unshift({ status: newStatus, date: this.task.updatedAt });
   }
 
   /**
-   * Update task priority and persist change.
-   * @param newPriority New priority string selected by the user.
+   * @summary Updates the task's priority level.
+   * @param newPriority - New priority value.
    */
   public updatePriority(newPriority: string): void {
-    if (!this.task) {
-      return;
-    }
+    if (!this.task) return;
 
     this.task.priority = newPriority as any;
     this.task.updatedAt = new Date().toISOString();
     this.taskService.updateTask(this.task);
   }
 
+  // #endregion
+
+  // #region ─────────────── Navigation Helpers ───────────────
+
+  /** Navigate back to Projects list. */
   goToProjects() {
     this.router.navigate(['/projects']);
   }
 
+  /** Navigate to parent project details page. */
   goToProject(projectId: number | undefined) {
     if (!projectId) return;
     this.router.navigate(['/projects', projectId]);
   }
 
-  //#endregion
+  // #endregion
 }

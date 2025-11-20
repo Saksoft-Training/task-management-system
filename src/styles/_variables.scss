@@ -378,3 +378,50 @@ $status-completed: #F0FDF4;
 $status-completed-border: #B9F8CF;
 $status-overdue: #FDF0F0;
 $status-overdue-border: #F8B9B9;
+
+// ----- Missing Colors to Add -----
+
+$color-priority-low-bg: #DCFCE7;
+$color-priority-low-text: #00C950;
+
+$color-priority-medium-bg: #F0B100;
+
+$color-priority-high-bg: #FF6900;
+
+$color-priority-urgent-bg: #FB2C36;
+
+// Status
+$color-status-gray: #D1D5DC;
+$color-status-dark: #1E2939;
+$color-status-blue-light: #DBEAFE;
+
+// Task modal / cards
+$color-modal-green: #DFECC6;
+$color-gray-lightest: #F3F4F6;
+$color-yellow-light: #FACC15;
+$color-gray-50-alt: #F9FAFB;
+$color-blue-50: #EFF6FF;
+$color-green-50: #F0FDF4;
+
+// Borders / grayscale
+$color-gray-bbb: #bbb;
+$color-gray-eee: #eeeeee;
+$color-border-d1: #d1d5db;
+
+// Error / notifications
+$color-gray-f9: #f9fafb;
+$color-gray-f9-2: #f9f9f9;
+$color-error-extra-bg: #fff5f5;
+
+// Shadows / Overlays
+$shadow-light-05: rgba(0, 0, 0, 0.05);
+$shadow-med-12: rgba(0, 0, 0, 0.12);
+$shadow-15: rgba(0, 0, 0, 0.15);
+
+$overlay-55: rgba(0, 0, 0, 0.55);
+$overlay-35: rgba(0, 0, 0, 0.35);
+
+// Card shadows
+$shadow-card-03: rgba(0, 0, 0, 0.03);
+$shadow-card-06: rgba(0, 0, 0, 0.06);
+$shadow-card-10: rgba(0, 0, 0, 0.10);

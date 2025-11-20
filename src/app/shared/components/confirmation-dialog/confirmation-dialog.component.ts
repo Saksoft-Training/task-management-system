@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './confirmation-dialog.component.html',
-  styleUrl: './confirmation-dialog.component.scss',
+  styleUrls: ['./confirmation-dialog.component.scss'],
 })
 export class ConfirmationDialogComponent {
   //#region Input Properties

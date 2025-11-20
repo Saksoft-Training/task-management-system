@@ -1,35 +1,36 @@
-<!-- BREADCRUMB -->
-<div class="breadcrumb">
-  
-  <!-- Navigate to Projects List -->
-  <a (click)="goToProjects()">Projects</a> /
-  
-  <!-- Navigate to Project Detail (task.projectId) -->
-  <a (click)="goToProject(task?.projectId)">
-    {{ projectName }}
-  </a> /
-  
-  <!-- Current Task (no navigation needed) -->
-  <span>{{ task?.title }}</span>
+<!-- Breadcrumb -->
+<div class="tl-breadcrumb">
+    <a>Projects</a> /
+    <a>{{ projectName }}</a> /
+    <span>{{ task?.title }}</span>
 </div>
 
-<!-- TITLE + STATUS + ACTIONS -->
-<div class="top-bar">
-    <h1 class="page-title">{{ task?.title }}</h1>
+<!-- Page header -->
+<div class="tl-topbar">
 
-    <div class="badges-task">
-        <span class="badge status">{{ task?.status }}</span>
-        <span class="badge priority">{{ task?.priority }}</span>
+    <!-- Task title -->
+    <h1 class="tl-title">{{ task?.title }}</h1>
+
+    <!-- Status + priority badges -->
+    <div class="tl-badges">
+        <span class="tl-badge tl-badge--status">{{ task?.status }}</span>
+        <span class="tl-badge tl-badge--priority">{{ task?.priority }}</span>
     </div>
 
-    <div class="actions-task">
-        <button class="btn-outline" (click)="onEdit()">Edit <img src="assets/icons/edit-Icon.svg" alt="Edit Icon"></button>
-        <button class="btn-delete" (click)="onDelete()">Delete <img src="assets/icons/delete-Icon.svg" alt="Delete Icon"></button>
+    <!-- Edit / Delete buttons -->
+    <div class="tl-actions">
+        <button class="tl-btn-outline" (click)="onEdit()">
+            Edit <img src="assets/icons/edit-Icon.svg" alt="Edit">
+        </button>
+
+        <button class="tl-btn-delete" (click)="onDelete()">
+            Delete <img src="assets/icons/delete-Icon.svg" alt="Delete">
+        </button>
     </div>
 </div>
 
-<!-- STATUS + PRIORITY CONTROLS -->
-<div class="controls">
+<!-- Quick status + priority update -->
+<div class="tl-controls">
     <label>Status:</label>
     <select [ngModel]="task?.status" (ngModelChange)="updateStatus($event)">
         <option *ngFor="let s of statusOptions">{{ s }}</option>
@@ -41,62 +42,77 @@
     </select>
 </div>
 
-<!-- MAIN GRID -->
-<div class="content-grid">
+<!-- Main layout -->
+<div class="tl-info-grid">
 
-    <!-- LEFT INFO PANEL -->
-    <div class="info-card">
-        <div class="info-row">
-            <span class="label"><img src="assets/icons/calendar-Icon.svg" alt="Due Date Icon"> Due Date</span>
+    <!-- Task details -->
+    <div class="tl-info-card">
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">
+                <img src="assets/icons/calendar-Icon.svg"> Due Date
+            </span>
             <span>{{ task?.dueDate }}</span>
         </div>
 
-        <div class="info-row">
-            <span class="label"><img src="assets/icons/profile-Icon.svg" alt="Assignee Icon"> Assignee</span>
+        <div class="tl-info-row">
+            <span class="tl-info-label">
+                <img src="assets/icons/profile-Icon.svg"> Assignee
+            </span>
             <span>{{ task?.assignee }}</span>
         </div>
 
-        <div class="info-row">
-            <span class="label"> Created At</span>
+        <div class="tl-info-row">
+            <span class="tl-info-label">Created At</span>
             <span>{{ task?.createdAt }}</span>
         </div>
 
-        <div class="info-row">
-            <span class="label"> Project</span>
+        <div class="tl-info-row">
+            <span class="tl-info-label">Project</span>
             <span>{{ projectName }}</span>
         </div>
 
-        <div class="info-row">
-            <span class="label"> Created By</span>
+        <div class="tl-info-row">
+            <span class="tl-info-label">Created By</span>
             <span>{{ task?.createdBy }}</span>
         </div>
 
-        <div class="info-row">
-            <span class="label"> Last Updated</span>
+        <div class="tl-info-row">
+            <span class="tl-info-label">Last Updated</span>
             <span>{{ task?.updatedAt }}</span>
         </div>
     </div>
 
-    <!-- RIGHT STATUS HISTORY -->
-    <div class="history-card">
-        <h3><img src="assets/icons/history-Icon.svg" alt="Status History Icon">  Status History</h3>
+    <!-- Status history -->
+    <div class="tl-history-card">
+        <h3>
+            <img src="assets/icons/history-Icon.svg"> Status History
+        </h3>
 
-        <div class="history-item" *ngFor="let h of statusHistory">
-            <span class="status-tag"><img src="assets/icons/time-Icon.svg" alt="Icon">  {{ h.status }}</span>
-            <span class="date">{{ h.date }}</span>
+        <div class="tl-history-item" *ngFor="let h of statusHistory">
+            <span class="tl-history-status">
+                <img src="assets/icons/time-Icon.svg"> {{ h.status }}
+            </span>
+            <span class="tl-history-date">{{ h.date }}</span>
         </div>
     </div>
-
 </div>
 
-<!-- DESCRIPTION -->
-<div class="description">
+<!-- Description -->
+<div class="tl-description">
     <h3>Description</h3>
     <p>{{ task?.description }}</p>
 </div>
-<app-delete-confirm-modal
-  [visible]="showDeleteModal"
-  [itemName]="task?.title"
-  (confirm)="onConfirmDelete()"
-  (cancel)="onCancelDelete()">
-</app-delete-confirm-modal>
+
+<!-- Delete confirmation -->
+@if (showDeleteModal) {
+  <app-confirmation-dialog-component
+    [title]="'Delete Task'"
+    [message]="'Are you sure you want to delete the task:\n' + (taskToDelete?.title || '') + '?'"
+    [confirmText]="'Delete'"
+    [cancelText]="'Cancel'"
+    [type]="'danger'"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </app-confirmation-dialog-component>
+}

@@ -1,56 +1,58 @@
-<div class="task-card-expanded-backdrop">
-  <!-- Background overlay -->
+<!-- Modal background -->
+<div class="tl-task-modal-backdrop">
 
-  <div class="task-card-expanded">
-    <!-- Main expanded task card -->
+  <!-- Modal box -->
+  <div class="tl-task-modal">
 
-    <div class="header">
-      <h3>{{ task.title }}</h3>
+    <!-- Header -->
+    <div class="tl-task-header">
+      <h3 class="tl-task-title">{{ task.title }}</h3>
 
-      <div class="header-actions">
-        <!-- Edit & Close buttons -->
-        <button class="edit-btn" (click)="goToTaskDetails(task.id)">Edit/Modify ↗</button>
-        <button class="close-btn" (click)="closeCard()">✕</button>
+      <!-- Edit + Close buttons -->
+      <div class="tl-task-header-actions">
+        <button class="tl-btn-edit" (click)="goToTaskDetails(task.id)">Edit/Modify ↗</button>
+        <button class="tl-btn-close" (click)="closeCard()">✕</button>
       </div>
     </div>
 
-    <div class="details">
+    <!-- Task details -->
+    <div class="tl-task-details">
 
-      <div class="badges">
-        <!-- Status & Priority -->
-        <span class="status-badge">{{ task.status }}</span>
-        <span class="priority-badge">{{ task.priority }}</span>
+      <!-- Status + priority badges -->
+      <div class="tl-task-badges">
+        <span class="tl-badge-status">{{ task.status }}</span>
+        <span class="tl-badge-priority">{{ task.priority }}</span>
       </div>
 
-      <div class="info-grid">
-        <!-- Task info list -->
+      <!-- Info grid -->
+      <div class="tl-info-grid">
 
-        <div class="info-row">
+        <div class="tl-info-row">
           <label>Due Date</label>
           <span>{{ task.dueDate | date }}</span>
         </div>
 
-        <div class="info-row">
+        <div class="tl-info-row">
           <label>Project</label>
           <span>{{ projectName }}</span>
         </div>
 
-        <div class="info-row">
+        <div class="tl-info-row">
           <label>Assignee</label>
           <span>{{ task.assignee }}</span>
         </div>
 
-        <div class="info-row">
+        <div class="tl-info-row">
           <label>Created By</label>
           <span>{{ task.createdBy }}</span>
         </div>
 
-        <div class="info-row">
+        <div class="tl-info-row">
           <label>Created At</label>
           <span>{{ task.createdAt }}</span>
         </div>
 
-        <div class="info-row">
+        <div class="tl-info-row">
           <label>Last Updated</label>
           <span>{{ task.updatedAt }}</span>
         </div>

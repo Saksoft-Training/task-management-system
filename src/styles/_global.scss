@@ -1,7 +1,7 @@
 @use "./variables";
 @use "./mixins";
 @use "sass:color";
- 
+
 // ====================== FOOTER ======================
 * {
   margin: 0;
@@ -10,7 +10,8 @@
 
 }
 
-html,body {
+html,
+body {
 
   height: auto;
   min-height: 100%;
@@ -63,6 +64,7 @@ body::-webkit-scrollbar {
   font-weight: variables.$font-weight-footer;
   padding: variables.$padding-footer-top variables.$padding-footer-sides variables.$padding-footer-bottom;
   @include mixins.flex-between;
+
   &-left,
   &-right {
     flex-shrink: 0;
@@ -91,11 +93,11 @@ body::-webkit-scrollbar {
     margin-right: 0.625rem;
     font-size: variables.$error-icon-size;
   }
- 
+
   .message {
     flex-grow: 1;
   }
- 
+
   .close-btn {
     background: none;
     border: none;
@@ -104,13 +106,14 @@ body::-webkit-scrollbar {
     font-size: variables.$font-size-title;
     margin-left: 0.625rem;
     @include mixins.transition(color, 0.2s);
+
     &:hover {
       color: variables.$color-error-hover;
     }
   }
 }
 
- 
+
 /* ========================================= */
 /*  HEADER component */
 /* ========================================= */
@@ -223,7 +226,7 @@ body::-webkit-scrollbar {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: variables.$color-overlay-dark;   
+  background: variables.$color-overlay-dark;
   @include mixins.flex(center, center, column);
   z-index: 9999;
 }
@@ -231,8 +234,8 @@ body::-webkit-scrollbar {
 .spinner {
   width: 32px;
   height: 32px;
-  border: 4px solid variables.$color-spinner-border;  
-  border-top-color: variables.$color-primary;        
+  border: 4px solid variables.$color-spinner-border;
+  border-top-color: variables.$color-primary;
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
@@ -241,6 +244,7 @@ body::-webkit-scrollbar {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -259,7 +263,7 @@ body::-webkit-scrollbar {
 /* ========================================================= */
 /* DIALOG */
 /* ========================================================= */
- 
+
 .dialog-overlay {
   position: fixed;
   top: 0;
@@ -271,7 +275,7 @@ body::-webkit-scrollbar {
   @include mixins.flex();
   z-index: variables.$dialog-overlay-z;
 }
- 
+
 .dialog-box {
   background: variables.$color-bg-footer;
   border-radius: variables.$dialog-radius;
@@ -279,13 +283,13 @@ body::-webkit-scrollbar {
   max-width: variables.$dialog-max-width;
   @include mixins.box-shadow(variables.$dialog-shadow);
   overflow: hidden;
- 
+
   .dialog-header {
     @include mixins.flex-between;
     padding: variables.$dialog-padding-header;
     border-bottom: 1px solid variables.$color-dialog-border;
     background-color: variables.$color-dialog-header-bg;
- 
+
     h3 {
       margin: 0;
       @include mixins.font-primary(variables.$font-size-title, variables.$font-weight-title);
@@ -296,7 +300,7 @@ body::-webkit-scrollbar {
       max-width: variables.$dialog-max-width;
       @include mixins.box-shadow(variables.$dialog-shadow);
       overflow: hidden;
- 
+
       .close-btn {
         background: none;
         border: none;
@@ -304,7 +308,7 @@ body::-webkit-scrollbar {
         cursor: pointer;
         @include mixins.flex();
         @include mixins.transition(transform);
- 
+
         img {
           width: 18px;
           height: 18px;
@@ -312,7 +316,7 @@ body::-webkit-scrollbar {
           padding: 0.25rem;
           @include mixins.flex();
           @include mixins.transition(transform, 0.2s);
- 
+
           &:hover {
             opacity: 0.8;
             transform: scale(1.1);
@@ -320,24 +324,24 @@ body::-webkit-scrollbar {
         }
       }
     }
- 
+
     .dialog-body {
       padding: variables.$dialog-padding-body;
- 
+
       p {
         color: variables.$color-text-secondary;
         font-size: variables.$font-size-body;
         line-height: 1.4;
       }
     }
- 
+
     .dialog-actions {
       display: flex;
       justify-content: flex-end;
       gap: variables.$dialog-gap-actions;
       padding: variables.$dialog-padding-actions;
       border-top: 1px solid variables.$color-dialog-border;
- 
+
       .btn {
         padding: 8px 16px;
         font-size: variables.$font-size-button;
@@ -345,53 +349,53 @@ body::-webkit-scrollbar {
         border: none;
         cursor: pointer;
         @include mixins.transition(background-color);
- 
+
         &.cancel {
           background-color: variables.$color-btn-cancel-bg;
           color: variables.$color-bg-footer;
- 
+
           &:hover {
             background-color: variables.$color-btn-cancel-hover;
           }
         }
- 
+
         &.confirm {
           background-color: variables.$color-btn-confirm-bg;
           color: variables.$color-bg-footer;
- 
+
           &:hover {
             background-color: variables.$color-btn-confirm-hover;
           }
- 
+
           &.danger {
             background-color: variables.$color-btn-danger-bg;
- 
+
             &:hover {
               background-color: variables.$color-btn-danger-hover;
             }
           }
         }
- 
+
         &.cancel {
           background-color: variables.$color-btn-cancel-bg;
           color: variables.$color-btn-cancel-text;
- 
+
           &:hover {
             background-color: variables.$color-btn-cancel-hover;
           }
         }
- 
+
         &.confirm {
           background-color: variables.$color-btn-confirm-bg;
           color: variables.$color-bg-footer;
- 
+
           &:hover {
             background-color: variables.$color-btn-confirm-hover;
           }
- 
+
           &.danger {
             background-color: variables.$color-btn-danger-bg;
- 
+
             &:hover {
               background-color: variables.$color-btn-danger-hover;
             }
@@ -415,10 +419,12 @@ body::-webkit-scrollbar {
   &::-webkit-scrollbar {
     width: variables.$scrollbar-width;
   }
+
   &::-webkit-scrollbar-track {
     background: variables.$color-light-grey;
     border-radius: variables.$scrollbar-radius;
   }
+
   &::-webkit-scrollbar-thumb {
     background: variables.$color-scroll-thumb;
     border-radius: variables.$scrollbar-radius;
@@ -523,7 +529,7 @@ body::-webkit-scrollbar {
   border-radius: variables.$badge-radius;
   font-size: variables.$font-size-badge;
   padding: variables.$badge-padding;
-  min-width: 18px;  
+  min-width: 18px;
   height: 18px;
   display: flex;
   justify-content: center;
@@ -556,10 +562,21 @@ body::-webkit-scrollbar {
   width: variables.$icon-size;
 }
 
-.severity-success { color: variables.$color-success; }
-.severity-warning { color: variables.$color-warning; }
-.severity-critical { color: variables.$color-critical; }
-.severity-info    { color: variables.$color-info; }
+.severity-success {
+  color: variables.$color-success;
+}
+
+.severity-warning {
+  color: variables.$color-warning;
+}
+
+.severity-critical {
+  color: variables.$color-critical;
+}
+
+.severity-info {
+  color: variables.$color-info;
+}
 
 .content {
   flex: 1;
@@ -585,23 +602,24 @@ body::-webkit-scrollbar {
   flex-direction: column;
   gap: variables.$actions-gap;
 
- button {
-      border: none;
-      padding: 0.25rem 0.5rem;
-      font-size: variables.$action-font-size;
-      color: variables.$color-message-text;
-      cursor: pointer;
-      display: flex;
-      font-size: 0.9rem;
-      position: absolute;
-      background: variables.$color-bg-footer;
-      border-radius: 8px;
-      z-index: 50;
-      &:hover {
-        background-color: variables.$color-hover-bg;
-      }
+  button {
+    border: none;
+    padding: 0.25rem 0.5rem;
+    font-size: variables.$action-font-size;
+    color: variables.$color-message-text;
+    cursor: pointer;
+    display: flex;
+    font-size: 0.9rem;
+    position: absolute;
+    background: variables.$color-bg-footer;
+    border-radius: 8px;
+    z-index: 50;
+
+    &:hover {
+      background-color: variables.$color-hover-bg;
     }
   }
+}
 
 
 //==========toast notification===========
@@ -715,9 +733,11 @@ body::-webkit-scrollbar {
   &::-webkit-scrollbar {
     width: 6px;
   }
+
   &::-webkit-scrollbar-track {
     background: variables.$scrollbar-track;
   }
+
   &::-webkit-scrollbar-thumb {
     background: variables.$scrollbar-thumb;
     border-radius: 10px;
@@ -798,7 +818,7 @@ body::-webkit-scrollbar {
   margin: 0 auto;
   box-sizing: border-box;
 
-  .page-title-register{
+  .page-title-register {
     width: 100%;
     max-width: 50rem;
     margin-bottom: 2.5rem;
@@ -824,12 +844,15 @@ body::-webkit-scrollbar {
     .strength-weak {
       color: variables.$color-weak;
     }
+
     .strength-medium {
       color: variables.$color-medium;
     }
+
     .strength-strong {
       color: variables.$color-strong;
     }
+
     .strength-very-strong {
       color: variables.$color-very-strong;
     }
@@ -837,12 +860,15 @@ body::-webkit-scrollbar {
     .meter-fill.strength-weak {
       background-color: variables.$color-weak;
     }
+
     .meter-fill.strength-medium {
       background-color: variables.$color-medium;
     }
+
     .meter-fill.strength-strong {
       background-color: variables.$color-strong;
     }
+
     .meter-fill.strength-very-strong {
       background-color: variables.$color-very-strong;
     }
@@ -966,6 +992,7 @@ body::-webkit-scrollbar {
         }
       }
     }
+
     .password-rules {
       font-size: 0.85rem;
       margin-bottom: 1rem;
@@ -1079,7 +1106,7 @@ body::-webkit-scrollbar {
 
       .error {
         background-color: variables.$color-error-light;
-        color:variables.$color-error-dark;
+        color: variables.$color-error-dark;
         border: 1px solid variables.$color-error-medium;
         padding: 0.625rem 0.75rem;
         border-radius: 0.5rem;
@@ -1087,6 +1114,7 @@ body::-webkit-scrollbar {
     }
   }
 }
+
 /* ============= Login Page ===============*/
 :host {
   display: flex;
@@ -1098,6 +1126,7 @@ body::-webkit-scrollbar {
   padding-bottom: 6rem;
   width: 100%;
 }
+
 .login-container {
   display: flex;
   width: 100%;
@@ -1107,6 +1136,7 @@ body::-webkit-scrollbar {
   padding-bottom: 2rem;
   background: variables.$color-gray-50;
   font-family: variables.$font-family-primary;
+
   .page-title-login {
     font-family: variables.$font-family-primary;
     font-weight: 400;
@@ -1120,12 +1150,14 @@ body::-webkit-scrollbar {
     max-width: 50rem;
   }
 }
+
 .login-page {
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: flex-start;
   margin-top: 0.5rem;
+
   .card {
     width: 28rem;
     height: auto;
@@ -1139,19 +1171,23 @@ body::-webkit-scrollbar {
     gap: 1.5rem;
     box-sizing: border-box;
     margin-bottom: 0;
+
     .header {
       width: 100%;
       display: flex;
       flex-direction: column;
       gap: 0.375rem;
+
       .header-content {
         display: flex;
         align-items: center;
         gap: 0.5rem;
+
         img {
           width: 1.5rem;
           height: 1.5rem;
         }
+
         h2 {
           font-size: 1rem;
           font-weight: 500;
@@ -1160,6 +1196,7 @@ body::-webkit-scrollbar {
           color: variables.$color-black;
         }
       }
+
       p {
         margin: 0;
         font-size: 1rem;
@@ -1167,21 +1204,25 @@ body::-webkit-scrollbar {
         color: variables.$color-gray-500;
       }
     }
+
     .input-section {
       display: flex;
       flex-direction: column;
       gap: 1rem;
       width: 100%;
     }
+
     .input-group {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+
       label {
         font-size: 0.875rem;
         font-weight: 500;
         color: variables.$color-black;
       }
+
       input {
         width: 100%;
         height: 2.25rem;
@@ -1191,6 +1232,7 @@ body::-webkit-scrollbar {
         padding: 0.25rem 0.75rem;
         font-size: 0.875rem;
         color: variables.$color-black;
+
         &:focus {
           outline: none;
         }
@@ -1200,17 +1242,20 @@ body::-webkit-scrollbar {
         }
       }
     }
+
     .options {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       padding-top: 0.375rem;
+
       .remember {
         display: flex;
         align-items: center;
         gap: 0.5rem;
         font-size: 0.875rem;
+
         input[type="checkbox"] {
           appearance: none;
           width: 1rem;
@@ -1220,9 +1265,11 @@ body::-webkit-scrollbar {
           background-color: variables.$color-white;
           cursor: pointer;
           position: relative;
+
           &:checked {
             background-color: variables.$color-checkbox-checked;
           }
+
           &:checked::after {
             content: "";
             position: absolute;
@@ -1236,6 +1283,7 @@ body::-webkit-scrollbar {
           }
         }
       }
+
       .forgot-link {
         font-size: 0.875rem;
         color: variables.$color-link-primary;
@@ -1243,6 +1291,7 @@ body::-webkit-scrollbar {
         text-decoration: none;
       }
     }
+
     .button-section {
       display: flex;
       flex-direction: column;
@@ -1250,6 +1299,7 @@ body::-webkit-scrollbar {
       width: 100%;
       padding-top: 1.25rem;
       gap: 0.5rem;
+
       .login-btn {
         width: 100%;
         height: 2.25rem;
@@ -1260,17 +1310,20 @@ body::-webkit-scrollbar {
         font-weight: 500;
         border: none;
         cursor: pointer;
+
         &:disabled {
           opacity: 0.6;
           cursor: not-allowed;
         }
       }
+
       .no-account {
         width: 100%;
         font-size: 0.875rem;
         color: variables.$color-gray-500;
         text-align: center;
       }
+
       .create-btn {
         width: 100%;
         height: 2.25rem;
@@ -1280,23 +1333,28 @@ body::-webkit-scrollbar {
         @include mixins.flex(center, center);
         gap: 0.5rem;
         cursor: pointer;
+
         img {
           width: 1rem;
           height: 1rem;
         }
+
         span {
           font-size: 0.875rem;
           font-weight: 500;
           color: variables.$color-black;
         }
+
         &:hover {
           background-color: variables.$color-gray-50;
         }
       }
     }
+
     .error {
       color: variables.$color-error-text;
       font-size: 0.8125rem;
+
       p {
         margin: 0;
       }
@@ -1317,6 +1375,7 @@ body::-webkit-scrollbar {
   font-family: variables.$font-family-primary;
   min-height: calc(100vh - 80px);
   overflow-y: auto;
+
   .title {
     font-size: 3.5rem;
     font-weight: 400;
@@ -1324,6 +1383,7 @@ body::-webkit-scrollbar {
     text-align: center;
     margin-top: 2rem;
   }
+
   .card {
     width: 28rem;
     min-height: 32.75rem;
@@ -1382,9 +1442,9 @@ body::-webkit-scrollbar {
       color: variables.$color-gray-600;
       border: none;
       padding: 12px 22px;
-  }
+    }
 
-  
+
     form {
       width: 100%;
       padding: 0.75rem 1.5rem 1.5rem;
@@ -1505,11 +1565,13 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: center;
   min-height: 100vh;
+
   .container {
     width: 75rem;
     display: flex;
     flex-direction: column;
   }
+
   .header-section {
     width: 71.875rem;
     margin: 2.5rem auto;
@@ -1517,22 +1579,26 @@ body::-webkit-scrollbar {
     justify-content: space-between;
     align-items: center;
   }
+
   .header-left {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
+
   .title {
     font-size: 3.75rem;
     font-weight: 400;
     color: variables.$color-black;
     margin: 0;
   }
+
   .subtitle {
     font-size: 0.9375rem;
     color: variables.$color-gray-600;
     margin: 0;
   }
+
   .edit-btn {
     background: variables.$profile-edit-btn-bg;
     padding: 0.875rem 1.375rem;
@@ -1543,6 +1609,7 @@ body::-webkit-scrollbar {
     font-weight: 700;
     color: variables.$color-black;
   }
+
   .card {
     width: 71.875rem;
     background: variables.$profile-card-bg;
@@ -1554,33 +1621,40 @@ body::-webkit-scrollbar {
     gap: 2rem;
     margin: 0 auto 5rem;
   }
+
   .card-header-row {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
   }
+
   .info-title {
     font-size: 1rem;
     font-weight: 500;
     color: variables.$color-black;
   }
+
   .info-subtitle {
     font-size: 1rem;
     color: variables.$color-gray-600;
   }
+
   .content-block {
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
+
   .avatar-row {
     width: 100%;
     display: flex;
   }
+
   .avatar-area {
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
+
     .upload-btn {
       width: 9rem;
       height: 2rem;
@@ -1596,6 +1670,7 @@ body::-webkit-scrollbar {
       font-size: 0.875rem;
       color: variables.$color-black;
     }
+
     .avatar,
     .avatar-placeholder {
       width: 8rem;
@@ -1608,9 +1683,11 @@ body::-webkit-scrollbar {
       font-size: 3.625rem;
       color: variables.$profile-avatar-text;
     }
+
     #fileInput {
       display: none;
     }
+
     .upload-hint {
       font-size: 0.75rem;
       color: variables.$color-gray-500;
@@ -1619,20 +1696,24 @@ body::-webkit-scrollbar {
       margin-top: -0.25rem;
     }
   }
+
   .content-divider {
     width: 100%;
     height: 0.0625rem;
     background: variables.$color-gray-200;
   }
+
   .details-view {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+
     .field {
       display: flex;
       flex-direction: column;
       gap: 0.375rem;
     }
+
     .field-label {
       font-family: Inter, sans-serif;
       font-weight: 500;
@@ -1641,16 +1722,19 @@ body::-webkit-scrollbar {
       letter-spacing: -0.009375rem;
       color: variables.$color-black;
     }
+
     p {
       font-size: 1rem;
       line-height: 1.5rem;
       color: variables.$color-black;
     }
   }
+
   .form-fields {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
     input {
       width: 100%;
       height: 2.25rem;
@@ -1660,15 +1744,18 @@ body::-webkit-scrollbar {
       border: none;
       font-size: 0.875rem;
     }
+
     input:focus {
       outline: none;
     }
+
     .label-with-icon {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       margin-bottom: 0.25rem;
     }
+
     .label-with-icon label {
       font-family: Inter, sans-serif;
       font-weight: 500;
@@ -1677,12 +1764,14 @@ body::-webkit-scrollbar {
       letter-spacing: -0.009375rem;
       color: variables.$color-black;
     }
+
     .password-label-row {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       margin: 0.25rem 0;
     }
+
     .password-label {
       font-family: Inter;
       font-weight: 500;
@@ -1691,6 +1780,7 @@ body::-webkit-scrollbar {
       letter-spacing: -0.009375rem;
       color: variables.$color-black;
     }
+
     .optional-label {
       font-family: Inter;
       font-weight: 500;
@@ -1698,6 +1788,7 @@ body::-webkit-scrollbar {
       line-height: 0.875rem;
       color: variables.$color-gray-500;
     }
+
     .password-help {
       width: 19.5625rem;
       font-family: Inter;
@@ -1707,6 +1798,7 @@ body::-webkit-scrollbar {
       color: variables.$color-gray-500;
       margin-top: 0.125rem;
     }
+
     .account-created-label {
       font-family: Inter;
       font-weight: 500;
@@ -1715,17 +1807,20 @@ body::-webkit-scrollbar {
       letter-spacing: -0.009375rem;
       color: variables.$color-black;
     }
+
     .static-text {
       font-family: Inter;
       font-size: 1rem;
       line-height: 1.5rem;
       color: variables.$color-gray-700;
     }
+
     .error {
       color: variables.$color-weak;
       font-size: 0.875rem;
     }
   }
+
   .actions-profile {
     width: 100%;
     height: 4rem;
@@ -1735,6 +1830,7 @@ body::-webkit-scrollbar {
     margin-top: 3rem;
     padding-bottom: 5.625rem;
   }
+
   .btn-primary {
     width: 100%;
     max-width: 65.1875rem;
@@ -1746,9 +1842,11 @@ body::-webkit-scrollbar {
     font-size: 0.875rem;
     cursor: pointer;
   }
+
   .btn-primary:hover {
     background: variables.$color-btn-primary-hover;
   }
+
   .btn-secondary {
     padding: 0.875rem 1.375rem;
     background: variables.$color-btn-cancel-bg;
@@ -1759,45 +1857,46 @@ body::-webkit-scrollbar {
     color: variables.$color-black;
     border: none;
   }
+
   .btn-secondary:hover {
     background-color: variables.$color-btn-secondary-hover-strong;
     border: 1px solid variables.$color-gray-200;
   }
 }
- 
 
- 
+
+
 // ====================== CREATE PROJECT PAGE ======================
 .project-create-page {
   padding: variables.$padding-primary;
 }
- 
+
 .breadcrumb {
   @include mixins.flex(flex-start);
   gap: 6px;
   margin-bottom: variables.$padding-footer-sides;
   font-size: variables.$font-size-error;
- 
+
   .breadcrumb-link {
     color: variables.$color-breadcrumb;
     font-weight: variables.$font-weight-primary;
     cursor: pointer;
- 
+
     &:hover {
       text-decoration: underline;
     }
   }
- 
+
   .breadcrumb-current {
     color: variables.$color-title;
     font-weight: variables.$font-weight-primary;
   }
- 
+
   .breadcrumb-separator {
     color: variables.$color-text-secondary;
   }
 }
- 
+
 .page-title {
   font-family: variables.$font-family-primary;
   font-size: variables.$font-size-page-title;
@@ -1805,13 +1904,13 @@ body::-webkit-scrollbar {
   color: variables.$color-title;
   margin-bottom: variables.$dialog-radius;
 }
- 
+
 .page-subtitle {
   font-size: variables.$font-size-body;
   color: variables.$color-subtitle;
   margin-bottom: 36px;
 }
- 
+
 .project-form-container {
   background: variables.$color-bg-footer;
   border: 1px solid #ededed;
@@ -1820,7 +1919,7 @@ body::-webkit-scrollbar {
   width: 100%;
   box-sizing: border-box;
 }
- 
+
 .form-title {
   font-family: variables.$font-family-primary;
   font-size: variables.$font-size-body;
@@ -1829,28 +1928,28 @@ body::-webkit-scrollbar {
   margin-bottom: 24px;
   line-height: 1.4;
 }
- 
+
 .formProject {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.75rem 2.5rem;
 }
- 
+
 .description-group {
   grid-column: span 2;
 }
- 
+
 .description-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
- 
+
 .char-counter {
   font-size: 12px;
   color: variables.$color-text;
 }
- 
+
 .project-description {
   padding: 12px 14px;
   border-radius: variables.$dialog-radius;
@@ -1860,29 +1959,29 @@ body::-webkit-scrollbar {
   resize: vertical;
   font-family: variables.$font-family-primary;
   background-color: variables.$input-background;
- 
+
   &:focus {
     background-color: variables.$color-bg-footer;
     border-color: variables.$color-breadcrumb;
     outline: none;
   }
 }
- 
+
 .field-group {
   display: flex;
   flex-direction: column;
- 
+
   .field-label {
     font-size: variables.$font-size-error;
     font-weight: variables.$font-weight-footer;
     margin-bottom: 4px;
   }
- 
+
   .field-label.required::after {
     content: " *";
     color: red;
   }
- 
+
   .field-input,
   .field-select {
     width: 100%;
@@ -1892,34 +1991,34 @@ body::-webkit-scrollbar {
     background-color: variables.$input-background;
     font-size: 14px;
     font-family: variables.$font-family-primary;
- 
+
     &:focus {
       background-color: variables.$color-bg-footer;
       border-color: variables.$color-breadcrumb;
       outline: none;
     }
   }
- 
+
   .status-options {
     background-color: #eeeeee;
     padding-bottom: 25px;
     font-size: 18px;
     color: variables.$color-text;
   }
- 
+
   .error small {
     color: variables.$color-error-text;
     margin-top: 4px;
     font-size: 12px;
   }
 }
- 
+
 .buttons {
   grid-column: span 2;
   @include mixins.flex(center);
   gap: 14px;
   margin-top: 10px;
- 
+
   .btn {
     padding: 12px 28px;
     font-size: variables.$font-size-error;
@@ -1928,33 +2027,33 @@ body::-webkit-scrollbar {
     cursor: pointer;
     transition: 0.2s ease;
   }
- 
+
   .btn-submit {
     background-color: variables.$color-breadcrumb;
     color: variables.$color-bg-footer;
     width: 23.75rem;
- 
+
     &:disabled {
       background-color: variables.$disabled-bg-color;
       cursor: not-allowed;
     }
- 
+
     &:hover:not(:disabled) {
-      background-color: color.adjust(variables.$color-primary-hover,$lightness: -6%);
+      background-color: color.adjust(variables.$color-primary-hover, $lightness: -6%);
     }
   }
- 
+
   .btn-secondary {
     background-color: variables.$btn-secondary-bg-color;
     color: variables.$color-title;
     padding: 12px 22px;
- 
+
     &:hover {
       background-color: variables.$hover-bg-color;
     }
   }
 }
- 
+
 .success {
   text-align: center;
   margin-top: variables.$font-size-title;
@@ -1962,18 +2061,18 @@ body::-webkit-scrollbar {
   font-size: variables.$font-size-error;
   font-weight: variables.$font-weight-primary;
 }
- 
+
 /* ============= Project List Page ===============*/
 .project-list {
   padding: 2rem 5rem;
   font-family: variables.$font-family-primary;
- 
+
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
- 
+
   .create-btn {
     background: variables.$create-btn-bg;
     color: variables.$color-title;
@@ -1984,24 +2083,24 @@ body::-webkit-scrollbar {
     cursor: pointer;
     font-weight: variables.$font-weight-footer;
     transition: 0.2s ease;
- 
+
     &:hover {
-      background: color.adjust(variables.$create-btn-bg,$lightness: -8%);
+      background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
     }
   }
- 
+
   .toolbar {
     display: flex;
     align-items: center;
     gap: 3.52rem;
     margin-bottom: 2rem;
   }
- 
+
   .search-wrapper {
     position: relative;
     flex: 0 1 90rem;
   }
- 
+
   .search-input {
     width: 100%;
     padding: 14px 18px 14px 42px;
@@ -2010,12 +2109,12 @@ body::-webkit-scrollbar {
     border-radius: 12px;
     font-size: 1rem;
     outline: none;
- 
+
     &::placeholder {
       color: variables.$color-gray-500;
     }
   }
- 
+
   .search-icon {
     position: absolute;
     left: variables.$font-size-error;
@@ -2024,11 +2123,11 @@ body::-webkit-scrollbar {
     transform: translateY(-50%);
     opacity: 0.55;
   }
- 
+
   .sort-wrapper {
     position: relative;
   }
- 
+
   .sort-box {
     padding: 12px 16px;
     background: variables.$input-background;
@@ -2044,12 +2143,12 @@ body::-webkit-scrollbar {
     white-space: nowrap;
     border: none;
   }
- 
+
   .sort-box img {
     width: variables.$font-size-error;
     opacity: 0.6;
   }
- 
+
   .sort-dropdown {
     position: absolute;
     width: 10.625rem;
@@ -2061,30 +2160,30 @@ body::-webkit-scrollbar {
     padding: 8px 0;
     z-index: 10;
   }
- 
+
   .sort-option {
     padding: 10px 16px;
     cursor: pointer;
     font-size: 0.9rem;
     color: variables.$color-text-primary;
     transition: 0.2s ease;
- 
+
     &:hover {
       background: variables.$color-bg-footer;
     }
   }
- 
+
   .sort-filter-wrapper {
     display: flex;
     align-items: center;
     gap: 1rem;
     position: relative;
   }
- 
+
   .filter-wrapper {
     position: relative;
   }
- 
+
   .filter-panel {
     position: absolute;
     top: calc(100% + 1rem);
@@ -2100,45 +2199,45 @@ body::-webkit-scrollbar {
     border-bottom: 1rem;
     transform: translateX(-80px);
   }
- 
+
   .filter-btn {
     display: flex;
     align-items: center;
     gap: 1.25rem;
- 
+
     padding: 10px 18px;
     background: variables.$color-bg-footer;
     border: 1px solid #d1d5db;
     border-radius: 12px;
- 
+
     font-size: 0.9rem;
     color: variables.$color-title;
     cursor: pointer;
     font-weight: variables.$font-weight-primary;
     transition: 0.2s ease;
- 
+
     .filter-icon {
       width: 16px;
       height: 16px;
       opacity: 0.7;
       transition: 0.2s ease;
     }
- 
+
     &:hover {
       background: variables.$color-gray-400;
     }
- 
+
     &.active {
       border-color: variables.$color-text-footer;
       color: variables.$color-bg-footer;
       background: variables.$color-text-footer;
- 
+
       .filter-icon {
         filter: brightness(0) invert(1);
       }
     }
   }
- 
+
   .clear-filters {
     margin-top: 1rem;
     cursor: pointer;
@@ -2149,7 +2248,7 @@ body::-webkit-scrollbar {
     border-radius: 8px;
     z-index: 50;
   }
- 
+
   .filter-badge {
     background: variables.$color-medium;
     color: variables.$color-bg-footer;
@@ -2158,7 +2257,7 @@ body::-webkit-scrollbar {
     border-radius: 10px;
     margin-left: 4px;
   }
- 
+
   .filter-header {
     display: flex;
     justify-content: flex-end;
@@ -2166,20 +2265,20 @@ body::-webkit-scrollbar {
     color: variables.$color-text-secondary;
     margin-bottom: 12px;
   }
- 
+
   .filter-options {
     display: flex;
     gap: variables.$font-size-title;
     align-items: center;
   }
- 
+
   .filter-item {
     display: flex;
     align-items: center;
     gap: 6px;
     cursor: pointer;
   }
- 
+
   .checkbox {
     width: 16px;
     height: 16px;
@@ -2192,13 +2291,13 @@ body::-webkit-scrollbar {
     color: variables.$color-bg-footer;
     transition: 0.2s ease;
   }
- 
+
   .checkbox.checked {
     background: variables.$color-text-footer;
     border-color: variables.$color-text-footer;
     color: variables.$color-bg-footer;
   }
- 
+
   .status-pill {
     padding: 6px 12px;
     border-radius: variables.$padding-footer-bottom;
@@ -2207,45 +2306,45 @@ body::-webkit-scrollbar {
     color: variables.$color-bg-footer;
     white-space: nowrap;
   }
- 
+
   .status-pill.planning {
     background: variables.$planning-color;
   }
- 
+
   .status-pill.in-progress {
     background: variables.$progress-color;
   }
- 
+
   .status-pill.completed {
     background: variables.$completed-color;
   }
- 
+
   .status-pill.on-hold {
     background: variables.$onHold-color;
   }
- 
+
   .empty-state {
     margin-top: 2rem;
     color: variables.$color-text-secondary;
     font-size: 1rem;
     text-align: center;
   }
- 
+
   .grid {
     margin-top: 1.5rem;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
     gap: 1.5rem;
   }
- 
+
   app-project-card-component {
     transition: 0.2s ease;
- 
+
     &:hover {
       transform: translateY(-3px);
     }
   }
- 
+
   .active-filters {
     display: flex;
     align-items: center;
@@ -2255,12 +2354,12 @@ body::-webkit-scrollbar {
     font-size: 0.95rem;
     color: variables.$color-text-primary;
   }
- 
+
   .active-filters .label {
     font-weight: 600;
     color: variables.$color-text-secondary;
   }
- 
+
   .active-pill {
     border-radius: 12px;
     padding: 4px 10px;
@@ -2271,34 +2370,34 @@ body::-webkit-scrollbar {
     color: variables.$color-bg-footer;
     font-weight: variables.$font-weight-primary;
   }
- 
+
   .active-pill.planning {
     background: variables.$planning-color;
   }
- 
+
   .active-pill.in-progress {
     background: variables.$progress-color;
   }
- 
+
   .active-pill.completed {
     background: variables.$completed-color;
   }
- 
+
   .active-pill.on-hold {
     background: variables.$onHold-color;
   }
- 
+
   .active-pill .clear-icon {
     width: 12px;
     cursor: pointer;
     opacity: 0.7;
     transition: 0.2s;
   }
- 
+
   .active-pill .clear-icon:hover {
     opacity: 1;
   }
- 
+
   .clear-all {
     margin-left: 1rem;
     cursor: pointer;
@@ -2309,31 +2408,31 @@ body::-webkit-scrollbar {
     gap: 4px;
     transition: 0.2s;
   }
- 
+
   .clear-all:hover {
     color: variables.$color-black;
     text-decoration: underline;
   }
- 
+
   .connect-section {
     margin-top: 1rem;
     padding: 4rem 2rem;
     text-align: center;
   }
- 
+
   .connect-title {
     font-size: 3.5rem;
     font-weight: variables.$font-weight-primary;
     color: variables.$color-black;
     margin-bottom: 0.5rem;
   }
- 
+
   .connect-subtitle {
     font-size: 1rem;
     color: variables.$color-text;
     margin-bottom: 2.5rem;
   }
- 
+
   .connect-btn {
     background: variables.$color-text-footer;
     color: variables.$color-bg-footer;
@@ -2345,15 +2444,15 @@ body::-webkit-scrollbar {
     cursor: pointer;
     transition: all 0.2s ease;
     width: 30%;
- 
+
     &:hover {
-      background: color.adjust(variables.$color-text-footer,$lightness: -8%);
+      background: color.adjust(variables.$color-text-footer, $lightness: -8%);
       transform: translateY(-2px);
     }
   }
- 
+
 }
- 
+
 /*============== Project Card ============*/
 .project-card {
   background: variables.$color-bg-footer;
@@ -2365,25 +2464,25 @@ body::-webkit-scrollbar {
   transition: 0.2s ease;
   cursor: pointer;
   height: 11rem;
- 
+
   &:hover {
     transform: translateY(-3px);
   }
 }
- 
+
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
- 
+
 .project-title {
   font-size: 1.05rem;
   font-weight: variables.$font-weight-footer;
   margin-bottom: 4px;
   color: variables.$color-title;
 }
- 
+
 .project-desc {
   font-size: 0.85rem;
   color: variables.$color-subtitle;
@@ -2392,7 +2491,7 @@ body::-webkit-scrollbar {
   max-height: 2.6rem;
   overflow: hidden;
 }
- 
+
 .status-pill {
   padding: 4px 12px;
   font-size: 0.75rem;
@@ -2401,40 +2500,40 @@ body::-webkit-scrollbar {
   font-weight: variables.$font-weight-primary;
   white-space: nowrap;
 }
- 
+
 .status-pill.In\ Progress {
   background: variables.$progress-color;
 }
- 
+
 .status-pill.Planning {
   background: variables.$planning-color;
 }
- 
+
 .status-pill.Completed {
   background: variables.$completed-color;
 }
- 
+
 .card-details {
   margin-top: 10px;
 }
- 
+
 .detail-row {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-bottom: 6px;
- 
+
   span {
     font-size: 0.85rem;
     color: variables.$color-text-secondary;
   }
 }
- 
+
 .icon {
   width: 16px;
   opacity: 0.7;
 }
- 
+
 .card-index {
   position: absolute;
   bottom: -25px;
@@ -2444,12 +2543,12 @@ body::-webkit-scrollbar {
   color: rgba(0, 0, 0, 0.06);
   pointer-events: none;
 }
- 
+
 .status-badge {
   position: absolute;
   top: 14px;
   right: 16px;
- 
+
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -2457,49 +2556,49 @@ body::-webkit-scrollbar {
   color: variables.$color-bg-footer;
   text-transform: capitalize;
 }
- 
+
 .status-badge.planning {
   background: variables.$planning-color;
 }
- 
+
 .status-badge.in-progress {
   background: variables.$progress-color;
 }
- 
+
 .status-badge.completed {
   background: variables.$completed-color;
 }
- 
+
 .status-badge.on-hold {
   background: variables.$onHold-color;
 }
- 
+
 .status-badge.cancelled {
   background: variables.$color-btn-danger-bg;
 }
- 
+
 /* ============= Project Detail Page ===============*/
 .project-detail-page {
   padding: 2rem 5rem;
   font-family: variables.$font-family-primary;
- 
+
   .top-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-top: 1rem;
   }
- 
+
   .left-section {
     display: flex;
     flex-direction: column;
- 
+
     .title-row {
       display: flex;
       align-items: self-start;
       gap: 2rem;
     }
- 
+
     .status-badge-detail {
       display: inline-block;
       padding: 5px 14px;
@@ -2509,31 +2608,31 @@ body::-webkit-scrollbar {
       color: variables.$color-bg-footer;
     }
   }
- 
+
   .status-badge-detail.planning {
     background: variables.$planning-color;
   }
- 
+
   .status-badge-detail.in-progress {
     background: variables.$progress-color;
   }
- 
+
   .status-badge-detail.completed {
     background: variables.$completed-color;
   }
- 
+
   .status-badge-detail.on-hold {
     background: variables.$onHold-color;
   }
- 
+
   .status-badge-detail.cancelled {
     background: variables.$color-btn-danger-bg;
   }
- 
+
   .actions-right {
     display: flex;
     gap: 1rem;
- 
+
     .create-task-btn {
       background: variables.$create-btn-bg;
       color: variables.$color-title;
@@ -2542,12 +2641,12 @@ body::-webkit-scrollbar {
       border: none;
       font-size: 0.875rem;
       cursor: pointer;
- 
+
       &:hover {
-        background: color.adjust(variables.$create-btn-bg,$lightness: -8%);
+        background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
       }
     }
- 
+
     .edit-task-btn {
       background: variables.$color-bg-footer;
       color: variables.$color-title;
@@ -2555,12 +2654,12 @@ body::-webkit-scrollbar {
       padding: 10px 22px;
       border-radius: 24px;
       font-size: 0.875rem;
- 
+
       &:hover {
         background: variables.$btn-secondary-bg-color;
       }
     }
- 
+
     .delete-task-btn {
       background: variables.$color-btn-danger-bg;
       color: variables.$color-bg-footer;
@@ -2568,13 +2667,13 @@ body::-webkit-scrollbar {
       border-radius: 24px;
       border: none;
       font-size: 0.875rem;
- 
+
       &:hover {
-        background: color.adjust(variables.$color-btn-danger-bg,$lightness: -8%);
+        background: color.adjust(variables.$color-btn-danger-bg, $lightness: -8%);
       }
     }
   }
- 
+
   .meta-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2582,13 +2681,13 @@ body::-webkit-scrollbar {
     margin-top: 3rem;
     align-items: start;
   }
- 
+
   .timeline {
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
- 
+
   .label {
     display: flex;
     align-items: center;
@@ -2597,29 +2696,29 @@ body::-webkit-scrollbar {
     font-size: 0.9rem;
     font-weight: 500;
   }
- 
+
   .dates {
     font-size: 14px;
     font-weight: 600;
     color: variables.$color-btn-cancel-text;
   }
- 
+
   .progress-row .dates {
     margin-left: 1.8rem;
   }
- 
+
   .meta-grid .timeline .progress-row .dates,
   .meta-grid .timeline .progress-row .progress-bar,
   .meta-grid .timeline .progress-row .progress-text {
     margin-left: 1.5rem;
   }
- 
+
   .meta-grid .timeline .progress-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
- 
+
   .progress-label {
     display: flex;
     align-items: center;
@@ -2628,7 +2727,7 @@ body::-webkit-scrollbar {
     font-size: 0.9rem;
     font-weight: 500;
   }
- 
+
   .progress-bar {
     width: 100%;
     height: 8px;
@@ -2637,32 +2736,32 @@ body::-webkit-scrollbar {
     margin: 6px 0;
     overflow: hidden;
   }
- 
+
   .progress-fill {
     width: 0%;
     height: 100%;
     background: variables.$progress-color;
     border-radius: 6px;
   }
- 
+
   .progress-text {
     font-size: 0.85rem;
     color: variables.$color-gray-600;
   }
- 
+
   .meta-right {
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
- 
+
   .status-summaries {
     display: flex;
     justify-content: space-between;
     gap: 1.5rem;
     margin-top: 2rem;
   }
- 
+
   .status-card {
     flex: 1;
     background: variables.$color-gray-50;
@@ -2675,36 +2774,36 @@ body::-webkit-scrollbar {
     min-height: 8.125rem;
     transition: 0.2s ease;
   }
- 
+
   .status-title {
     font-size: 1rem;
     font-weight: 500;
     color: variables.$color-gray-600;
   }
- 
+
   .status-count {
     font-size: 2rem;
     font-weight: variables.$font-weight-footer;
     color: variables.$color-title;
     margin-top: 1rem;
   }
- 
+
   /* Color Variants */
   .status-card.in-progress {
     background: variables.$status-in-progress;
     border-color: variables.$color-gray-200;
   }
- 
+
   .status-card.completed {
     background: variables.$status-completed;
     border-color: variables.$status-completed-border;
   }
- 
+
   .status-card.overdue {
     background: variables.$status-overdue;
     border-color: variables.$status-overdue-border;
   }
- 
+
   .tasks-panel {
     margin-top: 2rem;
     width: 100%;
@@ -2716,13 +2815,13 @@ body::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
   }
- 
+
   .tasks-title {
     font-size: 1.1rem;
     font-weight: variables.$font-weight-footer;
     margin-bottom: 1.5rem;
   }
- 
+
   .tasks-empty {
     flex: 1;
     display: flex;
@@ -2733,7 +2832,7 @@ body::-webkit-scrollbar {
     color: variables.$color-gray-600;
     font-size: 1rem;
   }
- 
+
   .create-task-btn {
     background: variables.$color-bg-footer;
     color: variables.$color-title;
@@ -2742,13 +2841,13 @@ body::-webkit-scrollbar {
     border: none;
     font-size: 0.875rem;
     cursor: pointer;
- 
+
     &:hover {
-      background: color.adjust(variables.$color-bg-footer,$lightness: -8%);
+      background: color.adjust(variables.$color-bg-footer, $lightness: -8%);
     }
   }
 }
- 
+
 
 
 /* =========================
@@ -2767,7 +2866,7 @@ body::-webkit-scrollbar {
 .dialog-box {
   width: 471px;
   height: 293px;
-  background: variables.$create-btn-bg;     
+  background: variables.$create-btn-bg;
   border-radius: 14px;
   padding: 24px 16px;
   box-sizing: border-box;
@@ -2814,7 +2913,7 @@ body::-webkit-scrollbar {
 .dialog-inner {
   width: 439px;
   height: 197px;
-  background: variables.$color-dialog-bg;     
+  background: variables.$color-dialog-bg;
   border-radius: 12px;
   padding: 24px 16px;
   box-sizing: border-box;
@@ -2832,7 +2931,7 @@ body::-webkit-scrollbar {
     font-weight: 400;
     line-height: 20px;
     letter-spacing: -0.15px;
-    color: variables.$color-gray-500;   
+    color: variables.$color-gray-500;
   }
 
   p:first-child {
@@ -2851,7 +2950,7 @@ body::-webkit-scrollbar {
 
 
 .dialog-actions .confirm {
-  background: variables.$color-primary;         
+  background: variables.$color-primary;
   color: variables.$color-white;
   width: 282px;
   height: 48px;
@@ -2867,13 +2966,13 @@ body::-webkit-scrollbar {
   cursor: pointer;
 
   &:hover {
-    background: variables.$color-btn-primary-hover;   
+    background: variables.$color-btn-primary-hover;
   }
 }
 
 .dialog-actions .dialog-cancel {
-  background: variables.$color-dialog-cancel-bg;      
-  color: variables.$color-btn-cancel-text;            
+  background: variables.$color-dialog-cancel-bg;
+  color: variables.$color-btn-cancel-text;
   min-width: 91px;
   height: 48px;
   padding: 14px 22px;
@@ -2888,9 +2987,10 @@ body::-webkit-scrollbar {
   cursor: pointer;
 
   &:hover {
-    background: variables.$color-btn-secondary-hover-strong; 
+    background: variables.$color-btn-secondary-hover-strong;
   }
 }
+
 /* ============================================
    CREATE TASK PAGE – GLOBAL CT STYLES (VARIABLE BASED)
 ============================================ */
@@ -2904,7 +3004,7 @@ body::-webkit-scrollbar {
 .page-title {
   font-size: 46px;
   font-weight: 600;
-  color: $color-title;
+  color: variables.$color-title;
   margin-bottom: 6px;
   padding-left: 20px;
 }
@@ -2912,25 +3012,25 @@ body::-webkit-scrollbar {
 /* -------- PAGE SUBTITLE -------- */
 .page-subtitle {
   font-size: 16px;
-  color: $color-subtitle;
+  color: variables.$color-subtitle;
   margin-bottom: 24px;
   padding-left: 20px;
 }
 
 /* -------- WHITE FORM BOX -------- */
 .project-form-container {
-  background: $color-dialog-bg;
+  background: variables.$color-dialog-bg;
   border-radius: 16px;
-  border: 1px solid $border-color;
+  border: 1px solid variables.$border-color;
   padding: 32px;
   margin-top: 12px;
-  box-shadow: $card-shadow;
+  box-shadow: variables.$card-shadow;
 }
 
 /* -------- HEADER INSIDE CARD -------- */
 .form-title {
   font-size: 16px;
-  color: $color-subtitle;
+  color: variables.$color-subtitle;
   margin-bottom: 24px;
 }
 
@@ -2960,12 +3060,12 @@ body::-webkit-scrollbar {
 .ct-field-label {
   font-size: 14px;
   font-weight: 500;
-  color: $color-label-dark;
+  color: variables.$color-label-dark;
 }
 
 .ct-field-label.required::after {
   content: " *";
-  color: $color-weak; // red accent
+  color: variables.$color-weak;
 }
 
 /* ============================================
@@ -2976,20 +3076,20 @@ body::-webkit-scrollbar {
   width: 100%;
   height: 36px;
   padding: 8px 12px;
-  background: $input-background !important;
+  background: variables.$input-background !important;
   border-radius: 10px;
   border: 1px solid transparent;
-  color: $color-black;
+  color: variables.$color-black;
   font-size: 14px;
 }
 
 .ct-field-input::placeholder,
 .ct-description-box::placeholder {
-  color: $color-subtitle !important;
+  color: variables.$color-subtitle !important;
 }
 
 .ct-field-input.ct-readonly {
-  color: $color-subtitle !important;
+  color: variables.$color-subtitle !important;
 }
 
 /* ============================================
@@ -2999,19 +3099,19 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  color: $color-subtitle;
+  color: variables.$color-subtitle;
 }
 
 .ct-char-counter {
   font-size: 12px;
-  color: $color-subtitle;
+  color: variables.$color-subtitle;
 }
 
 .ct-description-box {
   width: 100%;
   height: 64px !important;
   padding: 10px 14px;
-  background: $input-background !important;
+  background: variables.$input-background !important;
   border-radius: 10px;
   border: 1px solid transparent;
   resize: none;
@@ -3023,7 +3123,7 @@ body::-webkit-scrollbar {
 ============================================ */
 .ct-project-dates {
   font-size: 12px;
-  color: $color-subtitle;
+  color: variables.$color-subtitle;
   text-align: left;
   margin-top: 4px;
 }
@@ -3039,8 +3139,8 @@ body::-webkit-scrollbar {
   top: 40px;
   width: 129px;
   height: 32px;
-  background: $color-btn-danger-bg;
-  color: $color-white;
+  background: variables.$color-btn-danger-bg;
+  color: variables.$color-white;
   border: none;
   border-radius: 100px;
   font-size: 14px;
@@ -3050,7 +3150,7 @@ body::-webkit-scrollbar {
   align-items: center;
 
   &:hover {
-    background: $color-btn-danger-hover;
+    background: variables.$color-btn-danger-hover;
   }
 }
 
@@ -3069,8 +3169,8 @@ body::-webkit-scrollbar {
 .ct-btn-submit {
   width: 481px;
   height: 48px;
-  background: $color-primary;
-  color: $color-white;
+  background: variables.$color-primary;
+  color: variables.$color-white;
   font-size: 16px;
   border: none;
   border-radius: 1000px;
@@ -3078,7 +3178,7 @@ body::-webkit-scrollbar {
   cursor: pointer;
 
   &:hover {
-    background: $color-primary-hover;
+    background: variables.$color-primary-hover;
   }
 
   &:disabled {
@@ -3091,14 +3191,14 @@ body::-webkit-scrollbar {
 .ct-btn-secondary {
   height: 48px;
   padding: 14px 22px;
-  background: $btn-secondary-bg-color;
+  background: variables.$btn-secondary-bg-color;
   border-radius: 1000px;
   border: none;
   font-size: 16px;
   cursor: pointer;
 
   &:hover {
-    background: $color-btn-cancel-hover;
+    background: variables.$color-btn-cancel-hover;
   }
 }
 
@@ -3108,12 +3208,1464 @@ body::-webkit-scrollbar {
 .ct-field-input.ng-invalid.ng-touched,
 .ct-field-select.ng-invalid.ng-touched,
 .ct-description-box.ng-invalid.ng-touched {
-  border: 1px solid $color-error-dark !important;
+  border: 1px solid variables.$color-error-dark !important;
 }
 
 .ct-error {
   font-size: 12px;
-  color: $color-error-dark;
+  color: variables.$color-error-dark;
   margin-top: 2px;
 }
 
+// =============================================================
+// GLOBAL LIST PAGE WRAPPER
+// =============================================================
+.tl-wrapper {
+  width: auto;
+  padding: 60px 40px 40px 40px;
+  min-height: 100vh;
+  background: variables.$color-white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// =============================================================
+// HEADER (TITLE + TOGGLE + CREATE BUTTON)
+// =============================================================
+.tl-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  .tl-header-title {
+    font-size: 18px;
+    font-weight: 400;
+    color: variables.$color-black;
+  }
+
+  .tl-header-title-large {
+    font-size: 48px;
+    font-weight: 400;
+    color: variables.$color-black;
+  }
+
+  .tl-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    // TOGGLE GROUP
+    .tl-header-toggle {
+      display: flex;
+      align-items: center;
+      background: variables.$color-gray-200;
+      padding: 4px;
+      border-radius: 999px;
+      height: 32px;
+      border: 1px solid variables.$color-gray-200;
+
+      .tl-toggle-btn {
+        padding: 0 20px;
+        height: 30px;
+        background: transparent;
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: variables.$color-gray-600;
+        transition: 0.25s ease;
+
+        &.active {
+          background: variables.$color-white;
+          color: variables.$color-black;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+
+    // CREATE BTN
+    .tl-create-btn {
+      height: 32px;
+      padding: 0 22px;
+      background: variables.$create-btn-bg;
+      border-radius: 100px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
+      }
+    }
+  }
+}
+
+// =============================================================
+// GLOBAL LIST WRAPPER
+// =============================================================
+.tl-global-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// =============================================================
+// FILTER + SORT + COUNT BAR
+// =============================================================
+.tl-global-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+
+  .tl-filter-btn,
+  .tl-sort-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: variables.$color-white;
+    border: 1px solid variables.$color-gray-200;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+
+    &:hover {
+      background: variables.$color-gray-100;
+    }
+  }
+
+  .tl-sort-box {
+    width: 190px;
+  }
+
+  .tl-task-count {
+    position: absolute;
+    right: 40px;
+    font-size: 0.85rem;
+    color: variables.$color-gray-700;
+  }
+
+  // SORT DROPDOWN
+  .tl-sort-menu {
+    position: absolute;
+    top: 42px;
+    left: 155px;
+    width: 200px;
+    background: variables.$color-white;
+    border: 1px solid variables.$color-gray-200;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+
+    button {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      text-align: left;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background: variables.$color-gray-200;
+      }
+    }
+  }
+}
+
+/* ================================
+   PROJECT MODE CARD (NEW TL CLASS)
+================================ */
+
+.tl-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tl-project-card {
+  width: 100%;
+  background: variables.$color-white;
+  border: 1px solid variables.$color-gray-200;
+  border-radius: 14px;
+  padding: 8px 8px;  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    background: variables.$color-gray-50;
+  }
+}
+
+/* LEFT SIDE */
+.tl-project-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tl-project-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: variables.$color-black;
+  margin: 0;
+}
+
+.tl-project-sub {
+  font-size: 0.85rem;
+  color: variables.$color-gray-600;
+  margin: 0;
+}
+
+/* RIGHT SIDE */
+.tl-project-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* STATUS TAG (outline style like screenshot) */
+.tl-status {
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid variables.$color-gray-300;
+  background: variables.$color-white;
+  color: variables.$color-gray-700;
+}
+
+/* PRIORITY TAG (filled style like screenshot) */
+.tl-priority {
+  padding: 3px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: variables.$color-white;
+}
+
+/* Variants */
+.tl-priority--low {
+  background: variables.$color-priority-low-bg;
+  color: variables.$color-priority-low-text;
+}
+
+.tl-priority--medium {
+  background: variables.$color-priority-medium-bg;
+  color: variables.$color-white;
+}
+
+.tl-priority--high {
+  background: variables.$color-priority-high-bg;
+  color: variables.$color-white;
+}
+
+.tl-priority--urgent {
+  background: variables.$color-priority-urgent-bg;
+  color: variables.$color-white;
+}
+
+/* =============================================================
+   TABLE
+============================================================= */
+.tl-table-wrapper {
+  width: 100%;
+  background: variables.$color-white;
+  border-radius: 14px;
+  border: 1px solid variables.$color-gray-200;
+  box-shadow: 0 2px 10px variables.$shadow-light-05;
+  overflow: hidden;
+}
+
+.tl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  thead {
+    background: variables.$color-white;
+
+    th {
+      padding: 12px 16px;
+      font-weight: 600;
+      color: variables.$color-gray-700;
+      border-bottom: 1px solid variables.$color-gray-200;
+      cursor: pointer;
+      text-align: left;
+    }
+  }
+
+  tbody tr {
+    height: 52px;
+    border-bottom: 1px solid variables.$color-gray-200;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background: variables.$color-gray-100;
+    }
+
+    td {
+      padding: 12px 16px;
+      color: variables.$color-black;
+      vertical-align: middle;
+    }
+  }
+}
+
+/* =============================================================
+   STATUS TAGS
+============================================================= */
+.tl-status {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &--to-do {
+    background: variables.$color-status-gray;
+    color: variables.$color-status-dark;
+  }
+
+  &--in-progress {
+    background: variables.$color-status-blue-light;
+    color: variables.$progress-color;
+  }
+
+  &--completed {
+    background: variables.$color-priority-low-bg;
+    color: variables.$completed-color;
+  }
+}
+
+/* =============================================================
+   PRIORITY TAGS
+============================================================= */
+.tl-priority {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &--low {
+    background: variables.$color-priority-low-bg;
+    color: variables.$completed-color;
+  }
+
+  &--medium {
+    background: variables.$color-priority-medium-bg;
+    color: variables.$color-white;
+  }
+
+  &--high {
+    background: variables.$color-priority-high-bg;
+    color: variables.$color-white;
+  }
+
+  &--urgent {
+    background: variables.$color-priority-urgent-bg;
+    color: variables.$color-white;
+  }
+}
+
+/* =============================================================
+   ASSIGNEE CELL
+============================================================= */
+.tl-assignee {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .tl-avatar {
+    width: 28px;
+    height: 28px;
+    background: variables.$color-gray-200;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tl-assignee-name {
+    font-size: 0.85rem;
+    color: variables.$color-black;
+  }
+}
+
+/* =============================================================
+   ACTION ICONS
+============================================================= */
+.tl-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .tl-action-icon {
+    width: 18px;
+    cursor: pointer;
+    transition: 0.15s ease;
+
+    &:hover {
+      transform: scale(1.12);
+      opacity: 0.8;
+    }
+  }
+}
+
+:host {
+  display: block;
+  padding: 32px 48px;
+  font-family: 'Inter', sans-serif;
+  color: variables.$color-text-primary;
+}
+
+/* ------------------------------
+   Breadcrumb
+------------------------------ */
+.tl-breadcrumb {
+  font-size: 14px;
+  color: variables.$color-gray-600;
+  margin-bottom: 20px;
+
+  a {
+    color: variables.$color-breadcrumb;
+    cursor: pointer;
+  }
+
+  span {
+    color: variables.$color-text-primary;
+  }
+}
+/* ------------------------------
+   Top Bar
+------------------------------ */
+.tl-topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.tl-title {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+/* ------------------------------
+   Badges
+------------------------------ */
+.tl-badges {
+  display: flex;
+  gap: 8px;
+  margin-left: 20px;
+}
+
+.tl-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tl-badge--status {
+  background: variables.$color-priority-low-bg;
+  color: variables.$completed-color;
+}
+
+.tl-badge--priority {
+  background: variables.$notification-warning-bg;
+  color: variables.$color-warning;
+}
+
+/* ------------------------------
+   Actions
+------------------------------ */
+.tl-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.tl-btn-outline {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid variables.$color-border-d1;
+  background: variables.$color-white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tl-btn-delete {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: variables.$color-btn-danger-bg;
+  cursor: pointer;
+  color: variables.$color-white;
+  font-size: 14px;
+}
+
+/* ------------------------------
+   Controls
+------------------------------ */
+.tl-controls {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  label {
+    font-weight: 600;
+  }
+
+  select {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid variables.$color-border-d1;
+    background: variables.$color-white;
+    cursor: pointer;
+  }
+}
+
+/* ------------------------------
+   Main Grid
+------------------------------ */
+.tl-info-grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 24px;
+}
+
+/* ------------------------------
+   Info Card
+------------------------------ */
+.tl-info-card {
+  background: variables.$color-gray-f9;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid variables.$color-gray-200;
+}
+
+.tl-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+.tl-info-label {
+  font-weight: 600;
+  color: variables.$color-text-secondary;
+
+  img {
+    margin-right: 6px;
+  }
+}
+
+/* ------------------------------
+   Status History
+------------------------------ */
+.tl-history-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+
+  img {
+    margin-right: 6px;
+  }
+}
+
+.tl-history-item {
+  background: variables.$color-gray-f9;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tl-history-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tl-history-date {
+  font-size: 12px;
+  color: variables.$color-gray-600;
+}
+
+/* ------------------------------
+   Description
+------------------------------ */
+.tl-description {
+  margin-top: 40px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: variables.$color-text-secondary;
+  }
+}
+
+/* ================================
+   BACKDROP
+================================ */
+.tl-task-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: variables.$overlay-55;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* ================================
+   MAIN MODAL CARD
+================================ */
+.tl-task-modal {
+  width: 760px;
+  background: variables.$color-modal-green;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 4px 16px variables.$shadow-15;
+  animation: tlFadeIn 0.25s ease-out;
+}
+
+/* ================================
+   HEADER
+================================ */
+.tl-task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.tl-task-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: variables.$color-text-primary;
+}
+
+.tl-task-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tl-btn-edit {
+  background: variables.$color-white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: variables.$color-gray-300;
+  }
+}
+
+.tl-btn-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* ================================
+   DETAILS BOX
+================================ */
+.tl-task-details {
+  background: variables.$color-white;
+  border-radius: 16px;
+  padding: 26px 32px;
+}
+
+/* ================================
+   BADGES
+================================ */
+.tl-task-badges {
+  display: flex;
+  gap: 12px;
+}
+
+.tl-badge-status {
+  background: variables.$color-gray-lightest;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tl-badge-priority {
+  background: variables.$color-yellow-light;
+  color: variables.$color-black;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+}
+/* ================================
+   INFO GRID (Inside Modal)
+================================ */
+.tl-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 2px;
+}
+
+.tl-info-row {
+  display: flex;
+  align-items: center;
+
+  label {
+    width: 100px;
+    color: variables.$color-gray-600;
+    font-size: 14px;
+  }
+
+  span {
+    font-size: 15px;
+    font-weight: 500;
+    color: variables.$color-text-primary;
+  }
+}
+
+/* ================================
+   ANIMATION
+================================ */
+@keyframes tlFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===========================================
+   BOARD TOP (GLOBAL HEADER)
+=========================================== */
+.tl-board-global-header {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 40px 0 40px;
+
+  .tl-board-global-title {
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: -3%;
+  }
+
+  .tl-board-global-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+}
+
+/* View mode toggle */
+.tl-board-toggle {
+  display: flex;
+  align-items: center;
+  background: variables.$color-gray-200;
+  border-radius: 999px;
+  padding: 4px;
+  height: 38px;
+  border: 1px solid variables.$color-gray-200;
+}
+
+.tl-board-toggle-btn {
+  padding: 0 20px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: variables.$color-gray-600;
+
+  &.active {
+    background: variables.$color-white;
+    color: variables.$color-text-primary;
+    box-shadow: 0 1px 4px variables.$shadow-light-05;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Create Task Button */
+.tl-create-task-btn {
+  height: 34px;
+  padding: 0 22px;
+  background: variables.$create-btn-bg;
+  border-radius: 100px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: variables.$color-btn-primary-hover;
+  }
+}
+
+/* ===========================================
+   FILTERS ROW
+=========================================== */
+.tl-board-filters {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: auto;
+  padding: 0 40px 20px 40px;
+  gap: 10px;
+}
+
+.tl-filter-btn,
+.tl-sort-box {
+  border: 1px solid variables.$color-gray-200;
+  height: 34px;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+  }
+
+  &:hover {
+    background: variables.$hover-bg-color;
+  }
+}
+
+.tl-sort-box {
+  width: 180px;
+}
+
+.tl-task-count {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: variables.$color-gray-600;
+  font-weight: 500;
+}
+
+.tl-sort-menu {
+  position: absolute;
+  top: 40px;
+  left: 120px;
+  width: 200px;
+  border: 1px solid variables.$color-gray-200;
+  padding: 10px;
+  border-radius: 12px;
+  z-index: 200;
+  box-shadow: 0 4px 12px variables.$shadow-med-12;
+
+  button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    border-radius: 6px;
+
+    &:hover {
+      background: variables.$hover-bg-color;
+    }
+  }
+}
+
+/* ===========================================
+   BOARD COLUMNS
+=========================================== */
+.tl-board-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 0 40px 40px 40px;
+}
+
+/* Individual Column */
+.tl-board-column {
+  padding: 16px;
+  border-radius: 14px;
+  min-height: 390px;
+  border: 1px solid variables.$color-gray-200;
+
+  &.to-do {
+    background: variables.$color-gray-50-alt;
+    border-color: variables.$color-gray-200;
+  }
+
+  &.in-progress {
+    background: variables.$status-in-progress;
+    border-color: variables.$status-in-progress-border;
+  }
+
+  &.completed {
+    background: variables.$status-completed;
+    border-color: variables.$status-completed-border;
+  }
+}
+
+/* Column Header */
+.tl-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .count {
+    background: variables.$color-gray-200;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+}
+
+/* Empty */
+.tl-column-empty {
+  text-align: center;
+  padding: 20px 0;
+  color: variables.$color-gray-600;
+}
+
+/* ===========================================
+   TASK CARD
+=========================================== */
+.tl-task-card {
+  background: variables.$color-white;
+  border: 1px solid variables.$color-gray-200;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: 0.15s ease;
+
+  &:hover {
+    background: variables.$color-gray-f9-2;
+  }
+}
+
+.tl-task-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .tl-task-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+    padding-right: 10px;
+  }
+
+  /* Priority */
+  .tl-task-priority {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    &.low { background: variables.$color-priority-low-bg; color: variables.$color-priority-low-text; }
+    &.medium { background: variables.$color-priority-medium-bg; color: variables.$color-white; }
+    &.high { background: variables.$color-priority-high-bg; color: variables.$color-white; }
+    &.urgent { background: variables.$color-priority-urgent-bg; color: variables.$color-white; }
+  }
+}
+
+.tl-task-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .tl-task-assignee {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: variables.$color-gray-200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+  }
+
+  .tl-task-due {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: variables.$color-gray-600;
+  }
+}
+/* ===========================================
+   PROJECT HEADER (TOP OF PAGE)
+=========================================== */
+.tl-project-header {
+  padding: 0 40px;
+  margin-bottom: 20px;
+}
+
+.tl-project-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.tl-project-header-left {
+  flex: 1;
+}
+
+/* Breadcrumbs */
+.tl-project-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+
+  a {
+    color: variables.$color-gray-600;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:first-child {
+      color: variables.$color-primary;
+      font-weight: 600;
+    }
+  }
+
+  span {
+    color: variables.$color-gray-400;
+  }
+
+  .current {
+    color: variables.$color-text-primary;
+    font-weight: 600;
+  }
+}
+
+/* Title Row */
+.tl-project-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.tl-project-title {
+  font-size: 46px;
+  font-weight: 600;
+  margin: 0;
+  color: variables.$color-text-primary;
+}
+
+/* Status Chip */
+.tl-project-status-chip {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: variables.$color-white;
+
+  &.planning {
+    background: variables.$planning-color;
+  }
+}
+
+.tl-project-desc {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: variables.$color-gray-600;
+}
+
+.tl-project-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tl-project-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: variables.$color-text-secondary;
+}
+
+.tl-project-meta-separator {
+  width: 1px;
+  height: 18px;
+  background: variables.$color-border-d1;
+}
+
+/* Right controls */
+.tl-project-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 6px;
+}
+
+/* ===========================
+   OVERLAY
+=========================== */
+.tl-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: variables.$overlay-35;
+  backdrop-filter: blur(1px);
+  z-index: 900;
+}
+
+/* ===========================
+   FILTER PANEL
+=========================== */
+.tl-filter-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 380px;
+  height: 100%;
+  background: variables.$color-modal-green;
+  padding: 22px;
+  overflow-y: auto;
+  border-radius: 0 0 0 20px;
+  box-shadow: -4px 0 12px variables.$shadow-15;
+
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  z-index: 999;
+
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+/* ===========================
+   FILTER HEADER
+=========================== */
+.tl-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: variables.$color-text-primary;
+  }
+
+  .tl-filter-close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    img {
+      width: 20px;
+    }
+  }
+}
+
+/* ===========================
+   FILTER BOX
+=========================== */
+.tl-filter-box {
+  background-color: variables.$color-gray-50;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 2px variables.$shadow-card-03;
+}
+
+.tl-filter-box-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+
+  span {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .tl-clear-btn {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: variables.$color-gray-600;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      color: variables.$color-text-primary;
+    }
+
+    img {
+      width: 14px;
+    }
+  }
+}
+
+/* ===========================
+   CHECKBOX OPTIONS
+=========================== */
+.tl-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+
+  label {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    input {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+  }
+}
+
+/* ===========================
+   DATE RANGE
+=========================== */
+.tl-filter-date-row {
+  display: flex;
+  gap: 12px;
+
+  div {
+    flex: 1;
+
+    label {
+      font-size: 12px;
+      color: variables.$color-gray-600;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input {
+      width: 62%;
+      height: 24px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid variables.$color-gray-bbb;
+      font-size: 14px;
+    }
+  }
+}
+
+/* ===========================
+   CLEAR ALL BUTTON
+=========================== */
+.tl-filter-clear-all {
+  width: 100%;
+  padding: 14px 0;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: variables.$color-text-primary;
+  font-size: 15px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  transition: 0.2s;
+
+  &:hover {
+    color: variables.$color-black;
+  }
+
+  img {
+    width: 16px;
+  }
+}
+/* ------------------------------
+   FINISHING STYLES
+------------------------------ */
+
+/* Avatar / Assignee Colors (already handled above)
+   No remaining colors here
+*/
+
+/* Ensuring consistency for utility classes */
+.text-primary {
+  color: variables.$color-text-primary;
+}
+
+.text-secondary {
+  color: variables.$color-text-secondary;
+}
+
+.bg-light {
+  background: variables.$color-gray-50;
+}
+
+.bg-white {
+  background: variables.$color-white;
+}
+
+.border-light {
+  border-color: variables.$color-gray-200;
+}
+
+/* Button hover fallback */
+button:hover {
+  opacity: 0.95;
+}
+
+/* Scroll / Overflow Enhancements */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: variables.$color-gray-50;
+}
+
+::-webkit-scrollbar-thumb {
+  background: variables.$color-scroll-thumb;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: variables.$color-border-hover;
+}
+
+/* Generic Shadow Utilities */
+.shadow-sm {
+  box-shadow: 0 1px 3px variables.$shadow-light-05;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 12px variables.$shadow-med-12;
+}
+
+.shadow-lg {
+  box-shadow: 0 6px 18px variables.$shadow-15;
+}
+
+/* Card utility */
+.card {
+  background: variables.$color-white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px variables.$shadow-card-06;
+}
+
+/* Disabled State */
+.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus State */
+:focus-visible {
+  outline: 2px solid variables.$color-primary;
+  outline-offset: 2px;
+}
+
+/* Input Base Styles */
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: variables.$color-text-primary;
+  border: 1px solid variables.$color-border-d1;
+  background: variables.$input-background;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: variables.$color-primary;
+}
+
+/* Final cleanup selectors */
+.hidden {
+  display: none !important;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: 600;
+}
