@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../features/user-account-management/services/auth-service';
-
 import { NotificationService } from '../../../features/dashboard/services/notification-service';
-
 import { AppNotification } from '../../../../types/models/notifications';
 import { Observable } from 'rxjs';
 import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
-
-
+import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
+import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { User } from '../../../../types/models/user';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, DashboardNotificationsComponent],
+  imports: [CommonModule, RouterModule, DashboardNotificationsComponent, ConfirmationDialogComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -36,12 +36,24 @@ export class HeaderComponent implements OnInit {
    * @description Provides reactive updates whenever notifications change in the system
    */
   public notifications$!: Observable<AppNotification[]>;
+
+  //#region UI State
   /**
-   * @summary Stores the currently logged-in user for header display.
+   * @summary Controls visibility of the logout confirmation dialog.
+   * When true → dialog is shown. When false → dialog is hidden.
+   * 
    */
-  public user: any = null;
+  public showLogoutDialog: boolean = false;
+  //#endregion
+
   /**
-   * @summary Navigation links shown in the header.
+   * @summary Logged-in user's email displayed in the header.
+   */
+  public user: User | null = null;
+  public userEmail: string | null = null;
+
+  /**
+   * @summary Navigation menu items shown in the header.
    */
   public navLinks = [
     { label: 'Dashboard', path: '/dashboard' },
@@ -53,19 +65,25 @@ export class HeaderComponent implements OnInit {
   //#endregion
   //#region Constructor
   /**
-   * @summary Injects services for authentication & navigation.
-   * @param authService Provides current user observable and auth state.
-   * @param router Manages application routing.
+   * @summary Injects required services.
+   * @param authService Provides logged-in user information.
+   * @param router Helps determine current route for UI logic.
    */
-  constructor(
+  public constructor(
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService
-
-  ) {
-    //#region UI Helpers
-    const user = this.authService.getCurrentUser();
-    //this.userEmail = user?.email || null;
+  ) { }
+  //#endregion
+  //#region Lifecycle Hook
+  /**
+   * @summary Loads the logged-in user's email on component initialization.
+   * @returns void
+   */
+  public ngOnInit(): void {
+    this.authService.currentUser$.subscribe(user => {
+      this.userEmail = user?.email || null;
+    });
     this.notifications$ = this.notificationService.notifications$;
     this.notifications$.subscribe(notifications => {
     });
@@ -73,42 +91,18 @@ export class HeaderComponent implements OnInit {
       this.unreadCount = count;
     });
   }
-
-  //#endregion
-
-  //#region Lifecycle Hook
-  /**
-   * @summary Subscribes to user observable and loads initial user.
-   * @returns void
-   */
-  public ngOnInit(): void {
-    this.authService.currentUser$.subscribe(current => {
-      this.user = current;
-    });
-    this.user = this.authService.getCurrentUser();
-  }
-  //#endregion
-
-
   //#endregion
   //#region Methods
   /**
-   * @summary Determines whether to show a minimal header (login/register pages).
-   * @returns boolean
+   * @summary Determines whether to show minimal header
+   * @returns boolean True if on login or registration page.
    */
   public isAuthMinimal(): boolean {
     const url = this.router.url;
-    return url.includes('/login') || url.includes('/register');
-  }
-  //#endregion
-
-  //#region Navigation
-  /**
-   * @summary Navigates user to login page.
-   * @returns void
-   */
-  public goToLogin(): void {
-    this.router.navigate(['/login']);
+    return (
+      url.includes('/login') ||
+      url.includes('/register')
+    );
   }
   //#endregion
 
@@ -151,4 +145,43 @@ export class HeaderComponent implements OnInit {
   }
   //#endregion
 
+  //#region Logout Dialog Actions
+
+  /**
+   * @summary Opens the logout confirmation dialog.
+   * @returns {void}
+   */
+  public openLogoutDialog(): void {
+    this.showLogoutDialog = true;
+  }
+
+  /**
+   * @summary Confirms logout action and triggers AuthService logout.
+   * @returns {void}
+   */
+  public confirmLogout(): void {
+    this.showLogoutDialog = false;
+    this.authService.logout();
+  }
+
+  /**
+   * @summary Cancels the logout dialog and closes it.
+   * @returns {void}
+   */
+  public cancelLogout(): void {
+    this.showLogoutDialog = false;
+  }
+
+  //#endregion
+
+  //#region Navigation
+
+  /**
+   * @summary Navigates the user to the login page.
+   * @returns {void}
+   */
+  public goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+  //#endregion
 }

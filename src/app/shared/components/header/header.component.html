@@ -1,3 +1,4 @@
+
 <header class="app-header">
   <div class="header-container">
     <div class="logo">SakNgTrain</div>
@@ -10,30 +11,50 @@
       }
     </nav>
     <div class="user-section">
-      @if (user?.email) {
+      @if (userEmail) {
       <div class="user-email" (click)="goToLogin()">
         <img src="assets/icons/profile-Icon.svg" alt="profile" />
-        <span>{{ user.email }}</span>
+        <span>{{ userEmail }}</span>
       </div>
       }
-      <img src="assets/icons/logout-Icon.svg" alt="logout" />
       <div class="notification-container">
-        <button class="bell-button" (click)="toggleNotifications()" type="button">
-          <img src="assets/icons/Bell-Icon.svg" alt="notifications" class="bell-icon" />
+        <button class="bell-button" (click)="toggleNotifications()"
+          type="button">
+          <img src="assets/icons/Bell-Icon.svg" alt="notifications"
+            class="bell-icon" />
           @if (unreadCount > 0) {
           <span class="notification-badge">{{ unreadCount }}</span>
           }
         </button>
         @if (showNotifications) {
         <div class="notification-dropdown">
-          <app-dashboard-notifications-component [notifications]="(notifications$ | async) || []"
-            (markAsRead)="onMarkAsRead($event)" (markAllRead)="onMarkAllRead()" (clearAll)="onClearAll()">
+          <app-dashboard-notifications-component
+            [notifications]="(notifications$ | async) || []"
+            (markAsRead)="onMarkAsRead($event)"
+            (markAllRead)="onMarkAllRead()"
+            (clearAll)="onClearAll()">
           </app-dashboard-notifications-component>
         </div>
         }
       </div>
-      <img src="assets/icons/logout-Icon.svg" alt="logout" class="logout-icon" />
+      <img src="assets/icons/logout-Icon.svg" alt="logout"
+        class="logout-icon"
+        (click)="openLogoutDialog()">
     </div>
     }
   </div>
 </header>
+
+@if (showLogoutDialog) {
+<app-confirmation-dialog-component
+  title="LOGOUT"
+  message="Are you sure you want to logout?
+You will be logged out and redirected to the login page.
+Your session data will be cleared for security."
+  confirmText="Logout"
+  cancelText="Cancel"
+  type="danger"
+  (confirm)="confirmLogout()"
+  (cancel)="cancelLogout()">
+</app-confirmation-dialog-component>
+}

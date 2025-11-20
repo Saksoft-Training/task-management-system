@@ -4,7 +4,6 @@ $color-bg-footer: #ffffff;
 $color-text-footer: #4d5b2a;
 $color-title: #000000;
 $color-error-bg: #fdecea;
-$color-error-text: #b71c1c;
 $color-error-border: #f5c6cb;
 $color-error-hover: #7f0000;
 $color-dialog-header-bg: #fafafa;
@@ -12,33 +11,29 @@ $color-dialog-border: #f0f0f0;
 $border-color: #cccc;
 $disabled-bg-color: #86916b;
 $planning-color: #AD46FF;
-$progress-color: #2B7FFF;
-$completed-color: #00C950;
-$onHold-color: #FF6900;
+$progress-color:#2B7FFF;
+$completed-color:#00C950;
+$onHold-color:#FF6900;
 
 $color-overlay-bg: rgba(0, 0, 0, 0.4);
 
-$color-text-primary: #333;
-$color-text-secondary: #444;
 $color-text: #777;
 
 $color-breadcrumb: #485C11;
+$color-title: #000000;
 $color-subtitle: #6F6F6F;
 $input-background: #F3F3F5;
 $color-primary-hover: #3b421a;
 $btn-secondary-bg-color: #f5f5f7;
 $hover-bg-color: #e2e2e7;
 $color-btn-cancel-text: #000000;
-$create-btn-bg: #DFECC6;
+$create-btn-bg:#DFECC6;
 
 // Buttons
 // Base
-$color-white: #ffffff;
 $color-black: #000000;
 
-// Footer
-$color-bg-footer: #ffffff;
-$color-text-footer: #4d5b2a;
+
 
 // Neutral / Grayscale
 $color-gray-50: #fafafa;
@@ -54,9 +49,7 @@ $color-gray-800: #333;
 // Border color 
 $color-border: $color-gray-100;
 
-// Typography colors
-$color-text-primary: #333;
-$color-text-secondary: #444;
+
 
 // Link Colors
 $color-link-primary: #155dfc;
@@ -66,8 +59,6 @@ $color-primary: #485c11;
 
 // Error States
 $color-error-text: #b71c1c;
-$color-error-border: #f5c6cb;
-$color-error-hover: #7f0000;
 $color-subtitle: #6F6F6F;
 $color-dialog-bg: #ffffff;
 $color-dialog-header-bg: #fafafa;
@@ -76,22 +67,18 @@ $color-overlay-bg: rgba(0, 0, 0, 0.4);
 $color-text-primary: #333;
 $color-breadcrumb: #485C11;
 $color-text-secondary: #444;
-$input-background: #F3F3F5;
 $color-text: #333;
 $border-color: #ededed;
 $color-primary-hover: #3a5c1f;
 $disabled-bg-color: #c7c7c7;
 $btn-secondary-bg-color: #f3f3f3;
 $hover-bg-color: #e6e6e6;
-$color-primary-hover: #3a5c1f;
 // Button colors
 $color-btn-cancel-bg: #f1f1f1;
 $color-btn-cancel-hover: #e0e0e0;
 
 $color-btn-confirm-bg: #1a73e8;
 $color-btn-confirm-hover: #1765c1;
-
-
 
 $color-btn-danger-bg: #d32f2f;
 $color-btn-danger-hover: #b71c1c;
@@ -101,11 +88,7 @@ $font-family-primary: 'Inter';
 $font-size-footer: 13px;
 $font-weight-footer: 600;
 $font-size-page-title: 60px;
-$font-size-error: 14px;
-$font-size-title: 18px;
-
 $font-size-body: 15px;
-
 $font-size-page-title: 60px;
 
 // ====== SPACING ======
@@ -117,18 +100,17 @@ $error-padding-y: 12px;
 $error-padding-x: 16px;
 $error-border-radius: 6px;
 // Form Control Colors
-$color-checkbox-checked: #e4efcf;
+$color-checkbox-checked: #e4efcf; 
 
 // =========================================
 // TYPOGRAPHY 
 // =========================================
 
-$font-size-footer: 0.8125rem;
-$font-weight-footer: 600;
-
 $font-size-error: 0.875rem;
 $font-size-title: 1.125rem;
 $font-weight-title: 600;
+$font-weight-primary: 500;
+
 
 $font-size-body: 0.9375rem;
 $font-size-button: 0.875rem;
@@ -138,13 +120,9 @@ $font-size-button: 0.875rem;
 
 // Footer
 $padding-footer-top: 2.5rem;
-$padding-footer-sides: 1.25rem;
-$padding-footer-bottom: 1.25rem;
 
 // Error Message Block
 $error-padding-y: 0.75rem;
-$error-padding-x: 1rem;
-$error-border-radius: 0.375rem;
 $error-margin-y: 1rem;
 
 // Dialog Spacing
@@ -162,7 +140,7 @@ $padding-primary: 2.5rem;
 
 /* PROFILE PAGE COLORS */
 /* PROFILE PAGE COLORS */
-$profile-card-bg: $color-white;
+$profile-card-bg: #ffffff;
 $profile-card-border: $color-border;
 
 $profile-edit-btn-bg: #deebc9;
@@ -186,8 +164,6 @@ $color-btn-secondary-hover-strong: #8a9a6a;
 
 
 // ====== SIZES ======
-$error-icon-size: 1.25rem;
-
 $dialog-width: 25rem;
 $dialog-width: 25rem;
 $dialog-max-width: 90%;
@@ -230,8 +206,6 @@ $spacing-lg: 20px;
 // SHADOWS 
 // =========================================
 
-// 0 2px 6px rgba...
-$error-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.05);
 
 // 0 4px 20px rgba...
 $dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
@@ -245,16 +219,13 @@ $dialog-fade-duration: 0.3s;
 //====== Dashboard Notification Component =======
 // Colors
 $color-white: #ffffff;
-$color-light-grey: #f0f0f0;
+$color-light-grey: #f1f5f9;
 $color-scroll-thumb: #9da4ad;
-$color-border: #e2e8f0;
 $color-border-hover: #cbd5e1;
-$color-unread-bg: #f0f7ff;
 $color-primary-blue: #3b82f6;
 $color-header: #1e293b;
-$color-text: #475569;
+$color-text-notification: #475569;
 $color-timestamp: #64748b;
-$color-success: #10b981;
 
 // Sizes
 $notification-gap: 12px;
@@ -263,7 +234,7 @@ $border-radius: 8px;
 
 // Scrollbar
 $scrollbar-width: 6px;
-$scrollbar-radius: 50px;
+$scrollbar-radius:8px;
 
 //====notification bell component==========
 // Colors
@@ -283,18 +254,16 @@ $badge-radius: 999px;
 
 //======notification item component==========
 // Colors
-$color-unread-bg: #f5f7ff;
+$color-unread-bg: #f0f7ff;
 $color-hover-bg: #eef1ff;
 $color-success: #2e7d32;
 $color-warning: #f9a825;
-$color-critical: #d32f2f;
 $color-info: #1565c0;
 $color-message-text: #555;
 $color-timestamp-text: #888;
 
 // Spacing & sizing
-$notification-gap: 0.5rem;
-$notification-padding: 0.5rem 0.75rem;
+$notification-gap-item: 0.5rem;
 $icon-size: 28px;
 $actions-gap: 0.25rem;
 
@@ -302,7 +271,6 @@ $actions-gap: 0.25rem;
 $title-weight: 600;
 $message-font-size: 0.85rem;
 $timestamp-font-size: 0.75rem;
-$action-font-size: 0.75rem;
 
 // Shapes
 $notification-radius: 4px;
@@ -310,10 +278,7 @@ $notification-radius: 4px;
 //======toast notification=========
 // Colors
 $color-toast-text: #ffffff;
-$color-success: #2e7d32;
-$color-warning: #f9a825;
 $color-critical: #d32f2f;
-$color-info: #1565c0;
 
 // Layout & spacing
 $toast-bottom: 1.5rem;
@@ -375,22 +340,41 @@ $notification-info-bg: #e9f2ff;
 $notification-border-radius: 8px;
 $notification-border: #e2e8f0;
 
+//Password Strength Colors
+$color-weak: #d4183d;
+$color-medium: #f97316;
+$color-strong: #65a30d;
+$color-very-strong: #059669;
 
-// Added variables to resolve build errors
-$font-weight-primary: 400;
-$font-weight-semibold: 600;
-$color-medium: #6b7280;
-$color-weak: #9ca3af;
-$color-strong: #111827;
-$color-very-strong: #000000;
-$color-success-bg: #e6ffed;
-$color-success-text : #237804;
-$color-success-border: #b7eb8f;
-$color-forgot-icon-bg: #e0e7ff;
-$color-forgot-label: $action-color;
-$color-forgot-input-bg: #f9f9ff;
-$color-forgot-input-border: #d1d5db;
-$color-forgot-input-focus-border: #3b82f6;
-$color-reset-btn-bg: #3b82f6;
-$color-forgot-hint: #6A7282;
-$color-forgot-back-text: #155dfc;
+// Success States
+$color-success-bg: #ecfdf5;
+$color-success-text: #065f46;
+$color-success-border: #6ee7b7;
+
+// =========================================
+// FORGOT PASSWORD — CUSTOM COLORS
+// =========================================
+
+$color-forgot-input-bg: #F3F3F5;            
+$color-forgot-hint: #6B7280;                 
+$color-forgot-label: #0A0A0A;                
+$color-forgot-icon-bg: rgba(183, 131, 255, 0.14); 
+$color-forgot-back-text: #45556C;            
+
+
+$color-dialog-cancel-bg: #F2F2F7;
+$color-overlay-dark: #00000059;          
+$color-spinner-border: #FFFFFF4D;      
+$color-border-light: #d1d5db;
+$color-error-light: #fee2e2;
+$color-error-dark: #b91c1c;
+$color-error-medium: #fecaca;
+$color-error-extra-light: #fff5f5;
+
+
+$status-in-progress: #EFF6FF;
+$status-in-progress-border: #BEDBFF;
+$status-completed: #F0FDF4;
+$status-completed-border: #B9F8CF;
+$status-overdue: #FDF0F0;
+$status-overdue-border: #F8B9B9;
