@@ -1,115 +1,77 @@
-//#region Imports
 import { Injectable } from '@angular/core';
-import { Task } from '../../../../types/models/task';
-//#endregion
+import { BehaviorSubject } from 'rxjs';
+import { Task, TaskStatus } from '../../../../types/models/task';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class TaskService {
+  
+  private storageKey = 'tasks';
 
-  //#region Private Properties
-  /**
-   * Key used for persisting tasks in localStorage.
-   */
-  private readonly storageKey: string = 'tasks';
-  //#endregion
+  private tasksSubject = new BehaviorSubject<Task[]>(this.read());
+  public tasks$ = this.tasksSubject.asObservable();
 
-  //#region Public API — Read Operations
-
-  /**
-   * Returns all tasks stored in localStorage.
-   *
-   * @returns {Task[]} List of all saved tasks
-   */
-  public getAllTasks(): Task[] {
-    const rawData = localStorage.getItem(this.storageKey);
-    return rawData ? JSON.parse(rawData) : [];
+  /** READ LOCAL STORAGE */
+  private read(): Task[] {
+    const raw = localStorage.getItem(this.storageKey);
+    return raw ? JSON.parse(raw) : [];
   }
 
-  /**
-   * Retrieves a single task by its ID.
-   *
-   * @param id - The task ID
-   * @returns {Task | undefined} Matching task or undefined
-   */
-  public getTaskById(id: number): Task | undefined {
-    return this.getAllTasks().find(task => task.id === id);
+  /** WRITE LOCAL STORAGE */
+  private write(tasks: Task[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+    this.tasksSubject.next(tasks);
   }
 
-  /**
-   * Retrieves all tasks associated with a project.
-   *
-   * @param projectId - Project ID
-   * @returns {Task[]} Tasks that belong to the project
-   */
-  public getTasksByProjectId(projectId: number): Task[] {
-    return this.getAllTasks().filter(task => task.projectId === projectId);
+  /** FETCHERS */
+  getAllTasks(): Task[] {
+    return this.read();
   }
 
-  //#endregion
+  getTaskById(id: number): Task | undefined {
+    return this.getAllTasks().find(t => t.id === id);
+  }
 
-  //#region Public API — Write Operations
+  getTasksByProjectId(projectId: number): Task[] {
+    return this.getAllTasks().filter(t => t.projectId === projectId);
+  }
 
-  /**
-   * Saves a new task to localStorage.
-   *
-   * @param task - The task to store
-   * @returns {void}
-   */
-  public saveTask(task: Task): void {
+  /** CRUD */
+  saveTask(task: Task): void {
     const tasks = this.getAllTasks();
     tasks.push(task);
-    this.writeTasks(tasks);
+    this.write(tasks);
   }
 
-  /**
-   * Updates an existing task.
-   *
-   * @param updatedTask - Updated task object
-   * @returns {void}
-   */
-  public updateTask(updatedTask: Task): void {
-    const updatedTasks = this.getAllTasks().map(task =>
-      task.id === updatedTask.id ? updatedTask : task
+  updateTask(updated: Task): void {
+    const tasks = this.getAllTasks().map(t =>
+      t.id === updated.id ? updated : t
     );
-
-    this.writeTasks(updatedTasks);
+    this.write(tasks);
   }
 
-  /**
-   * Deletes a task by its ID.
-   *
-   * @param id - Task ID to delete
-   * @returns {void}
-   */
-  public deleteTask(id: number): void {
-    const filteredTasks = this.getAllTasks().filter(task => task.id !== id);
-    this.writeTasks(filteredTasks);
+  deleteTask(id: number): void {
+    const tasks = this.getAllTasks().filter(t => t.id !== id);
+    this.write(tasks);
   }
 
-  /**
-   * Clears all stored tasks.
-   * Useful during development and debugging.
-   *
-   * @returns {void}
-   */
-  public clearAllTasks(): void {
+  clearAllTasks(): void {
     localStorage.removeItem(this.storageKey);
+    this.tasksSubject.next([]);
   }
 
-  //#endregion
+  /** DRAG/DROP STATUS UPDATE */
+  updateTaskStatus(id: number, status: TaskStatus): void {
+    const all = this.getAllTasks();
+    const i = all.findIndex(t => t.id === id);
+    if (i === -1) return;
 
-  //#region Private Utilities
+    const now = new Date().toISOString();
+    all[i].status = status;
+    all[i].updatedAt = now;
+    all[i].completedAt = status === 'Completed' ? now : null;
 
-  /**
-   * Writes the given task list to localStorage.
-   *
-   * @param tasks - Array of tasks to persist
-   * @returns {void}
-   */
-  private writeTasks(tasks: Task[]): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+    this.write(all);
   }
-
-  //#endregion
-
 }
