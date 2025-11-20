@@ -2,21 +2,21 @@
      CREATE / EDIT TASK PAGE
 ================================ -->
 
-<div class="create-task-page">
+<div class="ct-create-task-page">
 
-  <!-- 🔹 PAGE TITLE -->
+  <!-- 🔹 PAGE TITLE (global class kept same) -->
   <h1 class="page-title">
     {{ isEdit ? 'Edit Task' : 'Create Task' }}
   </h1>
 
-  <!-- 🔹 PAGE SUBTITLE -->
+  <!-- 🔹 PAGE SUBTITLE (global class kept same) -->
   <p class="page-subtitle">
     {{ isEdit ? 'Edit/Modify or Update your task' : 'Create your task' }}
   </p>
 
-  <!-- 🔹 DELETE BUTTON (Only in Edit Mode) -->
+  <!-- 🔹 DELETE BUTTON -->
   @if (isEdit) {
-  <button class="delete-btn" (click)="onDelete()">Delete Task 🗑</button>
+  <button class="ct-delete-btn" (click)="onDelete()">Delete Task 🗑</button>
   }
 
   <app-delete-confirm-modal
@@ -28,7 +28,7 @@
 
   <div class="project-form-container">
 
-    <!-- 🔹 FORM TITLE -->
+    <!-- 🔹 FORM TITLE (global class kept same) -->
     <p class="form-title">
       {{ isEdit ? 'Update your task details' :
       'Add a new task to track progress on your project' }}
@@ -37,22 +37,18 @@
     <!-- ==================================
          TASK FORM 
     ================================== -->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="formProject">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ct-form">
 
-      <!-- ==================================
-           PROJECT FIELD
-      ================================== -->
-      <div class="field-group">
-        <label class="field-label required">Project</label>
+      <!-- PROJECT FIELD -->
+      <div class="ct-field-group">
+        <label class="ct-field-label required">Project</label>
 
-        <!-- If project is fixed (passed via route or editing), show readonly input -->
         @if (!showProjectDropdown) {
-        <input title="project" class="field-input readonly"
+        <input title="project" class="ct-field-input ct-readonly"
           [value]="selectedProject?.name" readonly />
         }
-        <!-- Else show dropdown to select project -->
         @else {
-        <select title="project" class="field-select"
+        <select title="project" class="ct-field-select"
           formControlName="projectId">
           <option disabled value>Select project</option>
           @for (p of projects; track p.id) {
@@ -61,24 +57,20 @@
         </select>
         }
 
-        <!-- Error Message -->
         @if (form.get('projectId')?.touched && form.get('projectId')?.invalid) {
-        <div class="error"><small>Project is required.</small></div>
+        <div class="ct-error"><small>Project is required.</small></div>
         }
       </div>
 
-      <!-- ==================================
-           TITLE FIELD
-      ================================== -->
-      <div class="field-group">
-        <label class="field-label required">Title</label>
+      <!-- TITLE FIELD -->
+      <div class="ct-field-group">
+        <label class="ct-field-label required">Title</label>
 
-        <input class="field-input" formControlName="title"
+        <input class="ct-field-input" formControlName="title"
           placeholder="Enter task title" />
 
-        <!-- Error Messages -->
         @if (form.get('title')?.touched && form.get('title')?.invalid) {
-        <div class="error">
+        <div class="ct-error">
           @if (form.get('title')?.hasError('required')) {
           <small>Title is required.</small>
           }
@@ -92,26 +84,22 @@
         }
       </div>
 
-      <!-- ==================================
-           STATUS FIELD
-      ================================== -->
-      <div class="field-group">
-        <label class="field-label required">Status</label>
+      <!-- STATUS FIELD -->
+      <div class="ct-field-group">
+        <label class="ct-field-label required">Status</label>
 
-        <select title="status" class="field-select" formControlName="status">
+        <select title="status" class="ct-field-select" formControlName="status">
           @for (s of statuses; track s) {
           <option [value]="s">{{ s }}</option>
           }
         </select>
       </div>
 
-      <!-- ==================================
-           PRIORITY FIELD
-      ================================== -->
-      <div class="field-group">
-        <label class="field-label required">Priority</label>
+      <!-- PRIORITY FIELD -->
+      <div class="ct-field-group">
+        <label class="ct-field-label required">Priority</label>
 
-        <select title="priority" class="field-select"
+        <select title="priority" class="ct-field-select"
           formControlName="priority">
           @for (p of priorities; track p) {
           <option [value]="p">{{ p }}</option>
@@ -119,36 +107,30 @@
         </select>
       </div>
 
-      <!-- ==================================
-           DESCRIPTION FIELD
-      ================================== -->
-      <div class="field-group full-width">
-        <div class="description-header">
-          <label class="field-label">Description</label>
+      <!-- DESCRIPTION FIELD -->
+      <div class="ct-field-group ct-full-width">
+        <div class="ct-description-header">
+          <label class="ct-field-label">Description</label>
 
-          <!-- Character counter -->
-          <span class="char-counter">
+          <span class="ct-char-counter">
             {{ descriptionCount }}/500 characters
           </span>
         </div>
 
-        <textarea class="project-description" maxlength="500"
+        <textarea class="ct-description-box" maxlength="500"
           formControlName="description"
           placeholder="Enter project description (optional)"></textarea>
 
-        <!-- Error -->
         @if (form.get('description')?.hasError('maxlength')) {
-        <div class="error"><small>Maximum 500 characters allowed.</small></div>
+        <div class="ct-error"><small>Maximum 500 characters allowed.</small></div>
         }
       </div>
 
-      <!-- ==================================
-           ASSIGNEE FIELD
-      ================================== -->
-      <div class="field-group">
-        <label class="field-label required">Assignee</label>
+      <!-- ASSIGNEE FIELD -->
+      <div class="ct-field-group">
+        <label class="ct-field-label required">Assignee</label>
 
-        <select title="assignee" class="field-select"
+        <select title="assignee" class="ct-field-select"
           formControlName="assignee">
           <option disabled value>Select an assignee</option>
 
@@ -157,33 +139,30 @@
           }
         </select>
 
-        <!-- Error -->
         @if (form.get('assignee')?.touched && form.get('assignee')?.invalid) {
-        <div class="error"><small>Assignee is required.</small></div>
+        <div class="ct-error"><small>Assignee is required.</small></div>
         }
       </div>
 
-      <!-- ==================================
-           DUE DATE FIELD
-      ================================== -->
-      <div class="field-group">
-        <label class="field-label required">Due Date</label>
+      <!-- DUE DATE FIELD -->
+      <div class="ct-field-group">
+        <label class="ct-field-label required">Due Date</label>
 
-        <div class="date-wrapper" (click)="openDatePicker()">
-          <input #dueDateInput title="due date" type="date" class="field-input"
+        <div class="ct-date-wrapper" (click)="openDatePicker()">
+          <input #dueDateInput title="due date" type="date" class="ct-field-input"
             formControlName="dueDate"
             [min]="minDate" [max]="maxDate" />
         </div>
 
         @if (selectedProject) {
-        <div class="project-dates">
+        <div class="ct-project-dates">
           Project dates: {{ selectedProject.startDate }} to {{
           selectedProject.endDate }}
         </div>
         }
 
         @if (form.get('dueDate')?.touched && form.get('dueDate')?.invalid) {
-        <div class="error">
+        <div class="ct-error">
           @if (form.get('dueDate')?.hasError('required')) {
           <small>Due date is required.</small>
           }
@@ -200,25 +179,20 @@
         }
       </div>
 
-      <!-- ==================================
-           FORM BUTTONS
-      ================================== -->
-      <div class="buttons">
+      <!-- FORM BUTTONS -->
+      <div class="ct-buttons">
 
-        <!-- Submit Button -->
-        <button class="btn btn-submit" type="submit" [disabled]="form.invalid">
+        <button class="ct-btn ct-btn-submit" type="submit" [disabled]="form.invalid">
           {{ isEdit ? 'Save Changes' : 'Create Task' }}
         </button>
 
-        <!-- Reset button only for Create Mode -->
         @if (!isEdit) {
-        <button class="btn btn-secondary" type="button" (click)="onReset()">
+        <button class="ct-btn ct-btn-secondary" type="button" (click)="onReset()">
           Reset
         </button>
         }
 
-        <!-- Cancel -->
-        <button class="btn btn-secondary" type="button" (click)="onCancel()">
+        <button class="ct-btn ct-btn-secondary" type="button" (click)="onCancel()">
           Cancel
         </button>
       </div>
