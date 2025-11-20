@@ -1,3 +1,6 @@
+
+<app-toast-notification-component></app-toast-notification-component>
+
 <div class="profile-page">
   <div class="container">
     <div class="header-section">
@@ -22,7 +25,7 @@
         <div class="avatar-row">
           <div class="avatar-area">
             @if (currentUser?.photo) {
-            <img [src]="currentUser.photo" class="avatar" />
+            <img [src]="currentUser!.photo" class="avatar" />
             } @else {
             <div class="avatar-placeholder">
               {{ currentUser?.name?.charAt(0) || 'U' }}
@@ -115,7 +118,7 @@
               }}</div>
           </div>
         </div>
-        <div class="actions">
+        <div class="actions-profile">
           <button type="submit" class="btn-primary">Save Changes</button>
           <button type="button" class="btn-secondary"
             (click)="cancelEdit()">Cancel</button>
@@ -125,3 +128,4 @@
     </div>
   </div>
 </div>
+

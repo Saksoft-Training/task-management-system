@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractContro
 import { RouterModule, Router } from '@angular/router';
 import { UserStorageService } from '../../../../shared/services/storage-service';
 import { AuthService } from '../../services/auth-service';
+import { NotificationService } from '../../../dashboard/services/notification-service';
+import { ToastNotificationComponent } from '../../../dashboard/components/notifications/toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule,ToastNotificationComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
@@ -33,7 +35,8 @@ export class ProfileComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userStorage: UserStorageService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
   //#endregion
 
@@ -226,8 +229,13 @@ export class ProfileComponent implements OnInit {
     }
     const success = this.userStorage.updateUser(updatedUser, oldEmail);
     if (!success) {
-      alert('Failed to update profile.');
-      return;
+this.notificationService.addNotification({
+        title: 'Update Failed',
+        message: 'Unable to update profile.',
+        severity: 'critical',
+        kind: 'profile-update-error' as any,
+        showToast: true
+      });      return;
     }
     sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
     localStorage.setItem('currentUser', JSON.stringify(updatedUser));
@@ -235,8 +243,13 @@ export class ProfileComponent implements OnInit {
     this.currentUser = updatedUser;
     this.isEditing = false;
     this.previewImage = null;
-    alert('Profile updated successfully!');
-    this.router.navigate(['/profile']);
+ this.notificationService.addNotification({
+      title: 'Profile Updated',
+      message: 'Your profile was updated successfully.',
+      severity: 'success',
+      kind: 'profile-update' as any,
+      showToast: true
+    });    this.router.navigate(['/profile']);
   }
   //#endregion
 }
