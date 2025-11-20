@@ -9,8 +9,8 @@ import { AuthService } from '../../user-account-management/services/auth-service
   providedIn: 'root',
 })
 export class DashboardService {
- 
-   private storageKeyTasks = 'tasks';
+
+  private storageKeyTasks = 'tasks';
 
   private stats$ = new BehaviorSubject<Statistics>(this.emptyStats());
 

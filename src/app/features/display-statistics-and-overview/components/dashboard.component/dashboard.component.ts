@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
-   stats$!: Observable<Statistics>;
+  stats$!: Observable<Statistics>;
   loading = true;
 
   constructor(private dashboardService: DashboardService) {
