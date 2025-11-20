@@ -8,8 +8,6 @@ import { NotificationService } from '../../../features/dashboard/services/notifi
 import { AppNotification } from '../../../../types/models/notifications';
 import { Observable } from 'rxjs';
 import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
-import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
-import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
 
 
 @Component({
@@ -20,19 +18,19 @@ import { NotificationDropdownComponent } from '../../../features/dashboard/compo
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  
+
   //#region Component Properties
   /**
    * @summary Controls the visibility state of the notifications dropdown panel
    * @description When true, the notifications panel is displayed; when false, it is hidden
    */
   public showNotifications = false;
-    /**
-   * @summary Count of unread notifications for badge display
-   * @description Used to show a numeric badge on the notification bell icon
-   */
+  /**
+ * @summary Count of unread notifications for badge display
+ * @description Used to show a numeric badge on the notification bell icon
+ */
   public unreadCount = 0;
-  
+
   /**
    * @summary Observable stream of notifications from the notification service
    * @description Provides reactive updates whenever notifications change in the system
@@ -61,15 +59,23 @@ export class HeaderComponent implements OnInit {
    */
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) { }
-  //#endregion
-
-  //#region Lifecycle
     private router: Router,
     private notificationService: NotificationService
-  ) { }
+
+  ) {
+    //#region UI Helpers
+    const user = this.authService.getCurrentUser();
+    //this.userEmail = user?.email || null;
+    this.notifications$ = this.notificationService.notifications$;
+    this.notifications$.subscribe(notifications => {
+    });
+    this.notificationService.unreadCount$.subscribe(count => {
+      this.unreadCount = count;
+    });
+  }
+
   //#endregion
+
   //#region Lifecycle Hook
   /**
    * @summary Subscribes to user observable and loads initial user.
@@ -83,16 +89,7 @@ export class HeaderComponent implements OnInit {
   }
   //#endregion
 
-  //#region UI Helpers
-    const user = this.authService.getCurrentUser();
-    this.userEmail = user?.email || null;
-    this.notifications$ = this.notificationService.notifications$;
-    this.notifications$.subscribe(notifications => {
-    });
-    this.notificationService.unreadCount$.subscribe(count => {
-      this.unreadCount = count;
-    });
-  }
+
   //#endregion
   //#region Methods
   /**
@@ -153,9 +150,5 @@ export class HeaderComponent implements OnInit {
     this.notificationService.clearAll(); // Use clearAll() instead of clearAllNotifications()
   }
   //#endregion
-
-   goToLogin() {
-  this.router.navigate(['/login']);
-}
 
 }

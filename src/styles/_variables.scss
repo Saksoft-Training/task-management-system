@@ -2,9 +2,7 @@
 $color-border: #f1f1f1;
 $color-bg-footer: #ffffff;
 $color-text-footer: #4d5b2a;
-<<<<<<< HEAD
 $color-title: #000000;
-=======
 $color-error-bg: #fdecea;
 $color-error-text: #b71c1c;
 $color-error-border: #f5c6cb;
@@ -14,9 +12,9 @@ $color-dialog-border: #f0f0f0;
 $border-color: #cccc;
 $disabled-bg-color: #86916b;
 $planning-color: #AD46FF;
-$progress-color:#2B7FFF;
-$completed-color:#00C950;
-$onHold-color:#FF6900;
+$progress-color: #2B7FFF;
+$completed-color: #00C950;
+$onHold-color: #FF6900;
 
 $color-overlay-bg: rgba(0, 0, 0, 0.4);
 
@@ -25,14 +23,13 @@ $color-text-secondary: #444;
 $color-text: #777;
 
 $color-breadcrumb: #485C11;
-$color-title: #000000;
 $color-subtitle: #6F6F6F;
 $input-background: #F3F3F5;
 $color-primary-hover: #3b421a;
 $btn-secondary-bg-color: #f5f5f7;
 $hover-bg-color: #e2e2e7;
 $color-btn-cancel-text: #000000;
-$create-btn-bg:#DFECC6;
+$create-btn-bg: #DFECC6;
 
 // Buttons
 // Base
@@ -68,8 +65,6 @@ $color-link-primary: #155dfc;
 $color-primary: #485c11;
 
 // Error States
->>>>>>> d5523d6 (KAN-12 Added ProjectList code)
-$color-error-bg: #fdecea;
 $color-error-text: #b71c1c;
 $color-error-border: #f5c6cb;
 $color-error-hover: #7f0000;
@@ -117,14 +112,12 @@ $font-size-page-title: 60px;
 $padding-footer-top: 40px;
 $padding-footer-sides: 20px;
 $padding-footer-bottom: 20px;
-<<<<<<< HEAD
 $padding-primary: 40px;
 $error-padding-y: 12px;
 $error-padding-x: 16px;
 $error-border-radius: 6px;
-=======
 // Form Control Colors
-$color-checkbox-checked: #e4efcf; 
+$color-checkbox-checked: #e4efcf;
 
 // =========================================
 // TYPOGRAPHY 
@@ -152,7 +145,6 @@ $padding-footer-bottom: 1.25rem;
 $error-padding-y: 0.75rem;
 $error-padding-x: 1rem;
 $error-border-radius: 0.375rem;
->>>>>>> d5523d6 (KAN-12 Added ProjectList code)
 $error-margin-y: 1rem;
 
 // Dialog Spacing
@@ -382,3 +374,23 @@ $notification-info-bg: #e9f2ff;
 // Notification Card
 $notification-border-radius: 8px;
 $notification-border: #e2e8f0;
+
+
+// Added variables to resolve build errors
+$font-weight-primary: 400;
+$font-weight-semibold: 600;
+$color-medium: #6b7280;
+$color-weak: #9ca3af;
+$color-strong: #111827;
+$color-very-strong: #000000;
+$color-success-bg: #e6ffed;
+$color-success-text : #237804;
+$color-success-border: #b7eb8f;
+$color-forgot-icon-bg: #e0e7ff;
+$color-forgot-label: $action-color;
+$color-forgot-input-bg: #f9f9ff;
+$color-forgot-input-border: #d1d5db;
+$color-forgot-input-focus-border: #3b82f6;
+$color-reset-btn-bg: #3b82f6;
+$color-forgot-hint: #6A7282;
+$color-forgot-back-text: #155dfc;
