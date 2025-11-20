@@ -81,11 +81,40 @@
             <div class="status-count">{{ overdueCount }}</div>
         </div>
     </div>
-    <div class="tasks-panel">
-        <h3>Tasks</h3>
+   <div class="tasks-panel">
+    <h3>Tasks</h3>
+    <button class="toggle-btn">
+          <img src="assets/icons/list-Icon.svg" class="icon" alt="List" />
+          List
+        </button>
+ 
+        <!-- Board Mode Toggle Button -->
+        <button class="toggle-btn">
+          <img src="assets/icons/board-Icon.svg" class="icon" alt="Board" />
+          Board
+        </button>
+    <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
+
+    @if (tasks.length > 0) {
+        <div class="tasks-list">
+            @for (task of tasks; track task.id) {
+                <div class="task-item">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-meta">
+                        <span>Status: {{ task.status }}</span>
+                        <span>Priority: {{ task.priority }}</span>
+                        <span>Assignee: {{ task.assignee }}</span>
+                        <span>Due: {{ task.dueDate | date:'MMM d, y' }}</span>
+                    </div>
+                </div>
+            }
+        </div>
+    } @else {
         <div class="tasks-empty">
             <p>No tasks yet</p>
             <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
         </div>
-    </div>
+    }
+</div>
+
 </div>

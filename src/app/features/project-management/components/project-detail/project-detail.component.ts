@@ -4,6 +4,8 @@ import { ProjectService } from '../../services/project.service';
 import { AuthService } from '../../../user-account-management/services/auth-service';
 import { Project } from '../../../../../types/models/project';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TaskService } from '../../../task-management/services/task-service';
+import { Task } from '../../../../../types/models/task';
 
 @Component({
   selector: 'app-project-detail-component',
@@ -17,6 +19,7 @@ export class ProjectDetailComponent implements OnInit {
   public project?: Project;
   /** Logged-in user's email */
   public currentUserEmail: string = '';
+  public tasks: Task[] = [];
   /** Total number of days between project start and end dates */
   public totalDays = 0;
   /** Number of days that have elapsed since the project started */
@@ -40,7 +43,8 @@ export class ProjectDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     protected router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private readonly taskService: TaskService
   ) { }
   // #endregion
 
@@ -58,12 +62,38 @@ export class ProjectDetailComponent implements OnInit {
       alert('Project not found');
       this.router.navigate(['/projects']);
     }
-    if (this.project) {
-      this.calculateProgress();
+    if (!this.project) {
+      alert('Project not found');
+      this.router.navigate(['/projects']);
+      return;
     }
+
+    this.calculateProgress();
+    this.loadTasks();
+    this.calculateTaskStats();
   }
   // #endregion
 
+  private loadTasks(): void {
+    if (!this.project) return;
+
+    this.tasks = this.taskService
+      .getTasksByProjectId(this.project.id)
+      .filter(t => t.createdBy === this.currentUserEmail);
+  }
+  private calculateTaskStats(): void {
+    this.todoCount = this.tasks.filter(t => t.status === 'To Do').length;
+    this.inProgressCount = this.tasks.filter(t => t.status === 'In Progress').length;
+    this.completedCount = this.tasks.filter(t => t.status === 'Completed').length;
+
+    this.overdueCount = this.tasks.filter(t => {
+      const due = new Date(t.dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return t.status !== 'Completed' && due < today;
+    }).length;
+  }
+  
   // #region Utility Methods
   /**
    * @summary Converts a YYYY-MM-DD string to a local Date object.
@@ -82,7 +112,9 @@ export class ProjectDetailComponent implements OnInit {
   * @returns {void}
   */
   public onCreateTask(): void {
-    this.router.navigate(['/tasks/create']);
+    this.router.navigate(['/tasks/create'], {
+      queryParams: { projectId: this.project?.id }
+    });
   }
   /**
   * @summary Navigates to the list of all projects.
