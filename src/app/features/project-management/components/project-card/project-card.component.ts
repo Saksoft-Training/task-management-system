@@ -19,6 +19,7 @@ export class ProjectCardComponent {
   * @summary The full project data object passed from the parent component.
   */
   @Input() project!: Project;
+  @Input() taskCount: number = 0;
   // #endregion
 
   // #region Computed Getters

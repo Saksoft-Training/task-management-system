@@ -6,10 +6,11 @@ import { Project } from '../../../../../types/models/project';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TaskService } from '../../../task-management/services/task-service';
 import { Task } from '../../../../../types/models/task';
+import { DilogDeleteComponent } from '../../../../shared/components/dilog-delete/dilog-delete.component';
 
 @Component({
   selector: 'app-project-detail-component',
-  imports: [DatePipe, CommonModule],
+  imports: [DatePipe, CommonModule,DilogDeleteComponent],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.scss',
 })
@@ -28,13 +29,20 @@ export class ProjectDetailComponent implements OnInit {
   public percentComplete = 0;
   /** Display text showing progress  */
   public progressText = '';
+  public showDeleteDialog = false;
   /** Task statistics */
   public todoCount = 0;
   public inProgressCount = 0;
   public completedCount = 0;
   public overdueCount = 0;
   // #endregion
-
+  // Values passed to dialog
+public deleteDialogData = {
+  title: 'DELETE PROJECT',
+  message: '',
+  confirmText: 'Delete',
+  cancelText: 'Cancel'
+};
   // #region Constructor
   /**
    * @summary Initializes services required by the component.
@@ -130,11 +138,28 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   public onDeleteProject(): void {
-    if (this.project && confirm('Are you sure you want to delete this project?')) {
-      this.projectService.delete(this.project.id, this.currentUserEmail);
-      this.router.navigate(['/projects']);
-    }
+    if (!this.project) return;
+
+  const taskCount = this.tasks.length;
+
+  this.deleteDialogData.message =
+    `Are you sure you want to delete “${this.project.name}” ?\n\n`
+    + `Are you sure you want to delete this project? This action cannot be undone.\n\n`
+    + `⚠️ This will also permanently delete ${taskCount} associated task(s).`;
+
+  this.showDeleteDialog = true;
   }
+  public handleDeleteConfirm(): void {
+  if (this.project) {
+    this.projectService.delete(this.project.id, this.currentUserEmail);
+    this.router.navigate(['/projects']);
+  }
+  this.showDeleteDialog = false;
+}
+
+public handleDeleteCancel(): void {
+  this.showDeleteDialog = false;
+}
 
   // #endregion
   // #region Computed Getters

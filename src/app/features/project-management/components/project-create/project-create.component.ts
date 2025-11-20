@@ -5,10 +5,12 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../../../../types/models/project';
 
 import { AuthService } from '../../../user-account-management/services/auth-service';
+import { DilogDeleteComponent } from '../../../../shared/components/dilog-delete/dilog-delete.component';
+import { NotificationService } from '../../../dashboard/services/notification-service';
 
 @Component({
   selector: 'app-project-create-component',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, DilogDeleteComponent],
   templateUrl: './project-create.component.html',
   styleUrl: './project-create.component.scss',
 })
@@ -26,6 +28,15 @@ export class ProjectCreateComponent {
   public currentUser: string = '';
   /** Minimum date allowed for date fields (today) */
   public minDate: string = new Date().toISOString().split('T')[0];
+  public showDeleteDialog = false;
+
+  public deleteDialogData = {
+    title: 'DELETE PROJECT',
+    message: '',
+    confirmText: 'Delete',
+    cancelText: 'Cancel'
+  };
+
   // #endregion
 
   //#region Constructor
@@ -41,7 +52,8 @@ export class ProjectCreateComponent {
     private router: Router,
     private projectService: ProjectService,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {
     this.projectForm = this.formBuilder.group({
       description: ['', [Validators.maxLength(500)]],
@@ -67,36 +79,36 @@ export class ProjectCreateComponent {
    * @returns {void}
    */
   private validateProjectId(): void {
-  const projectIdParam = this.route.snapshot.paramMap.get('id');
+    const projectIdParam = this.route.snapshot.paramMap.get('id');
 
-  if (!projectIdParam) {
-    return;
+    if (!projectIdParam) {
+      return;
+    }
+
+    const projectId = Number(projectIdParam);
+
+    if (!Number.isInteger(projectId) || projectId <= 0) {
+      this.router.navigate(['/projects']);
+      return;
+    }
+
+    const project = this.projectService.getById(projectId, this.currentUser);
+    if (!project) {
+      this.router.navigate(['/projects']);
+      return;
+    }
+
+    this.editProjectId = projectId;
+
+    // 👉 Patch form when editing
+    this.projectForm.patchValue({
+      name: project.name,
+      description: project.description,
+      status: project.status,
+      startDate: project.startDate,
+      endDate: project.endDate
+    });
   }
-
-  const projectId = Number(projectIdParam);
-
-  if (!Number.isInteger(projectId) || projectId <= 0) {
-    this.router.navigate(['/projects']);
-    return;
-  }
-
-  const project = this.projectService.getById(projectId, this.currentUser);
-  if (!project) {
-    this.router.navigate(['/projects']);
-    return;
-  }
-
-  this.editProjectId = projectId;
-
-  // 👉 Patch form when editing
-  this.projectForm.patchValue({
-    name: project.name,
-    description: project.description,
-    status: project.status,
-    startDate: project.startDate,
-    endDate: project.endDate
-  });
-}
 
   /**
    * @summary Converts various date formats into a Date object without time.
@@ -174,6 +186,13 @@ export class ProjectCreateComponent {
         updatedAt: now.toISOString()
       };
       this.projectService.update(updatedProject, this.currentUser);
+      this.notificationService.addNotification({
+      kind: 'custom' as any,
+      severity: 'success',
+      title: 'Project updated successfully',
+      message: updatedProject.name,
+      showToast: true
+    });
       this.router.navigate(['/projects', this.editProjectId]);
       return;
     }
@@ -186,11 +205,17 @@ export class ProjectCreateComponent {
       endDate: form.endDate,
       status: form.status,
       createdBy: this.currentUser,
-      createdAt: now.toISOString().split('T')[0],
+      createdAt: now.toISOString(),
       updatedAt: now.toISOString()
     };
     this.projectService.save(newProject, this.currentUser);
-    this.successMessage = 'Project created successfully!';
+    this.notificationService.addNotification({
+    kind: 'custom' as any,
+    severity: 'success',
+    title: 'Project created successfully',
+    message: newProject.name,
+    showToast: true
+  });
     setTimeout(() => this.router.navigate(['/projects', newProject.id]), 1000);
   }
   /**
@@ -209,11 +234,30 @@ export class ProjectCreateComponent {
     this.router.navigate(['/projects']);
   }
   public onDeleteProject(): void {
-  if (this.editProjectId && confirm('Are you sure you want to delete this project?')) {
-    this.projectService.delete(this.editProjectId, this.currentUser);
-    this.router.navigate(['/projects']);
+    if (!this.editProjectId) return;
+
+    const project = this.projectService.getById(this.editProjectId, this.currentUser);
+    if (!project) return;
+
+    this.deleteDialogData.message =
+      `Are you sure you want to delete “${project.name}” ?\n\n` +
+      `Are you sure you want to delete this project? This action cannot be undone.\n\n`;
+
+    this.showDeleteDialog = true;
   }
-}
+
+  public handleDeleteConfirm(): void {
+    if (this.editProjectId) {
+      this.projectService.delete(this.editProjectId, this.currentUser);
+      this.router.navigate(['/projects']);
+    }
+    this.showDeleteDialog = false;
+  }
+
+  public handleDeleteCancel(): void {
+    this.showDeleteDialog = false;
+  }
+
 
   /**
   * @summary Navigates to the list of all projects.
@@ -222,6 +266,6 @@ export class ProjectCreateComponent {
   public goToProjects(): void {
     this.router.navigate(['/projects']);
   }
-  
+
   // #endregion
 }
