@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Task } from '../../../../../types';
 import { ProjectService } from '../../../project-management/services/project.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -35,7 +36,10 @@ export class TaskCardComponent implements OnInit {
    * @summary Injects ProjectService to retrieve project details.
    * @param projectService Service for fetching project information.
    */
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private router: Router
+  ) { }
 
   // #endregion
 
@@ -58,6 +62,10 @@ export class TaskCardComponent implements OnInit {
    */
   public closeCard(): void {
     this.close.emit();
+  }
+
+  goToTaskDetails(id: number) {
+    this.router.navigate(['/tasks', id]);
   }
 
   // #endregion

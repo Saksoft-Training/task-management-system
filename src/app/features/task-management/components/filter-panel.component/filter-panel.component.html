@@ -1,84 +1,102 @@
-<div class="overlay" *ngIf="open" (click)="close.emit()"></div>
+@if (open) {
+  <div class="overlay" (click)="close.emit()"></div>
+}
 
-<div *ngIf="open"
-     class="filter-panel"
-     [class.open]="open">
+@if (open) {
+  <div class="filter-panel" [class.open]="open">
 
-  <div class="header">
-    <h2>FILTER TASKS</h2>
-    <button class="close-btn" (click)="close.emit()">✕</button>
-  </div>
-
-  <!-- STATUS -->
-  <div class="box">
-    <div class="box-title">
-      <span>⚪ Status</span>
-      <button class="clear" (click)="clearSection('status')">Clear Filters</button>
+    <div class="header">
+      <h2>FILTER TASKS</h2>
+      <button class="close-btn" (click)="close.emit()"><img src="assets/icons/close-Icon.svg" alt="Close Icon"></button>
     </div>
 
-    <div class="options">
-      <label *ngFor="let s of statusList">
-        <input type="checkbox"
-               [checked]="filters.status.includes(s)"
-               (change)="toggleCheck(filters.status, s)">
-        {{ s }}
-      </label>
-    </div>
-  </div>
-
-  <!-- PRIORITY -->
-  <div class="box">
-    <div class="box-title">
-      <span>🚩 Priority</span>
-      <button class="clear" (click)="clearSection('priority')">Clear Filters</button>
-    </div>
-
-    <div class="options">
-      <label *ngFor="let p of priorityList">
-        <input type="checkbox"
-               [checked]="filters.priority.includes(p)"
-               (change)="toggleCheck(filters.priority, p)">
-        {{ p }}
-      </label>
-    </div>
-  </div>
-
-  <!-- ASSIGNEE -->
-  <div class="box">
-    <div class="box-title">
-      <span>👤 Assignee</span>
-    </div>
-
-    <div class="options">
-      <label *ngFor="let a of assignees">
-        <input type="checkbox"
-               [checked]="filters.assignee.includes(a)"
-               (change)="toggleCheck(filters.assignee, a)">
-        {{ a }}
-      </label>
-    </div>
-  </div>
-
-  <!-- DUE DATE -->
-  <div class="box">
-    <div class="box-title">
-      <span>📅 Due Date Range</span>
-    </div>
-
-    <div class="date-row">
-      <div>
-        <label>From</label>
-        <input type="date" [(ngModel)]="filters.fromDate" (change)="filtersChanged.emit(filters)">
+    <!-- STATUS -->
+    <div class="box">
+      <div class="box-title">
+        <span>Status</span>
+        <button class="clear" (click)="clearSection('status')">Clear Filters</button>
       </div>
-      <div>
-        <label>To</label>
-        <input type="date" [(ngModel)]="filters.toDate" (change)="filtersChanged.emit(filters)">
+
+      <div class="options">
+        @for (s of statusList; track s) {
+          <label>
+            <input type="checkbox"
+                   [checked]="filters.status.includes(s)"
+                   (change)="toggleCheck(filters.status, s)">
+            {{ s }}
+          </label>
+        }
       </div>
     </div>
+
+    <!-- PRIORITY -->
+    <div class="box">
+      <div class="box-title">
+        <span>Priority</span>
+        <button class="clear" (click)="clearSection('priority')"><img src="assets/icons/clear-Icon.svg" alt="Clear Icon">  Clear Filters</button>
+      </div>
+
+      <div class="options">
+        @for (p of priorityList; track p) {
+          <label>
+            <input type="checkbox"
+                   [checked]="filters.priority.includes(p)"
+                   (change)="toggleCheck(filters.priority, p)">
+            {{ p }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- ASSIGNEE -->
+    <div class="box">
+      <div class="box-title">
+        <span>
+          <img src="assets/icons/profile-Icon.svg" alt="Assignee Icon">
+          Assignee
+        </span>
+      </div>
+
+      <div class="options">
+        @for (a of assignees; track a) {
+          <label>
+            <input type="checkbox"
+                   [checked]="filters.assignee.includes(a)"
+                   (change)="toggleCheck(filters.assignee, a)">
+            {{ a }}
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- DUE DATE -->
+    <div class="box">
+      <div class="box-title">
+        <span>
+          <img src="assets/icons/calendar-Icon.svg" alt="Due Date Icon">
+          Due Date Range
+        </span>
+      </div>
+
+      <div class="date-row">
+        <div>
+          <label>From</label>
+          <input type="date"
+                 [(ngModel)]="filters.fromDate"
+                 (change)="filtersChanged.emit(filters)">
+        </div>
+        <div>
+          <label>To</label>
+          <input type="date"
+                 [(ngModel)]="filters.toDate"
+                 (change)="filtersChanged.emit(filters)">
+        </div>
+      </div>
+    </div>
+
+    <button class="clear-all" (click)="clearAll()">
+      <img src="assets/icons/clear-Icon.svg" alt="Clear Icon"> Clear All Filters
+    </button>
+
   </div>
-
-  <button class="clear-all" (click)="clearAll()">
-    ✕ Clear All Filters
-  </button>
-
-</div>
+}

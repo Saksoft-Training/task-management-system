@@ -9,7 +9,7 @@
 
       <div class="header-actions">
         <!-- Edit & Close buttons -->
-        <button class="edit-btn">Edit/Modify ↗</button>
+        <button class="edit-btn" (click)="goToTaskDetails(task.id)">Edit/Modify ↗</button>
         <button class="close-btn" (click)="closeCard()">✕</button>
       </div>
     </div>
