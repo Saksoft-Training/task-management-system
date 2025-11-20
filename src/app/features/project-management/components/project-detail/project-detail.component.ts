@@ -93,7 +93,7 @@ export class ProjectDetailComponent implements OnInit {
       return t.status !== 'Completed' && due < today;
     }).length;
   }
-  
+
   // #region Utility Methods
   /**
    * @summary Converts a YYYY-MM-DD string to a local Date object.
@@ -123,6 +123,19 @@ export class ProjectDetailComponent implements OnInit {
   public goToProjects(): void {
     this.router.navigate(['/projects']);
   }
+  public onEditProject(): void {
+    if (this.project) {
+      this.router.navigate(['/projects/create', this.project.id]);
+    }
+  }
+
+  public onDeleteProject(): void {
+    if (this.project && confirm('Are you sure you want to delete this project?')) {
+      this.projectService.delete(this.project.id, this.currentUserEmail);
+      this.router.navigate(['/projects']);
+    }
+  }
+
   // #endregion
   // #region Computed Getters
   /**
@@ -175,5 +188,6 @@ export class ProjectDetailComponent implements OnInit {
       progressText: this.progressText
     });
   }
+  
   // #endregion
 }
