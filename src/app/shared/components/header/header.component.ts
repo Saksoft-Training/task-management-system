@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
 import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
 import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
-
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { User } from '../../../../types/models/user';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, DashboardNotificationsComponent],
+  imports: [CommonModule, RouterModule, DashboardNotificationsComponent, ConfirmationDialogComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -161,6 +161,7 @@ export class HeaderComponent implements OnInit {
    */
   public confirmLogout(): void {
     this.showLogoutDialog = false;
+    this.authService.logout();
   }
  
   /**

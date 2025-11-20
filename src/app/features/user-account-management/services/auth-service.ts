@@ -120,4 +120,21 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
   //#endregion
+
+  ///#region Logout
+  /**
+   * @summary Logs out the current user by clearing login session keys,
+   * resetting the application header state, and redirecting to the login page.
+   * @returns void
+   */
+  public logout(): void {
+    const keysToRemove = ['currentUser', 'authToken'];
+    keysToRemove.forEach(key => {
+      sessionStorage.removeItem(key);
+      localStorage.removeItem(key);
+    });
+    this.currentUserSubject.next(null);
+    this.router.navigate(['/login'], { replaceUrl: true });
+  }
+  //#endregion
 }
