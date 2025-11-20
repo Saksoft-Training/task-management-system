@@ -1,21 +1,57 @@
+<!-- ================================
+     CREATE / EDIT TASK PAGE
+================================ -->
+
 <div class="create-task-page">
 
-  <h1 class="page-title">Create Task</h1>
-  <p class="page-subtitle">Create your task</p>
+  <!-- 🔹 PAGE TITLE -->
+  <h1 class="page-title">
+    {{ isEdit ? 'Edit Task' : 'Create Task' }}
+  </h1>
+
+  <!-- 🔹 PAGE SUBTITLE -->
+  <p class="page-subtitle">
+    {{ isEdit ? 'Edit/Modify or Update your task' : 'Create your task' }}
+  </p>
+
+  <!-- 🔹 DELETE BUTTON (Only in Edit Mode) -->
+  @if (isEdit) {
+  <button class="delete-btn" (click)="onDelete()">Delete Task 🗑</button>
+  }
+
+  <app-delete-confirm-modal
+    [visible]="showDeleteModal"
+    [itemName]="taskToDelete?.title"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </app-delete-confirm-modal>
 
   <div class="project-form-container">
-    <p class="form-title">Add a new task to track progress on your project</p>
 
+    <!-- 🔹 FORM TITLE -->
+    <p class="form-title">
+      {{ isEdit ? 'Update your task details' :
+      'Add a new task to track progress on your project' }}
+    </p>
+
+    <!-- ==================================
+         TASK FORM 
+    ================================== -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="formProject">
 
-      <!-- PROJECT -->
+      <!-- ==================================
+           PROJECT FIELD
+      ================================== -->
       <div class="field-group">
         <label class="field-label required">Project</label>
 
+        <!-- If project is fixed (passed via route or editing), show readonly input -->
         @if (!showProjectDropdown) {
         <input title="project" class="field-input readonly"
           [value]="selectedProject?.name" readonly />
-        } @else {
+        }
+        <!-- Else show dropdown to select project -->
+        @else {
         <select title="project" class="field-select"
           formControlName="projectId">
           <option disabled value>Select project</option>
@@ -25,32 +61,43 @@
         </select>
         }
 
+        <!-- Error Message -->
         @if (form.get('projectId')?.touched && form.get('projectId')?.invalid) {
         <div class="error"><small>Project is required.</small></div>
         }
       </div>
 
-      <!-- TITLE -->
+      <!-- ==================================
+           TITLE FIELD
+      ================================== -->
       <div class="field-group">
         <label class="field-label required">Title</label>
-        <input class="field-input" formControlName="title"
-          placeholder="Enter task title">
 
+        <input class="field-input" formControlName="title"
+          placeholder="Enter task title" />
+
+        <!-- Error Messages -->
         @if (form.get('title')?.touched && form.get('title')?.invalid) {
         <div class="error">
-          @if (form.get('title')?.hasError('required')) { <small>Title is
-            required.</small> }
-          @if (form.get('title')?.hasError('minlength')) { <small>Minimum 5
-            characters.</small> }
-          @if (form.get('title')?.hasError('maxlength')) { <small>Maximum 100
-            characters.</small> }
+          @if (form.get('title')?.hasError('required')) {
+          <small>Title is required.</small>
+          }
+          @if (form.get('title')?.hasError('minlength')) {
+          <small>Minimum 5 characters.</small>
+          }
+          @if (form.get('title')?.hasError('maxlength')) {
+          <small>Maximum 100 characters.</small>
+          }
         </div>
         }
       </div>
 
-      <!-- STATUS -->
+      <!-- ==================================
+           STATUS FIELD
+      ================================== -->
       <div class="field-group">
         <label class="field-label required">Status</label>
+
         <select title="status" class="field-select" formControlName="status">
           @for (s of statuses; track s) {
           <option [value]="s">{{ s }}</option>
@@ -58,9 +105,12 @@
         </select>
       </div>
 
-      <!-- PRIORITY -->
+      <!-- ==================================
+           PRIORITY FIELD
+      ================================== -->
       <div class="field-group">
         <label class="field-label required">Priority</label>
+
         <select title="priority" class="field-select"
           formControlName="priority">
           @for (p of priorities; track p) {
@@ -69,46 +119,60 @@
         </select>
       </div>
 
-      <!-- DESCRIPTION -->
+      <!-- ==================================
+           DESCRIPTION FIELD
+      ================================== -->
       <div class="field-group full-width">
         <div class="description-header">
           <label class="field-label">Description</label>
-          <span class="char-counter">{{ descriptionCount }}/500 characters</span>
+
+          <!-- Character counter -->
+          <span class="char-counter">
+            {{ descriptionCount }}/500 characters
+          </span>
         </div>
 
         <textarea class="project-description" maxlength="500"
           formControlName="description"
           placeholder="Enter project description (optional)"></textarea>
 
+        <!-- Error -->
         @if (form.get('description')?.hasError('maxlength')) {
         <div class="error"><small>Maximum 500 characters allowed.</small></div>
         }
       </div>
 
-      <!-- ASSIGNEE -->
+      <!-- ==================================
+           ASSIGNEE FIELD
+      ================================== -->
       <div class="field-group">
         <label class="field-label required">Assignee</label>
 
         <select title="assignee" class="field-select"
           formControlName="assignee">
           <option disabled value>Select an assignee</option>
+
           @for (u of users; track u.email) {
           <option [value]="u.name">{{ u.name }}</option>
           }
         </select>
 
+        <!-- Error -->
         @if (form.get('assignee')?.touched && form.get('assignee')?.invalid) {
         <div class="error"><small>Assignee is required.</small></div>
         }
       </div>
 
-      <!-- DUE DATE -->
+      <!-- ==================================
+           DUE DATE FIELD
+      ================================== -->
       <div class="field-group">
         <label class="field-label required">Due Date</label>
 
-        <div class="date-wrapper">
-          <input title="due date" type="date" class="field-input"
-            formControlName="dueDate" [min]="minDate" [max]="maxDate">
+        <div class="date-wrapper" (click)="openDatePicker()">
+          <input #dueDateInput title="due date" type="date" class="field-input"
+            formControlName="dueDate"
+            [min]="minDate" [max]="maxDate" />
         </div>
 
         @if (selectedProject) {
@@ -120,26 +184,43 @@
 
         @if (form.get('dueDate')?.touched && form.get('dueDate')?.invalid) {
         <div class="error">
-          @if (form.get('dueDate')?.hasError('required')) { <small>Due date is
-            required.</small> }
-          @if (form.get('dueDate')?.hasError('pastDate')) { <small>Cannot be in
-            past.</small> }
+          @if (form.get('dueDate')?.hasError('required')) {
+          <small>Due date is required.</small>
+          }
+          @if (form.get('dueDate')?.hasError('pastDate')) {
+          <small>Cannot be in past.</small>
+          }
           @if (form.get('dueDate')?.hasError('beforeProjectStart')) {
-          <small>Before project start.</small> }
-          @if (form.get('dueDate')?.hasError('afterProjectEnd')) { <small>After
-            project end.</small> }
+          <small>Before project start.</small>
+          }
+          @if (form.get('dueDate')?.hasError('afterProjectEnd')) {
+          <small>After project end.</small>
+          }
         </div>
         }
       </div>
 
-      <!-- BUTTONS -->
+      <!-- ==================================
+           FORM BUTTONS
+      ================================== -->
       <div class="buttons">
-        <button class="btn btn-submit" type="submit"
-          [disabled]="form.invalid">Create Task</button>
-        <button class="btn btn-secondary" type="button"
-          (click)="onReset()">Reset</button>
-        <button class="btn btn-secondary" type="button"
-          (click)="onCancel()">Cancel</button>
+
+        <!-- Submit Button -->
+        <button class="btn btn-submit" type="submit" [disabled]="form.invalid">
+          {{ isEdit ? 'Save Changes' : 'Create Task' }}
+        </button>
+
+        <!-- Reset button only for Create Mode -->
+        @if (!isEdit) {
+        <button class="btn btn-secondary" type="button" (click)="onReset()">
+          Reset
+        </button>
+        }
+
+        <!-- Cancel -->
+        <button class="btn btn-secondary" type="button" (click)="onCancel()">
+          Cancel
+        </button>
       </div>
 
     </form>
