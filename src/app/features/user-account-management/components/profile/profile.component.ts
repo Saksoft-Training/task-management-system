@@ -1,22 +1,26 @@
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { UserStorageService } from '../../../../shared/services/storage-service';
 import { AuthService } from '../../services/auth-service';
+import { User } from '../../../../../types/models/user';
 import { NotificationService } from '../../../dashboard/services/notification-service';
-import { ToastNotificationComponent } from '../../../dashboard/components/notifications/toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule,ToastNotificationComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+
   //#region Properties
-  public currentUser: any = null;
+  public currentUser: User | null = null;
   public isEditing = false;
   public editForm!: FormGroup;
   public previewImage: string | null = null;
@@ -64,7 +68,7 @@ export class ProfileComponent implements OnInit {
   private initializeForm(): void {
     this.editForm = this.formBuilder.group({
       name: [
-        this.currentUser.name || '',
+        this.currentUser!.name || '',
         [
           Validators.required,
           Validators.minLength(3),
@@ -72,7 +76,7 @@ export class ProfileComponent implements OnInit {
         ]
       ],
       email: [
-        this.currentUser.email || '',
+        this.currentUser!.email || '',
         [Validators.required, this.gmailValidator()]
       ],
       password: ['', [this.passwordStrengthValidator]]
@@ -138,7 +142,7 @@ export class ProfileComponent implements OnInit {
         ctrl?.setValue(lower, { emitEvent: false });
       }
       const trimmed = lower.trim();
-      const ownEmail = this.currentUser.email.trim().toLowerCase();
+      const ownEmail = this.currentUser!.email.trim().toLowerCase();
       // Unique email validation
       if (trimmed !== ownEmail && this.userStorage.isEmailExists(trimmed)) {
         ctrl?.setErrors({ emailExists: true });
@@ -154,7 +158,7 @@ export class ProfileComponent implements OnInit {
    */
   public enterEditMode(): void {
     this.isEditing = true;
-    this.previewImage = this.currentUser.photo || null;
+    this.previewImage = this.currentUser!.photo || null;  // ❗ works only if your user has photo
   }
   /**
    * @summary Navigates to the Create Project page.
@@ -171,12 +175,11 @@ export class ProfileComponent implements OnInit {
     this.isEditing = false;
     this.previewImage = null;
     this.editForm.reset({
-      name: this.currentUser.name,
-      email: this.currentUser.email,
+      name: this.currentUser!.name,
+      email: this.currentUser!.email,
       password: ''
     });
-      this.router.navigate(['/dashboard']);
-
+    this.router.navigate(['/dashboard']);
   }
   //#endregion
 
@@ -213,29 +216,29 @@ export class ProfileComponent implements OnInit {
       this.editForm.markAllAsTouched();
       return;
     }
-    const oldEmail = this.currentUser.email.trim().toLowerCase();
+    const oldEmail = this.currentUser!.email.trim().toLowerCase();
     const name = this.editForm.value.name.trim();
     const email = this.editForm.value.email.trim().toLowerCase();
     const newPassword = this.editForm.value.password;
     const updatedUser = {
-      ...this.currentUser,
+      ...this.currentUser!,
       name,
       email,
-      photo: this.previewImage || this.currentUser.photo,
-      createdAt: this.currentUser.createdAt
+      photo: this.previewImage || this.currentUser!.photo,
+      createdAt: this.currentUser!.createdAt
     };
     if (newPassword) {
       updatedUser.password = this.userStorage.encodePassword(newPassword);
     }
     const success = this.userStorage.updateUser(updatedUser, oldEmail);
     if (!success) {
-this.notificationService.addNotification({
+      this.notificationService.addNotification({
         title: 'Update Failed',
-        message: 'Unable to update profile.',
+        message: 'Unable to update your profile.',
         severity: 'critical',
         kind: 'profile-update-error' as any,
         showToast: true
-      });      return;
+      }); return;
     }
     sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
     localStorage.setItem('currentUser', JSON.stringify(updatedUser));
@@ -243,13 +246,13 @@ this.notificationService.addNotification({
     this.currentUser = updatedUser;
     this.isEditing = false;
     this.previewImage = null;
- this.notificationService.addNotification({
+    this.notificationService.addNotification({
       title: 'Profile Updated',
       message: 'Your profile was updated successfully.',
       severity: 'success',
       kind: 'profile-update' as any,
       showToast: true
-    });    this.router.navigate(['/profile']);
+    }); this.router.navigate(['/profile']);
   }
   //#endregion
 }
