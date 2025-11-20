@@ -1,114 +1,84 @@
 <!-- ==============================================
      TASK BOARD ROOT WRAPPER
-     Contains project header, filtering, and columns
 ================================================== -->
 <div class="task-board">
 
   <!-- =========================================================
-       PROJECT BOARD HEADER (Only visible on /projects/:id/board)
-       Includes breadcrumbs, project title, status, and metadata
+       PROJECT BOARD HEADER
   ============================================================ -->
   @if (isProjectBoard && projectDetails) {
-
   <div class="project-view-header">
-
     <div class="header-top-row">
 
-      <!-- -------------------------
-             LEFT SIDE (Project Info)
-        -------------------------- -->
       <div class="left">
 
         <!-- Breadcrumb Navigation -->
         <nav class="breadcrumbs">
           <a routerLink="/projects">Projects</a>
           <span>/</span>
-          <a [routerLink]="'/projects/' + projectId">{{ projectDetails.name
-            }}</a>
+          <a [routerLink]="'/projects/' + projectId">{{ projectDetails.name }}</a>
           <span>/</span>
           <span class="current">Task Board View</span>
         </nav>
 
-        <!-- Project Title + Status Badge -->
+        <!-- Project Title -->
         <div class="title-row">
           <h1 class="project-title">{{ projectDetails.name }}</h1>
 
           <span class="status-chip"
-            [ngClass]="projectDetails.status.toLowerCase()">
+                [ngClass]="projectDetails.status.toLowerCase()">
             {{ projectDetails.status }}
           </span>
         </div>
 
-        <!-- Project description -->
         <p class="project-desc">{{ projectDetails.description }}</p>
 
-        <!-- Project metadata (dates + task count) -->
         <div class="meta-row">
-
-          <!-- Start & End Dates -->
           <div class="meta-item">
             <img src="assets/icons/calendar-Icon.svg" class="meta-icon" />
-            <span>
-              {{ projectDetails.startDate }} to {{ projectDetails.endDate }}
-            </span>
+            <span>{{ projectDetails.startDate }} to {{ projectDetails.endDate }}</span>
           </div>
 
           <div class="separator"></div>
 
-          <!-- Total tasks in this project -->
           <div class="meta-item">
             <img src="assets/icons/task-Icon.svg" class="meta-icon" />
             <span>{{ projectTasksCount }} tasks</span>
           </div>
-
         </div>
+
       </div>
 
-      <!-- -------------------------
-             RIGHT SIDE (Controls)
-        -------------------------- -->
       <div class="project-right-controls">
-
-        <!-- Toggle between List <-> Board -->
         <div class="middle-toggle">
           <button class="toggle-btn" (click)="goList()">
             <img src="assets/icons/list-Icon.svg" class="icon" />
             List
           </button>
 
-          <!-- Active state stays on Board -->
           <button class="toggle-btn active">
             <img src="assets/icons/board-Icon.svg" class="icon" />
             Board
           </button>
         </div>
 
-        <!-- Create Task Button -->
-        <button class="create-btn" (click)="createTask()">
-          Create New Task
-        </button>
-
+        <button class="create-btn" (click)="createTask()">Create New Task</button>
       </div>
 
     </div>
   </div>
   }
 
-  <!-- =====================================================
-       GLOBAL BOARD VIEW (when NOT inside a project board)
-       Title + Controls for global task board
-  ======================================================== -->
+  <!-- =========================================================
+       GLOBAL VIEW (NON-PROJECT BOARD)
+  ============================================================ -->
   @if (!isProjectBoard) {
-
   <div class="board-top-row">
-
     <h2 class="board-title">All Boards</h2>
 
     <div class="right-controls">
 
-      <!-- View toggle -->
       <div class="middle-toggle">
-
         <button class="toggle-btn" (click)="goList()">
           <img src="assets/icons/list-Icon.svg" class="icon" />
           List
@@ -118,20 +88,16 @@
           <img src="assets/icons/board-Icon.svg" class="icon" />
           Board
         </button>
-
       </div>
 
-      <!-- Create task -->
-      <button class="create-btn" (click)="createTask()">
-        Create New Task
-      </button>
+      <button class="create-btn" (click)="createTask()">Create New Task</button>
 
     </div>
   </div>
   }
 
   <!-- =================================================
-       FILTER ROW : Filters + Sort Controls + Task Count
+       FILTERS + SORT + COUNT
   ================================================== -->
   <div class="board-filters-row">
 
@@ -147,13 +113,12 @@
       (filtersChanged)="applyFilters($event)">
     </app-filter-panel>
 
-    <!-- Sort Menu Trigger -->
+    <!-- Sort -->
     <div class="sort-box" (click)="toggleSortMenu = !toggleSortMenu">
       <img src="assets/icons/sort-Icon.svg" class="icon" />
       Sort: {{ sortLabel }}
     </div>
 
-    <!-- Sort Dropdown Menu -->
     @if (toggleSortMenu) {
     <div class="sort-menu">
       <button (click)="setSortDirection(true)">↑ Ascending</button>
@@ -165,73 +130,60 @@
     </div>
     }
 
-    <!-- Task Count Summary -->
-    <span class="task-count">
-      Showing {{ filtered.length }} of {{ tasks.length }} tasks
-    </span>
+    <!-- Count -->
+    <span class="task-count">Showing {{ filtered.length }} of {{ tasks.length }} tasks</span>
 
   </div>
 
   <!-- ===================================================
-       COLUMNS SECTION : DRAG + DROP KANBAN COLUMN LAYOUT
+       COLUMNS (KANBAN BOARD) — NATIVE DRAG & DROP
   ====================================================== -->
   <div class="columns-wrapper">
 
-    <!-- Loop through each status column (To Do / In Progress / Completed) -->
     @for (status of statuses; track status) {
 
-    <div
-      class="column"
-      [id]="status.replace(' ', '').toLowerCase()"
-      cdkDropList
-      [cdkDropListData]="columns[status]"
-      [cdkDropListConnectedTo]="connectedLists"
-      (cdkDropListDropped)="drop($event, status)">
+    <div class="column"
+         [attr.data-status]="status"
+         (dragover)="onDragOver($event)"
+         (drop)="onDrop($event, status)">
 
-      <!-- Column Header -->
       <div class="column-header">
         <h3>{{ status }}</h3>
         <span class="count">{{ columns[status].length }}</span>
       </div>
 
-      <!-- Empty state when no tasks -->
       @if (columns[status].length === 0) {
       <div class="empty">No tasks</div>
       }
 
-      <!-- Task Cards in Column -->
       @for (task of columns[status]; track task.id) {
 
-      <div class="task-card" cdkDrag>
+      <div class="task-card"
+           draggable="true"
+           (dragstart)="onDragStart($event, task)"
+           (dragend)="onDragEnd()">
 
-        <!-- Top Row: Title + Priority Badge -->
         <div class="top">
           <h4 class="title">{{ task.title }}</h4>
-
-          <span class="priority {{ priorityClass(task.priority) }}">
-            {{ task.priority }}
-          </span>
+          <span class="priority {{ priorityClass(task.priority) }}">{{ task.priority }}</span>
         </div>
 
-        <!-- Bottom Row: Assignee + Due Date -->
         <div class="bottom">
-
           <div class="assignee">
-            <div class="avatar">
-              {{ initials(task.assignee) }}
-            </div>
+            <div class="avatar">{{ initials(task.assignee) }}</div>
             <span>{{ task.assignee }}</span>
           </div>
 
           <div class="due">{{ formatDate(task.dueDate) }}</div>
-
         </div>
 
       </div>
 
       }
     </div>
+
     }
+
   </div>
 
 </div>
