@@ -1,6 +1,6 @@
 @use "./variables";
 @use "./mixins";
-
+@use "sass:color";
  
 // ====================== FOOTER ======================
 * {
@@ -1940,7 +1940,7 @@ body::-webkit-scrollbar {
     }
  
     &:hover:not(:disabled) {
-      background-color: darken(variables.$color-primary-hover, 6%);
+      background-color: color.adjust(variables.$color-primary-hover,$lightness: -6%);
     }
   }
  
@@ -1986,7 +1986,7 @@ body::-webkit-scrollbar {
     transition: 0.2s ease;
  
     &:hover {
-      background: darken(variables.$create-btn-bg, 8%);
+      background: color.adjust(variables.$create-btn-bg,$lightness: -8%);
     }
   }
  
@@ -2347,7 +2347,7 @@ body::-webkit-scrollbar {
     width: 30%;
  
     &:hover {
-      background: darken(variables.$color-text-footer, 8%);
+      background: color.adjust(variables.$color-text-footer,$lightness: -8%);
       transform: translateY(-2px);
     }
   }
@@ -2544,7 +2544,7 @@ body::-webkit-scrollbar {
       cursor: pointer;
  
       &:hover {
-        background: darken(variables.$create-btn-bg, 8%);
+        background: color.adjust(variables.$create-btn-bg,$lightness: -8%);
       }
     }
  
@@ -2570,7 +2570,7 @@ body::-webkit-scrollbar {
       font-size: 0.875rem;
  
       &:hover {
-        background: darken(variables.$color-btn-danger-bg, 8%);
+        background: color.adjust(variables.$color-btn-danger-bg,$lightness: -8%);
       }
     }
   }
@@ -2744,7 +2744,7 @@ body::-webkit-scrollbar {
     cursor: pointer;
  
     &:hover {
-      background: darken(variables.$color-bg-footer, 8%);
+      background: color.adjust(variables.$color-bg-footer,$lightness: -8%);
     }
   }
 }
