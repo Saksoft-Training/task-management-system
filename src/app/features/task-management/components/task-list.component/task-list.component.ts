@@ -402,10 +402,12 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   /** Used by task board → returns tasks under specific status */
   public getTasks(status: string): Task[] {
     return this.filtered.filter(t => t.status === status);
-  }
-
+  } 
+  
+  /** Controls visibility of the filter sidebar panel */
   public showFilter = false;
 
+  /** Active filter values applied to the task list */
   public activeFilters: any = {
     status: [],
     priority: [],
@@ -413,33 +415,49 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     fromDate: null,
     toDate: null,
   };
+
+   /**
+   * Receives updated filters from FilterPanelComponent
+   * and reapplies sorting + filtering on the task list.
+   */
   public applyFilters(f: any) {
     this.activeFilters = f;
     this.applySorting();  // refresh after filters
   }
 
+  /** Controls visibility of delete confirmation modal */
   public showDeleteModal = false;
-public taskToDelete: Task | null = null;
 
-public deleteTask(task: Task) {
-  this.taskToDelete = task;
-  this.showDeleteModal = true;
-}
+   /** Holds the task that is pending deletion */
+  public taskToDelete: Task | null = null;
 
-public onConfirmDelete() {
-  if (this.taskToDelete) {
-    this.taskService.deleteTask(this.taskToDelete.id);
+  /**
+   * Opens confirmation modal for the selected task.
+   */
+  public deleteTask(task: Task) {
+    this.taskToDelete = task;
+    this.showDeleteModal = true;
   }
-  this.showDeleteModal = false;
-  this.taskToDelete = null;
-}
+  /**
+   * Executes deletion after user confirmation
+   * and refreshes the task list.
+   */
+  public onConfirmDelete() {
+    if (this.taskToDelete) {
+      this.taskService.deleteTask(this.taskToDelete.id);
+    }
+    this.showDeleteModal = false;
+    this.taskToDelete = null;
+  }
 
-
-public onCancelDelete(): void {
-  this.showDeleteModal = false;
-  this.taskToDelete = null;
-  this.selectedTask = null;  
-  this.router.navigate(['/tasks']);
-}
+  /**
+   * Cancels delete modal, clears selection, and returns to task list.
+   */
+  public onCancelDelete(): void {
+    this.showDeleteModal = false;
+    this.taskToDelete = null;
+    this.selectedTask = null;
+    this.router.navigate(['/tasks']);
+  }
 
 }

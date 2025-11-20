@@ -8,6 +8,7 @@ import { TaskCreateComponent } from './features/task-management/components/tast-
 import { ProfileComponent } from './features/project-management/components/profile/profile.component';
 import { ForgotPasswordComponent } from './features/user-account-management/components/forgot-password/forgot-password.component';
 import { ProjectListComponent } from './features/project-management/components/project-list/project-list.component';
+import { TaskDetailPageComponent } from './features/task-management/components/task-detail-page.component/task-detail-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,4 +27,5 @@ export const routes: Routes = [
   { path: 'board', component: TaskBoardComponent },
   { path: "tasks/edit/:id", component: TaskCreateComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'tasks/:id', component: TaskDetailPageComponent },
 ];

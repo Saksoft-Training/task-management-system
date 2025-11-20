@@ -2,50 +2,108 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+/**
+ * @summary
+ * Slide-in filter panel component for task filtering.
+ * Allows filtering by status, priority, assignee, and date range.
+ * Emits updated filter values on every user action.
+ */
 @Component({
   selector: 'app-filter-panel',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './filter-panel.component.html',
-  styleUrls: ['./filter-panel.component.scss']
+  styleUrls: ['./filter-panel.component.scss'],
 })
 export class FilterPanelComponent {
 
-  @Input() open = false;
-  @Input() assignees: string[] = [];   // ✅ use real users from parent
+  //#region -------------- Input Properties --------------
 
-  @Output() close = new EventEmitter<void>();
-  @Output() filtersChanged = new EventEmitter<any>();
+  /**
+   * Controls whether the filter panel is opened or closed.
+   */
+  @Input() public open: boolean = false;
 
-  // --------------------------
-  //  FILTER STATE
-  // --------------------------
-  filters = {
-    status: [] as string[],
-    priority: [] as string[],
-    assignee: [] as string[],
-    fromDate: null as string | null,
-    toDate: null as string | null,
+  /**
+   * The list of available assignees coming from the parent.
+   */
+  @Input() public assignees: string[] = [];
+
+  //#endregion
+
+  //#region ------------------ Output Events ---------------
+
+  /**
+   * Emits when user clicks on the close button or backdrop.
+   */
+  @Output() public close: EventEmitter<void> = new EventEmitter<void>();
+
+  /**
+   * Emits the updated filter object whenever a filter value changes.
+   */
+  @Output() public filtersChanged: EventEmitter<any> = new EventEmitter<any>();
+
+  //#endregion
+
+  //#region ---------------- Internal Filter State ----------
+
+  /**
+   * Current active filters applied inside the panel.
+   */
+  public filters: {
+    status: string[];
+    priority: string[];
+    assignee: string[];
+    fromDate: string | null;
+    toDate: string | null;
+  } = {
+    status: [],
+    priority: [],
+    assignee: [],
+    fromDate: null,
+    toDate: null,
   };
 
-  statusList = ["To Do", "In Progress", "Completed"];
-  priorityList = ["Low", "Medium", "High", "Urgent"];
+  /**
+   * Predefined filter values for the UI.
+   */
+  public statusList: string[] = ['To Do', 'In Progress', 'Completed'];
+  public priorityList: string[] = ['Low', 'Medium', 'High', 'Urgent'];
 
-  toggleCheck(list: string[], value: string) {
-    if (list.includes(value)) {
-      list.splice(list.indexOf(value), 1);
+  //#endregion
+
+  //#region --------------- Public Methods ----------------
+
+  /**
+   * Adds or removes a value from a checkbox filter list.
+   * @param list The target array (status, priority, assignee)
+   * @param value The value to toggle
+   */
+  public toggleCheck(list: string[], value: string): void {
+    const index = list.indexOf(value);
+
+    if (index !== -1) {
+      list.splice(index, 1);
     } else {
       list.push(value);
     }
+
     this.filtersChanged.emit(this.filters);
   }
 
-  clearSection(section: 'status' | 'priority' | 'assignee') {
+  /**
+   * Clears all values inside a specific filter section.
+   * @param section The section to clear
+   */
+  public clearSection(section: 'status' | 'priority' | 'assignee'): void {
     this.filters[section] = [];
     this.filtersChanged.emit(this.filters);
   }
 
-  clearAll() {
+  /**
+   * Clears all filters and closes the panel.
+   */
+  public clearAll(): void {
     this.filters = {
       status: [],
       priority: [],
@@ -55,7 +113,8 @@ export class FilterPanelComponent {
     };
 
     this.filtersChanged.emit(this.filters);
-
-    this.close.emit(); // closes filter panel
+    this.close.emit();
   }
+
+  //#endregion
 }

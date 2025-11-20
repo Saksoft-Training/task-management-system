@@ -1,20 +1,28 @@
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-    <a>Projects</a> /
-    <a>{{ projectName }}</a> /
-    <span>{{ task?.title }}</span>
+  
+  <!-- Navigate to Projects List -->
+  <a (click)="goToProjects()">Projects</a> /
+  
+  <!-- Navigate to Project Detail (task.projectId) -->
+  <a (click)="goToProject(task?.projectId)">
+    {{ projectName }}
+  </a> /
+  
+  <!-- Current Task (no navigation needed) -->
+  <span>{{ task?.title }}</span>
 </div>
 
 <!-- TITLE + STATUS + ACTIONS -->
 <div class="top-bar">
     <h1 class="page-title">{{ task?.title }}</h1>
 
-    <div class="badges">
+    <div class="badges-task">
         <span class="badge status">{{ task?.status }}</span>
         <span class="badge priority">{{ task?.priority }}</span>
     </div>
 
-    <div class="actions">
+    <div class="actions-task">
         <button class="btn-outline" (click)="onEdit()">Edit <img src="assets/icons/edit-Icon.svg" alt="Edit Icon"></button>
         <button class="btn-delete" (click)="onDelete()">Delete <img src="assets/icons/delete-Icon.svg" alt="Delete Icon"></button>
     </div>

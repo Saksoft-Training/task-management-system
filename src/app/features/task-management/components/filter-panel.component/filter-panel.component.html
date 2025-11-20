@@ -3,11 +3,11 @@
 }
 
 @if (open) {
-  <div class="filter-panel" [class.open]="open">
+  <div class="filter-panel-task" [class.open]="open">
 
-    <div class="header">
+    <div class="header-task">
       <h2>FILTER TASKS</h2>
-      <button class="close-btn" (click)="close.emit()"><img src="assets/icons/close-Icon.svg" alt="Close Icon"></button>
+      <button class="close-btn-task" (click)="close.emit()"><img src="assets/icons/close-Icon.svg" alt="Close Icon"></button>
     </div>
 
     <!-- STATUS -->
@@ -17,7 +17,7 @@
         <button class="clear" (click)="clearSection('status')">Clear Filters</button>
       </div>
 
-      <div class="options">
+      <div class="options-task">
         @for (s of statusList; track s) {
           <label>
             <input type="checkbox"
@@ -94,7 +94,7 @@
       </div>
     </div>
 
-    <button class="clear-all" (click)="clearAll()">
+    <button class="clear-all-task" (click)="clearAll()">
       <img src="assets/icons/clear-Icon.svg" alt="Clear Icon"> Clear All Filters
     </button>
 
