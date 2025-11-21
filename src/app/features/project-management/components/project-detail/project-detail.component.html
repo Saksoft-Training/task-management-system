@@ -16,10 +16,13 @@
             <p class="page-subtitle">{{ project?.description }}</p>
         </div>
         <div class="actions-right">
-            <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
-            <button class="edit-task-btn" (click)="onEditProject()">Edit Project <img
+            <button class="create-task-btn" (click)="onCreateTask()">Create New
+                Task</button>
+            <button class="edit-task-btn" (click)="onEditProject()">Edit Project
+                <img
                     src="assets/icons/edit-Icon.svg"></button>
-            <button class="delete-task-btn" (click)="onDeleteProject()">Delete Project <img
+            <button class="delete-task-btn" (click)="onDeleteProject()">Delete
+                Project <img
                     src="assets/icons/delete-Icon.svg"></button>
         </div>
     </div>
@@ -31,7 +34,8 @@
                     Project Timeline
                 </div>
                 <div class="dates">
-                    {{ project?.startDate | date:'MMMM d, y' }} - {{ project?.endDate | date:'MMMM d, y' }}
+                    {{ project?.startDate | date:'MMMM d, y' }} - {{
+                    project?.endDate | date:'MMMM d, y' }}
                 </div>
             </div>
             <div class="progress-row">
@@ -40,7 +44,8 @@
                     Progress
                 </div>
                 <div class="progress-bar">
-                    <div class="progress-fill" [style.width.%]="percentComplete"></div>
+                    <div class="progress-fill"
+                        [style.width.%]="percentComplete"></div>
                 </div>
                 <div class="progress-text">{{ progressText }}</div>
             </div>
@@ -59,8 +64,10 @@
                     Created
                 </div>
                 <div class="dates">
-                    <div>{{ project?.createdAt | date:'MMM d, y, h:mm a' }}</div>
-                    <div class="label">Last updated: {{ project?.updatedAt | date:'MMM d, y, h:mm a' }}</div>
+                    <div>{{ project?.createdAt | date:'MMM d, y, h:mm a'
+                        }}</div>
+                    <div class="label">Last updated: {{ project?.updatedAt |
+                        date:'MMM d, y, h:mm a' }}</div>
                 </div>
             </div>
         </div>
@@ -84,74 +91,85 @@
         </div>
     </div>
     <div class="tasks-panel">
- 
+
         <div class="tl-header">
             <h3>Tasks</h3>
             <div class="tl-header-controls">
                 <div class="tl-header-toggle">
-                    <button class="tl-toggle-btn" [class.active]="taskViewMode === 'list'"
+                    <button class="tl-toggle-btn"
+                        [class.active]="taskViewMode === 'list'"
                         (click)="taskViewMode = 'list'">
                         <img src="assets/icons/list-Icon.svg" class="icon" />
                         List
                     </button>
- 
+
                     <button class="tl-toggle-btn" (click)="goToBoard()">
                         <img src="assets/icons/board-Icon.svg" class="icon" />
                         Board
                     </button>
                 </div>
- 
-                <button class="tl-create-btn" (click)="onCreateTask()">Create New Task</button>
+
+                <button class="tl-create-btn" (click)="onCreateTask()">Create
+                    New Task</button>
             </div>
         </div>
- 
+
         <div class="tl-project-list">
- 
+
             @for (task of tasks; track task.id) {
- 
-            <div class="tl-project-card">
- 
+
+            <div class="tl-project-card" (click)="openTaskCard(task)">
+
                 <div class="tl-project-left">
                     <h4 class="tl-project-title">{{ task.title }}</h4>
                     <p class="tl-project-sub">
-                        {{ task.dueDate | date:'MMM d, y' }} • Assigned to: {{ task.assignee }}
+                        {{ task.dueDate | date:'MMM d, y' }} • Assigned to: {{
+                        task.assignee }}
                     </p>
                 </div>
- 
+
                 <div class="tl-project-right">
-                    <span class="tl-status tl-status--{{ task.status.toLowerCase().replace(' ', '-') }}">
+                    <span
+                        class="tl-status tl-status--{{ task.status.toLowerCase().replace(' ', '-') }}">
                         {{ task.status }}
                     </span>
- 
-                    <span class="tl-priority tl-priority--{{ task.priority.toLowerCase().replace(' ', '-') }}">
+
+                    <span
+                        class="tl-priority tl-priority--{{ task.priority.toLowerCase().replace(' ', '-') }}">
                         {{ task.priority }}
                     </span>
                 </div>
- 
+
             </div>
- 
+
             }
- 
+            @if (activeTask) {
+            <app-task-card-component
+                [task]="activeTask"
+                (close)="closeTaskCard()">
+            </app-task-card-component>
+            }
+
             @if (tasks.length === 0) {
             <div class="tasks-empty">
                 <p>No tasks yet</p>
-                <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
+                <button class="create-task-btn" (click)="onCreateTask()">Create
+                    New Task</button>
             </div>
             }
- 
+
         </div>
     </div>
     <!-- DELETE CONFIRMATION DIALOG -->
-@if (showDeleteDialog) {
-  <app-dilog-delete-component
-    [title]="deleteDialogData.title"
-    [message]="deleteDialogData.message"
-    [confirmText]="deleteDialogData.confirmText"
-    [cancelText]="deleteDialogData.cancelText"
-    type="danger"
-    (confirm)="handleDeleteConfirm()"
-    (cancel)="handleDeleteCancel()"
-  />
-}
+    @if (showDeleteDialog) {
+    <app-dilog-delete-component
+        [title]="deleteDialogData.title"
+        [message]="deleteDialogData.message"
+        [confirmText]="deleteDialogData.confirmText"
+        [cancelText]="deleteDialogData.cancelText"
+        type="danger"
+        (confirm)="handleDeleteConfirm()"
+        (cancel)="handleDeleteCancel()" />
+    }
 
 </div>

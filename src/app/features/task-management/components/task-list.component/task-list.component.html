@@ -104,24 +104,24 @@
         <tbody>
 
           <!-- Task rows -->
-          @for (t of filteredTasks; track t.id) {
+          @for (taskItem of filteredTasks; track taskItem.id) {
 
-          <tr (click)="openCard(t)">
+          <tr (click)="openCard(taskItem)">
 
             <!-- Title -->
-            <td class="tl-col-title">{{ t.title }}</td>
+            <td class="tl-col-title">{{ taskItem.title }}</td>
 
             <!-- Status -->
             <td>
-              <span class="tl-status tl-status--{{ t.status.toLowerCase().replace(' ', '-') }}">
-                {{ t.status }}
+              <span class="tl-status tl-status--{{ taskItem.status.toLowerCase().replace(' ', '-') }}">
+                {{ taskItem.status }}
               </span>
             </td>
 
             <!-- Priority -->
             <td>
-              <span class="tl-priority tl-priority--{{ t.priority.toLowerCase().replace(' ', '-') }}">
-                {{ t.priority }}
+              <span class="tl-priority tl-priority--{{ taskItem.priority.toLowerCase().replace(' ', '-') }}">
+                {{ taskItem.priority }}
               </span>
             </td>
 
@@ -129,26 +129,26 @@
             <td>
               <div class="tl-assignee">
                 <div class="tl-avatar">
-                  {{ t.assignee[0] }}{{ t.assignee.split(' ')[1]?.[0] || '' }}
+                  {{ taskItem.assignee[0] }}{{ taskItem.assignee.split(' ')[1]?.[0] || '' }}
                 </div>
-                <span class="tl-assignee-name">{{ t.assignee }}</span>
+                <span class="tl-assignee-name">{{ taskItem.assignee }}</span>
               </div>
             </td>
 
             <!-- Date -->
-            <td class="tl-date">{{ t.dueDate | date }}</td>
+            <td class="tl-date">{{ taskItem.dueDate | date }}</td>
 
             <!-- Project name -->
-            <td class="tl-project-name">{{ getProjectName(t.projectId) }}</td>
+            <td class="tl-project-name">{{ getProjectName(taskItem.projectId) }}</td>
 
             <!-- Actions -->
             <td class="tl-actions">
 
               <img src="assets/icons/edit-Icon.svg" class="tl-action-icon"
-                (click)="editTask(t); $event.stopPropagation()" />
+                (click)="editTask(taskItem); $event.stopPropagation()" />
 
               <img src="assets/icons/delete-Icon.svg" class="tl-action-icon"
-                (click)="deleteTask(t); $event.stopPropagation()" />
+                (click)="deleteTask(taskItem); $event.stopPropagation()" />
 
               <!-- Delete confirmation -->
               @if (isDeleteModalOpen) {

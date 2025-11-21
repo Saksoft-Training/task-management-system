@@ -7,10 +7,11 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { TaskService } from '../../../task-management/services/task-service';
 import { Task } from '../../../../../types/models/task';
 import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
+import { TaskCardComponent } from "../../../task-management/components/task-card.component/task-card.component";
 
 @Component({
   selector: 'app-project-detail-component',
-  imports: [DatePipe, CommonModule,DialogDeleteComponent],
+  imports: [DatePipe, CommonModule, DialogDeleteComponent, TaskCardComponent],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.scss',
 })
@@ -30,7 +31,10 @@ export class ProjectDetailComponent implements OnInit {
   /** Display text showing progress  */
   public progressText = '';
   public showDeleteDialog = false;
-   public taskViewMode: 'list' | 'board' = 'list';
+  public taskViewMode: 'list' | 'board' = 'list';
+  public activeTask: Task | null = null;
+
+
   /** Task statistics */
   public todoCount = 0;
   public inProgressCount = 0;
@@ -38,12 +42,12 @@ export class ProjectDetailComponent implements OnInit {
   public overdueCount = 0;
   // #endregion
   // Values passed to dialog
-public deleteDialogData = {
-  title: 'DELETE PROJECT',
-  message: '',
-  confirmText: 'Delete',
-  cancelText: 'Cancel'
-};
+  public deleteDialogData = {
+    title: 'DELETE PROJECT',
+    message: '',
+    confirmText: 'Delete',
+    cancelText: 'Cancel'
+  };
   // #region Constructor
   /**
    * @summary Initializes services required by the component.
@@ -141,26 +145,26 @@ public deleteDialogData = {
   public onDeleteProject(): void {
     if (!this.project) return;
 
-  const taskCount = this.tasks.length;
+    const taskCount = this.tasks.length;
 
-  this.deleteDialogData.message =
-    `Are you sure you want to delete “${this.project.name}” ?\n\n`
-    + `Are you sure you want to delete this project? This action cannot be undone.\n\n`
-    + `⚠️ This will also permanently delete ${taskCount} associated task(s).`;
+    this.deleteDialogData.message =
+      `Are you sure you want to delete “${this.project.name}” ?\n\n`
+      + `Are you sure you want to delete this project? This action cannot be undone.\n\n`
+      + `⚠️ This will also permanently delete ${taskCount} associated task(s).`;
 
-  this.showDeleteDialog = true;
+    this.showDeleteDialog = true;
   }
   public handleDeleteConfirm(): void {
-  if (this.project) {
-    this.projectService.delete(this.project.id, this.currentUserEmail);
-    this.router.navigate(['/projects']);
+    if (this.project) {
+      this.projectService.delete(this.project.id, this.currentUserEmail);
+      this.router.navigate(['/projects']);
+    }
+    this.showDeleteDialog = false;
   }
-  this.showDeleteDialog = false;
-}
 
-public handleDeleteCancel(): void {
-  this.showDeleteDialog = false;
-}
+  public handleDeleteCancel(): void {
+    this.showDeleteDialog = false;
+  }
 
   // #endregion
   // #region Computed Getters
@@ -215,9 +219,17 @@ public handleDeleteCancel(): void {
     });
   }
   goToBoard() {
-  if (!this.project?.id) return;
-  this.router.navigate([`/projects/${this.project.id}/board`]);
-}
-  
+    if (!this.project?.id) return;
+    this.router.navigate([`/projects/${this.project.id}/board`]);
+  }
+
+  public openTaskCard(task: Task): void {
+    this.activeTask = task;
+  }
+
+  public closeTaskCard(): void {
+    this.activeTask = null;
+  }
+
   // #endregion
 }
