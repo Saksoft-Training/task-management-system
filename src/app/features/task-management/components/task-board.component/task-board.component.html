@@ -1,0 +1,197 @@
+<!-- Board wrapper -->
+<div class="tl-board-wrapper">
+
+  <!-- Project board header -->
+  @if (isProjectBoard && projectDetails) {
+  <div class="tl-project-header">
+
+    <div class="tl-project-header-top">
+
+      <div class="tl-project-header-left">
+
+        <!-- Breadcrumb -->
+        <nav class="tl-project-breadcrumbs">
+          <a routerLink="/projects">Projects</a>
+          <span>/</span>
+          <a [routerLink]="'/projects/' + projectId">{{ projectDetails.name }}</a>
+          <span>/</span>
+          <span class="current">Task Board View</span>
+        </nav>
+
+        <!-- Project title + status -->
+        <div class="tl-project-title-row">
+          <h1 class="tl-project-title">{{ projectDetails.name }}</h1>
+          <span class="tl-project-status-chip" [ngClass]="projectDetails.status.toLowerCase()">
+            {{ projectDetails.status }}
+          </span>
+        </div>
+
+        <p class="tl-project-desc">{{ projectDetails.description }}</p>
+
+        <!-- Project meta -->
+        <div class="tl-project-meta-row">
+          <div class="tl-project-meta-item">
+            <img src="assets/icons/calendar-Icon.svg" class="meta-icon" />
+            <span>{{ projectDetails.startDate }} to {{ projectDetails.endDate }}</span>
+          </div>
+
+          <div class="tl-project-meta-separator"></div>
+
+          <div class="tl-project-meta-item">
+            <img src="assets/icons/task-Icon.svg" class="meta-icon" />
+            <span>{{ projectTasksCount }} tasks</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tl-project-header-right">
+
+        <!-- Toggle between list/board -->
+        <div class="tl-board-toggle">
+          <button class="tl-board-toggle-btn" (click)="navigateToList()">
+            <img src="assets/icons/list-Icon.svg" class="icon" /> List
+          </button>
+
+          <button class="tl-board-toggle-btn active">
+            <img src="assets/icons/board-Icon.svg" class="icon" /> Board
+          </button>
+        </div>
+
+        <!-- Create task -->
+        <button class="tl-create-task-btn" (click)="createTask()">Create New Task</button>
+
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Global board header -->
+  @if (!isProjectBoard) {
+  <div class="tl-board-global-header">
+
+    <h2 class="tl-board-global-title">All Boards</h2>
+
+    <div class="tl-board-global-right">
+
+      <!-- Toggle -->
+      <div class="tl-board-toggle">
+        <button class="tl-board-toggle-btn" (click)="navigateToList()">
+          <img src="assets/icons/list-Icon.svg" class="icon" /> List
+        </button>
+
+        <button class="tl-board-toggle-btn active">
+          <img src="assets/icons/board-Icon.svg" class="icon" /> Board
+        </button>
+      </div>
+
+      <!-- Create task -->
+      <button class="tl-create-task-btn" (click)="createTask()">Create New Task</button>
+
+    </div>
+
+  </div>
+  }
+
+  <!-- Filters + sorting -->
+  <div class="tl-board-filters">
+
+    <!-- Open filter panel -->
+    <button class="tl-filter-btn" (click)="isFilterOpen = true">
+      <img src="assets/icons/filter-Icon.svg" class="icon" /> Filters
+    </button>
+
+    <!-- Filter popup -->
+    <app-filter-panel
+      [open]="isFilterOpen"
+      [assignees]="allUsers"
+      (close)="isFilterOpen = false"
+      (filtersChanged)="applyFilters($event)">
+    </app-filter-panel>
+
+    <!-- Sort box -->
+    <div class="tl-sort-box" (click)="isSortMenuOpen = !isSortMenuOpen">
+      <img src="assets/icons/sort-Icon.svg" class="icon" />
+      Sort: {{ sortLabel }}
+    </div>
+
+    <!-- Sort menu -->
+    @if (isSortMenuOpen) {
+    <div class="tl-sort-menu">
+      <button (click)="setSortDirection(true)">↑ Ascending</button>
+      <button (click)="setSortDirection(false)">↓ Descending</button>
+      <button (click)="setSortField('dueDate')">Due Date</button>
+      <button (click)="setSortField('priority')">Priority</button>
+      <button (click)="setSortField('status')">Status</button>
+      <button (click)="setSortField('title')">Title</button>
+    </div>
+    }
+
+    <!-- Task count -->
+    <span class="tl-task-count">
+      Showing {{ filteredTasks.length }} of {{ tasks.length }} tasks
+    </span>
+
+  </div>
+
+  <!-- Kanban columns -->
+  <div class="tl-board-columns">
+
+    @for (status of statuses; track status) {
+
+    <div class="tl-board-column"
+      [ngClass]="{
+        'to-do': status === 'To Do',
+        'in-progress': status === 'In Progress',
+        'completed': status === 'Completed'
+      }"
+      [attr.data-status]="status"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event, status)">
+
+      <!-- Column title + count -->
+      <div class="tl-column-header">
+        <h3>{{ status }}</h3>
+        <span class="count">{{ statusColumns[status].length }}</span>
+      </div>
+
+      <!-- Empty column text -->
+      @if (statusColumns[status].length === 0) {
+      <div class="tl-column-empty">No tasks</div>
+      }
+
+      <!-- Task cards -->
+      @for (task of statusColumns[status]; track task.id) {
+
+      <div class="tl-task-card"
+        draggable="true"
+        (dragstart)="onDragStart($event, task)"
+        (dragend)="onDragEnd()">
+
+        <div class="tl-task-card-top">
+          <h4 class="tl-task-title">{{ task.title }}</h4>
+          <span class="tl-task-priority {{ priorityClass(task.priority) }}">
+            {{ task.priority }}
+          </span>
+        </div>
+
+        <div class="tl-task-card-bottom">
+          <div class="tl-task-assignee">
+            <div class="avatar">{{ initials(task.assignee) }}</div>
+            <span>{{ task.assignee }}</span>
+          </div>
+
+          <div class="tl-task-due">{{ formatDate(task.dueDate) }}</div>
+        </div>
+
+      </div>
+
+      }
+
+    </div>
+
+    }
+
+  </div>
+
+</div>

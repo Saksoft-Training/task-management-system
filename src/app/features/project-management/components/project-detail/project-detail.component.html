@@ -17,8 +17,10 @@
         </div>
         <div class="actions-right">
             <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
-            <button class="edit-task-btn">Edit Project <img src="assets/icons/edit-Icon.svg"></button>
-            <button class="delete-task-btn">Delete Project <img src="assets/icons/delete-Icon.svg"></button>
+            <button class="edit-task-btn" (click)="onEditProject()">Edit Project <img
+                    src="assets/icons/edit-Icon.svg"></button>
+            <button class="delete-task-btn" (click)="onDeleteProject()">Delete Project <img
+                    src="assets/icons/delete-Icon.svg"></button>
         </div>
     </div>
     <div class="meta-grid">
@@ -81,30 +83,75 @@
             <div class="status-count">{{ overdueCount }}</div>
         </div>
     </div>
-   <div class="tasks-panel">
-    <h3>Tasks</h3>
-    <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
-
-    @if (tasks.length > 0) {
-        <div class="tasks-list">
-            @for (task of tasks; track task.id) {
-                <div class="task-item">
-                    <div class="task-title">{{ task.title }}</div>
-                    <div class="task-meta">
-                        <span>Status: {{ task.status }}</span>
-                        <span>Priority: {{ task.priority }}</span>
-                        <span>Assignee: {{ task.assignee }}</span>
-                        <span>Due: {{ task.dueDate | date:'MMM d, y' }}</span>
-                    </div>
+    <div class="tasks-panel">
+ 
+        <div class="tl-header">
+            <h3>Tasks</h3>
+            <div class="tl-header-controls">
+                <div class="tl-header-toggle">
+                    <button class="tl-toggle-btn" [class.active]="taskViewMode === 'list'"
+                        (click)="taskViewMode = 'list'">
+                        <img src="assets/icons/list-Icon.svg" class="icon" />
+                        List
+                    </button>
+ 
+                    <button class="tl-toggle-btn" (click)="goToBoard()">
+                        <img src="assets/icons/board-Icon.svg" class="icon" />
+                        Board
+                    </button>
                 </div>
+ 
+                <button class="tl-create-btn" (click)="onCreateTask()">Create New Task</button>
+            </div>
+        </div>
+ 
+        <div class="tl-project-list">
+ 
+            @for (task of tasks; track task.id) {
+ 
+            <div class="tl-project-card">
+ 
+                <div class="tl-project-left">
+                    <h4 class="tl-project-title">{{ task.title }}</h4>
+                    <p class="tl-project-sub">
+                        {{ task.dueDate | date:'MMM d, y' }} • Assigned to: {{ task.assignee }}
+                    </p>
+                </div>
+ 
+                <div class="tl-project-right">
+                    <span class="tl-status tl-status--{{ task.status.toLowerCase().replace(' ', '-') }}">
+                        {{ task.status }}
+                    </span>
+ 
+                    <span class="tl-priority tl-priority--{{ task.priority.toLowerCase().replace(' ', '-') }}">
+                        {{ task.priority }}
+                    </span>
+                </div>
+ 
+            </div>
+ 
             }
+ 
+            @if (tasks.length === 0) {
+            <div class="tasks-empty">
+                <p>No tasks yet</p>
+                <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
+            </div>
+            }
+ 
         </div>
-    } @else {
-        <div class="tasks-empty">
-            <p>No tasks yet</p>
-            <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
-        </div>
-    }
-</div>
+    </div>
+    <!-- DELETE CONFIRMATION DIALOG -->
+@if (showDeleteDialog) {
+  <app-dilog-delete-component
+    [title]="deleteDialogData.title"
+    [message]="deleteDialogData.message"
+    [confirmText]="deleteDialogData.confirmText"
+    [cancelText]="deleteDialogData.cancelText"
+    type="danger"
+    (confirm)="handleDeleteConfirm()"
+    (cancel)="handleDeleteCancel()"
+  />
+}
 
 </div>

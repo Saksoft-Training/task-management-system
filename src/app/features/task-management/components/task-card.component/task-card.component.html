@@ -1,0 +1,64 @@
+<!-- Modal background -->
+<div class="tl-task-modal-backdrop">
+
+  <!-- Modal box -->
+  <div class="tl-task-modal">
+
+    <!-- Header -->
+    <div class="tl-task-header">
+      <h3 class="tl-task-title">{{ task.title }}</h3>
+
+      <!-- Edit + Close buttons -->
+      <div class="tl-task-header-actions">
+        <button class="tl-btn-edit" (click)="goToTaskDetails(task.id)">Edit/Modify ↗</button>
+        <button class="tl-btn-close" (click)="closeCard()">✕</button>
+      </div>
+    </div>
+
+    <!-- Task details -->
+    <div class="tl-task-details">
+
+      <!-- Status + priority badges -->
+      <div class="tl-task-badges">
+        <span class="tl-badge-status">{{ task.status }}</span>
+        <span class="tl-badge-priority">{{ task.priority }}</span>
+      </div>
+
+      <!-- Info grid -->
+      <div class="tl-info-grid">
+
+        <div class="tl-info-row">
+          <label>Due Date</label>
+          <span>{{ task.dueDate | date }}</span>
+        </div>
+
+        <div class="tl-info-row">
+          <label>Project</label>
+          <span>{{ projectName }}</span>
+        </div>
+
+        <div class="tl-info-row">
+          <label>Assignee</label>
+          <span>{{ task.assignee }}</span>
+        </div>
+
+        <div class="tl-info-row">
+          <label>Created By</label>
+          <span>{{ task.createdBy }}</span>
+        </div>
+
+        <div class="tl-info-row">
+          <label>Created At</label>
+          <span>{{ task.createdAt }}</span>
+        </div>
+
+        <div class="tl-info-row">
+          <label>Last Updated</label>
+          <span>{{ task.updatedAt }}</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

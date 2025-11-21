@@ -1,0 +1,118 @@
+<!-- Breadcrumb -->
+<div class="tl-breadcrumb">
+    <a>Projects</a> /
+    <a>{{ projectName }}</a> /
+    <span>{{ task?.title }}</span>
+</div>
+
+<!-- Page header -->
+<div class="tl-topbar">
+
+    <!-- Task title -->
+    <h1 class="tl-title">{{ task?.title }}</h1>
+
+    <!-- Status + priority badges -->
+    <div class="tl-badges">
+        <span class="tl-badge tl-badge--status">{{ task?.status }}</span>
+        <span class="tl-badge tl-badge--priority">{{ task?.priority }}</span>
+    </div>
+
+    <!-- Edit / Delete buttons -->
+    <div class="tl-actions">
+        <button class="tl-btn-outline" (click)="onEdit()">
+            Edit <img src="assets/icons/edit-Icon.svg" alt="Edit">
+        </button>
+
+        <button class="tl-btn-delete" (click)="onDelete()">
+            Delete <img src="assets/icons/delete-Icon.svg" alt="Delete">
+        </button>
+    </div>
+</div>
+
+<!-- Quick status + priority update -->
+<div class="tl-controls">
+    <label>Status:</label>
+    <select [ngModel]="task?.status" (ngModelChange)="updateStatus($event)">
+        <option *ngFor="let s of statusOptions">{{ s }}</option>
+    </select>
+
+    <label>Priority:</label>
+    <select [ngModel]="task?.priority" (ngModelChange)="updatePriority($event)">
+        <option *ngFor="let p of priorityOptions">{{ p }}</option>
+    </select>
+</div>
+
+<!-- Main layout -->
+<div class="tl-info-grid">
+
+    <!-- Task details -->
+    <div class="tl-info-card">
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">
+                <img src="assets/icons/calendar-Icon.svg"> Due Date
+            </span>
+            <span>{{ task?.dueDate }}</span>
+        </div>
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">
+                <img src="assets/icons/profile-Icon.svg"> Assignee
+            </span>
+            <span>{{ task?.assignee }}</span>
+        </div>
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">Created At</span>
+            <span>{{ task?.createdAt }}</span>
+        </div>
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">Project</span>
+            <span>{{ projectName }}</span>
+        </div>
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">Created By</span>
+            <span>{{ task?.createdBy }}</span>
+        </div>
+
+        <div class="tl-info-row">
+            <span class="tl-info-label">Last Updated</span>
+            <span>{{ task?.updatedAt }}</span>
+        </div>
+    </div>
+
+    <!-- Status history -->
+    <div class="tl-history-card">
+        <h3>
+            <img src="assets/icons/history-Icon.svg"> Status History
+        </h3>
+
+        <div class="tl-history-item" *ngFor="let h of statusHistory">
+            <span class="tl-history-status">
+                <img src="assets/icons/time-Icon.svg"> {{ h.status }}
+            </span>
+            <span class="tl-history-date">{{ h.date }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Description -->
+<div class="tl-description">
+    <h3>Description</h3>
+    <p>{{ task?.description }}</p>
+</div>
+
+<!-- Delete confirmation -->
+@if (isDeleteModalOpen) {
+  <app-confirmation-dialog-component
+    [title]="'Delete Task'"
+    [message]="'Are you sure you want to delete the task:\n' + (pendingDeleteTask?.title || '') + '?'"
+    [confirmText]="'Delete'"
+    [cancelText]="'Cancel'"
+    [type]="'danger'"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </app-confirmation-dialog-component>
+}
