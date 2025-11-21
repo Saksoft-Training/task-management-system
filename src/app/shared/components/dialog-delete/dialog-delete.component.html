@@ -1,0 +1,25 @@
+<div class="dialog-overlay-delete">
+  <div class="dialog-box-delete">
+    <div class="dialog-header-green-delete">
+      <h3>{{ title }}</h3>
+      <button class="logout-close-icon-delete" (click)="onCancel()">
+        <img src="assets/icons/cross-Icon.svg" alt="Close" />
+      </button>
+    </div>
+    <div class="dialog-inner-delete">
+      <div class="dialog-body-delete">
+        @for (line of message.split('\n'); track $index) {
+        <p>{{ line }}</p>
+        }
+      </div>
+      <div class="dialog-actions-delete">
+        <button class="btn-confirm-delete" (click)="onConfirm()">
+          {{ confirmText }}
+        </button>
+        <button class="btn-dialog-cancel-delete" (click)="onCancel()">
+          {{ cancelText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
