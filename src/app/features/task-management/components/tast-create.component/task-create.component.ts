@@ -6,7 +6,6 @@ import {
   AbstractControl, ValidationErrors
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { Project } from '../../../../../types/models/project';
 import { Task, TaskPriority, TaskStatus } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
@@ -15,6 +14,7 @@ import { User } from '../../../../../types/models/user';
 import { ProjectService } from '../../../project-management/services/project.service';
 import { UserStorageService } from '../../../../shared/services/storage-service';
 import { ConfirmationDialogComponent } from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
+import { NotificationService } from '../../../dashboard/services/notification-service';
 //#endregion
 
 @Component({
@@ -66,14 +66,15 @@ export class TaskCreateComponent implements OnInit {
   //#endregion
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly projectService: ProjectService,
-    private readonly taskService: TaskService,
-    private readonly userStorageService: UserStorageService,
-    private readonly authService: AuthService
-  ) { }
+  private readonly fb: FormBuilder,
+  private readonly route: ActivatedRoute,
+  private readonly router: Router,
+  private readonly projectService: ProjectService,
+  private readonly taskService: TaskService,
+  private readonly userStorageService: UserStorageService,
+  private readonly authService: AuthService,
+  private readonly notificationService: NotificationService   
+) {}
 
   //#region Lifecycle
 
@@ -283,7 +284,13 @@ export class TaskCreateComponent implements OnInit {
       };
 
       this.taskService.updateTask(updated);
-      this.successMessage = 'Task updated successfully!';
+      this.notificationService.addNotification({
+        kind: 'custom' as any,
+        severity: 'success',
+        title: 'Task updated successfully',
+        message: updated.title,
+        showToast: true
+      });
     }
     // ---------------- CREATE MODE ----------------
     else {
@@ -303,7 +310,14 @@ export class TaskCreateComponent implements OnInit {
       };
 
       this.taskService.saveTask(newTask);
-      this.successMessage = 'Task created successfully!';
+      this.notificationService.addNotification({
+        kind: 'custom' as any,
+        severity: 'success',
+        title: 'Task created successfully',
+        message: value.title,
+        showToast: true
+      });
+
     }
 
     // Navigate after short delay (for message display)
