@@ -37,7 +37,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
 
   { path: 'projects', component: ProjectListComponent },
-  {path:'dashboard-comp',component:DashboardComponentStats}
+  {path:'dashboard-comp',component:DashboardComponentStats},
 
   { path: 'tasks/:id', component: TaskDetailPageComponent },
   { path: 'projects', component: ProjectListComponent },

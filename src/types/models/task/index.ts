@@ -6,11 +6,11 @@ export interface Task {
   title: string;
   description?: string;
   dueDate: string;
-  id: number;
+
   priority: TaskPriority;
   projectId: number;
   status: TaskStatus;
-  title: string;
+ 
   updatedAt: string;
   completedAt?: string | null;
 
