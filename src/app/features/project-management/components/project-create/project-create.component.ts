@@ -67,23 +67,37 @@ export class ProjectCreateComponent {
    * @returns {void}
    */
   private validateProjectId(): void {
-    const projectIdParam = this.route.snapshot.paramMap.get('id');
+  const projectIdParam = this.route.snapshot.paramMap.get('id');
 
-    if (!projectIdParam) {
-      return;
-    }
-    const projectId = Number(projectIdParam);
-    if (!Number.isInteger(projectId) || projectId <= 0) {
-      this.router.navigate(['/projects']);
-      return;
-    }
-    const project = this.projectService.getById(projectId, this.currentUser);
-    if (!project) {
-      this.router.navigate(['/projects']);
-      return;
-    }
-    this.editProjectId = projectId;
+  if (!projectIdParam) {
+    return;
   }
+
+  const projectId = Number(projectIdParam);
+
+  if (!Number.isInteger(projectId) || projectId <= 0) {
+    this.router.navigate(['/projects']);
+    return;
+  }
+
+  const project = this.projectService.getById(projectId, this.currentUser);
+  if (!project) {
+    this.router.navigate(['/projects']);
+    return;
+  }
+
+  this.editProjectId = projectId;
+
+  // 👉 Patch form when editing
+  this.projectForm.patchValue({
+    name: project.name,
+    description: project.description,
+    status: project.status,
+    startDate: project.startDate,
+    endDate: project.endDate
+  });
+}
+
   /**
    * @summary Converts various date formats into a Date object without time.
    * @param value - Input date value
@@ -194,6 +208,13 @@ export class ProjectCreateComponent {
   public onCancel(): void {
     this.router.navigate(['/projects']);
   }
+  public onDeleteProject(): void {
+  if (this.editProjectId && confirm('Are you sure you want to delete this project?')) {
+    this.projectService.delete(this.editProjectId, this.currentUser);
+    this.router.navigate(['/projects']);
+  }
+}
+
   /**
   * @summary Navigates to the list of all projects.
   * @returns {void}
@@ -201,5 +222,6 @@ export class ProjectCreateComponent {
   public goToProjects(): void {
     this.router.navigate(['/projects']);
   }
+  
   // #endregion
 }

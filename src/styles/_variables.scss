@@ -14,11 +14,8 @@ $planning-color: #AD46FF;
 $progress-color:#2B7FFF;
 $completed-color:#00C950;
 $onHold-color:#FF6900;
-
 $color-overlay-bg: rgba(0, 0, 0, 0.4);
-
 $color-text: #777;
-
 $color-breadcrumb: #485C11;
 $color-title: #000000;
 $color-subtitle: #6F6F6F;
@@ -28,13 +25,7 @@ $btn-secondary-bg-color: #f5f5f7;
 $hover-bg-color: #e2e2e7;
 $color-btn-cancel-text: #000000;
 $create-btn-bg:#DFECC6;
-
-// Buttons
-// Base
 $color-black: #000000;
-
-
-
 // Neutral / Grayscale
 $color-gray-50: #fafafa;
 $color-gray-100: #f1f1f1;
@@ -45,18 +36,12 @@ $color-gray-500: #717182;
 $color-gray-600: #6b7280;
 $color-gray-700: #444;
 $color-gray-800: #333;
-
 // Border color 
 $color-border: $color-gray-100;
-
-
-
 // Link Colors
 $color-link-primary: #155dfc;
-
 // Primary Brand
 $color-primary: #485c11;
-
 // Error States
 $color-error-text: #b71c1c;
 $color-subtitle: #6F6F6F;
@@ -76,13 +61,10 @@ $hover-bg-color: #e6e6e6;
 // Button colors
 $color-btn-cancel-bg: #f1f1f1;
 $color-btn-cancel-hover: #e0e0e0;
-
 $color-btn-confirm-bg: #1a73e8;
 $color-btn-confirm-hover: #1765c1;
-
 $color-btn-danger-bg: #d32f2f;
 $color-btn-danger-hover: #b71c1c;
-
 // ====== TYPOGRAPHY ======
 $font-family-primary: 'Inter';
 $font-size-footer: 13px;
@@ -90,7 +72,6 @@ $font-weight-footer: 600;
 $font-size-page-title: 60px;
 $font-size-body: 15px;
 $font-size-page-title: 60px;
-
 // ====== SPACING ======
 $padding-footer-top: 40px;
 $padding-footer-sides: 20px;
@@ -101,123 +82,80 @@ $error-padding-x: 16px;
 $error-border-radius: 6px;
 // Form Control Colors
 $color-checkbox-checked: #e4efcf; 
-
 // =========================================
 // TYPOGRAPHY 
 // =========================================
-
 $font-size-error: 0.875rem;
 $font-size-title: 1.125rem;
 $font-weight-title: 600;
 $font-weight-primary: 500;
-
-
 $font-size-body: 0.9375rem;
 $font-size-button: 0.875rem;
-// =========================================
-// SPACING 
-// =========================================
-
 // Footer
 $padding-footer-top: 2.5rem;
-
 // Error Message Block
 $error-padding-y: 0.75rem;
 $error-margin-y: 1rem;
-
 // Dialog Spacing
 $dialog-padding-header: 1rem 1.25rem;
 $dialog-padding-body: 1.25rem;
 $dialog-padding-actions: 0.75rem 1.25rem;
 $dialog-gap-actions: 0.625rem;
-
 // =========================================
 // SIZES 
 // =========================================
-
 $error-icon-size: 1.25rem;
 $padding-primary: 2.5rem;
-
 /* PROFILE PAGE COLORS */
 /* PROFILE PAGE COLORS */
 $profile-card-bg: #ffffff;
 $profile-card-border: $color-border;
-
 $profile-edit-btn-bg: #deebc9;
 $profile-edit-btn-text: #314f00;
-
 $profile-avatar-bg: #e6e6e6;
 $profile-avatar-placeholder-bg: #e7e7e7;
 $profile-avatar-text: #555;
-
 $profile-label-text: $color-text-secondary;
 $profile-value-text: $color-text-primary;
-
-
-
 /* ADDED NEW VARIABLES */
 $color-password-hint: #6A7282;
 $color-label-dark: #0A0A0A;
 $color-btn-primary-hover: #97a67b;
 $color-btn-secondary-hover-strong: #8a9a6a;
-
-
-
-// ====== SIZES ======
+// ===== SIZES ======
 $dialog-width: 25rem;
 $dialog-width: 25rem;
 $dialog-max-width: 90%;
 $dialog-radius: 8px;
 $font-size-subtitle: 15px;
 $dialog-overlay-z: 2000;
-
 $border-radius-large: 12px;
 $spacing-lg: 24px;
 $spacing-md: 16px;
 $spacing-sm: 8px;
-
 $notification-height: 600px;
 $notification-width: 100%;
-
 // ====== SHADOWS ======
 $error-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 $dialog-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-
 // ====== ANIMATIONS ======
 $dialog-fade-duration: 0.3s;
-
-
-// 🧱 Layout + Shadows
 $border-radius-large: 16px;
 $card-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 $item-hover-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-// ✍️ Typography
 $font-family-main: 'Inter', sans-serif;
-
-// 📏 Spacing
 $spacing-sm: 10px;
 $spacing-md: 15px;
 $spacing-lg: 20px;
-
-
-
 // =========================================
 // SHADOWS 
-// =========================================
-
-
-// 0 4px 20px rgba...
+// ========================================
 $dialog-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
-
 // =========================================
 // ANIMATIONS
 // =========================================
-
 $dialog-fade-duration: 0.3s;
-
 //====== Dashboard Notification Component =======
-// Colors
 $color-white: #ffffff;
 $color-light-grey: #f1f5f9;
 $color-scroll-thumb: #9da4ad;
@@ -226,32 +164,18 @@ $color-primary-blue: #3b82f6;
 $color-header: #1e293b;
 $color-text-notification: #475569;
 $color-timestamp: #64748b;
-
-// Sizes
 $notification-gap: 12px;
 $notification-padding: 12px 14px;
 $border-radius: 8px;
-
-// Scrollbar
 $scrollbar-width: 6px;
 $scrollbar-radius:8px;
-
-//====notification bell component==========
-// Colors
 $color-bell-badge-bg: #e53935;
 $color-bell-badge-text: #ffffff;
-
-// Font sizes
 $font-size-bell-icon: 1.5rem;
 $font-size-badge: 0.7rem;
-
-// Spacing
 $padding-bell-btn: 0.25rem;
 $badge-padding: 0 0.35rem;
-
-// Shapes
 $badge-radius: 999px;
-
 //======notification item component==========
 // Colors
 $color-unread-bg: #f0f7ff;
@@ -261,40 +185,31 @@ $color-warning: #f9a825;
 $color-info: #1565c0;
 $color-message-text: #555;
 $color-timestamp-text: #888;
-
 // Spacing & sizing
 $notification-gap-item: 0.5rem;
 $icon-size: 28px;
 $actions-gap: 0.25rem;
-
 // Typography
 $title-weight: 600;
 $message-font-size: 0.85rem;
 $timestamp-font-size: 0.75rem;
-
 // Shapes
 $notification-radius: 4px;
-
 //======toast notification=========
 // Colors
 $color-toast-text: #ffffff;
 $color-critical: #d32f2f;
-
 // Layout & spacing
 $toast-bottom: 1.5rem;
 $toast-right: 1.5rem;
 $toast-padding: 0.75rem 1rem;
 $toast-gap: 0.75rem;
-
 // Shadows & effects
 $toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-
 // Shape
 $toast-radius: 6px;
-
 // Font sizes
 $close-btn-size: 1rem;
-
 //=====dropdown notification=========
 // Dropdown Container
 $dropdown-width: 360px;
@@ -302,66 +217,53 @@ $dropdown-bg: #ffffff;
 $dropdown-border: #e2e8f0;
 $dropdown-radius: 10px;
 $dropdown-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-
 // Header
 $header-padding: 0.85rem 1rem;
 $header-border: #f1f5f9;
 $header-bg: #fafafa;
 $header-font-weight: 600;
 $header-font-size: 0.95rem;
-
 // Header Buttons
 $action-gap: 0.75rem;
 $action-font-size: 0.8rem;
 $action-color: #3b82f6;
 $action-disabled-opacity: 0.5;
-
 // Body
 $body-max-height: 320px;
 $body-padding: 0.75rem;
 $body-gap: 0.65rem;
-
 // Scrollbar colors
 $scrollbar-track: #f1f5f9;
 $scrollbar-thumb: #c1c9d2;
-
 // Empty State
 $empty-padding: 2.5rem 0;
 $empty-color: #94a3b8;
 $empty-font-size: 0.9rem;
-
 // Card background colors
 $notification-success-bg: #e9f7ee;
 $notification-warning-bg: #fff7e6;
 $notification-critical-bg: #fdecec;
 $notification-info-bg: #e9f2ff;
-
 // Notification Card
 $notification-border-radius: 8px;
 $notification-border: #e2e8f0;
-
 //Password Strength Colors
 $color-weak: #d4183d;
 $color-medium: #f97316;
 $color-strong: #65a30d;
 $color-very-strong: #059669;
-
 // Success States
 $color-success-bg: #ecfdf5;
 $color-success-text: #065f46;
 $color-success-border: #6ee7b7;
-
 // =========================================
 // FORGOT PASSWORD — CUSTOM COLORS
 // =========================================
-
 $color-forgot-input-bg: #F3F3F5;            
 $color-forgot-hint: #6B7280;                 
 $color-forgot-label: #0A0A0A;                
 $color-forgot-icon-bg: rgba(183, 131, 255, 0.14); 
 $color-forgot-back-text: #45556C;            
-
-
 $color-dialog-cancel-bg: #F2F2F7;
 $color-overlay-dark: #00000059;          
 $color-spinner-border: #FFFFFF4D;      
@@ -370,8 +272,6 @@ $color-error-light: #fee2e2;
 $color-error-dark: #b91c1c;
 $color-error-medium: #fecaca;
 $color-error-extra-light: #fff5f5;
-
-
 $status-in-progress: #EFF6FF;
 $status-in-progress-border: #BEDBFF;
 $status-completed: #F0FDF4;
