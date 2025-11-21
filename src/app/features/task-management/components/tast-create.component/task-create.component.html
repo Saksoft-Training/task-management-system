@@ -18,9 +18,13 @@
 
   <!-- Delete confirmation modal -->
   @if (showDeleteModal) {
-  <app-confirmation-dialog-component [title]="'Delete Task'"
+  <app-confirmation-dialog-component 
+    [title]="'Delete Task'"
     [message]="'Are you sure you want to delete the task:\n' + (taskToDelete?.title || '') + '?'"
-    [confirmText]="'Delete'" [cancelText]="'Cancel'" [type]="'danger'" (confirm)="onConfirmDelete()"
+    [confirmText]="'Delete'" 
+    [cancelText]="'Cancel'" 
+    [type]="'danger'"
+    (confirm)="onConfirmDelete()"
     (cancel)="onCancelDelete()">
   </app-confirmation-dialog-component>
   }
@@ -40,17 +44,24 @@
         <label class="ct-field-label required">Project</label>
 
         @if (!showProjectDropdown) {
-        <!-- Shows selected project -->
-        <input title="project" placeholder="Select project" class="ct-field-input ct-readonly"
-          [value]="selectedProject?.name || ''" readonly />
+        <input 
+          title="project" 
+          placeholder="Select project" 
+          class="ct-field-input ct-readonly"
+          [value]="selectedProject?.name || ''" 
+          readonly />
         }
         @else {
-        <!-- Project dropdown -->
-        <select title="project" class="ct-field-select" formControlName="projectId" [compareWith]="compareProject">
+        <select 
+          title="project" 
+          class="ct-field-select" 
+          formControlName="projectId" 
+          [compareWith]="compareProject">
+
           <option value="" disabled hidden>Select project</option>
 
-          @for (p of projects; track p.id) {
-          <option [value]="p.id">{{ p.name }}</option>
+          @for (projectItem of projects; track projectItem.id) {
+          <option [value]="projectItem.id">{{ projectItem.name }}</option>
           }
         </select>
         }
@@ -71,26 +82,23 @@
           @if (form.get('title')?.hasError('required')) {
           <small>Title is required.</small>
           }
-
           @if (form.get('title')?.hasError('minlength')) {
           <small>Minimum 5 characters.</small>
           }
-
           @if (form.get('title')?.hasError('maxlength')) {
           <small>Maximum 100 characters.</small>
           }
 
         </div>
         }
-
       </div>
 
       <!-- Status -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Status</label>
         <select title="status" class="ct-field-select" formControlName="status">
-          @for (s of statuses; track s) {
-          <option [value]="s">{{ s }}</option>
+          @for (statusItem of statuses; track statusItem) {
+          <option [value]="statusItem">{{ statusItem }}</option>
           }
         </select>
       </div>
@@ -99,8 +107,8 @@
       <div class="ct-field-group">
         <label class="ct-field-label required">Priority</label>
         <select title="priority" class="ct-field-select" formControlName="priority">
-          @for (p of priorities; track p) {
-          <option [value]="p">{{ p }}</option>
+          @for (priorityItem of priorities; track priorityItem) {
+          <option [value]="priorityItem">{{ priorityItem }}</option>
           }
         </select>
       </div>
@@ -109,14 +117,15 @@
       <div class="ct-field-group ct-full-width">
         <div class="ct-description-header">
           <label class="ct-field-label">Description</label>
-
-          <!-- Character counter -->
           <span class="ct-char-counter">
             {{ descriptionCount }}/500 characters
           </span>
         </div>
 
-        <textarea class="ct-description-box" maxlength="500" formControlName="description"
+        <textarea 
+          class="ct-description-box" 
+          maxlength="500" 
+          formControlName="description"
           placeholder="Enter project description (optional)">
         </textarea>
 
@@ -131,8 +140,9 @@
 
         <select title="assignee" class="ct-field-select" formControlName="assignee">
           <option disabled value>Select an assignee</option>
-          @for (u of users; track u.email) {
-          <option [value]="u.name">{{ u.name }}</option>
+
+          @for (userItem of users; track userItem.email) {
+          <option [value]="userItem.name">{{ userItem.name }}</option>
           }
         </select>
 
@@ -146,12 +156,17 @@
         <label class="ct-field-label required">Due Date</label>
 
         <div class="ct-date-wrapper" (click)="openDatePicker()">
-          <input #dueDateInput title="due date" type="date" class="ct-field-input" formControlName="dueDate"
-            [min]="minDate" [max]="maxDate" />
+          <input 
+            #dueDateInput 
+            title="due date" 
+            type="date" 
+            class="ct-field-input"
+            formControlName="dueDate"
+            [min]="minDate" 
+            [max]="maxDate" />
         </div>
 
         @if (selectedProject) {
-        <!-- Shows project date range -->
         <div class="ct-project-dates">
           Project dates: {{ selectedProject.startDate }} to {{ selectedProject.endDate }}
         </div>
@@ -163,15 +178,12 @@
           @if (form.get('dueDate')?.hasError('required')) {
           <small>Due date is required.</small>
           }
-
           @if (form.get('dueDate')?.hasError('pastDate')) {
           <small>Cannot be in past.</small>
           }
-
           @if (form.get('dueDate')?.hasError('beforeProjectStart')) {
           <small>Before project start.</small>
           }
-
           @if (form.get('dueDate')?.hasError('afterProjectEnd')) {
           <small>After project end.</small>
           }
