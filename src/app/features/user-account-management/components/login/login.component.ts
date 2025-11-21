@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ReactiveFormsModule,FormBuilder,FormGroup,Validators,AbstractControl,ValidationErrors} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../services/auth-service';
+import { NotificationService } from '../../../dashboard/services/notification-service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
   public loginErrorMessage = '';
   public loginAttempted = false;
   //#endregion
- 
+
   //#region Constructor
   /**
    * @summary Injects form builder, authentication service and router.
@@ -29,10 +30,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
   //#endregion
- 
+
   //#region Lifecycle Hook
   /**
    * @summary Initializes login form on component load.
@@ -42,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.initializeLoginForm();
   }
   //#endregion
- 
+
   //#region Form Initialization
   /**
    * @summary Creates login form with Gmail validation rule.
@@ -56,7 +58,7 @@ export class LoginComponent implements OnInit {
     });
   }
   //#endregion
- 
+
   //#region Validators
   /**
    * @summary Validates email to accept only Gmail.
@@ -67,13 +69,13 @@ export class LoginComponent implements OnInit {
     return (control: AbstractControl): ValidationErrors | null => {
       const email = control.value;
       if (!email) return null;
- 
+
       const pattern = /^[a-z0-9._%+-]+@gmail\.com$/;
       return pattern.test(email) ? null : { invalidEmail: true };
     };
   }
   //#endregion
- 
+
   //#region Helper Methods
   /**
    * @summary Forces email input to lowercase for consistency.
@@ -84,7 +86,7 @@ export class LoginComponent implements OnInit {
     const val = emailCtrl?.value || '';
     emailCtrl?.setValue(val.toLowerCase(), { emitEvent: true });
   }
- 
+
   /**
    * @summary Shortcut getter for form controls.
    * @returns any
@@ -93,7 +95,7 @@ export class LoginComponent implements OnInit {
     return this.loginFormGroup.controls;
   }
   //#endregion
- 
+
   //#region Form Submission
   /**
    * @summary Validates form, calls login API, and handles success/error.
@@ -102,7 +104,7 @@ export class LoginComponent implements OnInit {
   public submitLoginForm(): void {
     this.loginErrorMessage = '';
     this.loginAttempted = true;
- 
+
     if (this.loginFormGroup.invalid) {
       this.loginFormGroup.markAllAsTouched();
       return;
@@ -113,16 +115,31 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.isFormSubmitting = false;
         this.loginAttempted = false;
-        this.router.navigate(['/profile']);
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'success',
+          title: 'Login Successful',
+          message: '',
+          showToast: true
+        });
+        setTimeout(() => {
+          this.router.navigate(['/profile']);
+        }, 800);
       },
       error: (err) => {
         this.isFormSubmitting = false;
-        this.loginErrorMessage = err?.message || 'Invalid email or password';
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'critical',
+          title: 'Login Failed',
+          message: err?.message || 'Invalid email or password',
+          showToast: true
+        });
       }
     });
   }
   //#endregion
- 
+
   //#region Navigation
   /**
    * @summary Navigates to given route path
@@ -134,4 +151,3 @@ export class LoginComponent implements OnInit {
   }
   //#endregion
 }
- 

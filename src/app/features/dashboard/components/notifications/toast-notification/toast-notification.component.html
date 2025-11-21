@@ -1,7 +1,12 @@
-<div class="toast-container" *ngIf="current" [ngClass]="severityClass">
+<div class="toast-container" *ngIf="current">
+  <div class="toast-icon" [ngClass]="current.severity">
+    <img [src]="getIcon(current.severity)" />
+  </div>
+
   <div class="toast-content">
     <strong>{{ current.title }}</strong>
     <span>{{ current.message }}</span>
   </div>
+
   <button class="close-btn" (click)="close()">✕</button>
 </div>

@@ -252,7 +252,7 @@ export class ProfileComponent implements OnInit {
       severity: 'success',
       kind: 'profile-update' as any,
       showToast: true
-    }); this.router.navigate(['/profile']);
+    }); this.router.navigate(['/dashboard']);
   }
   //#endregion
 }

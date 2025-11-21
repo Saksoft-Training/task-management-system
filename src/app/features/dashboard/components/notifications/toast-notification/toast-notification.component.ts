@@ -19,7 +19,7 @@ export class ToastNotificationComponent implements OnInit, OnDestroy {
    * @default 4000
    * @required
    */
-  @Input() autoDismissTimeout = 4000;
+  @Input() autoDismissTimeout = 1000;
 
   //#endregion
 
@@ -99,5 +99,18 @@ export class ToastNotificationComponent implements OnInit, OnDestroy {
   public get severityClass(): string {
     return this.current ? `toast-${this.current.severity}` : '';
   }
+  public getIcon(severity: string): string {
+  switch (severity) {
+    case 'success':
+      return '/assets/icons/status-icon.svg';
+    case 'warning':
+      return '/assets/icons/warning.svg';
+    case 'critical':
+      return '/assets/icons/warning-red.svg';
+    default:
+      return '/assets/icons/red-warning.svg';
+  }
+}
+
   //#endregion
 }

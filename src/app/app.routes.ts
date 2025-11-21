@@ -20,7 +20,6 @@ import { ProjectDetailComponent } from './features/project-management/components
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
-  {path:'tasks',component:TaskCreateComponent},
     { path: 'login', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects', component: ProjectListComponent },
@@ -30,6 +29,7 @@ export const routes: Routes = [
   { path: 'projects/:id/board', component: TaskBoardComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/board', component: TaskBoardComponent },
+  { path: 'tasks/create', component: TaskCreateComponent },
   { path: 'tasks/create/:projectId', component: TaskCreateComponent },
   { path: 'tasks/edit/:id', component: TaskCreateComponent },
   { path: 'tasks/:id', component: TaskDetailPageComponent },
