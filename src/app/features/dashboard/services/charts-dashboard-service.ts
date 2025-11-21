@@ -3,11 +3,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Task, TaskPriority, TaskStatus } from '../../../../types/models/task';
 import { Activity } from '../../../../types/activity/activity.model';
 import { ChartConfiguration } from 'chart.js';
-
-export interface OverdueInfo {
-  count: number;
-  tasks: Task[];
-}
+import { OverdueInfo } from '../../../../types/activity/overdueInfo';
 
 @Injectable({
   providedIn: 'root'

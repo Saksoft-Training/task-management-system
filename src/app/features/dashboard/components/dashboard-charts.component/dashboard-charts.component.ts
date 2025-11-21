@@ -5,7 +5,9 @@ import { ChartComponent } from '../chart.component/chart.component';
 import { ActivityFeedComponent } from '../activity-feed.component/activity-feed.component';
 import { ChartConfiguration, TooltipItem } from 'chart.js';
 import { combineLatest, Observable } from 'rxjs';
-import { chartsDashboardService, OverdueInfo } from '../../services/charts-dashboard-service';
+import { chartsDashboardService } from '../../services/charts-dashboard-service';
+import { OverdueInfo } from '../../../../../types/activity/overdueInfo';
+
 
 @Component({
   selector: 'app-dashboard-charts',
@@ -41,10 +43,6 @@ export class DashboardChartsComponent implements OnInit {
     // Wait until all observables emit before removing loading spinner
     combineLatest([this.pieData$, this.trendData$, this.priorityData$, this.overdue$])
       .subscribe(([pie, trend, priority, overdue]) => {
-        console.log('PIE:', pie);
-        console.log('TREND:', trend);
-        console.log('PRIORITY:', priority);
-        console.log('OVERDUE:', overdue);
         this.loading = false;
       });
 
