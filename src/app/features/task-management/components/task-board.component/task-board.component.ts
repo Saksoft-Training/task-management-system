@@ -21,7 +21,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   /* TASK DATA */
   public tasks: Task[] = [];
-  public filtered: Task[] = [];
+  public filteredTasks: Task[] = [];
 
   /* PROJECT INFO */
   public projectId: number | null = null;
@@ -32,20 +32,23 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   /* SORTING */
   public sortField: keyof Task = 'dueDate';
   public sortAsc = true;
-  public toggleSortMenu = false;
+  public isSortMenuOpen = false;
 
   /* STATUSES */
   public readonly statuses: TaskStatus[] = ['To Do', 'In Progress', 'Completed'];
-  public columns: Record<TaskStatus, Task[]> = {
+
+  public statusColumns: Record<TaskStatus, Task[]> = {
     'To Do': [],
     'In Progress': [],
     'Completed': []
   };
 
   /* FILTERS */
-  public showFilter = false;
+  public isFilterOpen = false;
+
   public allUsers: string[] = [];
-  public activeFilters: any = {
+
+  public appliedFilters: any = {
     status: [],
     priority: [],
     assignee: [],
@@ -54,10 +57,10 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   };
 
   /* SUBSCRIPTIONS */
-  private sub!: Subscription;
+  private taskSubscription!: Subscription;
 
   /* DRAGGING */
-  draggingTask: Task | null = null;
+  public activeDragTask: Task | null = null;
 
   constructor(
     private readonly router: Router,
@@ -75,7 +78,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
       this.isProjectBoard = !!this.projectId;
     });
 
-    this.sub = this.taskService.tasks$.subscribe(tasks => {
+    this.taskSubscription = this.taskService.tasks$.subscribe(tasks => {
       this.tasks = tasks;
 
       this.allUsers = this.userStorage.getAllUsers().map(u => u.name);
@@ -96,7 +99,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.taskSubscription?.unsubscribe();
   }
 
   /* ------------ FILTER + SORT + GROUP ------------ */
@@ -106,32 +109,32 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
       ? this.tasks.filter(t => t.projectId === this.projectId)
       : [...this.tasks];
 
-    if (this.activeFilters.status.length > 0) list = list.filter(t => this.activeFilters.status.includes(t.status));
-    if (this.activeFilters.priority.length > 0) list = list.filter(t => this.activeFilters.priority.includes(t.priority));
-    if (this.activeFilters.assignee.length > 0) list = list.filter(t => this.activeFilters.assignee.includes(t.assignee));
+    if (this.appliedFilters.status.length > 0) list = list.filter(t => this.appliedFilters.status.includes(t.status));
+    if (this.appliedFilters.priority.length > 0) list = list.filter(t => this.appliedFilters.priority.includes(t.priority));
+    if (this.appliedFilters.assignee.length > 0) list = list.filter(t => this.appliedFilters.assignee.includes(t.assignee));
 
-    if (this.activeFilters.fromDate) {
-      list = list.filter(t => new Date(t.dueDate) >= new Date(this.activeFilters.fromDate));
+    if (this.appliedFilters.fromDate) {
+      list = list.filter(t => new Date(t.dueDate) >= new Date(this.appliedFilters.fromDate));
     }
 
-    if (this.activeFilters.toDate) {
-      list = list.filter(t => new Date(t.dueDate) <= new Date(this.activeFilters.toDate));
+    if (this.appliedFilters.toDate) {
+      list = list.filter(t => new Date(t.dueDate) <= new Date(this.appliedFilters.toDate));
     }
 
-    this.filtered = list;
+    this.filteredTasks = list;
     this.projectTasksCount = list.length;
 
-    this.applySorting();
+    this.sortTasks();
     this.groupTasks();
   }
 
   private groupTasks(): void {
-    this.columns = { 'To Do': [], 'In Progress': [], 'Completed': [] };
-    this.filtered.forEach(task => this.columns[task.status].push(task));
+    this.statusColumns = { 'To Do': [], 'In Progress': [], 'Completed': [] };
+    this.filteredTasks.forEach(task => this.statusColumns[task.status].push(task));
   }
 
-  private applySorting(): void {
-    this.filtered.sort((a, b) => {
+  private sortTasks(): void {
+    this.filteredTasks.sort((a, b) => {
       let A: any = a[this.sortField] ?? '';
       let B: any = b[this.sortField] ?? '';
 
@@ -151,16 +154,16 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   setSortField(field: keyof Task): void {
     this.sortField = field;
-    this.applySorting();
+    this.sortTasks();
     this.groupTasks();
-    this.toggleSortMenu = false;
+    this.isSortMenuOpen = false;
   }
 
   setSortDirection(asc: boolean): void {
     this.sortAsc = asc;
-    this.applySorting();
+    this.sortTasks();
     this.groupTasks();
-    this.toggleSortMenu = false;
+    this.isSortMenuOpen = false;
   }
 
   get sortLabel(): string {
@@ -173,10 +176,10 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /* ------------ DRAG & DROP (NO CDK) ------------ */
+  /* ------------ DRAG & DROP ------------ */
 
   onDragStart(event: DragEvent, task: Task) {
-    this.draggingTask = task;
+    this.activeDragTask = task;
     event.dataTransfer?.setData("text/plain", String(task.id));
   }
 
@@ -187,22 +190,22 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   onDrop(event: DragEvent, newStatus: TaskStatus) {
     event.preventDefault();
 
-    if (!this.draggingTask) return;
+    if (!this.activeDragTask) return;
 
-    this.draggingTask.status = newStatus;
-    this.taskService.updateTaskStatus(this.draggingTask.id, newStatus);
+    this.activeDragTask.status = newStatus;
+    this.taskService.updateTaskStatus(this.activeDragTask.id, newStatus);
 
     this.applyFiltering();
-    this.draggingTask = null;
+    this.activeDragTask = null;
   }
 
   onDragEnd() {
-    this.draggingTask = null;
+    this.activeDragTask = null;
   }
 
   /* ------------ NAVIGATION ------------ */
 
-  goList(): void {
+  navigateToList(): void {
     if (this.isProjectBoard) this.router.navigate([`/projects/${this.projectId}`]);
     else this.router.navigate(['/tasks']);
   }
@@ -232,12 +235,12 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   closeSortMenu(event: Event): void {
     const target = event.target as HTMLElement;
     if (!target.closest('.sort-box') && !target.closest('.sort-menu')) {
-      this.toggleSortMenu = false;
+      this.isSortMenuOpen = false;
     }
   }
 
   applyFilters(f: any) {
-    this.activeFilters = f;
+    this.appliedFilters = f;
     this.applyFiltering();
   }
 }

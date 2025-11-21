@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { ProjectCreateComponent } from './features/project-management/components/project-create/project-create.component';
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 
@@ -19,7 +18,6 @@ import { DashboardChartsComponent } from './features/dashboard/components/dashbo
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'register', pathMatch: 'full' },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
@@ -27,10 +25,12 @@ export const routes: Routes = [
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
   { path: 'projects/create/:id', component: ProjectCreateComponent },
+  { path: 'projects/:id', component: ProjectDetailComponent },
   { path: 'projects/:id/board', component: TaskBoardComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/board', component: TaskBoardComponent },
   { path: 'tasks/create/:projectId', component: TaskCreateComponent },
+
   { path: 'board', component: TaskBoardComponent },
   { path: "tasks/edit/:id", component: TaskCreateComponent },
   { path: 'profile', component: ProfileComponent },
@@ -39,5 +39,12 @@ export const routes: Routes = [
   { path: 'projects/:id', component: ProjectDetailComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
   {path:'dashboard',component:DashboardComponentStats},
-  {path:'dashboard-comp',component:DashboardChartsComponent}
+  {path:'dashboard-comp',component:DashboardChartsComponent},
+
+  { path: 'tasks/edit/:id', component: TaskCreateComponent },
+  { path: 'tasks/:id', component: TaskDetailPageComponent },
+  {path: 'tasks/project/:projectId', component: TaskListComponent},
+  { path: 'board', component: TaskBoardComponent },
+  { path: 'profile', component: ProfileComponent },
+
 ];

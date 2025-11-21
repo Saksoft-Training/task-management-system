@@ -2,13 +2,10 @@
 
 export type TaskPriority = 'High' | 'Low' | 'Medium' | 'Urgent';
 export type TaskStatus = 'Completed' | 'In Progress' | 'To Do';
-
+ 
 export interface Task {
- assignee: string;
-  assigneeEmail: string;
-  completedAt?: string | null;
-  createdAt: string;
-  createdBy: string;
+  id: number;
+  title: string;
   description?: string;
   dueDate: string;
   id: number;
@@ -18,4 +15,5 @@ export interface Task {
   title: string;
   updatedAt: string;
 }
-
+ 
+ 
