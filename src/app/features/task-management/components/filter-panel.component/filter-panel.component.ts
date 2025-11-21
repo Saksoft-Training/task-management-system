@@ -19,37 +19,27 @@ export class FilterPanelComponent {
 
   //#region -------------- Input Properties --------------
 
-  /**
-   * Controls whether the filter panel is opened or closed.
-   */
+  /** Controls visibility of the filter sidebar */
   @Input() public open: boolean = false;
 
-  /**
-   * The list of available assignees coming from the parent.
-   */
+  /** List of users (assignees) from parent */
   @Input() public assignees: string[] = [];
 
   //#endregion
 
   //#region ------------------ Output Events ---------------
 
-  /**
-   * Emits when user clicks on the close button or backdrop.
-   */
+  /** Emits when filter panel is closed */
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
-  /**
-   * Emits the updated filter object whenever a filter value changes.
-   */
+  /** Emits whenever filters change */
   @Output() public filtersChanged: EventEmitter<any> = new EventEmitter<any>();
 
   //#endregion
 
   //#region ---------------- Internal Filter State ----------
 
-  /**
-   * Current active filters applied inside the panel.
-   */
+  /** Stores all applied filter values */
   public filters: {
     status: string[];
     priority: string[];
@@ -64,9 +54,7 @@ export class FilterPanelComponent {
     toDate: null,
   };
 
-  /**
-   * Predefined filter values for the UI.
-   */
+  /** UI lists */
   public statusList: string[] = ['To Do', 'In Progress', 'Completed'];
   public priorityList: string[] = ['Low', 'Medium', 'High', 'Urgent'];
 
@@ -74,11 +62,7 @@ export class FilterPanelComponent {
 
   //#region --------------- Public Methods ----------------
 
-  /**
-   * Adds or removes a value from a checkbox filter list.
-   * @param list The target array (status, priority, assignee)
-   * @param value The value to toggle
-   */
+  /** Toggles checkbox selection */
   public toggleCheck(list: string[], value: string): void {
     const index = list.indexOf(value);
 
@@ -91,18 +75,13 @@ export class FilterPanelComponent {
     this.filtersChanged.emit(this.filters);
   }
 
-  /**
-   * Clears all values inside a specific filter section.
-   * @param section The section to clear
-   */
+  /** Clear only 1 filter section */
   public clearSection(section: 'status' | 'priority' | 'assignee'): void {
     this.filters[section] = [];
     this.filtersChanged.emit(this.filters);
   }
 
-  /**
-   * Clears all filters and closes the panel.
-   */
+  /** Clear all filters */
   public clearAll(): void {
     this.filters = {
       status: [],

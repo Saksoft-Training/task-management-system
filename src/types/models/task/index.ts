@@ -1,6 +1,6 @@
 export type TaskPriority = 'High' | 'Low' | 'Medium' | 'Urgent';
 export type TaskStatus = 'Completed' | 'In Progress' | 'To Do';
-
+ 
 export interface Task {
   assignee: string;
   assigneeEmail: string;
@@ -15,5 +15,6 @@ export interface Task {
   status: TaskStatus;
   title: string;
   updatedAt: string;
-
 }
+ 
+ 
