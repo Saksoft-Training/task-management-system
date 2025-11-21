@@ -3914,5 +3914,1652 @@ img {
   &:hover {
     background: variables.$color-btn-secondary-hover-strong;
   }
+}
+
+/* ============================================
+   CREATE TASK PAGE – GLOBAL CT STYLES (VARIABLE BASED)
+
+/* -------- PAGE WRAPPER -------- */
+.ct-create-task-page {
+  padding: 20px 40px 40px 40px;
+}
+
+/* -------- PAGE TITLE -------- */
+.page-title {
+  font-size: 46px;
+  font-weight: 600;
+  color: variables.$color-title;
+  margin-bottom: 6px;
+  padding-left: 20px;
+}
+
+/* -------- PAGE SUBTITLE -------- */
+.page-subtitle {
+  font-size: 16px;
+  color: variables.$color-subtitle;
+  margin-bottom: 24px;
+  padding-left: 20px;
+}
+
+/* -------- WHITE FORM BOX -------- */
+.project-form-container {
+  background: variables.$color-dialog-bg;
+  border-radius: 16px;
+  border: 1px solid variables.$border-color;
+  padding: 32px;
+  margin-top: 12px;
+  box-shadow: variables.$card-shadow;
+}
+
+/* -------- HEADER INSIDE CARD -------- */
+.form-title {
+  font-size: 16px;
+  color: variables.$color-subtitle;
+  margin-bottom: 24px;
+}
+
+/* ============================================
+   FORM GRID – EXACT LAYOUT
+.ct-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+  row-gap: 28px;
+}
+
+.ct-full-width {
+  grid-column: span 2;
+}
+
+/* ============================================
+   FIELD GROUP + LABELS
+.ct-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ct-field-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: variables.$color-label-dark;
+}
+
+.ct-field-label.required::after {
+  content: " *";
+  color: variables.$color-weak;
+}
+
+/* ============================================
+   STANDARD INPUTS (36px)
+.ct-field-input,
+.ct-field-select {
+  width: 100%;
+  height: 36px;
+  padding: 8px 12px;
+  background: variables.$input-background !important;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  color: variables.$color-black;
+  font-size: 14px;
+}
+
+.ct-field-input::placeholder,
+.ct-description-box::placeholder {
+  color: variables.$color-subtitle !important;
+}
+
+.ct-field-input.ct-readonly {
+  color: variables.$color-subtitle !important;
+}
+
+/* ============================================
+   DESCRIPTION BOX (64px)
+.ct-description-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: variables.$color-subtitle;
+}
+
+.ct-char-counter {
+  font-size: 12px;
+  color: variables.$color-subtitle;
+}
+
+.ct-description-box {
+  width: 100%;
+  height: 64px !important;
+  padding: 10px 14px;
+  background: variables.$input-background !important;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  resize: none;
+  font-size: 14px;
+}
+
+/* ============================================
+   PROJECT DATE RANGE DISPLAY
+.ct-project-dates {
+  font-size: 12px;
+  color: variables.$color-subtitle;
+  text-align: left;
+  margin-top: 4px;
+}
+
+/* ============================================
+   DELETE BUTTON (RIGHT TOP)
+.ct-delete-btn {
+  position: absolute;
+  margin-top: 100px;
+  margin-right: 20px;
+  right: 40px;
+  top: 40px;
+  width: 129px;
+  height: 32px;
+  background: variables.$color-btn-danger-bg;
+  color: variables.$color-white;
+  border: none;
+  border-radius: 100px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: variables.$color-btn-danger-hover;
+  }
+}
+
+/* ============================================
+   BOTTOM BUTTON ROW
+.ct-buttons {
+  grid-column: span 2;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+/* Primary button */
+.ct-btn-submit {
+  width: 481px;
+  height: 48px;
+  background: variables.$color-primary;
+  color: variables.$color-white;
+  font-size: 16px;
+  border: none;
+  border-radius: 1000px;
+  padding: 14px 22px;
+  cursor: pointer;
+
+  &:hover {
+    background: variables.$color-primary-hover;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Secondary button */
+.ct-btn-secondary {
+  height: 48px;
+  padding: 14px 22px;
+  background: variables.$btn-secondary-bg-color;
+  border-radius: 1000px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background: variables.$color-btn-cancel-hover;
+  }
+}
+
+/* ============================================
+   ERROR STATES
+.ct-field-input.ng-invalid.ng-touched,
+.ct-field-select.ng-invalid.ng-touched,
+.ct-description-box.ng-invalid.ng-touched {
+  border: 1px solid variables.$color-error-dark !important;
+}
+
+.ct-error {
+  font-size: 12px;
+  color: variables.$color-error-dark;
+  margin-top: 2px;
+}
+
+// =============================================================
+// GLOBAL LIST PAGE WRAPPER
+// =============================================================
+.tl-wrapper {
+  width: auto;
+  padding: 60px 40px 40px 40px;
+  min-height: 100vh;
+  background: variables.$color-white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// =============================================================
+// HEADER (TITLE + TOGGLE + CREATE BUTTON)
+// =============================================================
+.tl-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  .tl-header-title {
+    font-size: 18px;
+    font-weight: 400;
+    color: variables.$color-black;
+  }
+
+  .tl-header-title-large {
+    font-size: 48px;
+    font-weight: 400;
+    color: variables.$color-black;
+  }
+
+  .tl-header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    // TOGGLE GROUP
+    .tl-header-toggle {
+      display: flex;
+      align-items: center;
+      background: variables.$color-gray-200;
+      padding: 4px;
+      border-radius: 999px;
+      height: 32px;
+      border: 1px solid variables.$color-gray-200;
+
+      .tl-toggle-btn {
+        padding: 0 20px;
+        height: 30px;
+        background: transparent;
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: variables.$color-gray-600;
+        transition: 0.25s ease;
+
+        &.active {
+          background: variables.$color-white;
+          color: variables.$color-black;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+
+    // CREATE BTN
+    .tl-create-btn {
+      height: 32px;
+      padding: 0 22px;
+      background: variables.$create-btn-bg;
+      border-radius: 100px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
+      }
+    }
+  }
+}
+
+// =============================================================
+// GLOBAL LIST WRAPPER
+// =============================================================
+.tl-global-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// =============================================================
+// FILTER + SORT + COUNT BAR
+// =============================================================
+.tl-global-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+
+  .tl-filter-btn,
+  .tl-sort-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: variables.$color-white;
+    border: 1px solid variables.$color-gray-200;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+
+    &:hover {
+      background: variables.$color-gray-100;
+    }
+  }
+
+  .tl-sort-box {
+    width: 190px;
+  }
+
+  .tl-task-count {
+    position: absolute;
+    right: 40px;
+    font-size: 0.85rem;
+    color: variables.$color-gray-700;
+  }
+
+  // SORT DROPDOWN
+  .tl-sort-menu {
+    position: absolute;
+    top: 42px;
+    left: 155px;
+    width: 200px;
+    background: variables.$color-white;
+    border: 1px solid variables.$color-gray-200;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 100;
+
+    button {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      background: transparent;
+      text-align: left;
+      border-radius: 6px;
+      cursor: pointer;
+
+      &:hover {
+        background: variables.$color-gray-200;
+      }
+    }
+  }
+}
+
+/* ================================
+   PROJECT MODE CARD (NEW TL CLASS)
+
+.tl-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tl-project-card {
+  width: 100%;
+  background: variables.$color-white;
+  border: 1px solid variables.$color-gray-200;
+  border-radius: 14px;
+  padding: 8px 8px;  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    background: variables.$color-gray-50;
+  }
+}
+
+/* LEFT SIDE */
+.tl-project-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tl-project-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: variables.$color-black;
+  margin: 0;
+}
+
+.tl-project-sub {
+  font-size: 0.85rem;
+  color: variables.$color-gray-600;
+  margin: 0;
+}
+
+/* RIGHT SIDE */
+.tl-project-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* STATUS TAG (outline style like screenshot) */
+.tl-status {
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid variables.$color-gray-300;
+  background: variables.$color-white;
+  color: variables.$color-gray-700;
+}
+
+/* PRIORITY TAG (filled style like screenshot) */
+.tl-priority {
+  padding: 3px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: variables.$color-white;
+}
+
+/* Variants */
+.tl-priority--low {
+  background: variables.$color-priority-low-bg;
+  color: variables.$color-priority-low-text;
+}
+
+.tl-priority--medium {
+  background: variables.$color-priority-medium-bg;
+  color: variables.$color-white;
+}
+
+.tl-priority--high {
+  background: variables.$color-priority-high-bg;
+  color: variables.$color-white;
+}
+
+.tl-priority--urgent {
+  background: variables.$color-priority-urgent-bg;
+  color: variables.$color-white;
+}
+
+/* =============================================================
+   TABLE
+.tl-table-wrapper {
+  width: 100%;
+  background: variables.$color-white;
+  border-radius: 14px;
+  border: 1px solid variables.$color-gray-200;
+  box-shadow: 0 2px 10px variables.$shadow-light-05;
+  overflow: hidden;
+}
+
+.tl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+
+  thead {
+    background: variables.$color-white;
+
+    th {
+      padding: 12px 16px;
+      font-weight: 600;
+      color: variables.$color-gray-700;
+      border-bottom: 1px solid variables.$color-gray-200;
+      cursor: pointer;
+      text-align: left;
+    }
+  }
+
+  tbody tr {
+    height: 52px;
+    border-bottom: 1px solid variables.$color-gray-200;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background: variables.$color-gray-100;
+    }
+
+    td {
+      padding: 12px 16px;
+      color: variables.$color-black;
+      vertical-align: middle;
+    }
+  }
+}
+
+/* =============================================================
+   STATUS TAGS
+.tl-status {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &--to-do {
+    background: variables.$color-status-gray;
+    color: variables.$color-status-dark;
+  }
+
+  &--in-progress {
+    background: variables.$color-status-blue-light;
+    color: variables.$progress-color;
+  }
+
+  &--completed {
+    background: variables.$color-priority-low-bg;
+    color: variables.$completed-color;
+  }
+}
+
+/* =============================================================
+   PRIORITY TAGS
+.tl-priority {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  &--low {
+    background: variables.$color-priority-low-bg;
+    color: variables.$completed-color;
+  }
+
+  &--medium {
+    background: variables.$color-priority-medium-bg;
+    color: variables.$color-white;
+  }
+
+  &--high {
+    background: variables.$color-priority-high-bg;
+    color: variables.$color-white;
+  }
+
+  &--urgent {
+    background: variables.$color-priority-urgent-bg;
+    color: variables.$color-white;
+  }
+}
+
+/* =============================================================
+   ASSIGNEE CELL
+.tl-assignee {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .tl-avatar {
+    width: 28px;
+    height: 28px;
+    background: variables.$color-gray-200;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tl-assignee-name {
+    font-size: 0.85rem;
+    color: variables.$color-black;
+  }
+}
+
+/* =============================================================
+   ACTION ICONS
+.tl-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .tl-action-icon {
+    width: 18px;
+    cursor: pointer;
+    transition: 0.15s ease;
+
+    &:hover {
+      transform: scale(1.12);
+      opacity: 0.8;
+    }
+  }
+}
+
+:host {
+  display: block;
+  padding: 32px 48px;
+  font-family: 'Inter', sans-serif;
+  color: variables.$color-text-primary;
+}
+
+/* ------------------------------
+   Breadcrumb
+------------------------------ */
+.tl-breadcrumb {
+  font-size: 14px;
+  color: variables.$color-gray-600;
+  margin-bottom: 20px;
+
+  a {
+    color: variables.$color-breadcrumb;
+    cursor: pointer;
+  }
+
+  span {
+    color: variables.$color-text-primary;
+  }
+}
+/* ------------------------------
+   Top Bar
+------------------------------ */
+.tl-topbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.tl-title {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+/* ------------------------------
+   Badges
+------------------------------ */
+.tl-badges {
+  display: flex;
+  gap: 8px;
+  margin-left: 20px;
+}
+
+.tl-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tl-badge--status {
+  background: variables.$color-priority-low-bg;
+  color: variables.$completed-color;
+}
+
+.tl-badge--priority {
+  background: variables.$notification-warning-bg;
+  color: variables.$color-warning;
+}
+
+/* ------------------------------
+   Actions
+------------------------------ */
+.tl-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.tl-btn-outline {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid variables.$color-border-d1;
+  background: variables.$color-white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.tl-btn-delete {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: variables.$color-btn-danger-bg;
+  cursor: pointer;
+  color: variables.$color-white;
+  font-size: 14px;
+}
+
+/* ------------------------------
+   Controls
+------------------------------ */
+.tl-controls {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+
+  label {
+    font-weight: 600;
+  }
+
+  select {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid variables.$color-border-d1;
+    background: variables.$color-white;
+    cursor: pointer;
+  }
+}
+
+/* ------------------------------
+   Main Grid
+------------------------------ */
+.tl-info-grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 24px;
+}
+
+/* ------------------------------
+   Info Card
+------------------------------ */
+.tl-info-card {
+  background: variables.$color-gray-f9;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid variables.$color-gray-200;
+}
+
+.tl-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+.tl-info-label {
+  font-weight: 600;
+  color: variables.$color-text-secondary;
+
+  img {
+    margin-right: 6px;
+  }
+}
+
+/* ------------------------------
+   Status History
+------------------------------ */
+.tl-history-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+
+  img {
+    margin-right: 6px;
+  }
+}
+
+.tl-history-item {
+  background: variables.$color-gray-f9;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tl-history-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tl-history-date {
+  font-size: 12px;
+  color: variables.$color-gray-600;
+}
+
+/* ------------------------------
+   Description
+------------------------------ */
+.tl-description {
+  margin-top: 40px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: variables.$color-text-secondary;
+  }
+}
+
+/* ================================
+   BACKDROP
+.tl-task-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: variables.$overlay-55;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+/* ================================
+   MAIN MODAL CARD
+.tl-task-modal {
+  width: 760px;
+  background: variables.$color-modal-green;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 4px 16px variables.$shadow-15;
+  animation: tlFadeIn 0.25s ease-out;
+}
+
+/* ================================
+   HEADER
+.tl-task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.tl-task-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: variables.$color-text-primary;
+}
+
+.tl-task-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tl-btn-edit {
+  background: variables.$color-white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: variables.$color-gray-300;
+  }
+}
+
+.tl-btn-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+/* ================================
+   DETAILS BOX
+.tl-task-details {
+  background: variables.$color-white;
+  border-radius: 16px;
+  padding: 26px 32px;
+}
+
+/* ================================
+   BADGES
+.tl-task-badges {
+  display: flex;
+  gap: 12px;
+}
+
+.tl-badge-status {
+  background: variables.$color-gray-lightest;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.tl-badge-priority {
+  background: variables.$color-yellow-light;
+  color: variables.$color-black;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+}
+/* ================================
+   INFO GRID (Inside Modal)
+.tl-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 2px;
+}
+
+.tl-info-row {
+  display: flex;
+  align-items: center;
+
+  label {
+    width: 100px;
+    color: variables.$color-gray-600;
+    font-size: 14px;
+  }
+
+  span {
+    font-size: 15px;
+    font-weight: 500;
+    color: variables.$color-text-primary;
+  }
+}
+
+/* ================================
+   ANIMATION
+@keyframes tlFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===========================================
+   BOARD TOP (GLOBAL HEADER)
+.tl-board-global-header {
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 40px 0 40px;
+
+  .tl-board-global-title {
+    font-size: 60px;
+    font-weight: 400;
+    letter-spacing: -3%;
+  }
+
+  .tl-board-global-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+}
+
+/* View mode toggle */
+.tl-board-toggle {
+  display: flex;
+  align-items: center;
+  background: variables.$color-gray-200;
+  border-radius: 999px;
+  padding: 4px;
+  height: 38px;
+  border: 1px solid variables.$color-gray-200;
+}
+
+.tl-board-toggle-btn {
+  padding: 0 20px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: variables.$color-gray-600;
+
+  &.active {
+    background: variables.$color-white;
+    color: variables.$color-text-primary;
+    box-shadow: 0 1px 4px variables.$shadow-light-05;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Create Task Button */
+.tl-create-task-btn {
+  height: 34px;
+  padding: 0 22px;
+  background: variables.$create-btn-bg;
+  border-radius: 100px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: variables.$color-btn-primary-hover;
+  }
+}
+
+/* ===========================================
+   FILTERS ROW
+.tl-board-filters {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: auto;
+  padding: 0 40px 20px 40px;
+  gap: 10px;
+}
+
+.tl-filter-btn,
+.tl-sort-box {
+  border: 1px solid variables.$color-gray-200;
+  height: 34px;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+  }
+
+  &:hover {
+    background: variables.$hover-bg-color;
+  }
+}
+
+.tl-sort-box {
+  width: 180px;
+}
+
+.tl-task-count {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: variables.$color-gray-600;
+  font-weight: 500;
+}
+
+.tl-sort-menu {
+  position: absolute;
+  top: 40px;
+  left: 120px;
+  width: 200px;
+  border: 1px solid variables.$color-gray-200;
+  padding: 10px;
+  border-radius: 12px;
+  z-index: 200;
+  box-shadow: 0 4px 12px variables.$shadow-med-12;
+
+  button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    border-radius: 6px;
+
+    &:hover {
+      background: variables.$hover-bg-color;
+    }
+  }
+}
+
+/* ===========================================
+   BOARD COLUMNS
+.tl-board-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 0 40px 40px 40px;
+}
+
+/* Individual Column */
+.tl-board-column {
+  padding: 16px;
+  border-radius: 14px;
+  min-height: 390px;
+  border: 1px solid variables.$color-gray-200;
+
+  &.to-do {
+    background: variables.$color-gray-50-alt;
+    border-color: variables.$color-gray-200;
+  }
+
+  &.in-progress {
+    background: variables.$status-in-progress;
+    border-color: variables.$status-in-progress-border;
+  }
+
+  &.completed {
+    background: variables.$status-completed;
+    border-color: variables.$status-completed-border;
+  }
+}
+
+/* Column Header */
+.tl-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .count {
+    background: variables.$color-gray-200;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+}
+
+/* Empty */
+.tl-column-empty {
+  text-align: center;
+  padding: 20px 0;
+  color: variables.$color-gray-600;
+}
+
+/* ===========================================
+   TASK CARD
+.tl-task-card {
+  background: variables.$color-white;
+  border: 1px solid variables.$color-gray-200;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: 0.15s ease;
+
+  &:hover {
+    background: variables.$color-gray-f9-2;
+  }
+}
+
+.tl-task-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .tl-task-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+    padding-right: 10px;
+  }
+
+  /* Priority */
+  .tl-task-priority {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    &.low { background: variables.$color-priority-low-bg; color: variables.$color-priority-low-text; }
+    &.medium { background: variables.$color-priority-medium-bg; color: variables.$color-white; }
+    &.high { background: variables.$color-priority-high-bg; color: variables.$color-white; }
+    &.urgent { background: variables.$color-priority-urgent-bg; color: variables.$color-white; }
+  }
+}
+
+.tl-task-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .tl-task-assignee {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: variables.$color-gray-200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+  }
+
+  .tl-task-due {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: variables.$color-gray-600;
+  }
+}
+/* ===========================================
+   PROJECT HEADER (TOP OF PAGE)
+.tl-project-header {
+  padding: 0 40px;
+  margin-bottom: 20px;
+}
+
+.tl-project-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.tl-project-header-left {
+  flex: 1;
+}
+
+/* Breadcrumbs */
+.tl-project-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+
+  a {
+    color: variables.$color-gray-600;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:first-child {
+      color: variables.$color-primary;
+      font-weight: 600;
+    }
+  }
+
+  span {
+    color: variables.$color-gray-400;
+  }
+
+  .current {
+    color: variables.$color-text-primary;
+    font-weight: 600;
+  }
+}
+
+/* Title Row */
+.tl-project-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.tl-project-title {
+  font-size: 46px;
+  font-weight: 600;
+  margin: 0;
+  color: variables.$color-text-primary;
+}
+
+/* Status Chip */
+.tl-project-status-chip {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: variables.$color-white;
+
+  &.planning {
+    background: variables.$planning-color;
+  }
+}
+
+.tl-project-desc {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: variables.$color-gray-600;
+}
+
+.tl-project-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.tl-project-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: variables.$color-text-secondary;
+}
+
+.tl-project-meta-separator {
+  width: 1px;
+  height: 18px;
+  background: variables.$color-border-d1;
+}
+
+/* Right controls */
+.tl-project-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 6px;
+}
+
+/* ===========================
+   OVERLAY
+.tl-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: variables.$overlay-35;
+  backdrop-filter: blur(1px);
+  z-index: 900;
+}
+
+/* ===========================
+   FILTER PANEL
+.tl-filter-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 380px;
+  height: 100%;
+  background: variables.$color-modal-green;
+  padding: 22px;
+  overflow-y: auto;
+  border-radius: 0 0 0 20px;
+  box-shadow: -4px 0 12px variables.$shadow-15;
+
+  transform: translateX(100%);
+  transition: transform 0.35s ease;
+  z-index: 999;
+
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+/* ===========================
+   FILTER HEADER
+.tl-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: variables.$color-text-primary;
+  }
+
+  .tl-filter-close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    img {
+      width: 20px;
+    }
+  }
+}
+
+/* ===========================
+   FILTER BOX
+.tl-filter-box {
+  background-color: variables.$color-gray-50;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 2px variables.$shadow-card-03;
+}
+
+.tl-filter-box-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+
+  span {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .tl-clear-btn {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: variables.$color-gray-600;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      color: variables.$color-text-primary;
+    }
+
+    img {
+      width: 14px;
+    }
+  }
+}
+
+/* ===========================
+   CHECKBOX OPTIONS
+.tl-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 30px;
+
+  label {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    input {
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+  }
+}
+
+/* ===========================
+   DATE RANGE
+.tl-filter-date-row {
+  display: flex;
+  gap: 12px;
+
+  div {
+    flex: 1;
+
+    label {
+      font-size: 12px;
+      color: variables.$color-gray-600;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input {
+      width: 62%;
+      height: 24px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid variables.$color-gray-bbb;
+      font-size: 14px;
+    }
+  }
+}
+
+/* ===========================
+   CLEAR ALL BUTTON
+.tl-filter-clear-all {
+  width: 100%;
+  padding: 14px 0;
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: variables.$color-text-primary;
+  font-size: 15px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  transition: 0.2s;
+
+  &:hover {
+    color: variables.$color-black;
+  }
+
+  img {
+    width: 16px;
+  }
+}
+/* ------------------------------
+   FINISHING STYLES
+------------------------------ */
+
+/* Avatar / Assignee Colors (already handled above)
+   No remaining colors here
+*/
+
+/* Ensuring consistency for utility classes */
+.text-primary {
+  color: variables.$color-text-primary;
+}
+
+.text-secondary {
+  color: variables.$color-text-secondary;
+}
+
+.bg-light {
+  background: variables.$color-gray-50;
+}
+
+.bg-white {
+  background: variables.$color-white;
+}
+
+.border-light {
+  border-color: variables.$color-gray-200;
+}
+
+/* Button hover fallback */
+button:hover {
+  opacity: 0.95;
+}
+
+/* Scroll / Overflow Enhancements */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: variables.$color-gray-50;
+}
+
+::-webkit-scrollbar-thumb {
+  background: variables.$color-scroll-thumb;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: variables.$color-border-hover;
+}
+
+/* Generic Shadow Utilities */
+.shadow-sm {
+  box-shadow: 0 1px 3px variables.$shadow-light-05;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 12px variables.$shadow-med-12;
+}
+
+.shadow-lg {
+  box-shadow: 0 6px 18px variables.$shadow-15;
+}
+
+/* Card utility */
+.card {
+  background: variables.$color-white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px variables.$shadow-card-06;
+}
+
+/* Disabled State */
+.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Focus State */
+:focus-visible {
+  outline: 2px solid variables.$color-primary;
+  outline-offset: 2px;
+}
+
+/* Input Base Styles */
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: variables.$color-text-primary;
+  border: 1px solid variables.$color-border-d1;
+  background: variables.$input-background;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: variables.$color-primary;
+}
+
+/* Final cleanup selectors */
+.hidden {
+  display: none !important;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: 600;
+}
+}
 
 }
