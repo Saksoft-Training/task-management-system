@@ -6,6 +6,7 @@ import { AuthService } from '../../../user-account-management/services/auth-serv
 import { ProjectCardComponent } from '../project-card/project-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TaskService } from '../../../task-management/services/task-service';
 
 /**
  * @summary Pipe used to convert strings by replacing spaces with hyphens
@@ -56,7 +57,8 @@ export class ProjectListComponent {
   constructor(
     private projectService: ProjectService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private taskService: TaskService
   ) { }
   //#endregion
 
@@ -194,5 +196,11 @@ export class ProjectListComponent {
     if (!insideSort) this.showSort = false;
     if (!insideFilter) this.showFilters = false;
   }
+  public getTaskCount(projectId: number): number {
+  return this.taskService
+    .getTasksByProjectId(projectId)
+    .length;
+}
+
   //#endregion
 }
