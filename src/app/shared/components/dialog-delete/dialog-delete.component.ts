@@ -3,10 +3,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 @Component({
   selector: 'app-dilog-delete-component',
   imports: [],
-  templateUrl: './dilog-delete.component.html',
-  styleUrl: './dilog-delete.component.scss',
+  templateUrl: './dialog-delete.component.html',
+  styleUrl: './dialog-delete.component.scss',
 })
-export class DilogDeleteComponent {
+export class DialogDeleteComponent {
   //#region Input Properties
   /**
    * @summary Header text of the confirmation dialog.

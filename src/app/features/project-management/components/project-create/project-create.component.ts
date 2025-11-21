@@ -5,12 +5,12 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../../../../types/models/project';
 
 import { AuthService } from '../../../user-account-management/services/auth-service';
-import { DilogDeleteComponent } from '../../../../shared/components/dilog-delete/dilog-delete.component';
+import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
 import { NotificationService } from '../../../dashboard/services/notification-service';
 
 @Component({
   selector: 'app-project-create-component',
-  imports: [ReactiveFormsModule, DilogDeleteComponent],
+  imports: [ReactiveFormsModule, DialogDeleteComponent],
   templateUrl: './project-create.component.html',
   styleUrl: './project-create.component.scss',
 })

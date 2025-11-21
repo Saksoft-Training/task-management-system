@@ -6,11 +6,11 @@ import { Project } from '../../../../../types/models/project';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TaskService } from '../../../task-management/services/task-service';
 import { Task } from '../../../../../types/models/task';
-import { DilogDeleteComponent } from '../../../../shared/components/dilog-delete/dilog-delete.component';
+import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
 
 @Component({
   selector: 'app-project-detail-component',
-  imports: [DatePipe, CommonModule,DilogDeleteComponent],
+  imports: [DatePipe, CommonModule,DialogDeleteComponent],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.scss',
 })
