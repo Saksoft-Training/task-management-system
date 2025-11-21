@@ -49,7 +49,7 @@
 
         <!-- Toggle between list/board -->
         <div class="tl-board-toggle">
-          <button class="tl-board-toggle-btn" (click)="goList()">
+          <button class="tl-board-toggle-btn" (click)="navigateToList()">
             <img src="assets/icons/list-Icon.svg" class="icon" /> List
           </button>
 
@@ -76,7 +76,7 @@
 
       <!-- Toggle -->
       <div class="tl-board-toggle">
-        <button class="tl-board-toggle-btn" (click)="goList()">
+        <button class="tl-board-toggle-btn" (click)="navigateToList()">
           <img src="assets/icons/list-Icon.svg" class="icon" /> List
         </button>
 
@@ -97,23 +97,26 @@
   <div class="tl-board-filters">
 
     <!-- Open filter panel -->
-    <button class="tl-filter-btn" (click)="showFilter = true">
+    <button class="tl-filter-btn" (click)="isFilterOpen = true">
       <img src="assets/icons/filter-Icon.svg" class="icon" /> Filters
     </button>
 
     <!-- Filter popup -->
-    <app-filter-panel [open]="showFilter" [assignees]="allUsers" (close)="showFilter = false"
+    <app-filter-panel
+      [open]="isFilterOpen"
+      [assignees]="allUsers"
+      (close)="isFilterOpen = false"
       (filtersChanged)="applyFilters($event)">
     </app-filter-panel>
 
     <!-- Sort box -->
-    <div class="tl-sort-box" (click)="toggleSortMenu = !toggleSortMenu">
+    <div class="tl-sort-box" (click)="isSortMenuOpen = !isSortMenuOpen">
       <img src="assets/icons/sort-Icon.svg" class="icon" />
       Sort: {{ sortLabel }}
     </div>
 
     <!-- Sort menu -->
-    @if (toggleSortMenu) {
+    @if (isSortMenuOpen) {
     <div class="tl-sort-menu">
       <button (click)="setSortDirection(true)">↑ Ascending</button>
       <button (click)="setSortDirection(false)">↓ Descending</button>
@@ -126,7 +129,7 @@
 
     <!-- Task count -->
     <span class="tl-task-count">
-      Showing {{ filtered.length }} of {{ tasks.length }} tasks
+      Showing {{ filteredTasks.length }} of {{ tasks.length }} tasks
     </span>
 
   </div>
@@ -136,27 +139,34 @@
 
     @for (status of statuses; track status) {
 
-    <div class="tl-board-column" [ngClass]="{
-       'to-do': status === 'To Do',
-       'in-progress': status === 'In Progress',
-       'completed': status === 'Completed'
-     }" [attr.data-status]="status" (dragover)="onDragOver($event)" (drop)="onDrop($event, status)">
+    <div class="tl-board-column"
+      [ngClass]="{
+        'to-do': status === 'To Do',
+        'in-progress': status === 'In Progress',
+        'completed': status === 'Completed'
+      }"
+      [attr.data-status]="status"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event, status)">
 
       <!-- Column title + count -->
       <div class="tl-column-header">
         <h3>{{ status }}</h3>
-        <span class="count">{{ columns[status].length }}</span>
+        <span class="count">{{ statusColumns[status].length }}</span>
       </div>
 
       <!-- Empty column text -->
-      @if (columns[status].length === 0) {
+      @if (statusColumns[status].length === 0) {
       <div class="tl-column-empty">No tasks</div>
       }
 
       <!-- Task cards -->
-      @for (task of columns[status]; track task.id) {
+      @for (task of statusColumns[status]; track task.id) {
 
-      <div class="tl-task-card" draggable="true" (dragstart)="onDragStart($event, task)" (dragend)="onDragEnd()">
+      <div class="tl-task-card"
+        draggable="true"
+        (dragstart)="onDragStart($event, task)"
+        (dragend)="onDragEnd()">
 
         <div class="tl-task-card-top">
           <h4 class="tl-task-title">{{ task.title }}</h4>

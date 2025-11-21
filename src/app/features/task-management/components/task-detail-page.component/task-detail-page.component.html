@@ -105,10 +105,10 @@
 </div>
 
 <!-- Delete confirmation -->
-@if (showDeleteModal) {
+@if (isDeleteModalOpen) {
   <app-confirmation-dialog-component
     [title]="'Delete Task'"
-    [message]="'Are you sure you want to delete the task:\n' + (taskToDelete?.title || '') + '?'"
+    [message]="'Are you sure you want to delete the task:\n' + (pendingDeleteTask?.title || '') + '?'"
     [confirmText]="'Delete'"
     [cancelText]="'Cancel'"
     [type]="'danger'"
