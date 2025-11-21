@@ -4,10 +4,18 @@
         <span class="breadcrumb-separator">/</span>
         <span class="breadcrumb-current">{{ editProjectId ? 'Edit Project' : 'Create New Project' }}</span>
     </div>
-    <h1 class="page-title">
-        {{ editProjectId ? 'Edit Project' : 'Create Project' }}
-    </h1>
-    <p class="page-subtitle">{{ editProjectId ? 'Edit your projects' : 'Create your projects' }}</p>
+    <div class="header-row">
+        <h1 class="page-title">
+            {{ editProjectId ? 'Edit Project' : 'Create Project' }}
+        </h1>
+        <!-- TOP-RIGHT DELETE BUTTON -->
+        @if (editProjectId) {
+        <button class="delete-project-top-btn" (click)="onDeleteProject()">
+            Delete Project <img src="assets/icons/delete-Icon.svg">
+        </button>
+        }
+    </div>
+    <p class="page-subtitle">{{ editProjectId ? 'Edit/Modify or Update your projects' : 'Create your projects' }}</p>
     <div class="project-form-container">
         <p class="form-title">Set up a new project to organize your tasks</p>
         <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="formProject">
@@ -74,19 +82,12 @@
                 <button type="submit" [disabled]="projectForm.invalid" class="btn btn-submit">
                     {{ editProjectId ? 'Save Changes' : 'Create Project' }}
                 </button>
-                <!-- CREATE MODE: show Reset -->
-    @if (!editProjectId) {
-        <button type="button" (click)="onReset()" class="btn btn-secondary">
-            Reset
-        </button>
-    }
-
-    <!-- EDIT MODE: show Delete -->
-    @if (editProjectId) {
-        <button type="button" (click)="onDeleteProject()" class="btn btn-danger">
-            Delete
-        </button>
-    }
+                <!-- RESET ALWAYS SHOWN IN BOTH CREATE & EDIT -->
+                <button type="button"
+                        (click)="onReset()"
+                        class="btn btn-secondary">
+                    Reset
+                </button>
                 <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancel</button>
             </div>
         </form>
@@ -94,4 +95,16 @@
     @if (successMessage) {
     <div class="success">{{ successMessage }}</div>
     }
+    @if (showDeleteDialog) {
+  <app-dilog-delete-component
+    [title]="deleteDialogData.title"
+    [message]="deleteDialogData.message"
+    [confirmText]="deleteDialogData.confirmText"
+    [cancelText]="deleteDialogData.cancelText"
+    type="danger"
+    (confirm)="handleDeleteConfirm()"
+    (cancel)="handleDeleteCancel()"
+  />
+}
+
 </div>
