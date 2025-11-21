@@ -1,22 +1,31 @@
-<div class="activity-feed">
-  <div class="header-row">
+<div class="activity-feed-stats">
+  <div class="header-row-stats">
     <h2>Recent Activity</h2>
   </div>
+
   <ng-container *ngIf="activities$ | async as activities; else loadingTpl">
     <ng-container *ngIf="activities.length > 0; else emptyTpl">
-      <ul class="activity-list">
-        <li class="activity-item" *ngFor="let activity of activities" (click)="onActivityClick(activity)">
-          <div class="avatar">
+      <ul class="activity-list-stats">
+        <li
+          class="activity-item-stats"
+          *ngFor="let activity of activities"
+          (click)="onActivityClick(activity)"
+        >
+          <div class="avatar-stats">
             <span>{{ getInitials(activity.user) }}</span>
           </div>
-          <div class="content">
-            <div class="line1">
-              <span class="action">{{ formatAction(activity) }}</span>
-              <span class="item-name">{{ activity.itemName }}</span>
+
+          <div class="content-stats">
+            <div class="line1-stats">
+              <span class="action-stats">{{ formatAction(activity) }}</span>
+              <span class="item-name-stats">{{ activity.itemName }}</span>
             </div>
-            <div class="line2">
-              <span class="user">{{ activity.user }}</span>
-              <span class="timestamp">{{ activity.timestamp | date: 'short' }}</span>
+
+            <div class="line2-stats">
+              <span class="user-stats">{{ activity.user }}</span>
+              <span class="timestamp-stats">
+                {{ activity.timestamp | date: 'short' }}
+              </span>
             </div>
           </div>
         </li>
@@ -25,10 +34,10 @@
   </ng-container>
 
   <ng-template #loadingTpl>
-    <div class="info">Loading activities…</div>
+    <div class="info-stats">Loading activities…</div>
   </ng-template>
 
   <ng-template #emptyTpl>
-    <div class="info">No recent activities.</div>
+    <div class="info-stats">No recent activities.</div>
   </ng-template>
 </div>

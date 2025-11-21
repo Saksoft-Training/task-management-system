@@ -1,7 +1,7 @@
 <!-- Breadcrumb -->
 <div class="tl-breadcrumb">
-    <a>Projects</a> /
-    <a>{{ projectName }}</a> /
+    <a routerLink="/projects">Projects</a> /
+    <a [routerLink]="['/projects', projectId]">{{ projectName }}</a> /
     <span>{{ task?.title }}</span>
 </div>
 
