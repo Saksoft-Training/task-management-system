@@ -7,10 +7,11 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { TaskService } from '../../../task-management/services/task-service';
 import { Task } from '../../../../../types/models/task';
 import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
+import { TaskCardComponent } from "../../../task-management/components/task-card.component/task-card.component";
 
 @Component({
   selector: 'app-project-detail-component',
-  imports: [DatePipe, CommonModule,DialogDeleteComponent],
+  imports: [DatePipe, CommonModule, DialogDeleteComponent, TaskCardComponent],
   templateUrl: './project-detail.component.html',
   styleUrl: './project-detail.component.scss',
 })
@@ -31,6 +32,7 @@ export class ProjectDetailComponent implements OnInit {
   public progressText = '';
   public showDeleteDialog = false;
    public taskViewMode: 'list' | 'board' = 'list';
+   public activeTask: Task | null = null;
   /** Task statistics */
   public todoCount = 0;
   public inProgressCount = 0;
@@ -218,6 +220,15 @@ public handleDeleteCancel(): void {
   if (!this.project?.id) return;
   this.router.navigate([`/projects/${this.project.id}/board`]);
 }
+
+public openTaskCard(task: Task): void {
+  this.activeTask = task;
+}
+
+public closeTaskCard(): void {
+  this.activeTask = null;
+}
+
   
   // #endregion
 }

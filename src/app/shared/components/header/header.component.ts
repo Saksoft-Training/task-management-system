@@ -13,7 +13,7 @@ import { User } from '../../../../types/models/user';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, DashboardNotificationsComponent, ConfirmationDialogComponent],
+  imports: [CommonModule, RouterModule, NotificationDropdownComponent, ConfirmationDialogComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -105,7 +105,17 @@ export class HeaderComponent implements OnInit {
     );
   }
   //#endregion
- 
+ onNavigateNotification(notification: any) {
+  // Example: navigate using router
+  console.log('Navigate to notification:', notification);
+
+  // optionally close dropdown
+  this.showNotifications = false;
+
+  // If notifications have a route:
+  // this.router.navigate([notification.route]);
+}
+
   //#region Event Handlers
   /**
   * @summary Marks a specific notification as read

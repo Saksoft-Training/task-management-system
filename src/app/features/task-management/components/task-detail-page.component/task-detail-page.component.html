@@ -33,12 +33,16 @@
 <div class="tl-controls">
     <label>Status:</label>
     <select [ngModel]="task?.status" (ngModelChange)="updateStatus($event)">
-        <option *ngFor="let s of statusOptions">{{ s }}</option>
+        @for (statusItem of statusOptions; track statusItem) {
+            <option>{{ statusItem }}</option>
+        }
     </select>
 
     <label>Priority:</label>
     <select [ngModel]="task?.priority" (ngModelChange)="updatePriority($event)">
-        <option *ngFor="let p of priorityOptions">{{ p }}</option>
+        @for (priorityItem of priorityOptions; track priorityItem) {
+            <option>{{ priorityItem }}</option>
+        }
     </select>
 </div>
 
@@ -89,12 +93,14 @@
             <img src="assets/icons/history-Icon.svg"> Status History
         </h3>
 
-        <div class="tl-history-item" *ngFor="let h of statusHistory">
+        @for (historyItem of statusHistory; track historyItem) {
+        <div class="tl-history-item">
             <span class="tl-history-status">
-                <img src="assets/icons/time-Icon.svg"> {{ h.status }}
+                <img src="assets/icons/time-Icon.svg"> {{ historyItem.status }}
             </span>
-            <span class="tl-history-date">{{ h.date }}</span>
+            <span class="tl-history-date">{{ historyItem.date }}</span>
         </div>
+        }
     </div>
 </div>
 

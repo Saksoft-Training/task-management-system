@@ -11,16 +11,16 @@ import { TaskBoardComponent } from './features/task-management/components/task-b
 import { TaskCreateComponent } from './features/task-management/components/tast-create.component/task-create.component';
 import { ForgotPasswordComponent } from './features/user-account-management/components/forgot-password/forgot-password.component';
 import { ProjectListComponent } from './features/project-management/components/project-list/project-list.component';
+
 import { TaskDetailPageComponent } from './features/task-management/components/task-detail-page.component/task-detail-page.component';
 import { ProfileComponent } from './features/user-account-management/components/profile/profile.component';
 import { ProjectDetailComponent } from './features/project-management/components/project-detail/project-detail.component';
-import { DashboardChartsComponent } from './features/dashboard/components/dashboard-charts.component/dashboard-charts.component';
 
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
@@ -29,22 +29,11 @@ export const routes: Routes = [
   { path: 'projects/:id/board', component: TaskBoardComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/board', component: TaskBoardComponent },
-  { path: 'tasks/create/:projectId', component: TaskCreateComponent },
-
-  { path: 'board', component: TaskBoardComponent },
-  { path: "tasks/edit/:id", component: TaskCreateComponent },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'tasks/:id', component: TaskDetailPageComponent },
-  { path: 'projects', component: ProjectListComponent },
-  { path: 'projects/:id', component: ProjectDetailComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
-  {path:'dashboard',component:DashboardComponentStats},
-  {path:'dashboard-comp',component:DashboardChartsComponent},
-
+  { path: 'tasks/create/:projectId', component: TaskCreateComponent },
   { path: 'tasks/edit/:id', component: TaskCreateComponent },
   { path: 'tasks/:id', component: TaskDetailPageComponent },
   {path: 'tasks/project/:projectId', component: TaskListComponent},
   { path: 'board', component: TaskBoardComponent },
   { path: 'profile', component: ProfileComponent },
-
 ];

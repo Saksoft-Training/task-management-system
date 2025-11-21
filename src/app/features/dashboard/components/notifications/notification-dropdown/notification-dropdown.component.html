@@ -1,4 +1,4 @@
-<div class="dropdown-container">
+<div class="dropdown-container" #dropdownRef>
   <div class="dropdown-header">
     <span>Notifications</span>
     <div class="header-actions">
@@ -11,8 +11,12 @@
     </div>
   </div>
   <div class="dropdown-body" *ngIf="notifications.length; else emptyState">
-    <app-notification-item-component *ngFor="let n of notifications" [notification]="n"
-      (navigate)="navigate.emit($event)" (markRead)="markAsRead.emit($event.id)" (dismiss)="handleDismiss($event)">
+    <app-notification-item-component
+      *ngFor="let n of notifications"
+      [notification]="n"
+      (navigate)="navigate.emit($event)"
+      (markRead)="markAsRead.emit($event.id)"
+      (dismiss)="handleDismiss($event)">
     </app-notification-item-component>
   </div>
   <ng-template #emptyState>

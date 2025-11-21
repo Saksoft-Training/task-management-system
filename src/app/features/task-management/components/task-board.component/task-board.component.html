@@ -102,10 +102,7 @@
     </button>
 
     <!-- Filter popup -->
-    <app-filter-panel
-      [open]="isFilterOpen"
-      [assignees]="allUsers"
-      (close)="isFilterOpen = false"
+    <app-filter-panel [open]="isFilterOpen" [assignees]="allUsers" (close)="isFilterOpen = false"
       (filtersChanged)="applyFilters($event)">
     </app-filter-panel>
 
@@ -137,51 +134,46 @@
   <!-- Kanban columns -->
   <div class="tl-board-columns">
 
-    @for (status of statuses; track status) {
+    @for (boardStatus of statuses; track boardStatus) {
 
-    <div class="tl-board-column"
-      [ngClass]="{
-        'to-do': status === 'To Do',
-        'in-progress': status === 'In Progress',
-        'completed': status === 'Completed'
-      }"
-      [attr.data-status]="status"
-      (dragover)="onDragOver($event)"
-      (drop)="onDrop($event, status)">
+    <div class="tl-board-column" [ngClass]="{
+        'to-do': boardStatus === 'To Do',
+        'in-progress': boardStatus === 'In Progress',
+        'completed': boardStatus === 'Completed'
+      }" [attr.data-status]="boardStatus" (dragover)="onDragOver($event)" (drop)="onDrop($event, boardStatus)">
 
       <!-- Column title + count -->
       <div class="tl-column-header">
-        <h3>{{ status }}</h3>
-        <span class="count">{{ statusColumns[status].length }}</span>
+        <h3>{{ boardStatus }}</h3>
+        <span class="count">{{ statusColumns[boardStatus].length }}</span>
       </div>
 
       <!-- Empty column text -->
-      @if (statusColumns[status].length === 0) {
+      @if (statusColumns[boardStatus].length === 0) {
       <div class="tl-column-empty">No tasks</div>
       }
 
       <!-- Task cards -->
-      @for (task of statusColumns[status]; track task.id) {
+      @for (boardTask of statusColumns[boardStatus]; track boardTask.id) {
 
-      <div class="tl-task-card"
-        draggable="true"
-        (dragstart)="onDragStart($event, task)"
-        (dragend)="onDragEnd()">
+      <div class="tl-task-card" draggable="true" (dragstart)="onDragStart($event, boardTask)" (dragend)="onDragEnd()">
 
         <div class="tl-task-card-top">
-          <h4 class="tl-task-title">{{ task.title }}</h4>
-          <span class="tl-task-priority {{ priorityClass(task.priority) }}">
-            {{ task.priority }}
+          <h4 class="tl-task-title" (click)="openTask(boardTask.id)">
+            {{ boardTask.title }}
+          </h4>
+          <span class="tl-task-priority {{ priorityClass(boardTask.priority) }}">
+            {{ boardTask.priority }}
           </span>
         </div>
 
         <div class="tl-task-card-bottom">
           <div class="tl-task-assignee">
-            <div class="avatar">{{ initials(task.assignee) }}</div>
-            <span>{{ task.assignee }}</span>
+            <div class="avatar">{{ initials(boardTask.assignee) }}</div>
+            <span>{{ boardTask.assignee }}</span>
           </div>
 
-          <div class="tl-task-due">{{ formatDate(task.dueDate) }}</div>
+          <div class="tl-task-due">{{ formatDate(boardTask.dueDate) }}</div>
         </div>
 
       </div>
