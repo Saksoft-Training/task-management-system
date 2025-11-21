@@ -15,6 +15,7 @@ import { ProjectListComponent } from './features/project-management/components/p
 import { TaskDetailPageComponent } from './features/task-management/components/task-detail-page.component/task-detail-page.component';
 import { ProfileComponent } from './features/user-account-management/components/profile/profile.component';
 import { ProjectDetailComponent } from './features/project-management/components/project-detail/project-detail.component';
+import { DashboardChartsComponent } from './features/dashboard/components/dashboard-charts.component/dashboard-charts.component';
 
 
 export const routes: Routes = [
@@ -36,6 +37,7 @@ export const routes: Routes = [
   { path: 'tasks/:id', component: TaskDetailPageComponent },
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/:id', component: ProjectDetailComponent },
-  { path: 'tasks/create', component: TaskCreateComponent }
+  { path: 'tasks/create', component: TaskCreateComponent },
+  {path:'dashboard',component:DashboardChartsComponent}
 
 ];
