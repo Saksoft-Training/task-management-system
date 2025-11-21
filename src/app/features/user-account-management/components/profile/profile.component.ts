@@ -1,3 +1,6 @@
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
@@ -155,7 +158,7 @@ export class ProfileComponent implements OnInit {
    */
   public enterEditMode(): void {
     this.isEditing = true;
-    this.previewImage = this.currentUser!.photo || null;  
+    this.previewImage = this.currentUser!.photo || null;  // ❗ works only if your user has photo
   }
   /**
    * @summary Navigates to the Create Project page.
@@ -249,7 +252,7 @@ export class ProfileComponent implements OnInit {
       severity: 'success',
       kind: 'profile-update' as any,
       showToast: true
-    }); this.router.navigate(['/profile']);
+    }); this.router.navigate(['/dashboard']);
   }
   //#endregion
 }

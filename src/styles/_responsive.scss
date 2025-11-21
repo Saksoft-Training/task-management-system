@@ -1,0 +1,106 @@
+/* responsive.scss */
+
+/* ============ MOBILE (max-width: 600px) ============ */
+@media (max-width: 600px) {
+  .app-header {
+    padding: 12px 20px;
+    height: 4.5rem;
+  }
+
+  .page-title-login,
+  .page-title-register {
+    font-size: 2rem;
+  }
+
+  .register-page .card,
+  .login-page .card,
+  .forgot-page .card {
+    width: 90%;
+    padding: 1rem;
+  }
+
+  .toast-container {
+    width: 90%;
+    right: 5%;
+    top: 80px;
+  }
+
+  .notification-dropdown {
+    width: 90%;
+    right: 0;
+  }
+
+  .project-create-page,
+  .project-list,
+  .project-detail-page,
+  .profile-page {
+    padding: 1rem;
+  }
+
+  .formProject {
+    grid-template-columns: 1fr;
+  }
+
+  .status-summaries {
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    height: auto;
+  }
+}
+
+/* ============ TABLET (600px - 992px) ============ */
+@media (min-width: 600px) and (max-width: 992px) {
+  .app-header {
+    padding: 16px 40px;
+  }
+
+  .register-page .card,
+  .login-page .card,
+  .forgot-page .card {
+    width: 70%;
+  }
+
+  .project-list {
+    padding: 2rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  .status-summaries {
+    grid-template-columns: repeat(2, 1fr);
+    display: grid;
+  }
+
+  .project-detail-page .meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============ DESKTOP (992px+) ============ */
+@media (min-width: 992px) {
+  .app-header {
+    padding: 20px 80px;
+  }
+
+  .register-page .card,
+  .login-page .card,
+  .forgot-page .card {
+    width: 28rem;
+  }
+
+  .project-list {
+    padding: 2rem 5rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  }
+}

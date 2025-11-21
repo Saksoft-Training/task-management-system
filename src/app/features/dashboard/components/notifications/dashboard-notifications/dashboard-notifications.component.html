@@ -1,15 +1,22 @@
 <div class="notifications-list">
   @for (notification of notifications; track notification.id) {
   <div class="notification-item" [class.unread]="!notification.isRead">
-    <div class="notification-content">
-      <h4>{{ notification.title }}</h4>
-      <p>{{ notification.message }}</p>
-      <span class="timestamp">{{ notification.timestamp | date:'short' }}</span>
+
+    <div class="left-section">
+      <img src="assets/icons/check-green.svg" class="status-icon" *ngIf="notification.isRead" />
+      <img src="assets/icons/check-gray.svg" class="status-icon" *ngIf="!notification.isRead" />
+
+      <div class="notification-content">
+        <h4>{{ notification.title }}</h4>
+        <p>{{ notification.message }}</p>
+        <span class="timestamp">{{ notification.timestamp | date:'short' }}</span>
+      </div>
     </div>
-    <button class="mark-read-btn" (click)="markAsRead.emit(notification.id)">
-      <img src="assets/icons/right-Icon.svg"> Mark as Read
-    </button>
+
+    <button class="close-btn" (click)="markAsRead.emit(notification.id)">✕</button>
+
   </div>
+
   } @empty {
   <div class="no-notifications">
     <img src="assets/icons/Bell-Icon.svg"><br>

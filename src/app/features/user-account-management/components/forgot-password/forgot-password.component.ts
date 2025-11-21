@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { UserStorageService } from '../../../../shared/services/storage-service';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { NotificationService } from '../../../dashboard/services/notification-service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -27,7 +28,8 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private userStorage: UserStorageService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
   //#endregion
 
@@ -131,12 +133,22 @@ export class ForgotPasswordComponent implements OnInit {
     of(null).pipe(delay(500)).subscribe(() => {
       const updated = this.userStorage.updatePasswordForEmail(email, newPassword);
       if (!updated) {
-        this.errorMessage = 'Email not found.';
-        this.isSubmitting = false;
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'critical',
+          title: 'Reset Failed',
+          message: 'Email not found.',
+          showToast: true
+        }); this.isSubmitting = false;
         return;
       }
-      alert("Password reset successfully!"); // demo only
-      this.successMessage = 'Password reset successfully. Redirecting to login…';
+      this.notificationService.addNotification({
+        kind: 'custom' as any,
+        severity: 'success',
+        title: 'Password Reset Successful',
+        message: '',
+        showToast: true
+      }); this.successMessage = 'Password reset successfully';
       this.resetForm.reset();
       setTimeout(() => {
         this.isSubmitting = false;

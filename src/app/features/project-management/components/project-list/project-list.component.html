@@ -80,7 +80,7 @@
     }
     <div class="grid">
         @for (project of filteredProjects; let i = $index; track project.id) {
-        <app-project-card-component [project]="project" [index]="i + 1" (click)="viewProject(project.id)">
+        <app-project-card-component [project]="project" [index]="i + 1" (click)="viewProject(project.id)" [taskCount]="getTaskCount(project.id)">
         </app-project-card-component>
         }
     </div>

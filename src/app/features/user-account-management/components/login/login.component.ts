@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {ReactiveFormsModule,FormBuilder,FormGroup,Validators,AbstractControl,ValidationErrors} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../services/auth-service';
+import { NotificationService } from '../../../dashboard/services/notification-service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -29,8 +30,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private notificationService: NotificationService
+  ) { }
   //#endregion
 
   //#region Lifecycle Hook
@@ -113,11 +115,26 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.isFormSubmitting = false;
         this.loginAttempted = false;
-        this.router.navigate(['/profile']);
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'success',
+          title: 'Login Successful',
+          message: '',
+          showToast: true
+        });
+        setTimeout(() => {
+          this.router.navigate(['/profile']);
+        }, 800);
       },
       error: (err) => {
         this.isFormSubmitting = false;
-        this.loginErrorMessage = err?.message || 'Invalid email or password';
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'critical',
+          title: 'Login Failed',
+          message: err?.message || 'Invalid email or password',
+          showToast: true
+        });
       }
     });
   }
@@ -125,7 +142,7 @@ export class LoginComponent implements OnInit {
 
   //#region Navigation
   /**
-   * @summary Navigates to given route path 
+   * @summary Navigates to given route path
    * @param path - Router path to navigate.
    * @returns void
    */
