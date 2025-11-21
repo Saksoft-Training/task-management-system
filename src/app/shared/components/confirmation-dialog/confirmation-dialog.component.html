@@ -2,7 +2,7 @@
   <div class="dialog-box">
     <div class="dialog-header-green">
       <h3>{{ title }}</h3>
-      <button class="logout-close-icon" (click)="onCancel()">
+      <button class="logout-close-icon" (click)="$event.stopPropagation(); cancel.emit()">
         <img src="assets/icons/cross-Icon.svg" alt="Close" />
       </button>
     </div>
@@ -13,10 +13,10 @@
         }
       </div>
       <div class="dialog-actions">
-        <button class="btn confirm" (click)="onConfirm()">
+        <button class="btn confirm" (click)="$event.stopPropagation(); confirm.emit()">
           {{ confirmText }}
         </button>
-        <button class="btn dialog-cancel" (click)="onCancel()">
+        <button class="btn dialog-cancel" (click)="$event.stopPropagation(); cancel.emit()">
           {{ cancelText }}
         </button>
       </div>

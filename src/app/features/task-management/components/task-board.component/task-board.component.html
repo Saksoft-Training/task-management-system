@@ -1,19 +1,16 @@
-<!-- ==============================================
-     TASK BOARD ROOT WRAPPER
-================================================== -->
-<div class="task-board">
+<!-- Board wrapper -->
+<div class="tl-board-wrapper">
 
-  <!-- =========================================================
-       PROJECT BOARD HEADER
-  ============================================================ -->
+  <!-- Project board header -->
   @if (isProjectBoard && projectDetails) {
-  <div class="project-view-header">
-    <div class="header-top-row">
+  <div class="tl-project-header">
 
-      <div class="left">
+    <div class="tl-project-header-top">
 
-        <!-- Breadcrumb Navigation -->
-        <nav class="breadcrumbs">
+      <div class="tl-project-header-left">
+
+        <!-- Breadcrumb -->
+        <nav class="tl-project-breadcrumbs">
           <a routerLink="/projects">Projects</a>
           <span>/</span>
           <a [routerLink]="'/projects/' + projectId">{{ projectDetails.name }}</a>
@@ -21,27 +18,26 @@
           <span class="current">Task Board View</span>
         </nav>
 
-        <!-- Project Title -->
-        <div class="title-row">
-          <h1 class="project-title">{{ projectDetails.name }}</h1>
-
-          <span class="status-chip"
-                [ngClass]="projectDetails.status.toLowerCase()">
+        <!-- Project title + status -->
+        <div class="tl-project-title-row">
+          <h1 class="tl-project-title">{{ projectDetails.name }}</h1>
+          <span class="tl-project-status-chip" [ngClass]="projectDetails.status.toLowerCase()">
             {{ projectDetails.status }}
           </span>
         </div>
 
-        <p class="project-desc">{{ projectDetails.description }}</p>
+        <p class="tl-project-desc">{{ projectDetails.description }}</p>
 
-        <div class="meta-row">
-          <div class="meta-item">
+        <!-- Project meta -->
+        <div class="tl-project-meta-row">
+          <div class="tl-project-meta-item">
             <img src="assets/icons/calendar-Icon.svg" class="meta-icon" />
             <span>{{ projectDetails.startDate }} to {{ projectDetails.endDate }}</span>
           </div>
 
-          <div class="separator"></div>
+          <div class="tl-project-meta-separator"></div>
 
-          <div class="meta-item">
+          <div class="tl-project-meta-item">
             <img src="assets/icons/task-Icon.svg" class="meta-icon" />
             <span>{{ projectTasksCount }} tasks</span>
           </div>
@@ -49,78 +45,79 @@
 
       </div>
 
-      <div class="project-right-controls">
-        <div class="middle-toggle">
-          <button class="toggle-btn" (click)="goList()">
-            <img src="assets/icons/list-Icon.svg" class="icon" />
-            List
+      <div class="tl-project-header-right">
+
+        <!-- Toggle between list/board -->
+        <div class="tl-board-toggle">
+          <button class="tl-board-toggle-btn" (click)="navigateToList()">
+            <img src="assets/icons/list-Icon.svg" class="icon" /> List
           </button>
 
-          <button class="toggle-btn active">
-            <img src="assets/icons/board-Icon.svg" class="icon" />
-            Board
+          <button class="tl-board-toggle-btn active">
+            <img src="assets/icons/board-Icon.svg" class="icon" /> Board
           </button>
         </div>
 
-        <button class="create-btn" (click)="createTask()">Create New Task</button>
-      </div>
+        <!-- Create task -->
+        <button class="tl-create-task-btn" (click)="createTask()">Create New Task</button>
 
+      </div>
     </div>
   </div>
   }
 
-  <!-- =========================================================
-       GLOBAL VIEW (NON-PROJECT BOARD)
-  ============================================================ -->
+  <!-- Global board header -->
   @if (!isProjectBoard) {
-  <div class="board-top-row">
-    <h2 class="board-title">All Boards</h2>
+  <div class="tl-board-global-header">
 
-    <div class="right-controls">
+    <h2 class="tl-board-global-title">All Boards</h2>
 
-      <div class="middle-toggle">
-        <button class="toggle-btn" (click)="goList()">
-          <img src="assets/icons/list-Icon.svg" class="icon" />
-          List
+    <div class="tl-board-global-right">
+
+      <!-- Toggle -->
+      <div class="tl-board-toggle">
+        <button class="tl-board-toggle-btn" (click)="navigateToList()">
+          <img src="assets/icons/list-Icon.svg" class="icon" /> List
         </button>
 
-        <button class="toggle-btn active">
-          <img src="assets/icons/board-Icon.svg" class="icon" />
-          Board
+        <button class="tl-board-toggle-btn active">
+          <img src="assets/icons/board-Icon.svg" class="icon" /> Board
         </button>
       </div>
 
-      <button class="create-btn" (click)="createTask()">Create New Task</button>
+      <!-- Create task -->
+      <button class="tl-create-task-btn" (click)="createTask()">Create New Task</button>
 
     </div>
+
   </div>
   }
 
-  <!-- =================================================
-       FILTERS + SORT + COUNT
-  ================================================== -->
-  <div class="board-filters-row">
+  <!-- Filters + sorting -->
+  <div class="tl-board-filters">
 
-    <button class="filter-btn" (click)="showFilter = true">
-      <img src="assets/icons/filter-Icon.svg" class="icon" />
-      Filters
+    <!-- Open filter panel -->
+    <button class="tl-filter-btn" (click)="isFilterOpen = true">
+      <img src="assets/icons/filter-Icon.svg" class="icon" /> Filters
     </button>
 
+    <!-- Filter popup -->
     <app-filter-panel
-      [open]="showFilter"
+      [open]="isFilterOpen"
       [assignees]="allUsers"
-      (close)="showFilter = false"
+      (close)="isFilterOpen = false"
       (filtersChanged)="applyFilters($event)">
     </app-filter-panel>
 
-    <!-- Sort -->
-    <div class="sort-box" (click)="toggleSortMenu = !toggleSortMenu">
+    <!-- Sort box -->
+    <div class="tl-sort-box" (click)="isSortMenuOpen = !isSortMenuOpen">
       <img src="assets/icons/sort-Icon.svg" class="icon" />
       Sort: {{ sortLabel }}
     </div>
 
-    @if (toggleSortMenu) {
-    <div class="sort-menu">
+    <!-- Sort menu -->
+    @if (isSortMenuOpen) {
+    <div class="tl-sort-menu">
       <button (click)="setSortDirection(true)">↑ Ascending</button>
       <button (click)="setSortDirection(false)">↓ Descending</button>
       <button (click)="setSortField('dueDate')">Due Date</button>
@@ -130,56 +127,67 @@
     </div>
     }
 
-    <!-- Count -->
-    <span class="task-count">Showing {{ filtered.length }} of {{ tasks.length }} tasks</span>
+    <!-- Task count -->
+    <span class="tl-task-count">
+      Showing {{ filteredTasks.length }} of {{ tasks.length }} tasks
+    </span>
 
   </div>
 
-  <!-- ===================================================
-       COLUMNS (KANBAN BOARD) — NATIVE DRAG & DROP
-  ====================================================== -->
-  <div class="columns-wrapper">
+  <!-- Kanban columns -->
+  <div class="tl-board-columns">
 
     @for (status of statuses; track status) {
 
-    <div class="column"
-         [attr.data-status]="status"
-         (dragover)="onDragOver($event)"
-         (drop)="onDrop($event, status)">
+    <div class="tl-board-column"
+      [ngClass]="{
+        'to-do': status === 'To Do',
+        'in-progress': status === 'In Progress',
+        'completed': status === 'Completed'
+      }"
+      [attr.data-status]="status"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event, status)">
 
-      <div class="column-header">
+      <!-- Column title + count -->
+      <div class="tl-column-header">
         <h3>{{ status }}</h3>
-        <span class="count">{{ columns[status].length }}</span>
+        <span class="count">{{ statusColumns[status].length }}</span>
       </div>
 
-      @if (columns[status].length === 0) {
-      <div class="empty">No tasks</div>
+      <!-- Empty column text -->
+      @if (statusColumns[status].length === 0) {
+      <div class="tl-column-empty">No tasks</div>
       }
 
-      @for (task of columns[status]; track task.id) {
+      <!-- Task cards -->
+      @for (task of statusColumns[status]; track task.id) {
 
-      <div class="task-card"
-           draggable="true"
-           (dragstart)="onDragStart($event, task)"
-           (dragend)="onDragEnd()">
+      <div class="tl-task-card"
+        draggable="true"
+        (dragstart)="onDragStart($event, task)"
+        (dragend)="onDragEnd()">
 
-        <div class="top">
-          <h4 class="title">{{ task.title }}</h4>
-          <span class="priority {{ priorityClass(task.priority) }}">{{ task.priority }}</span>
+        <div class="tl-task-card-top">
+          <h4 class="tl-task-title">{{ task.title }}</h4>
+          <span class="tl-task-priority {{ priorityClass(task.priority) }}">
+            {{ task.priority }}
+          </span>
         </div>
 
-        <div class="bottom">
-          <div class="assignee">
+        <div class="tl-task-card-bottom">
+          <div class="tl-task-assignee">
             <div class="avatar">{{ initials(task.assignee) }}</div>
             <span>{{ task.assignee }}</span>
           </div>
 
-          <div class="due">{{ formatDate(task.dueDate) }}</div>
+          <div class="tl-task-due">{{ formatDate(task.dueDate) }}</div>
         </div>
 
       </div>
 
       }
+
     </div>
 
     }

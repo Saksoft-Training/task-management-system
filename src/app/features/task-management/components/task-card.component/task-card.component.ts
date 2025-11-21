@@ -4,7 +4,6 @@ import { Task } from '../../../../../types';
 import { ProjectService } from '../../../project-management/services/project.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-task-card-component',
   standalone: true,
@@ -24,28 +23,18 @@ export class TaskCardComponent implements OnInit {
    */
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
 
-  // #endregion
-
   /**
    * @summary Stores the name of the project the task belongs to.
    */
   public projectName: string = '';
-  // #endregion
 
-  /**
-   * @summary Injects ProjectService to retrieve project details.
-   * @param projectService Service for fetching project information.
-   */
   constructor(
     private readonly projectService: ProjectService,
-    private router: Router
-  ) { }
-
-  // #endregion
+    private readonly router: Router
+  ) {}
 
   /**
-   * @summary Loads project name from the assigned projectId of the task.
-   * @returns void
+   * Loads the project name from projectId.
    */
   public ngOnInit(): void {
     const email: string = localStorage.getItem('loggedUserEmail') || '';
@@ -54,19 +43,17 @@ export class TaskCardComponent implements OnInit {
     this.projectName = project?.name ?? 'Unknown';
   }
 
-  // #endregion
-
   /**
-   * @summary Emits a close event for parent handling.
-   * @returns void
+   * @summary Emit close event
    */
   public closeCard(): void {
     this.close.emit();
   }
 
-  goToTaskDetails(id: number) {
+  /**
+   * Navigate to Task Details page
+   */
+  public goToTaskDetails(id: number) {
     this.router.navigate(['/tasks', id]);
   }
-
-  // #endregion
 }
