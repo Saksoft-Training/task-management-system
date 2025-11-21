@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { HeaderComponent } from './shared/components/header/header.component';
+
 import { FooterComponent } from './shared/components/footer.component/footer.component';
 import { ToastNotificationComponent } from './features/dashboard/components/notifications/toast-notification/toast-notification.component';
-import { HeaderComponent } from './shared/components/header/header.component';
 
 
 @Component({
@@ -17,9 +18,11 @@ import { HeaderComponent } from './shared/components/header/header.component';
 export class App {
   protected readonly title = signal('task-project-management');
 
+
   constructor() {
 
 
   }
+
 
 }

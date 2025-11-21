@@ -3336,6 +3336,518 @@ body::-webkit-scrollbar {
 }
 
 
+// ===========================
+// Dashboard Page Styles
+// ===========================
+
+.dashboard-page {
+  padding: variables.$dashboard-padding;
+}
+
+.grid {
+  display: grid;
+  gap: variables.$grid-gap;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+// Tablet breakpoint
+@media (min-width: variables.$bp-tablet) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// Desktop breakpoint
+@media (min-width: variables.$bp-desktop) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.loading-note {
+  color: variables.$color-text-muted;
+  margin-bottom: variables.$loading-note-margin-bottom;
+}
+
+.empty-state {
+  margin-top: variables.$empty-state-margin-top;
+  color: variables.$color-text-muted;
+}
+
+
+// ===========================
+// Statistic Card Styles
+// ===========================
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: variables.$gap-medium;
+  padding: variables.$card-padding;
+  border-radius: variables.$stat-card-radius;
+  border: 1px solid variables.$border-light;
+  background: variables.$white;
+  min-height: variables.$stat-card-min-height;
+  width: variables.$stat-card-width;
+  height: variables.$stat-card-height;
+  text-align: left;
+  cursor: pointer;
+}
+
+.statistic-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  font-weight: 700;
+  font-size: variables.$font-icon-size;
+}
+
+img {
+  margin-left: variables.$icon-offset-right;
+  margin-top: variables.$icon-offset-top;
+  width: variables.$icon-size;
+  height: variables.$icon-size;
+}
+
+.content {
+  flex: 1;
+}
+
+.label {
+  font-size: variables.$font-medium;
+  margin-bottom: variables.$icon-offset-top;
+}
+
+.value {
+  font-size: variables.$font-large;
+  font-weight: 700;
+}
+
+.status-badge {
+  font-size: variables.$font-small;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.meta {
+  font-size: variables.$font-small;
+  justify-content: space-between;
+}
+
+// ===========================
+// Color Variants
+// ===========================
+
+.blue {
+  background: variables.$color-blue-bg;
+  border-color: variables.$color-blue-border;
+}
+
+.purple,
+.amber {
+  background: variables.$color-purple-bg;
+  border-color: variables.$color-purple-border;
+}
+
+.green {
+  background: variables.$color-green-bg;
+  border-color: variables.$color-green-border;
+}
+
+.neutral {
+  background: variables.$color-neutral-bg;
+  border-color: variables.$color-neutral-border;
+}
+
+.red {
+  background: variables.$color-red-bg;
+  border-color: variables.$color-red-border;
+}
+
+// ===========================
+// Skeleton Loader
+// ===========================
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-small;
+  width: 100%;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eee, #f5f5f5, #eee);
+}
+
+.skeleton-line.short {
+  width: 30%;
+}
+
+.skeleton-line.long {
+  width: 70%;
+
+}
+
+.status-badge.cancelled {
+  background: variables.$color-btn-danger-bg;
+}
+/* ============= Project Detail Page ===============*/
+.project-detail-page {
+  padding: 2rem 5rem;
+  font-family: variables.$font-family-primary;
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+  .left-section {
+    display: flex;
+    flex-direction: column;
+    .title-row {
+      display: flex;
+      align-items: self-start;
+      gap: 2rem;
+    }
+    .status-badge-detail {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: variables.$color-bg-footer;
+    }
+  }
+  .status-badge-detail.planning {
+    background: variables.$planning-color;
+  }
+  .status-badge-detail.in-progress {
+    background: variables.$progress-color;
+  }
+  .status-badge-detail.completed {
+    background: variables.$completed-color;
+  }
+  .status-badge-detail.on-hold {
+    background: variables.$onHold-color;
+  }
+  .status-badge-detail.cancelled {
+    background: variables.$color-btn-danger-bg;
+  }
+  .actions-right {
+    display: flex;
+    gap: 1rem;
+    .create-task-btn {
+      background: variables.$create-btn-bg;
+      color: variables.$color-title;
+      padding: 10px 22px;
+      border-radius: 24px;
+      border: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+      &:hover {
+        background: color.adjust(variables.$create-btn-bg, $lightness: -8%);
+      }
+    }
+    .edit-task-btn {
+      background: variables.$color-bg-footer;
+      color: variables.$color-title;
+      border: 1px solid #d1d5db;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 0.875rem;
+      &:hover {
+        background: variables.$btn-secondary-bg-color;
+      }
+    }
+    .delete-task-btn {
+      background: variables.$color-btn-danger-bg;
+      color: variables.$color-bg-footer;
+      padding: 10px 22px;
+      border-radius: 24px;
+      border: none;
+      font-size: 0.875rem;
+      &:hover {
+        background: color.adjust(variables.$color-btn-danger-bg, $lightness: -8%);
+      }
+    }
+  }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+    align-items: start;
+  }
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: variables.$color-gray-600;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .dates {
+    font-size: 14px;
+    font-weight: 600;
+    color: variables.$color-btn-cancel-text;
+  }
+  .progress-row .dates {
+    margin-left: 1.8rem;
+  }
+  .meta-grid .timeline .progress-row .dates,
+  .meta-grid .timeline .progress-row .progress-bar,
+  .meta-grid .timeline .progress-row .progress-text {
+    margin-left: 1.5rem;
+  }
+  .meta-grid .timeline .progress-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .progress-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: variables.$color-gray-600;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: variables.$color-gray-300;
+    border-radius: 6px;
+    margin: 6px 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    width: 0%;
+    height: 100%;
+    background: variables.$progress-color;
+    border-radius: 6px;
+  }
+  .progress-text {
+    font-size: 0.85rem;
+    color: variables.$color-gray-600;
+  }
+  .meta-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .status-summaries {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .status-card {
+    flex: 1;
+    background: variables.$color-gray-50;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 8.125rem;
+    transition: 0.2s ease;
+  }
+  .status-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: variables.$color-gray-600;
+  }
+  .status-count {
+    font-size: 2rem;
+    font-weight: variables.$font-weight-footer;
+    color: variables.$color-title;
+    margin-top: 1rem;
+  }
+  /* Color Variants */
+  .status-card.in-progress {
+    background: variables.$status-in-progress;
+    border-color: variables.$color-gray-200;
+  }
+  .status-card.completed {
+    background: variables.$status-completed;
+    border-color: variables.$status-completed-border;
+  }
+  .status-card.overdue {
+    background: variables.$status-overdue;
+    border-color: variables.$status-overdue-border;
+  }
+  .tasks-panel {
+    margin-top: 2rem;
+    width: 100%;
+    background: variables.$color-bg-footer;
+    border: 1px solid variables.$color-gray-200;
+    border-radius: 16px;
+    padding: 2rem;
+    min-height: 12.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .tasks-title {
+    font-size: 1.1rem;
+    font-weight: variables.$font-weight-footer;
+    margin-bottom: 1.5rem;
+  }
+  .tasks-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: variables.$color-gray-600;
+    font-size: 1rem;
+  }
+  .create-task-btn {
+    background: variables.$color-bg-footer;
+    color: variables.$color-title;
+    padding: 10px 22px;
+    border-radius: 24px;
+    border: none;
+    font-size: 0.875rem;
+    cursor: pointer;
+    &:hover {
+      background: color.adjust(variables.$color-bg-footer, $lightness: -8%);
+    }
+  }
+}
+/* =========================
+   Dialog Overlay
+   ========================= */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.dialog-box {
+  width: 471px;
+  height: 293px;
+  background: variables.$create-btn-bg;
+  border-radius: 14px;
+  padding: 24px 16px;
+  box-sizing: border-box;
+  position: relative;
+}
+.dialog-header-green {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: variables.$color-black;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+}
+.logout-close-icon {
+  position: absolute;
+  top: 24px;
+  left: 431px;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  img {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+}
+.dialog-inner {
+  width: 439px;
+  height: 197px;
+  background: variables.$color-dialog-bg;
+  border-radius: 12px;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+.dialog-body {
+  width: 389px;
+  height: 77px;
+  margin-bottom: 26px;
+  p {
+    margin: 0 0 6px 0;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: -0.15px;
+    color: variables.$color-gray-500;
+  }
+  p:first-child {
+    margin-bottom: 14px;
+  }
+}
+.dialog-actions {
+  width: 389px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dialog-actions .confirm {
+  background: variables.$color-primary;
+  color: variables.$color-white;
+  width: 282px;
+  height: 48px;
+  padding: 14px 22px;
+  border-radius: 1000px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  &:hover {
+    background: variables.$color-btn-primary-hover;
+  }
+}
+.dialog-actions .dialog-cancel {
+  background: variables.$color-dialog-cancel-bg;
+  color: variables.$color-btn-cancel-text;
+  min-width: 91px;
+  height: 48px;
+  padding: 14px 22px;
+  border-radius: 1000px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  &:hover {
+    background: variables.$color-btn-secondary-hover-strong;
+  }
+
+}
+
+
 //---activity----
 
 .activity-feed {
