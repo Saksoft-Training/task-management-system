@@ -38,6 +38,6 @@ export const routes: Routes = [
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/:id', component: ProjectDetailComponent },
   { path: 'tasks/create', component: TaskCreateComponent },
-  {path:'dashboard',component:DashboardChartsComponent}
-
+  {path:'dashboard',component:DashboardComponentStats},
+  {path:'dashboard-comp',component:DashboardChartsComponent}
 ];
