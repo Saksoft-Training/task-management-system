@@ -1,0 +1,189 @@
+<!-- ==============================================
+     TASK BOARD ROOT WRAPPER
+================================================== -->
+<div class="task-board">
+
+  <!-- =========================================================
+       PROJECT BOARD HEADER
+  ============================================================ -->
+  @if (isProjectBoard && projectDetails) {
+  <div class="project-view-header">
+    <div class="header-top-row">
+
+      <div class="left">
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumbs">
+          <a routerLink="/projects">Projects</a>
+          <span>/</span>
+          <a [routerLink]="'/projects/' + projectId">{{ projectDetails.name }}</a>
+          <span>/</span>
+          <span class="current">Task Board View</span>
+        </nav>
+
+        <!-- Project Title -->
+        <div class="title-row">
+          <h1 class="project-title">{{ projectDetails.name }}</h1>
+
+          <span class="status-chip"
+                [ngClass]="projectDetails.status.toLowerCase()">
+            {{ projectDetails.status }}
+          </span>
+        </div>
+
+        <p class="project-desc">{{ projectDetails.description }}</p>
+
+        <div class="meta-row">
+          <div class="meta-item">
+            <img src="assets/icons/calendar-Icon.svg" class="meta-icon" />
+            <span>{{ projectDetails.startDate }} to {{ projectDetails.endDate }}</span>
+          </div>
+
+          <div class="separator"></div>
+
+          <div class="meta-item">
+            <img src="assets/icons/task-Icon.svg" class="meta-icon" />
+            <span>{{ projectTasksCount }} tasks</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="project-right-controls">
+        <div class="middle-toggle">
+          <button class="toggle-btn" (click)="goList()">
+            <img src="assets/icons/list-Icon.svg" class="icon" />
+            List
+          </button>
+
+          <button class="toggle-btn active">
+            <img src="assets/icons/board-Icon.svg" class="icon" />
+            Board
+          </button>
+        </div>
+
+        <button class="create-btn" (click)="createTask()">Create New Task</button>
+      </div>
+
+    </div>
+  </div>
+  }
+
+  <!-- =========================================================
+       GLOBAL VIEW (NON-PROJECT BOARD)
+  ============================================================ -->
+  @if (!isProjectBoard) {
+  <div class="board-top-row">
+    <h2 class="board-title">All Boards</h2>
+
+    <div class="right-controls">
+
+      <div class="middle-toggle">
+        <button class="toggle-btn" (click)="goList()">
+          <img src="assets/icons/list-Icon.svg" class="icon" />
+          List
+        </button>
+
+        <button class="toggle-btn active">
+          <img src="assets/icons/board-Icon.svg" class="icon" />
+          Board
+        </button>
+      </div>
+
+      <button class="create-btn" (click)="createTask()">Create New Task</button>
+
+    </div>
+  </div>
+  }
+
+  <!-- =================================================
+       FILTERS + SORT + COUNT
+  ================================================== -->
+  <div class="board-filters-row">
+
+    <button class="filter-btn" (click)="showFilter = true">
+      <img src="assets/icons/filter-Icon.svg" class="icon" />
+      Filters
+    </button>
+
+    <app-filter-panel
+      [open]="showFilter"
+      [assignees]="allUsers"
+      (close)="showFilter = false"
+      (filtersChanged)="applyFilters($event)">
+    </app-filter-panel>
+
+    <!-- Sort -->
+    <div class="sort-box" (click)="toggleSortMenu = !toggleSortMenu">
+      <img src="assets/icons/sort-Icon.svg" class="icon" />
+      Sort: {{ sortLabel }}
+    </div>
+
+    @if (toggleSortMenu) {
+    <div class="sort-menu">
+      <button (click)="setSortDirection(true)">↑ Ascending</button>
+      <button (click)="setSortDirection(false)">↓ Descending</button>
+      <button (click)="setSortField('dueDate')">Due Date</button>
+      <button (click)="setSortField('priority')">Priority</button>
+      <button (click)="setSortField('status')">Status</button>
+      <button (click)="setSortField('title')">Title</button>
+    </div>
+    }
+
+    <!-- Count -->
+    <span class="task-count">Showing {{ filtered.length }} of {{ tasks.length }} tasks</span>
+
+  </div>
+
+  <!-- ===================================================
+       COLUMNS (KANBAN BOARD) — NATIVE DRAG & DROP
+  ====================================================== -->
+  <div class="columns-wrapper">
+
+    @for (status of statuses; track status) {
+
+    <div class="column"
+         [attr.data-status]="status"
+         (dragover)="onDragOver($event)"
+         (drop)="onDrop($event, status)">
+
+      <div class="column-header">
+        <h3>{{ status }}</h3>
+        <span class="count">{{ columns[status].length }}</span>
+      </div>
+
+      @if (columns[status].length === 0) {
+      <div class="empty">No tasks</div>
+      }
+
+      @for (task of columns[status]; track task.id) {
+
+      <div class="task-card"
+           draggable="true"
+           (dragstart)="onDragStart($event, task)"
+           (dragend)="onDragEnd()">
+
+        <div class="top">
+          <h4 class="title">{{ task.title }}</h4>
+          <span class="priority {{ priorityClass(task.priority) }}">{{ task.priority }}</span>
+        </div>
+
+        <div class="bottom">
+          <div class="assignee">
+            <div class="avatar">{{ initials(task.assignee) }}</div>
+            <span>{{ task.assignee }}</span>
+          </div>
+
+          <div class="due">{{ formatDate(task.dueDate) }}</div>
+        </div>
+
+      </div>
+
+      }
+    </div>
+
+    }
+
+  </div>
+
+</div>

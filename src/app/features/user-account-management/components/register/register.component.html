@@ -1,5 +1,5 @@
 <div class="register-page">
-  <div class="page-title">Register</div>
+  <div class="page-title-register">Register</div>
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="card">
     <div class="header">
 
@@ -112,7 +112,7 @@
       <div class="error"><p>Passwords do not match.</p></div>
       }
     </div>
-    <div class="actions">
+    <div class="actions-register">
       <button class="register-btn" type="submit"
         [disabled]="isSubmitting">Register</button>
       <button class="cancel-btn" type="button"

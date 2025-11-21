@@ -1,0 +1,157 @@
+<div class="project-detail-page">
+    <div class="breadcrumb">
+        <a class="breadcrumb-link" (click)="goToProjects()">Projects</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{{ project?.name }}</span>
+    </div>
+    <div class="top-header">
+        <div class="left-section">
+            <div class="title-row">
+                <h1 class="page-title">{{ project?.name }}</h1>
+                <span class="status-badge-detail" [ngClass]="statusClass">
+                    {{ project?.status }}
+                </span>
+            </div>
+
+            <p class="page-subtitle">{{ project?.description }}</p>
+        </div>
+        <div class="actions-right">
+            <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
+            <button class="edit-task-btn" (click)="onEditProject()">Edit Project <img
+                    src="assets/icons/edit-Icon.svg"></button>
+            <button class="delete-task-btn" (click)="onDeleteProject()">Delete Project <img
+                    src="assets/icons/delete-Icon.svg"></button>
+        </div>
+    </div>
+    <div class="meta-grid">
+        <div class="timeline">
+            <div class="progress-row">
+                <div class="label">
+                    <img src="assets/icons/calendar-Icon.svg">
+                    Project Timeline
+                </div>
+                <div class="dates">
+                    {{ project?.startDate | date:'MMMM d, y' }} - {{ project?.endDate | date:'MMMM d, y' }}
+                </div>
+            </div>
+            <div class="progress-row">
+                <div class="progress-label">
+                    <img src="assets/icons/progress-Icon.svg">
+                    Progress
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="percentComplete"></div>
+                </div>
+                <div class="progress-text">{{ progressText }}</div>
+            </div>
+        </div>
+        <div class="meta-right">
+            <div class="progress-row">
+                <div class="label">
+                    <img src="assets/icons/createdBy-Icon.svg">
+                    Created By
+                </div>
+                <div class="dates">{{ project?.createdBy }}</div>
+            </div>
+            <div class="progress-row">
+                <div class="label">
+                    <img src="assets/icons/clock-Icon.svg">
+                    Created
+                </div>
+                <div class="dates">
+                    <div>{{ project?.createdAt | date:'MMM d, y, h:mm a' }}</div>
+                    <div class="label">Last updated: {{ project?.updatedAt | date:'MMM d, y, h:mm a' }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-summaries">
+        <div class="status-card">
+            <div class="status-title">To Do</div>
+            <div class="status-count">{{ todoCount }}</div>
+        </div>
+        <div class="status-card in-progress">
+            <div class="status-title">In Progress</div>
+            <div class="status-count">{{ inProgressCount }}</div>
+        </div>
+        <div class="status-card completed">
+            <div class="status-title">Completed</div>
+            <div class="status-count">{{ completedCount }}</div>
+        </div>
+        <div class="status-card overdue">
+            <div class="status-title">Overdue</div>
+            <div class="status-count">{{ overdueCount }}</div>
+        </div>
+    </div>
+    <div class="tasks-panel">
+ 
+        <div class="tl-header">
+            <h3>Tasks</h3>
+            <div class="tl-header-controls">
+                <div class="tl-header-toggle">
+                    <button class="tl-toggle-btn" [class.active]="taskViewMode === 'list'"
+                        (click)="taskViewMode = 'list'">
+                        <img src="assets/icons/list-Icon.svg" class="icon" />
+                        List
+                    </button>
+ 
+                    <button class="tl-toggle-btn" (click)="goToBoard()">
+                        <img src="assets/icons/board-Icon.svg" class="icon" />
+                        Board
+                    </button>
+                </div>
+ 
+                <button class="tl-create-btn" (click)="onCreateTask()">Create New Task</button>
+            </div>
+        </div>
+ 
+        <div class="tl-project-list">
+ 
+            @for (task of tasks; track task.id) {
+ 
+            <div class="tl-project-card">
+ 
+                <div class="tl-project-left">
+                    <h4 class="tl-project-title">{{ task.title }}</h4>
+                    <p class="tl-project-sub">
+                        {{ task.dueDate | date:'MMM d, y' }} • Assigned to: {{ task.assignee }}
+                    </p>
+                </div>
+ 
+                <div class="tl-project-right">
+                    <span class="tl-status tl-status--{{ task.status.toLowerCase().replace(' ', '-') }}">
+                        {{ task.status }}
+                    </span>
+ 
+                    <span class="tl-priority tl-priority--{{ task.priority.toLowerCase().replace(' ', '-') }}">
+                        {{ task.priority }}
+                    </span>
+                </div>
+ 
+            </div>
+ 
+            }
+ 
+            @if (tasks.length === 0) {
+            <div class="tasks-empty">
+                <p>No tasks yet</p>
+                <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
+            </div>
+            }
+ 
+        </div>
+    </div>
+    <!-- DELETE CONFIRMATION DIALOG -->
+@if (showDeleteDialog) {
+  <app-dilog-delete-component
+    [title]="deleteDialogData.title"
+    [message]="deleteDialogData.message"
+    [confirmText]="deleteDialogData.confirmText"
+    [cancelText]="deleteDialogData.cancelText"
+    type="danger"
+    (confirm)="handleDeleteConfirm()"
+    (cancel)="handleDeleteCancel()"
+  />
+}
+
+</div>

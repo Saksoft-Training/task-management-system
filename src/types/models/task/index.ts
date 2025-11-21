@@ -1,19 +1,18 @@
-export type TaskStatus = 'To Do' | 'In Progress' | 'Completed';
-export type TaskPriority = 'Low' | 'Medium' | 'High' | 'Urgent';
-export interface Task {
+export type TaskPriority = 'High' | 'Low' | 'Medium' | 'Urgent';
+export type TaskStatus = 'Completed' | 'In Progress' | 'To Do';
 
+export interface Task {
   id: number;
   title: string;
   description?: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  assignee: string;       
-  assigneeEmail: string;  
   dueDate: string;
+  id: number;
+  priority: TaskPriority;
   projectId: number;
-  createdBy: string;
-  createdAt: string;
+  status: TaskStatus;
+  title: string;
   updatedAt: string;
   completedAt?: string | null;
+
 }
 

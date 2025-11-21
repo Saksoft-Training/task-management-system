@@ -36,9 +36,6 @@
   transition: $props $duration $ease;
 }
 
-@mixin fade-in($duration: 0.3s) {
-  animation: fadeIn $duration ease;
-}
 
 @keyframes fadeIn {
   from {
