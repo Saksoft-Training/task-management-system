@@ -16,10 +16,7 @@ export class DashboardService {
 
   constructor(private authService: AuthService) {
     // Compute once the user loads
-    setTimeout(() => {
-      this.refresh();
-    }, 150);
-
+    this.refresh();
     fromEvent<StorageEvent>(window, 'storage').subscribe(() => this.refresh());
   }
 
