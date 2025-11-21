@@ -3736,15 +3736,21 @@ body::-webkit-scrollbar {
 .tl-breadcrumb {
   font-size: 14px;
   color: variables.$color-gray-600;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 
   a {
-    color: variables.$color-breadcrumb;
+    color: variables.$color-gray-500;
     cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      color: variables.$color-text-primary;
+    }
   }
 
   span {
     color: variables.$color-text-primary;
+    font-weight: 500;
   }
 }
 /* ------------------------------
@@ -3753,12 +3759,14 @@ body::-webkit-scrollbar {
 .tl-topbar {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .tl-title {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 700;
+  color: variables.$color-text-primary;
 }
 
 /* ------------------------------
@@ -3767,16 +3775,15 @@ body::-webkit-scrollbar {
 .tl-badges {
   display: flex;
   gap: 8px;
-  margin-left: 20px;
+  margin-left: 8px;
 }
 
 .tl-badge {
-  padding: 5px 12px;
+  padding: 4px 12px;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
-
 .tl-badge--status {
   background: variables.$color-priority-low-bg;
   color: variables.$completed-color;
@@ -3819,20 +3826,22 @@ body::-webkit-scrollbar {
    Controls
 ------------------------------ */
 .tl-controls {
-  margin-top: 28px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 
   label {
     font-weight: 600;
+    color: variables.$color-text-primary;
   }
 
   select {
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: 1px solid variables.$color-border-d1;
-    background: variables.$color-white;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid variables.$color-gray-300;
+    font-size: 14px;
     cursor: pointer;
   }
 }
@@ -3841,9 +3850,9 @@ body::-webkit-scrollbar {
    Main Grid
 ------------------------------ */
 .tl-info-grid {
-  margin-top: 32px;
+  margin-top: 28px;
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 320px;
   gap: 24px;
 }
 
@@ -3851,22 +3860,23 @@ body::-webkit-scrollbar {
    Info Card
 ------------------------------ */
 .tl-info-card {
-  background: variables.$color-gray-f9;
-  border-radius: 12px;
+  background: #FAFAFA;
   padding: 24px;
+  border-radius: 12px;
   border: 1px solid variables.$color-gray-200;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
 .tl-info-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: 14px;
   font-size: 15px;
 }
 
 .tl-info-label {
   font-weight: 600;
-  color: variables.$color-text-secondary;
+  color: variables.$color-gray-700;
 
   img {
     margin-right: 6px;
@@ -3877,9 +3887,10 @@ body::-webkit-scrollbar {
    Status History
 ------------------------------ */
 .tl-history-card h3 {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+  color: variables.$color-text-primary;
 
   img {
     margin-right: 6px;
@@ -3887,8 +3898,9 @@ body::-webkit-scrollbar {
 }
 
 .tl-history-item {
-  background: variables.$color-gray-f9;
-  padding: 10px 14px;
+  background: #FAFAFA;
+  border: 1px solid variables.$color-gray-200;
+  padding: 10px 12px;
   border-radius: 10px;
   margin-bottom: 10px;
   display: flex;
@@ -3896,8 +3908,10 @@ body::-webkit-scrollbar {
 }
 
 .tl-history-status {
-  padding: 4px 10px;
-  border-radius: 20px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background: #E7F9EF;
+  color: #00A854;
   font-size: 12px;
   font-weight: 600;
 }
@@ -3911,17 +3925,19 @@ body::-webkit-scrollbar {
    Description
 ------------------------------ */
 .tl-description {
-  margin-top: 40px;
+  margin-top: 32px;
 
   h3 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
+    margin-bottom: 10px;
+    color: variables.$color-text-primary;
   }
 
   p {
     font-size: 15px;
+    color: variables.$color-gray-700;
     line-height: 1.6;
-    color: variables.$color-text-secondary;
   }
 }
 
