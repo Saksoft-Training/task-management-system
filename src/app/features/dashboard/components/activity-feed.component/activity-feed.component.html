@@ -3,7 +3,7 @@
     <h2>Recent Activity</h2>
   </div>
 
-  <ng-container *ngIf="activities$ | async as activities; else loadingTpl">
+  <ng-container *ngIf="activities$ | async as activities; else emptyTpl">
     <ng-container *ngIf="activities.length > 0; else emptyTpl">
       <ul class="activity-list-stats">
         <li
@@ -32,10 +32,6 @@
       </ul>
     </ng-container>
   </ng-container>
-
-  <ng-template #loadingTpl>
-    <div class="info-stats">Loading activities…</div>
-  </ng-template>
 
   <ng-template #emptyTpl>
     <div class="info-stats">No recent activities.</div>

@@ -80,10 +80,6 @@
             No projects or tasks found. Add a project to get started.
         </div>
 
-        <!-- Duplicate empty state -->
-        <div *ngIf="stats.totalProjects === 0 && stats.totalTasks === 0" class="empty-state-stats">
-            No projects or tasks found. Add a project to get started.
-        </div>
 
         <!-- ========= CHARTS GRID ========= -->
         <div class="charts-grid-stats">
@@ -91,14 +87,7 @@
                 <app-dashboard-charts></app-dashboard-charts>
             </div>
 
-            <div class="chart-card-stats">
-                <app-chart></app-chart>
-            </div>
-        </div>
-
-        <!-- ========= ACTIVITY FEED PANEL ========= -->
-        <div class="activity-feed-card-stats">
-            <app-activity-feed></app-activity-feed>
+         
         </div>
     </ng-container>
 </section>
