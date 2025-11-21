@@ -1880,6 +1880,33 @@ body::-webkit-scrollbar {
   margin-bottom: 36px;
 }
 
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.delete-project-top-btn {
+  background: #cf1430;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.delete-project-top-btn img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
 .project-form-container {
   background: variables.$color-bg-footer;
   border: 1px solid #ededed;
@@ -2601,6 +2628,18 @@ body::-webkit-scrollbar {
   .actions-right {
     display: flex;
     gap: 1rem;
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    img {
+      width: 16px;
+      height: 16px;
+      filter: brightness(0) invert(1);
+    }
 
     .create-task-btn {
       background: variables.$create-btn-bg;
@@ -3341,7 +3380,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    PROJECT MODE CARD (NEW TL CLASS)
-================================ */
 
 .tl-project-list {
   display: flex;
@@ -3437,7 +3475,6 @@ body::-webkit-scrollbar {
 
 /* =============================================================
    TABLE
-============================================================= */
 .tl-table-wrapper {
   width: 100%;
   background: variables.$color-white;
@@ -3485,7 +3522,6 @@ body::-webkit-scrollbar {
 
 /* =============================================================
    STATUS TAGS
-============================================================= */
 .tl-status {
   padding: 4px 12px;
   border-radius: 50px;
@@ -3510,7 +3546,6 @@ body::-webkit-scrollbar {
 
 /* =============================================================
    PRIORITY TAGS
-============================================================= */
 .tl-priority {
   padding: 4px 12px;
   border-radius: 50px;
@@ -3540,7 +3575,6 @@ body::-webkit-scrollbar {
 
 /* =============================================================
    ASSIGNEE CELL
-============================================================= */
 .tl-assignee {
   display: flex;
   align-items: center;
@@ -3566,7 +3600,6 @@ body::-webkit-scrollbar {
 
 /* =============================================================
    ACTION ICONS
-============================================================= */
 .tl-actions {
   display: flex;
   align-items: center;
@@ -3788,7 +3821,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    BACKDROP
-================================ */
 .tl-task-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -3801,7 +3833,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    MAIN MODAL CARD
-================================ */
 .tl-task-modal {
   width: 760px;
   background: variables.$color-modal-green;
@@ -3813,7 +3844,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    HEADER
-================================ */
 .tl-task-header {
   display: flex;
   justify-content: space-between;
@@ -3864,7 +3894,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    DETAILS BOX
-================================ */
 .tl-task-details {
   background: variables.$color-white;
   border-radius: 16px;
@@ -3873,7 +3902,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    BADGES
-================================ */
 .tl-task-badges {
   display: flex;
   gap: 12px;
@@ -3897,7 +3925,6 @@ body::-webkit-scrollbar {
 }
 /* ================================
    INFO GRID (Inside Modal)
-================================ */
 .tl-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -3924,7 +3951,6 @@ body::-webkit-scrollbar {
 
 /* ================================
    ANIMATION
-================================ */
 @keyframes tlFadeIn {
   from {
     opacity: 0;
@@ -3938,7 +3964,6 @@ body::-webkit-scrollbar {
 
 /* ===========================================
    BOARD TOP (GLOBAL HEADER)
-=========================================== */
 .tl-board-global-header {
   width: auto;
   display: flex;
@@ -4013,7 +4038,6 @@ body::-webkit-scrollbar {
 
 /* ===========================================
    FILTERS ROW
-=========================================== */
 .tl-board-filters {
   display: flex;
   align-items: center;
@@ -4081,7 +4105,6 @@ body::-webkit-scrollbar {
 
 /* ===========================================
    BOARD COLUMNS
-=========================================== */
 .tl-board-columns {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -4142,7 +4165,6 @@ body::-webkit-scrollbar {
 
 /* ===========================================
    TASK CARD
-=========================================== */
 .tl-task-card {
   background: variables.$color-white;
   border: 1px solid variables.$color-gray-200;
@@ -4217,7 +4239,6 @@ body::-webkit-scrollbar {
 }
 /* ===========================================
    PROJECT HEADER (TOP OF PAGE)
-=========================================== */
 .tl-project-header {
   padding: 0 40px;
   margin-bottom: 20px;
@@ -4325,7 +4346,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    OVERLAY
-=========================== */
 .tl-filter-overlay {
   position: fixed;
   inset: 0;
@@ -4336,7 +4356,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    FILTER PANEL
-=========================== */
 .tl-filter-panel {
   position: fixed;
   right: 0;
@@ -4360,7 +4379,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    FILTER HEADER
-=========================== */
 .tl-filter-header {
   display: flex;
   justify-content: space-between;
@@ -4393,7 +4411,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    FILTER BOX
-=========================== */
 .tl-filter-box {
   background-color: variables.$color-gray-50;
   border-radius: 16px;
@@ -4433,7 +4450,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    CHECKBOX OPTIONS
-=========================== */
 .tl-filter-options {
   display: flex;
   flex-wrap: wrap;
@@ -4456,7 +4472,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    DATE RANGE
-=========================== */
 .tl-filter-date-row {
   display: flex;
   gap: 12px;
@@ -4484,7 +4499,6 @@ body::-webkit-scrollbar {
 
 /* ===========================
    CLEAR ALL BUTTON
-=========================== */
 .tl-filter-clear-all {
   width: 100%;
   padding: 14px 0;
@@ -4622,4 +4636,5 @@ textarea:focus {
 
 .bold {
   font-weight: 600;
+}
 }

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { ProjectCreateComponent } from './features/project-management/components/project-create/project-create.component';
 import { RegisterComponent } from './features/user-account-management/components/register/register.component';
 import { LoginComponent } from './features/user-account-management/components/login/login.component';
@@ -11,7 +10,6 @@ import { ProjectListComponent } from './features/project-management/components/p
 import { TaskDetailPageComponent } from './features/task-management/components/task-detail-page.component/task-detail-page.component';
 import { ProfileComponent } from './features/user-account-management/components/profile/profile.component';
 import { ProjectDetailComponent } from './features/project-management/components/project-detail/project-detail.component';
-
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,7 +23,6 @@ export const routes: Routes = [
   { path: 'projects/:id/board', component: TaskBoardComponent },
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/board', component: TaskBoardComponent },
-  { path: 'tasks/create', component: TaskCreateComponent },
   { path: 'tasks/create/:projectId', component: TaskCreateComponent },
   { path: 'tasks/edit/:id', component: TaskCreateComponent },
   { path: 'tasks/:id', component: TaskDetailPageComponent },
