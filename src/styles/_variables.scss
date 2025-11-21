@@ -277,4 +277,74 @@ $status-in-progress-border: #BEDBFF;
 $status-completed: #F0FDF4;
 $status-completed-border: #B9F8CF;
 $status-overdue: #FDF0F0;
+
 $status-overdue-border: #F8B9B9;
+
+// Dashboard Page Spacing
+$dashboard-padding: 16px;
+
+// Grid gaps
+$grid-gap: 12px;
+
+// Breakpoints
+$bp-tablet: 640px;
+$bp-desktop: 1024px;
+
+// Loading + empty state colors
+$color-text-muted: rgba(0, 0, 0, 0.6);
+
+// Margins
+$empty-state-margin-top: 20px;
+$loading-note-margin-bottom: 8px;
+
+
+// ===========================
+// Statistic Card Variables
+// ===========================
+
+// Base colors
+$white: #fff;
+
+// Color variants
+$color-blue-bg: #e5f0ff;
+$color-blue-border: #d3e3ff;
+
+$color-purple-bg: #f3e9ff;
+$color-purple-border: #e8d6ff;
+
+$color-green-bg: #e8ffef;
+$color-green-border: #d3fadf;
+
+$color-neutral-bg: #f9f9ff;
+$color-neutral-border: #ececff;
+
+$color-red-bg: #ffecec;
+$color-red-border: #ffd5d5;
+
+// Borders
+$border-light: rgba(0, 0, 0, 0.06);
+
+// Spacing
+$card-padding: 14px;
+$gap-medium: 12px;
+$gap-small: 8px;
+
+// Sizing
+$stat-card-radius: 12px;
+$stat-card-width: 288px;
+$stat-card-height: 166px;
+$stat-card-min-height: 84px;
+
+// Typography
+$font-large: 20px;
+$font-medium: 18px;
+$font-small: 12px;
+$font-icon-size: 22px;
+
+// Icons
+$icon-size: 16px;
+$icon-offset-right: 220px;
+$icon-offset-top: 40px;
+
+$status-overdue-border: #F8B9B9;
+
