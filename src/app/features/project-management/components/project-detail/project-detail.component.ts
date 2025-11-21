@@ -30,6 +30,7 @@ export class ProjectDetailComponent implements OnInit {
   /** Display text showing progress  */
   public progressText = '';
   public showDeleteDialog = false;
+   public taskViewMode: 'list' | 'board' = 'list';
   /** Task statistics */
   public todoCount = 0;
   public inProgressCount = 0;
@@ -213,6 +214,10 @@ public handleDeleteCancel(): void {
       progressText: this.progressText
     });
   }
+  goToBoard() {
+  if (!this.project?.id) return;
+  this.router.navigate([`/projects/${this.project.id}/board`]);
+}
   
   // #endregion
 }
