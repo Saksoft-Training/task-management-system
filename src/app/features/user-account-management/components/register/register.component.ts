@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { User } from '../../../../../types/models/user';
 import { AuthService } from '../../services/auth-service';
 import { UserStorageService } from '../../../../shared/services/storage-service';
+import { NotificationService } from '../../../dashboard/services/notification-service';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -40,7 +41,8 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private userStorage: UserStorageService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
   //#endregion
 
@@ -245,35 +247,58 @@ export class RegisterComponent implements OnInit {
    * @returns void
    */
   public onSubmit(): void {
-    this.successMessage = '';
-    this.errorMessage = '';
-    this.isSubmitting = true;
-    this.registerForm.updateValueAndValidity();
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      this.isSubmitting = false;
-      return;
-    }
-    const { name, email, password } = this.registerForm.value;
-    if (this.userStorage.isEmailExists(email)) {
-      this.registerForm.get('email')?.setErrors({ emailTaken: true });
-      this.isSubmitting = false;
-      return;
-    }
-    const encryptedPassword = this.userStorage.encodePassword(password);
-    const newUser: User = {
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      password: encryptedPassword,
-      createdAt: new Date().toISOString()
-    };
-    const users = this.userStorage.getAllUsers();
-    users.push(newUser);
-    this.userStorage.saveAllUsers(users);
-    this.successMessage = 'Registration successful';
-    setTimeout(() => this.router.navigate(['/login']), 1200);
+  this.isSubmitting = true;
+  this.registerForm.updateValueAndValidity();
+
+  if (this.registerForm.invalid) {
+    this.registerForm.markAllAsTouched();
     this.isSubmitting = false;
+    return;
   }
+
+  const { name, email, password } = this.registerForm.value;
+
+  if (this.userStorage.isEmailExists(email)) {
+    this.registerForm.get('email')?.setErrors({ emailTaken: true });
+
+    this.notificationService.addNotification({
+  kind: 'custom' as any,
+  severity: 'critical',
+  title: 'Registration Failed',
+  message: 'Please try again.',
+  showToast: true
+});
+
+
+    this.isSubmitting = false;
+    return;
+  }
+
+  const encryptedPassword = this.userStorage.encodePassword(password);
+  const newUser: User = {
+    name: name.trim(),
+    email: email.trim().toLowerCase(),
+    password: encryptedPassword,
+    createdAt: new Date().toISOString()
+  };
+
+  const users = this.userStorage.getAllUsers();
+  users.push(newUser);
+  this.userStorage.saveAllUsers(users);
+
+  this.notificationService.addNotification({
+  kind: 'custom' as any,  // if no specific kind is needed
+  severity: 'success',
+  title: 'Registration Successful',
+  message: 'Your account has been created.',
+  showToast: true   // 👈 VERY IMPORTANT
+});
+
+
+  setTimeout(() => this.router.navigate(['/login']), 1200);
+  this.isSubmitting = false;
+}
+
   //#endregion
 
   //#region Navigation

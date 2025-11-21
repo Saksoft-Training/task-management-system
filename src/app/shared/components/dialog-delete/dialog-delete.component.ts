@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-dilog-delete-component',
+  selector: 'app-dialog-delete-component',
   imports: [],
   templateUrl: './dialog-delete.component.html',
   styleUrl: './dialog-delete.component.scss',

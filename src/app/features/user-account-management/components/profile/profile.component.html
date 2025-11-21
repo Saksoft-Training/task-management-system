@@ -58,11 +58,9 @@
                 {{ currentUser?.name?.charAt(0) || 'U' }}
               </div>
               }
-              <input id="fileInput" type="file" accept="image/*"
-                (change)="onFileChange($event)" />
+              <input id="fileInput" type="file" accept="image/*" (change)="onFileChange($event)" />
               <label for="fileInput" class="upload-btn">
-                <img src="assets/icons/upload-picture.svg"
-                  class="upload-icon" />
+                <img src="assets/icons/upload-picture.svg" class="upload-icon" />
                 Upload Picture
               </label>
               <small class="upload-hint">Max size: 2MB. Formats: JPG, PNG,
@@ -75,8 +73,7 @@
               <label for="name">Name</label>
               <img src="assets/icons/ProfilePage.svg" class="label-icon" />
             </div>
-            <input id="name" formControlName="name"
-              placeholder="Enter your name" />
+            <input id="name" formControlName="name" placeholder="Enter your name" />
             @if (editForm.get('name')?.errors?.['required'] &&
             editForm.get('name')?.touched) {
             <div class="error">Name is required.</div> }
@@ -90,17 +87,28 @@
               <label for="email">Email</label>
               <img src="assets/icons/ProfilePage.svg" class="label-icon" />
             </div>
-            <input id="email" formControlName="email"
-              placeholder="Enter your email" />
-            @if (editForm.get('email')?.invalid &&
+            <input id="email" formControlName="email" placeholder="Enter your email" />
+            @if (editForm.get('email')?.errors?.['required'] &&
             editForm.get('email')?.touched) {
-            <div class="error">Enter a valid email address.</div> }
+            <div class="error">Email is required.</div>
+            }
+
+            <!-- Invalid Gmail format -->
+            @if (editForm.get('email')?.errors?.['invalidEmail'] &&
+            editForm.get('email')?.touched) {
+            <div class="error">Enter a valid Gmail address.</div>
+            }
+
+            <!-- Email already exists -->
+            @if (editForm.get('email')?.errors?.['emailExists'] &&
+            editForm.get('email')?.touched) {
+            <div class="error">This email is already registered.</div>
+            }
             <div class="password-label-row">
               <label class="password-label">New Password</label>
               <label class="optional-label">(optional)</label>
             </div>
-            <input id="password" type="password" formControlName="password"
-              placeholder="Enter new password" />
+            <input id="password" type="password" formControlName="password" placeholder="Enter new password" />
             @if (!editForm.get('password')?.value) {
             <div class="password-help">Leave blank if you don't want to change
               your password</div>
@@ -117,12 +125,10 @@
         </div>
         <div class="actions-profile">
           <button type="submit" class="btn-primary">Save Changes</button>
-          <button type="button" class="btn-secondary"
-            (click)="cancelEdit()">Cancel</button>
+          <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
         </div>
       </form>
       }
     </div>
   </div>
 </div>
-

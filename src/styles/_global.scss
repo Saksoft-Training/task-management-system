@@ -11,7 +11,6 @@
 
 html,
 body {
-
   height: auto;
   min-height: 100%;
   overflow-y: auto;
@@ -46,6 +45,7 @@ body::-webkit-scrollbar {
     height: 0;
   }
 }
+
 /* ========================================= */
 /* FOOTER STYLES */
 /* ========================================= */
@@ -103,67 +103,54 @@ body::-webkit-scrollbar {
   }
 }
 
-
 /* ========================================= */
 /*  HEADER component */
 /* ========================================= */
 .app-header {
-  width: 79.9375rem;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   background: variables.$color-white;
   border-bottom: 0.0625rem solid variables.$color-gray-200;
   height: 6.25rem;
-  padding: 0;
+  padding: 20px 80px;
   box-sizing: border-box;
   font-family: variables.$font-family-primary;
 }
 
 .header-container {
-  width: 75rem;
-  height: 6.25rem;
+  width: 100%;
+  max-width: 90rem;
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
+
 }
 
 .logo {
-  width: 9.4375rem;
-  height: 2.25rem;
-  display: flex;
-  align-items: center;
   font-size: 1.875rem;
-  font-weight: 500;
-  letter-spacing: -5%;
+  font-weight: variables.$font-weight-primary;
+  letter-spacing: -0.5px;
   line-height: 120%;
   color: variables.$color-black;
 }
 
 .nav-links {
-  position: absolute;
-  top: 2.25rem;
-  left: 31.40625rem;
-  transform: translateX(-50%);
-  width: 19.375rem;
-  height: 1.25rem;
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  gap: 2.1875rem;
+  gap: 2rem;
 
   a {
-    width: 4.5rem;
-    height: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 0.875rem;
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 140%;
     color: variables.$color-black;
     text-decoration: none;
+    transition: 0.2s ease;
   }
 }
 
@@ -182,12 +169,10 @@ body::-webkit-scrollbar {
   padding: 0.875rem 1.375rem;
   background: variables.$create-btn-bg;
   border-radius: 62.5rem;
-  width: fit-content;
   font-family: variables.$font-family-primary;
   font-size: 0.875rem;
-  font-weight: 500;
-  color: variables.$color-black;
-  white-space: nowrap;
+  font-weight: variables.$font-weight-primary;
+  color: variables.$color-label-dark;
   cursor: pointer;
 }
 
@@ -200,6 +185,49 @@ body::-webkit-scrollbar {
 .logout-icon {
   font-size: 1.125rem;
   cursor: pointer;
+}
+
+.notification-container {
+  position: relative;
+
+  .bell-button {
+    position: relative;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .bell-icon {
+      width: 24px;
+      height: 24px;
+      transition: filter 0.2s ease, transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background-color: #e11d48;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 9999px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+    }
+  }
 }
 
 /* ========================================= */
@@ -392,103 +420,127 @@ body::-webkit-scrollbar {
 .notifications-list {
   display: flex;
   flex-direction: column;
-  gap: variables.$notification-gap;
-  max-height: 350px;
+  gap: 0.75rem;
+  max-height: 21.875rem;
   overflow-y: auto;
-  padding-right: 5px;
+  padding-right: 0.3125rem;
 
   &::-webkit-scrollbar {
     width: variables.$scrollbar-width;
   }
+}
 
-  &::-webkit-scrollbar-track {
-    background: variables.$color-light-grey;
-    border-radius: variables.$scrollbar-radius;
+/* ========== FIXED NOTIFICATION CARD ========== */
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+
+  &.unread {
+    background: #eef6ff;
+    border-left: 4px solid #3b82f6;
   }
 
-  &::-webkit-scrollbar-thumb {
-    background: variables.$color-scroll-thumb;
-    border-radius: variables.$scrollbar-radius;
-  }
-
-  .notification-item {
+  /* LEFT ICON */
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    /* prevent icon from shrinking */
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    background: variables.$color-white;
-    border: 1px solid variables.$color-border;
-    border-radius: variables.$border-radius;
-    padding: variables.$notification-padding;
-    transition:
-      background 0.2s ease-in-out,
-      border-color 0.2s ease-in-out;
-    cursor: pointer;
-
-    &:hover {
-      border-color: variables.$color-border-hover;
-      background: #f9fafb;
-    }
-    
-    &.unread {
-      background: variables.$color-unread-bg;
-      border-left: 4px solid variables.$color-primary-blue;
-    }
-
-    .notification-content {
-      flex: 1;
-
-      h4 {
-        font-size: 14px;
-        font-weight: 600;
-        color: variables.$color-header;
-        margin: 0 0 4px;
-      }
-
-      p {
-        font-size: 13px;
-        color: variables.$color-text-notification;
-        margin: 0 0 6px;
-      }
-
-      .timestamp {
-        font-size: 11px;
-        color: variables.$color-timestamp;
-      }
-    }
-
-    .mark-read-btn {
-      background: transparent;
-      border: none;
-      font-size: 18px;
-      color: variables.$color-success;
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-      transition:
-        transform 0.2s ease,
-        opacity 0.2s ease;
-      &:hover {
-        transform: scale(1.2);
-        opacity: 0.8;
-      }
-    }
-  }
-
-  .no-notifications {
-    text-align: center;
-    padding: 20px;
-    color: variables.$color-timestamp;
-    height: 200px;
-    width: 378px;
+    align-items: center;
+    justify-content: center;
 
     img {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 10px;
-      opacity: 0.6;
+      width: 1rem;
+      height: 1rem;
     }
   }
+
+  /* MAIN CONTENT */
+  .content {
+    flex: 1;
+    /* TAKE FULL SPACE */
+    min-width: 0;
+    /* CRITICAL: prevents pushing buttons out */
+    overflow: hidden;
+
+    .title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .message {
+      font-size: 0.8rem;
+      color: #555;
+      margin-bottom: 0.2rem;
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      color: #777;
+    }
+  }
+
+  /* ACTION BUTTONS */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-end;
+    flex-shrink: 0;
+    /* CRITICAL: prevents overlap */
+  }
+
+  .actions button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.75rem;
+    /* Smaller text */
+    color: #4b5563;
+
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .actions button img {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .actions button:hover {
+    opacity: 0.7;
+  }
 }
+
+
+/* EMPTY STATE */
+.no-notifications {
+  text-align: center;
+  padding: 1.25rem;
+  color: variables.$color-timestamp;
+  height: 12.5rem;
+  width: 23.625rem;
+
+  img {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.625rem;
+    opacity: 0.6;
+  }
+}
+
 
 //===============notifications bell component=====
 .bell-btn {
@@ -524,9 +576,11 @@ body::-webkit-scrollbar {
   padding: variables.$notification-padding;
   cursor: pointer;
   border-radius: variables.$notification-radius;
+
   &.unread {
     background-color: variables.$color-unread-bg;
   }
+
   &:hover {
     background-color: variables.$color-hover-bg;
   }
@@ -602,64 +656,105 @@ body::-webkit-scrollbar {
 //==========toast notification===========
 .toast-container {
   position: fixed;
-  bottom: variables.$toast-bottom;
-  right: variables.$toast-right;
-  padding: variables.$toast-padding;
-  border-radius: variables.$toast-radius;
-  color: variables.$color-toast-text;
+  top: 100px; // same as screenshot 1
+  right: 40px;
+  z-index: 9999;
+
+  width: 420px;
+  min-height: 70px;
   display: flex;
   align-items: center;
-  gap: variables.$toast-gap;
-  box-shadow: variables.$toast-shadow;
-  z-index: 2000;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eef0f2;
+
+  animation: fadeIn 0.25s ease-out;
+  font-family: "Inter", sans-serif;
+}
+
+.toast-icon {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-right: 14px;
+}
+
+.toast-icon.success {
+  background: #e8f6ef;
+}
+
+.toast-icon.warning {
+  background: #fff8e5;
+}
+
+.toast-icon.critical {
+  background: #ffecec;
 }
 
 .toast-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 2px;
+}
 
-  strong {
-    margin-bottom: 0.15rem;
-  }
+.toast-content strong {
+  font-size: 16px;
+  color: #111;
+  font-weight: 600;
+}
+
+.toast-content span {
+  font-size: 14px;
+  color: #555;
 }
 
 .close-btn {
-  background: transparent;
   border: none;
+  background: transparent;
   cursor: pointer;
-  color: inherit;
-  font-size: variables.$close-btn-size;
+  font-size: 18px;
+  color: #555;
+  opacity: 0.6;
 }
 
-.toast-success {
-  background-color: variables.$color-success;
+.close-btn:hover {
+  opacity: 1;
 }
 
-.toast-warning {
-  background-color: variables.$color-warning;
+/* Smooth entry animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
-.toast-critical {
-  background-color: variables.$color-critical;
-}
-
-.toast-info {
-  background-color: variables.$color-info;
-}
 
 //============dropdown notification===========
-.dropdown-container {
-  width: variables.$dropdown-width;
-  background: variables.$dropdown-bg;
-  border: 1px solid variables.$dropdown-border;
-  border-radius: variables.$dropdown-radius;
-  overflow: hidden;
-  box-shadow: variables.$dropdown-shadow;
-  display: flex;
-  flex-direction: column;
+.notification-dropdown {
+  position: absolute;
+  top: 3.5rem;
+  right: 0;
+  width: 23.625rem;
+  background: white;
+  border: 1px solid variables.$color-border;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  z-index: 999;
 }
 
-/* ---------- HEADER ---------- */
 .dropdown-header {
   display: flex;
   justify-content: space-between;
@@ -681,10 +776,12 @@ body::-webkit-scrollbar {
       font-size: variables.$action-font-size;
       cursor: pointer;
       padding: 0;
+
       &:disabled {
         opacity: variables.$action-disabled-opacity;
         pointer-events: none;
       }
+
       &:hover {
         text-decoration: underline;
       }
@@ -702,6 +799,7 @@ body::-webkit-scrollbar {
   gap: variables.$body-gap;
   scrollbar-width: thin;
   scrollbar-color: variables.$scrollbar-thumb variables.$scrollbar-track;
+
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -897,6 +995,7 @@ body::-webkit-scrollbar {
         outline: none;
         box-shadow: none;
         caret-color: variables.$color-black;
+
         &:-webkit-autofill,
         &:-webkit-autofill:hover,
         &:-webkit-autofill:focus {
@@ -1530,20 +1629,18 @@ body::-webkit-scrollbar {
 /* ============= Profile Page ===============*/
 .profile-page {
   width: 100%;
-  padding: 0 1.25rem;
   display: flex;
-  justify-content: center;
   min-height: 100vh;
+  padding: 20px 80px;
 
   .container {
-    width: 75rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    gap: 3rem;
   }
 
   .header-section {
-    width: 71.875rem;
-    margin: 2.5rem auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1559,7 +1656,6 @@ body::-webkit-scrollbar {
     font-size: 3.75rem;
     font-weight: 400;
     color: variables.$color-black;
-    margin: 0;
   }
 
   .subtitle {
@@ -1580,7 +1676,7 @@ body::-webkit-scrollbar {
   }
 
   .card {
-    width: 71.875rem;
+    width: 100%;
     background: variables.$profile-card-bg;
     border: 0.0625rem solid variables.$profile-card-border;
     border-radius: 0.875rem;
@@ -1794,7 +1890,7 @@ body::-webkit-scrollbar {
     width: 100%;
     height: 4rem;
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     align-items: center;
     margin-top: 3rem;
     padding-bottom: 5.625rem;
@@ -1802,7 +1898,6 @@ body::-webkit-scrollbar {
 
   .btn-primary {
     width: 100%;
-    max-width: 65.1875rem;
     padding: 0.875rem 1.375rem;
     border-radius: 62.5rem;
     background: variables.$color-primary;
@@ -1833,11 +1928,9 @@ body::-webkit-scrollbar {
   }
 }
 
-
-
 // ====================== CREATE PROJECT PAGE ======================
 .project-create-page {
-  padding: variables.$padding-primary;
+  padding: 20px 80px;
 }
 
 .breadcrumb {
@@ -2635,7 +2728,7 @@ body::-webkit-scrollbar {
       gap: 8px;
     }
 
-    img {
+    .delete-task-btn img {
       width: 16px;
       height: 16px;
       filter: brightness(0) invert(1);
@@ -2855,8 +2948,6 @@ body::-webkit-scrollbar {
     }
   }
 }
-
-
 
 /* =========================
    Dialog Overlay
