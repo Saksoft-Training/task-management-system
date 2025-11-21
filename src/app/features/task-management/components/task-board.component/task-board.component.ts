@@ -68,7 +68,7 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
     private readonly taskService: TaskService,
     private readonly projectService: ProjectService,
     private readonly userStorage: UserStorageService,
-  ) {}
+  ) { }
 
   /* ------------ INIT ------------ */
   ngOnInit(): void {
@@ -242,5 +242,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   applyFilters(f: any) {
     this.appliedFilters = f;
     this.applyFiltering();
+  }
+  openTask(taskId: number): void {
+    this.router.navigate(['/tasks', taskId]);
   }
 }

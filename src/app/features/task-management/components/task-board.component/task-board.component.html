@@ -102,10 +102,7 @@
     </button>
 
     <!-- Filter popup -->
-    <app-filter-panel
-      [open]="isFilterOpen"
-      [assignees]="allUsers"
-      (close)="isFilterOpen = false"
+    <app-filter-panel [open]="isFilterOpen" [assignees]="allUsers" (close)="isFilterOpen = false"
       (filtersChanged)="applyFilters($event)">
     </app-filter-panel>
 
@@ -139,15 +136,11 @@
 
     @for (boardStatus of statuses; track boardStatus) {
 
-    <div class="tl-board-column"
-      [ngClass]="{
+    <div class="tl-board-column" [ngClass]="{
         'to-do': boardStatus === 'To Do',
         'in-progress': boardStatus === 'In Progress',
         'completed': boardStatus === 'Completed'
-      }"
-      [attr.data-status]="boardStatus"
-      (dragover)="onDragOver($event)"
-      (drop)="onDrop($event, boardStatus)">
+      }" [attr.data-status]="boardStatus" (dragover)="onDragOver($event)" (drop)="onDrop($event, boardStatus)">
 
       <!-- Column title + count -->
       <div class="tl-column-header">
@@ -163,13 +156,12 @@
       <!-- Task cards -->
       @for (boardTask of statusColumns[boardStatus]; track boardTask.id) {
 
-      <div class="tl-task-card"
-        draggable="true"
-        (dragstart)="onDragStart($event, boardTask)"
-        (dragend)="onDragEnd()">
+      <div class="tl-task-card" draggable="true" (dragstart)="onDragStart($event, boardTask)" (dragend)="onDragEnd()">
 
         <div class="tl-task-card-top">
-          <h4 class="tl-task-title">{{ boardTask.title }}</h4>
+          <h4 class="tl-task-title" (click)="openTask(boardTask.id)">
+            {{ boardTask.title }}
+          </h4>
           <span class="tl-task-priority {{ priorityClass(boardTask.priority) }}">
             {{ boardTask.priority }}
           </span>
