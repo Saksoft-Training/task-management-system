@@ -4839,8 +4839,8 @@ textarea:focus {
 /* CHART GRID */
 /* ======================= */
 .charts-grid-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
@@ -4935,7 +4935,7 @@ textarea:focus {
     display: flex;
     align-items: center;
     gap: variables.$space-md-stats;
-
+   
     .icon {
       width: 40px;
       height: 40px;
