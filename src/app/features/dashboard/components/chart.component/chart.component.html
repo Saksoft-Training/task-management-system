@@ -1,0 +1,7 @@
+<div class="chart-wrapper-stats" *ngIf="data; else loadingTpl">
+  <canvas #canvas></canvas>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="chart-loading-stats">Loading chart…</div>
+</ng-template>

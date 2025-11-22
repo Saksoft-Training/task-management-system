@@ -30,7 +30,8 @@
       <div class="notification-dropdown">
         <app-notification-dropdown [notifications]="(notifications$ | async) || []"
           (closeDropdown)="showNotifications = false" (markAsRead)="onMarkAsRead($event)"
-          (markAllRead)="onMarkAllRead()" (clearAll)="onClearAll()" (navigate)="onNavigateNotification($event)">
+          (markAllRead)="onMarkAllRead()" (clearAll)="onClearAll()" (navigate)="onNavigateNotification($event)"
+          (dismiss)="onDismissNotification($event)">
         </app-notification-dropdown>
       </div>
       }

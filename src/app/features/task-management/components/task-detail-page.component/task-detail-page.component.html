@@ -1,10 +1,9 @@
 <!-- Breadcrumb -->
 <div class="tl-breadcrumb">
-    <a>Projects</a> /
-    <a>{{ projectName }}</a> /
+    <a routerLink="/projects">Projects</a> /
+    <a [routerLink]="['/projects', projectId]">{{ projectName }}</a> /
     <span>{{ task?.title }}</span>
 </div>
-
 <!-- Page header -->
 <div class="tl-topbar">
 
@@ -34,14 +33,14 @@
     <label>Status:</label>
     <select [ngModel]="task?.status" (ngModelChange)="updateStatus($event)">
         @for (statusItem of statusOptions; track statusItem) {
-            <option>{{ statusItem }}</option>
+        <option>{{ statusItem }}</option>
         }
     </select>
 
     <label>Priority:</label>
     <select [ngModel]="task?.priority" (ngModelChange)="updatePriority($event)">
         @for (priorityItem of priorityOptions; track priorityItem) {
-            <option>{{ priorityItem }}</option>
+        <option>{{ priorityItem }}</option>
         }
     </select>
 </div>
@@ -112,13 +111,9 @@
 
 <!-- Delete confirmation -->
 @if (isDeleteModalOpen) {
-  <app-confirmation-dialog-component
-    [title]="'Delete Task'"
+<app-confirmation-dialog-component [title]="'Delete Task'"
     [message]="'Are you sure you want to delete the task:\n' + (pendingDeleteTask?.title || '') + '?'"
-    [confirmText]="'Delete'"
-    [cancelText]="'Cancel'"
-    [type]="'danger'"
-    (confirm)="onConfirmDelete()"
+    [confirmText]="'Delete'" [cancelText]="'Cancel'" [type]="'danger'" (confirm)="onConfirmDelete()"
     (cancel)="onCancelDelete()">
-  </app-confirmation-dialog-component>
+</app-confirmation-dialog-component>
 }

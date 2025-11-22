@@ -50,7 +50,7 @@ export class NotificationDropdownComponent {
    */
   @Output() clearAll = new EventEmitter<void>();
   //#endregion
-   /** Notify parent to close dropdown */
+  /** Notify parent to close dropdown */
   @Output() closeDropdown = new EventEmitter<void>();
 
   @ViewChild('dropdownRef') dropdownRef!: ElementRef;
@@ -58,7 +58,7 @@ export class NotificationDropdownComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     if (this.dropdownRef && !this.dropdownRef.nativeElement.contains(event.target)) {
-      this.closeDropdown.emit();   
+      this.closeDropdown.emit();
     }
   }
   //#region Public Methods
