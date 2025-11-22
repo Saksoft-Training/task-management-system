@@ -633,7 +633,7 @@ body::-webkit-scrollbar {
   display: flex;
   flex-direction: column;
   gap: variables.$actions-gap;
-
+ 
   button {
     border: none;
     padding: 0.25rem 0.5rem;
@@ -646,13 +646,13 @@ body::-webkit-scrollbar {
     background: variables.$color-bg-footer;
     border-radius: 8px;
     z-index: 50;
-
+ 
     &:hover {
       background-color: variables.$color-hover-bg;
     }
   }
 }
-
+ 
 
 //==========toast notification===========
 .toast-container {
@@ -4891,19 +4891,23 @@ textarea:focus {
      COLOR CLASSES
   ========================================= */
   &.blue {
-    border-left: 4px solid #3b82f6;
+     background: variables.$stats-color-blue-bg;
+    
   }
   &.amber {
-    border-left: 4px solid #f59e0b;
+    background: variables.$stats-color-amber-bg;  
+    
   }
   &.green {
-    border-left: 4px solid #10b981;
+    background:  variables.$stats-color-green-bg;
+    
   }
   &.red {
-    border-left: 4px solid #ef4444;
+    background: variables.$stats-color-red-bg; 
+    
   }
   &.neutral {
-    border-left: 4px solid variables.$color-border-stats;
+    background: variables.$stats-color-neutral-bg;
   }
 
   /* =========================================
