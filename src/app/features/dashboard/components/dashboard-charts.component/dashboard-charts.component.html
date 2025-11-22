@@ -15,10 +15,7 @@
       <div class="card-stats">
         <h2>Task Completion</h2>
         <ng-container *ngIf="pieData$ | async as pie; else emptyPie">
-          <app-chart
-            [type]="'pie'"
-            [data]="(pieData$ | async) ?? { labels: [], datasets: [] }"
-            [options]="pieOptions">
+          <app-chart [type]="'pie'" [data]="(pieData$ | async) ?? { labels: [], datasets: [] }" [options]="pieOptions">
           </app-chart>
         </ng-container>
         <ng-template #emptyPie>
@@ -30,9 +27,7 @@
       <div class="card-stats">
         <h2>Priority Distribution</h2>
         <ng-container *ngIf="priorityData$ | async as prio; else emptyPrio">
-          <app-chart
-            [type]="'bar'"
-            [data]="(priorityData$ | async) ?? { labels: [], datasets: [] }"
+          <app-chart [type]="'bar'" [data]="(priorityData$ | async) ?? { labels: [], datasets: [] }"
             [options]="priorityOptions">
           </app-chart>
         </ng-container>
@@ -45,9 +40,7 @@
       <div class="card-stats">
         <h2>Completion Trend (Last 14 days)</h2>
         <ng-container *ngIf="trendData$ | async as trend; else emptyTrend">
-          <app-chart
-            [type]="'line'"
-            [data]="(trendData$ | async) ?? { labels: [], datasets: [] }"
+          <app-chart [type]="'line'" [data]="(trendData$ | async) ?? { labels: [], datasets: [] }"
             [options]="trendOptions">
           </app-chart>
         </ng-container>

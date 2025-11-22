@@ -15,15 +15,49 @@ import { chartsDashboardService } from '../../services/charts-dashboard-service'
   styleUrl: './activity-feed.component.scss',
 })
 export class ActivityFeedComponent {
-  activities$!: Observable<Activity[]>;
 
-  constructor(private ds: chartsDashboardService, private router: Router) { }
+  // #region Properties
 
-  ngOnInit(): void {
-    this.activities$ = this.ds.recentActivities$;
+  /**
+   * Observable stream of recent activities displayed in the feed.
+   */
+  public activities$!: Observable<Activity[]>;
+
+  // #endregion
+
+  // #region Constructor
+
+  /**
+   * Creates an instance of ActivityFeedComponent.
+   * @param dashboardService - Service providing recent activity stream.
+   * @param router - Router instance to navigate between pages.
+   */
+  constructor(private dashboardService: chartsDashboardService, private router: Router) { }
+
+  // #endregion
+
+  // #region Lifecycle Methods
+
+  /**
+   * Angular lifecycle hook.
+   * @summary Initializes activity stream subscription.
+   * @returns void
+   */
+  public ngOnInit(): void {
+    this.activities$ = this.dashboardService.recentActivities$;
   }
 
-  getInitials(name: string): string {
+  // #endregion
+
+  // #region Utility Methods
+
+  /**
+   * Extracts up to two initials from the user's name.
+   * @summary Returns first two initials in uppercase.
+   * @param name - Full name of the user.
+   * @returns A string representing the initials.
+   */
+  public getInitials(name: string): string {
     return name
       .split(' ')
       .filter(Boolean)
@@ -31,8 +65,13 @@ export class ActivityFeedComponent {
       .map(p => p[0].toUpperCase())
       .join('');
   }
-
-  onActivityClick(activity: Activity): void {
+  /**
+    * Handles click event and navigates to the respective detail page.
+    * @summary Navigates to project or task based on activity type.
+    * @param activity - The clicked activity item.
+    * @returns void
+    */
+  public onActivityClick(activity: Activity): void {
     // Adjust according to your real routes
     if (activity.type === 'project') {
       this.router.navigate(['/projects', activity.itemId]);
@@ -40,10 +79,16 @@ export class ActivityFeedComponent {
       this.router.navigate(['/tasks', activity.itemId]);
     }
   }
-
-  formatAction(a: Activity): string {
-    const entity = a.type === 'project' ? 'Project' : 'Task';
-    const action = a.action.charAt(0).toUpperCase() + a.action.slice(1);
+  /**
+    * Formats and returns a readable action description.
+    * @summary Converts entity + action into a formatted label.
+    * @param activity - Activity object containing type and action.
+    * @returns A human-readable formatted action label.
+    */
+  public formatAction(activity: Activity): string {
+    const entity = activity.type === 'project' ? 'Project' : 'Task';
+    const action = activity.action.charAt(0).toUpperCase() + activity.action.slice(1);
     return `${entity} ${action}`;
   }
+  // #endregion
 }

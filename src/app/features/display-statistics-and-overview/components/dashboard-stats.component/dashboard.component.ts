@@ -11,14 +11,25 @@ import { DashboardChartsComponent } from '../../../dashboard/components/dashboar
 @Component({
   selector: 'app-dashboard.component',
   standalone: true,
-  imports: [StatisticsCardComponent, CommonModule,ActivityFeedComponent,ChartComponent,DashboardChartsComponent],
+  imports: [StatisticsCardComponent, CommonModule, ActivityFeedComponent, ChartComponent, DashboardChartsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponentStats {
-  stats$!: Observable<Statistics>;
-  loading = true;
+  // #region Public Properties
+  public stats$!: Observable<Statistics>;
+  /** Controls visibility of loading spinner. */
+  public loading = true;
 
+  // #endregion
+
+  // #region Constructor
+
+  /**
+   * Creates an instance of DashboardComponentStats.
+   * @summary Subscribes to statistics stream and handles loading state.
+   * @param dashboardService - Service providing dashboard statistics data.
+   */
   constructor(private dashboardService: DashboardService) {
     this.stats$ = this.dashboardService.getStatistics();
 
@@ -27,7 +38,17 @@ export class DashboardComponentStats {
     });
   }
 
-  refresh() {
+  // #endregion
+
+  // #region Public Methods
+
+  /**
+   * Refreshes dashboard statistics.
+   * @summary Calls backend refresh and reloads statistics data.
+   * @returns void
+   */
+  public refresh() {
     this.dashboardService.refresh();
   }
+  // #endregion
 }

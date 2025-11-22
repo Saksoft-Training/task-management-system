@@ -2935,7 +2935,7 @@ body::-webkit-scrollbar {
   }
 
   .create-task-btn {
-    background: variables.$color-bg-footer;
+      background: variables.$create-btn-bg;
     color: variables.$color-title;
     padding: 10px 22px;
     border-radius: 24px;

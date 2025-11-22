@@ -54,24 +54,25 @@ export class TaskDetailPageComponent implements OnInit {
   /**
    * Loads task by ID and initializes project name + history
    */
-  public projectId!: number; // <-- add this
+  public projectId!: number;
  
 ngOnInit(): void {
   const idParam = this.route.snapshot.paramMap.get('id');
-  const id = idParam ? Number(idParam) : NaN;
+  const id = idParam ? Number(idParam) : null;
  
   if (Number.isNaN(id)) {
     this.router.navigate(['/tasks']);
     return;
   }
  
-  this.task = this.taskService.getTaskById(id) ?? null;
+  const taskId: number = id!;
+  this.task = this.taskService.getTaskById(taskId) ?? null;
   if (!this.task) {
     this.router.navigate(['/tasks']);
     return;
   }
  
-  this.projectId = this.task.projectId;  // <-- NEW
+  this.projectId = this.task.projectId; 
  
   const email = localStorage.getItem('loggedUserEmail') ?? '';
   const project = this.projectService.getById(this.task.projectId, email);

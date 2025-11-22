@@ -9,24 +9,65 @@ Chart.register(...registerables);
   styleUrl: './chart.component.scss',
 })
 export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  // #region ViewChild & Inputs
+
+  /**
+   * Canvas reference used by Chart.js to draw the chart.
+   */
   @ViewChild('canvas', { static: false }) canvas!: ElementRef<HTMLCanvasElement>;
 
+  /**
+   * Chart type (bar, line, pie, etc.).
+   */
   @Input() type: ChartType = 'bar';
+  /**
+   * Chart data configuration.
+   */
   @Input() data!: ChartConfiguration['data'];
+  /**
+  * Optional chart configuration settings.
+  */
   @Input() options?: ChartConfiguration['options'];
+  // #endregion
 
+  // #region Private Properties
+
+  /**
+   * Holds the Chart.js instance so it can be destroyed or refreshed.
+   */
   private chart?: Chart;
+  // #endregion
 
-  ngAfterViewInit(): void {
+  // #region Lifecycle Hooks
+
+  /**
+   * Called once the view is initialized.
+   * @summary Initializes the chart rendering after view is ready.
+   * @returns void
+   */
+  public ngAfterViewInit(): void {
     this.render();
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
+  /**
+    * Called whenever input properties change.
+    * @summary Re-renders chart when data, type, or options are updated.
+    * @param changes - Object describing which inputs changed.
+    * @returns void
+    */
+  public ngOnChanges(changes: SimpleChanges): void {
     if ((changes['data'] || changes['type'] || changes['options']) && this.canvas) {
       this.render();
     }
   }
+  // #endregion
 
+  // #region Chart Rendering
+
+  /**
+   * Renders or re-renders the chart.
+   * @summary Creates a new Chart.js instance, destroying old one if needed.
+   * @returns void
+   */
   private render(): void {
     if (!this.canvas || !this.data) return;
 
@@ -51,8 +92,12 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     });
   }
-
-  ngOnDestroy(): void {
+  /**
+    * Cleanup hook to destroy chart instance.
+    * @summary Ensures no memory leaks when component is destroyed.
+    * @returns void
+    */
+  public ngOnDestroy(): void {
     if (this.chart) {
       this.chart.destroy();
     }

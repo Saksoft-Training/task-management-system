@@ -6,11 +6,7 @@
   <ng-container *ngIf="activities$ | async as activities; else emptyTpl">
     <ng-container *ngIf="activities.length > 0; else emptyTpl">
       <ul class="activity-list-stats">
-        <li
-          class="activity-item-stats"
-          *ngFor="let activity of activities"
-          (click)="onActivityClick(activity)"
-        >
+        <li class="activity-item-stats" *ngFor="let activity of activities" (click)="onActivityClick(activity)">
           <div class="avatar-stats">
             <span>{{ getInitials(activity.user) }}</span>
           </div>

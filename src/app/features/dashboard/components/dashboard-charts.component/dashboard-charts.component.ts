@@ -18,27 +18,51 @@ import { OverdueInfo } from '../../../../../types/activity/overdueInfo';
 })
 export class DashboardChartsComponent implements OnInit {
 
-  loading = true;
+  // #region Public Properties
 
-  // Initialize as observables properly
-  pieData$!: Observable<ChartConfiguration['data']>;
-  trendData$!: Observable<ChartConfiguration['data']>;
-  priorityData$!: Observable<ChartConfiguration['data']>;
-  overdue$!: Observable<OverdueInfo>;
+  /** Controls display of loading spinner. */
+  public loading = true;
 
-  pieOptions: ChartConfiguration['options'] = {};
-  trendOptions: ChartConfiguration['options'] = {};
-  priorityOptions: ChartConfiguration['options'] = {};
+  /** Pie chart data observable. */
+  public pieData$!: Observable<ChartConfiguration['data']>;
+  /** Task trend chart data observable. */
+  public trendData$!: Observable<ChartConfiguration['data']>;
 
-  constructor(private ds: chartsDashboardService) { }
+  /** Priority chart data observable. */
+  public priorityData$!: Observable<ChartConfiguration['data']>;
+  /** Overdue task information observable. */
+  public overdue$!: Observable<OverdueInfo>;
+  /** Pie chart options configuration. */
+  public pieOptions: ChartConfiguration['options'] = {};
+  /** Trend chart options configuration. */
+  public trendOptions: ChartConfiguration['options'] = {};
+  /** Priority chart options configuration. */
+  public priorityOptions: ChartConfiguration['options'] = {};
 
-  ngOnInit(): void {
+  // #endregion
 
+  // #region Constructor
+
+  /**
+   * Creates an instance of DashboardChartsComponent.
+   * @param ds - Service providing dashboard chart and activity data.
+   */
+  constructor(private dashboardservice: chartsDashboardService) { }
+  // #endregion
+
+  // #region Lifecycle Methods
+
+  /**
+   * Angular lifecycle method.
+   * @summary Initializes all dashboard chart streams and configures options.
+   * @returns void
+   */
+  public ngOnInit(): void {
     // Assign all chart/overdue streams here
-    this.pieData$ = this.ds.taskCompletionChartData$;
-    this.trendData$ = this.ds.taskTrendChartData$;
-    this.priorityData$ = this.ds.priorityChartData$;
-    this.overdue$ = this.ds.overdueTasks$;
+    this.pieData$ = this.dashboardservice.taskCompletionChartData$;
+    this.trendData$ = this.dashboardservice.taskTrendChartData$;
+    this.priorityData$ = this.dashboardservice.priorityChartData$;
+    this.overdue$ = this.dashboardservice.overdueTasks$;
 
     // Wait until all observables emit before removing loading spinner
     combineLatest([this.pieData$, this.trendData$, this.priorityData$, this.overdue$])
@@ -80,11 +104,20 @@ export class DashboardChartsComponent implements OnInit {
       plugins: { legend: { display: false } }
     };
   }
+  // #endregion
 
-  refresh() {
+  // #region Actions
+
+  /**
+   * Refreshes all dashboard data.
+   * @summary Calls backend refresh and re-enables loading spinner.
+   * @returns void
+   */
+  public refresh(): void {
     this.loading = true;
-    this.ds.refresh();
+    this.dashboardservice.refresh();
 
     setTimeout(() => this.loading = false, 350);
   }
+  // #endregion
 }
