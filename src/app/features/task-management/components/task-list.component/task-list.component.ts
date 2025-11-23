@@ -47,7 +47,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public filteredTasks: Task[] = [];
   public allUsers: string[] = [];
   public activeTask: Task | null = null;
-  public userEmail: string = localStorage.getItem('loggedUserEmail') || '';
+  public userEmail: string = '';
   //#endregion
 
   //#region Subscriptions
@@ -73,20 +73,29 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#region Lifecycle
 
   public ngOnInit(): void {
-    const users = this.userStorage.getAllUsers();
-    this.allUsers = users.map(u => u.name);
 
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.projectId = id ? Number(id) : null;
-      this.loadTasks(this.taskService.getAllTasks());
-    });
+  const user =
+    JSON.parse(localStorage.getItem('currentUser') || 'null') ||
+    JSON.parse(sessionStorage.getItem('currentUser') || 'null');
 
-    this.detectViewMode();
+  this.userEmail = user?.email || '';
 
-    this.taskSubscription = this.taskService.tasks$
-      .subscribe(tasks => this.loadTasks(tasks));
-  }
+  const users = this.userStorage.getAllUsers();
+  this.allUsers = users.map(u => u.name);
+
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('id');
+    this.projectId = id ? Number(id) : null;
+
+    this.loadTasks(this.taskService.getAllTasks());
+  });
+
+  this.detectViewMode();
+
+  this.taskSubscription = this.taskService.tasks$
+    .subscribe(tasks => this.loadTasks(tasks));
+}
+
 
   public ngOnDestroy(): void {
     this.taskSubscription?.unsubscribe();
@@ -300,6 +309,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#region Helpers
 
   public getProjectName(id: number): string {
+  if (!this.userEmail) return 'Unknown';
   return this.projectService.getById(id, this.userEmail)?.name || 'Unknown';
 }
 
