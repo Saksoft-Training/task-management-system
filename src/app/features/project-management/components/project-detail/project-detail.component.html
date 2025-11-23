@@ -89,8 +89,7 @@
             <h3>Tasks</h3>
             <div class="tl-header-controls">
                 <div class="tl-header-toggle">
-                    <button class="tl-toggle-btn" [class.active]="taskViewMode === 'list'"
-                        (click)="taskViewMode = 'list'">
+                    <button class="tl-toggle-btn"  (click)="goToList()">
                         <img src="assets/icons/list-Icon.svg" class="icon" />
                         List
                     </button>

@@ -5,8 +5,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Task } from '../../../../../types';
 import { TaskCardComponent } from '../task-card.component/task-card.component';
 import { TaskBoardComponent } from '../task-board.component/task-board.component';
@@ -24,7 +23,8 @@ import { ConfirmationDialogComponent } from '../../../../shared/components/confi
     CommonModule,
     TaskCardComponent,
     TaskBoardComponent,
-    FilterPanelComponent,
+    FilterPanelComponent, 
+    RouterLink,
     ConfirmationDialogComponent
   ],
   templateUrl: './task-list.component.html',
@@ -47,6 +47,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public filteredTasks: Task[] = [];
   public allUsers: string[] = [];
   public activeTask: Task | null = null;
+  public userEmail: string = localStorage.getItem('loggedUserEmail') || '';
   //#endregion
 
   //#region Subscriptions
@@ -63,7 +64,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly taskService: TaskService,
-    private readonly projectService: ProjectService,
+    public readonly projectService: ProjectService,
     private readonly userStorage: UserStorageService,
     private readonly router: Router
   ) { }
@@ -99,31 +100,46 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region View Mode Logic
-  private detectViewMode(): void {
-    const url = this.router.url.toLowerCase();
+ private detectViewMode(): void {
+  const url = this.router.url.toLowerCase();
 
-    if (url.match(/^\/projects\/\d+\/board$/)) {
-      this.viewMode = 'board';
-      return;
-    }
-
-    if (url.match(/^\/projects\/\d+$/)) {
-      this.viewMode = 'project';
-      return;
-    }
-
-    if (url === '/tasks/board') {
-      this.viewMode = 'board';
-      this.projectId = null;
-      return;
-    }
-
-    if (url === '/tasks' || url.startsWith('/tasks?')) {
-      this.viewMode = 'list';
-      this.projectId = null;
-      return;
-    }
+  // /projects/:id/board
+  if (url.match(/^\/projects\/\d+\/board$/)) {
+    this.viewMode = 'board';
+    return;
   }
+
+  // /projects/:id/tasks  → list view WITH project header
+  if (url.match(/^\/projects\/\d+\/tasks$/)) {
+    this.viewMode = 'list';
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.projectId = id;
+    return;
+  }
+
+  // /projects/:id  → same list view
+  if (url.match(/^\/projects\/\d+$/)) {
+    this.viewMode = 'list';
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.projectId = id;
+    return;
+  }
+
+  // /tasks/board
+  if (url === '/tasks/board') {
+    this.viewMode = 'board';
+    this.projectId = null;
+    return;
+  }
+
+  // /tasks
+  if (url === '/tasks' || url.startsWith('/tasks?')) {
+    this.viewMode = 'list';
+    this.projectId = null;
+    return;
+  }
+}
+
   //#endregion
 
   //#region Load + Filter + Sort
@@ -284,9 +300,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#region Helpers
 
   public getProjectName(id: number): string {
-    const email = localStorage.getItem('loggedUserEmail') || '';
-    return this.projectService.getById(id, email)?.name || 'Unknown';
-  }
+  return this.projectService.getById(id, this.userEmail)?.name || 'Unknown';
+}
+
 
   public getShowingText(): string {
     return `Showing ${this.filteredTasks.length} of ${this.tasks.length} tasks`;
@@ -318,8 +334,8 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public editTask(task: Task): void {
-  this.router.navigate(['/tasks/edit', task.id]);
-}
+    this.router.navigate(['/tasks/edit', task.id]);
+  }
 
   public applyFilters(f: any): void {
     this.appliedFilters = f;

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Task, TaskStatus } from '../../../../types/models/task';
- 
+import { AuthService } from '../../user-account-management/services/auth-service';
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -9,13 +11,26 @@ export class TaskService {
 
   //#region Private Properties
   /** LocalStorage key under which tasks are stored */
-  private storageKey = 'tasks';
-  
+  private storageKey = 'tasks'; 
+
+  /**
+   * @summary Generates a unique key per user so each user has independent task storage
+   */
+  private getStorageKey(email: string): string {
+    return `tasks_${email}`; 
+  }
+
   /** Reactive source of all tasks */
-  private tasksSubject = new BehaviorSubject<Task[]>(this.read());
-    /** Observable for components to subscribe to */
+  private tasksSubject = new BehaviorSubject<Task[]>([]);
+  /** Observable for components to subscribe to */
   public tasks$ = this.tasksSubject.asObservable();
   //#endregion
+  //#region Constructor
+  constructor(private authService: AuthService) {
+    const user = this.authService.getCurrentUser();
+    const email = user?.email || '';
+    this.tasksSubject.next(this.read(email)); 
+  }
 
   //#region Local Storage (Read / Write)
 
@@ -23,14 +38,18 @@ export class TaskService {
    * Reads all tasks from LocalStorage.
    * Returns empty array if no tasks exist.
    */
-  private read(): Task[] {
-    const raw = localStorage.getItem(this.storageKey);
+  private read(email: string): Task[] {
+    const key = this.getStorageKey(email);
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : [];
   }
  
   /** WRITE LOCAL STORAGE */
   private write(tasks: Task[]): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(tasks));
+    const user = this.authService.getCurrentUser();
+    const email = user?.email || '';
+    const key = this.getStorageKey(email);
+    localStorage.setItem(key, JSON.stringify(tasks));
     this.tasksSubject.next(tasks);
   }
   /**
@@ -38,7 +57,9 @@ export class TaskService {
    * and updates the reactive BehaviorSubject.
    */
   getAllTasks(): Task[] {
-    return this.read();
+    const user = this.authService.getCurrentUser();
+    const email = user?.email || '';
+    return this.read(email);
   }
   //#endregion
 
@@ -53,7 +74,7 @@ export class TaskService {
   getTasksByProjectId(projectId: number): Task[] {
     return this.getAllTasks().filter(t => t.projectId === projectId);
   }
-   //#endregion
+  //#endregion
 
   //#region CRUD Operations
 
@@ -78,7 +99,10 @@ export class TaskService {
   }
   /** Removes all tasks from LocalStorage */
   clearAllTasks(): void {
-    localStorage.removeItem(this.storageKey);
+    const user = this.authService.getCurrentUser();
+    const email = user?.email || '';
+    const key = this.getStorageKey(email);
+    localStorage.removeItem(key);
     this.tasksSubject.next([]);
   }
   //#endregion
@@ -89,7 +113,7 @@ export class TaskService {
    * Updates a task's status during drag/drop operations.
    * Also sets updatedAt and completedAt timestamps.
    */
-    updateTaskStatus(id: number, status: TaskStatus): void {
+  updateTaskStatus(id: number, status: TaskStatus): void {
     const all = this.getAllTasks();
     const i = all.findIndex(t => t.id === id);
     if (i === -1) return;
@@ -101,7 +125,7 @@ export class TaskService {
  
     this.write(all);
   }
-    //#endregion
+  //#endregion
 
   //#region Bulk Delete
   /**
@@ -111,5 +135,5 @@ export class TaskService {
     const tasks = this.getAllTasks().filter(t => t.projectId !== projectId);
     this.write(tasks);
   }
-    //#endregion
+  //#endregion
 }

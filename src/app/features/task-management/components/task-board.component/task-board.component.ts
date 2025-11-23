@@ -278,9 +278,12 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   /** Navigates back to list view or project page. */
   navigateToList(): void {
-    if (this.isProjectBoard) this.router.navigate([`/projects/${this.projectId}`]);
-    else this.router.navigate(['/tasks']);
+  if (this.isProjectBoard) {
+    this.router.navigate([`/projects/${this.projectId}/tasks`]);
+  } else {
+    this.router.navigate(['/tasks']);
   }
+}
   /** Opens task creation page. */
   createTask(): void {
     this.router.navigate(['/tasks/create'], {
