@@ -193,6 +193,13 @@ export class HeaderComponent implements OnInit {
   public goToLogin(): void {
     this.router.navigate(['/login']);
   }
+   /**
+   * @summary Navigates the user to the profile page.
+   * @returns {void}
+   */
+  public goToProfile(): void {
+  this.router.navigate(['/profile']);
+}
   onDismissNotification(notificationId: string) {
     console.log("Removing notification:", notificationId);
     this.notificationService.dismiss(notificationId);  // delete from storage

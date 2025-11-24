@@ -228,6 +228,10 @@ export class ProjectDetailComponent implements OnInit {
     if (!this.project?.id) return;
     this.router.navigate([`/projects/${this.project.id}/board`]);
   }
+
+  goToList(): void {
+  this.router.navigate([`/projects/${this.project?.id}/tasks`]);
+}
  
   public openTaskCard(task: Task): void {
     this.activeTask = task;
