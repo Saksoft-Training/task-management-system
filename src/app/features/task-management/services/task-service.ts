@@ -1,69 +1,68 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Task, TaskStatus } from '../../../../types/models/task';
 import { AuthService } from '../../user-account-management/services/auth-service';
 
 @Injectable({ providedIn: 'root' })
-export class TaskService {
+export class TaskService implements OnDestroy {
 
   //#region Properties
-  /**
-   * @summary Key used to store tasks inside LocalStorage.
-   */
+
+  /** LocalStorage key where all tasks (global list) are stored */
   private readonly storageKey: string = 'tasks';
 
-  /**
-   * @summary Internal reactive task list filtered by logged-in user.
-   */
-  private readonly tasksSubject: BehaviorSubject<Task[]> =
-    new BehaviorSubject<Task[]>([]);
+  /** Emits task list visible to the current logged-in user */
+  private readonly tasksSubject = new BehaviorSubject<Task[]>([]);
 
-  /**
-   * @summary Observable stream used by components to subscribe to real-time task updates.
-   */
+  /** Observable for components to subscribe to */
   public readonly tasks$: Observable<Task[]> = this.tasksSubject.asObservable();
+
+  /** Holds subscription to currentUser$ so we can unsubscribe later */
+  private userSubscription!: Subscription;
+
   //#endregion
 
+
   //#region Constructor
-  /**
-   * @summary Injects authentication service and loads tasks for the current user.
-   * @param authService Responsible for accessing current user details.
-   */
+
   constructor(private readonly authService: AuthService) {
-    // Load tasks initially
+
+    /** Load tasks immediately */
     this.tasksSubject.next(this.readForCurrentUser());
 
-    // React to user changes
-    this.authService.currentUser$.subscribe(() => {
+    /** Refresh tasks whenever logged-in user changes */
+    this.userSubscription = this.authService.currentUser$.subscribe(() => {
       this.tasksSubject.next(this.readForCurrentUser());
     });
   }
+
   //#endregion
 
-  //#region Local Storage Read/Write
-  /**
-   * @summary Reads ALL tasks for ALL users from storage.
-   * @returns Task[] Array of tasks found in LocalStorage.
-   */
+
+  //#region Cleanup
+
+  ngOnDestroy(): void {
+    this.userSubscription?.unsubscribe();
+  }
+
+  //#endregion
+
+
+  //#region Local Storage Helpers
+
+  /** Reads ALL tasks (global, unfiltered) */
   private read(): Task[] {
-    const raw: string | null = localStorage.getItem(this.storageKey);
+    const raw = localStorage.getItem(this.storageKey);
     return raw ? JSON.parse(raw) : [];
   }
 
-  /**
-   * @summary Writes updated tasks to storage and refreshes UI for logged-in user.
-   * @param tasks All tasks (global list) to store.
-   * @returns void
-   */
+  /** Writes all tasks and automatically refreshes filtered list */
   private write(tasks: Task[]): void {
     localStorage.setItem(this.storageKey, JSON.stringify(tasks));
     this.tasksSubject.next(this.readForCurrentUser());
   }
 
-  /**
-   * @summary Filters tasks so only the logged-in user's tasks appear.
-   * @returns Task[] User-specific task list.
-   */
+  /** Returns tasks only for the logged-in user */
   private readForCurrentUser(): Task[] {
     const allTasks = this.read();
     const user = this.authService.getCurrentUser();
@@ -74,112 +73,86 @@ export class TaskService {
       t => t.assigneeEmail === user.email || t.createdBy === user.email
     );
   }
+
   //#endregion
 
-  //#region Fetchers
-  /**
-   * @summary Gets tasks for the logged-in user.
-   * @returns Task[]
-   */
+
+  //#region Public Fetch Methods
+
+  /** All tasks for current user */
   public getAllTasks(): Task[] {
     return this.readForCurrentUser();
   }
 
-  /**
-   * @summary Finds a task by its ID.
-   * @param id Task ID.
-   * @returns Task | undefined
-   */
+  /** Get task by ID */
   public getTaskById(id: number): Task | undefined {
     return this.readForCurrentUser().find(t => t.id === id);
   }
 
-  /**
-   * @summary Returns tasks that belong to a specific project.
-   * @param projectId ID of the project.
-   * @returns Task[]
-   */
+  /** Get tasks belonging to a project */
   public getTasksByProjectId(projectId: number): Task[] {
     return this.readForCurrentUser().filter(t => t.projectId === projectId);
   }
+
   //#endregion
 
-  //#region CRUD Operations
-  /**
-   * @summary Saves a new task.
-   * @param task Task object.
-   * @returns void
-   */
+
+  //#region CRUD Methods
+
+  /** Create new task */
   public saveTask(task: Task): void {
-    const allTasks = this.read();
-    allTasks.push(task);
-    this.write(allTasks);
+    const all = this.read();
+    all.push(task);
+    this.write(all);
   }
 
-  /**
-   * @summary Updates an existing task.
-   * @param updated Updated task details.
-   * @returns void
-   */
+  /** Update existing task */
   public updateTask(updated: Task): void {
-    const allTasks = this.read().map(t =>
-      t.id === updated.id ? updated : t
-    );
-    this.write(allTasks);
+    const all = this.read().map(t => (t.id === updated.id ? updated : t));
+    this.write(all);
   }
 
-  /**
-   * @summary Deletes a task by ID.
-   * @param id Task ID.
-   * @returns void
-   */
+  /** Delete task by ID */
   public deleteTask(id: number): void {
-    const allTasks = this.read().filter(t => t.id !== id);
-    this.write(allTasks);
+    const all = this.read().filter(t => t.id !== id);
+    this.write(all);
   }
 
-  /**
-   * @summary Removes all tasks from storage.
-   * @returns void
-   */
+  /** Completely clear all tasks */
   public clearAllTasks(): void {
     localStorage.removeItem(this.storageKey);
     this.tasksSubject.next([]);
   }
+
   //#endregion
 
-  //#region Drag & Drop Status Update
-  /**
-   * @summary Updates only the status of a task (for Kanban drag & drop).
-   * @param id Task ID.
-   * @param status New status to apply.
-   * @returns void
-   */
-  public updateTaskStatus(id: number, status: TaskStatus): void {
-    const allTasks = this.read();
-    const index = allTasks.findIndex(t => t.id === id);
 
-    if (index === -1) return;
+  //#region Drag & Drop Status Update
+
+  public updateTaskStatus(id: number, status: TaskStatus): void {
+    const all = this.read();
+    const idx = all.findIndex(t => t.id === id);
+    if (idx === -1) return;
 
     const now = new Date().toISOString();
 
-    allTasks[index].status = status;
-    allTasks[index].updatedAt = now;
-    allTasks[index].completedAt = status === 'Completed' ? now : null;
+    all[idx].status = status;
+    all[idx].updatedAt = now;
+    all[idx].completedAt = status === 'Completed' ? now : null;
 
-    this.write(allTasks);
+    this.write(all);
   }
+
   //#endregion
 
-  //#region Bulk Delete
-  /**
-   * @summary Deletes all tasks associated with a specific project.
-   * @param projectId Project identifier.
-   * @returns void
-   */
+
+  //#region Bulk Operations
+
+  /** Delete all tasks of a specific project */
   public deleteTasksByProjectId(projectId: number): void {
-    const allTasks = this.read().filter(t => t.projectId !== projectId);
-    this.write(allTasks);
+    const remaining = this.read().filter(t => t.projectId !== projectId);
+    this.write(remaining);
   }
+
   //#endregion
 }

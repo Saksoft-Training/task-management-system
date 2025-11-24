@@ -4,7 +4,7 @@ import {
   OnChanges, SimpleChanges
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Task } from '../../../../../types';
 import { TaskCardComponent } from '../task-card.component/task-card.component';
@@ -23,7 +23,7 @@ import { ConfirmationDialogComponent } from '../../../../shared/components/confi
     CommonModule,
     TaskCardComponent,
     TaskBoardComponent,
-    FilterPanelComponent, 
+    FilterPanelComponent,
     RouterLink,
     ConfirmationDialogComponent
   ],
@@ -33,12 +33,10 @@ import { ConfirmationDialogComponent } from '../../../../shared/components/confi
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   //#region Inputs
-  /** Project ID passed from parent (optional) */
   @Input() projectId?: number | null;
   //#endregion
 
   //#region View Mode
-  /** list | board | project */
   public viewMode: 'project' | 'list' | 'board' | 'global' = 'project';
   //#endregion
 
@@ -50,8 +48,8 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public userEmail: string = '';
   //#endregion
 
-  //#region Subscriptions
-  private taskSubscription!: Subscription;
+  //#region Unsubscription Handler
+  private destroy$ = new Subject<void>();
   //#endregion
 
   //#region Sorting
@@ -74,31 +72,30 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnInit(): void {
 
-  const user =
-    JSON.parse(localStorage.getItem('currentUser') || 'null') ||
-    JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+    const user =
+      JSON.parse(localStorage.getItem('currentUser') || 'null') ||
+      JSON.parse(sessionStorage.getItem('currentUser') || 'null');
 
-  this.userEmail = user?.email || '';
+    this.userEmail = user?.email || '';
 
-  const users = this.userStorage.getAllUsers();
-  this.allUsers = users.map(u => u.name);
+    const users = this.userStorage.getAllUsers();
+    this.allUsers = users.map(u => u.name);
 
-  this.route.paramMap.subscribe(params => {
-    const id = params.get('id');
-    this.projectId = id ? Number(id) : null;
+    // FIXED - Safe subscription
+    this.route.paramMap
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const id = params.get('id');
+        this.projectId = id ? Number(id) : null;
+        this.loadTasks(this.taskService.getAllTasks());
+      });
 
-    this.loadTasks(this.taskService.getAllTasks());
-  });
+    this.detectViewMode();
 
-  this.detectViewMode();
-
-  this.taskSubscription = this.taskService.tasks$
-    .subscribe(tasks => this.loadTasks(tasks));
-}
-
-
-  public ngOnDestroy(): void {
-    this.taskSubscription?.unsubscribe();
+    // FIXED - Safe subscription
+    this.taskService.tasks$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(tasks => this.loadTasks(tasks));
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -106,49 +103,46 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       this.loadTasks(this.taskService.getAllTasks());
     }
   }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   //#endregion
 
   //#region View Mode Logic
- private detectViewMode(): void {
-  const url = this.router.url.toLowerCase();
+  private detectViewMode(): void {
+    const url = this.router.url.toLowerCase();
 
-  // /projects/:id/board
-  if (url.match(/^\/projects\/\d+\/board$/)) {
-    this.viewMode = 'board';
-    return;
+    if (url.match(/^\/projects\/\d+\/board$/)) {
+      this.viewMode = 'board';
+      return;
+    }
+
+    if (url.match(/^\/projects\/\d+\/tasks$/)) {
+      this.viewMode = 'list';
+      this.projectId = Number(this.route.snapshot.paramMap.get('id'));
+      return;
+    }
+
+    if (url.match(/^\/projects\/\d+$/)) {
+      this.viewMode = 'list';
+      this.projectId = Number(this.route.snapshot.paramMap.get('id'));
+      return;
+    }
+
+    if (url === '/tasks/board') {
+      this.viewMode = 'board';
+      this.projectId = null;
+      return;
+    }
+
+    if (url === '/tasks' || url.startsWith('/tasks?')) {
+      this.viewMode = 'list';
+      this.projectId = null;
+      return;
+    }
   }
-
-  // /projects/:id/tasks  → list view WITH project header
-  if (url.match(/^\/projects\/\d+\/tasks$/)) {
-    this.viewMode = 'list';
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.projectId = id;
-    return;
-  }
-
-  // /projects/:id  → same list view
-  if (url.match(/^\/projects\/\d+$/)) {
-    this.viewMode = 'list';
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.projectId = id;
-    return;
-  }
-
-  // /tasks/board
-  if (url === '/tasks/board') {
-    this.viewMode = 'board';
-    this.projectId = null;
-    return;
-  }
-
-  // /tasks
-  if (url === '/tasks' || url.startsWith('/tasks?')) {
-    this.viewMode = 'list';
-    this.projectId = null;
-    return;
-  }
-}
-
   //#endregion
 
   //#region Load + Filter + Sort
@@ -203,7 +197,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       return 0;
     });
   }
-
   //#endregion
 
   //#region Sorting Controls
@@ -309,10 +302,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#region Helpers
 
   public getProjectName(id: number): string {
-  if (!this.userEmail) return 'Unknown';
-  return this.projectService.getById(id, this.userEmail)?.name || 'Unknown';
-}
-
+    if (!this.userEmail) return 'Unknown';
+    return this.projectService.getById(id, this.userEmail)?.name || 'Unknown';
+  }
 
   public getShowingText(): string {
     return `Showing ${this.filteredTasks.length} of ${this.tasks.length} tasks`;
