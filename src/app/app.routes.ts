@@ -33,4 +33,6 @@ export const routes: Routes = [
   { path: 'board', component: TaskBoardComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'dashboard', component: DashboardComponentStats },
+  { path: 'projects/:id/tasks', component: TaskListComponent },
+
 ];
