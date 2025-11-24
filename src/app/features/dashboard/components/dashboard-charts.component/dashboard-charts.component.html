@@ -1,0 +1,84 @@
+<div class="dashboard-charts-stats">
+  <div class="top-row-stats">
+    <h1>Visual Charts & Activity</h1>
+    <button type="button" (click)="refresh()">Refresh</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-stats">
+    Loading dashboard…
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <!-- Charts Grid -->
+    <div class="charts-grid-stats">
+      <!-- Task Completion Pie -->
+      <div class="card-stats">
+        <h2>Task Completion</h2>
+        <ng-container *ngIf="pieData$ | async as pie; else emptyPie">
+          <app-chart [type]="'pie'" [data]="(pieData$ | async) ?? { labels: [], datasets: [] }" [options]="pieOptions">
+          </app-chart>
+        </ng-container>
+        <ng-template #emptyPie>
+          <div class="empty-stats">No task data available.</div>
+        </ng-template>
+      </div>
+
+      <!-- Priority Bar -->
+      <div class="card-stats">
+        <h2>Priority Distribution</h2>
+        <ng-container *ngIf="priorityData$ | async as prio; else emptyPrio">
+          <app-chart [type]="'bar'" [data]="(priorityData$ | async) ?? { labels: [], datasets: [] }"
+            [options]="priorityOptions">
+          </app-chart>
+        </ng-container>
+        <ng-template #emptyPrio>
+          <div class="empty-stats">No tasks to calculate priorities.</div>
+        </ng-template>
+      </div>
+
+      <!-- Trend Line -->
+      <div class="card-stats">
+        <h2>Completion Trend (Last 14 days)</h2>
+        <ng-container *ngIf="trendData$ | async as trend; else emptyTrend">
+          <app-chart [type]="'line'" [data]="(trendData$ | async) ?? { labels: [], datasets: [] }"
+            [options]="trendOptions">
+          </app-chart>
+        </ng-container>
+        <ng-template #emptyTrend>
+          <div class="empty-stats">No completed tasks to show trend.</div>
+        </ng-template>
+      </div>
+
+      <!-- Overdue Box -->
+      <div class="card-stats overdue-stats" *ngIf="overdue$ | async as overdue">
+        <div class="overdue-header-stats">
+          <h2>Overdue Tasks</h2>
+          <span class="badge-stats" [class.ok-stats]="overdue.count === 0">
+            {{ overdue.count }}
+          </span>
+        </div>
+
+        <ng-container *ngIf="overdue.count > 0; else noOverdue">
+          <ul class="overdue-list-stats">
+            <li *ngFor="let t of overdue.tasks">
+              <div class="title-stats">{{ t.title }}</div>
+              <div class="meta-stats">
+                <span>Due: {{ t.dueDate | date: 'mediumDate' }}</span>
+                <span *ngIf="t.assignee">Assignee: {{ t.assignee }}</span>
+              </div>
+            </li>
+          </ul>
+        </ng-container>
+
+        <ng-template #noOverdue>
+          <p class="empty-stats">No overdue tasks. 🎉</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="activity-section-stats">
+      <app-activity-feed></app-activity-feed>
+    </div>
+  </ng-container>
+</div>

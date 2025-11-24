@@ -1,6 +1,6 @@
 <!-- Overlay -->
 @if (open) {
-<div class="tl-filter-overlay" (click)="close.emit()"></div>
+  <div class="tl-filter-overlay" (click)="close.emit()"></div>
 }
 
 <!-- Filter panel -->
@@ -25,10 +25,10 @@
     </div>
 
     <div class="tl-filter-options">
-      @for (s of statusList; track s) {
+      @for (status of statusList; track status) {
       <label>
-        <input type="checkbox" [checked]="filters.status.includes(s)" (change)="toggleCheck(filters.status, s)">
-        {{ s }}
+        <input type="checkbox" [checked]="filters.status.includes(status)" (change)="toggleCheck(filters.status, status)">
+        {{ status }}
       </label>
       }
     </div>
@@ -44,10 +44,10 @@
     </div>
 
     <div class="tl-filter-options">
-      @for (p of priorityList; track p) {
+      @for (priority of priorityList; track priority) {
       <label>
-        <input type="checkbox" [checked]="filters.priority.includes(p)" (change)="toggleCheck(filters.priority, p)">
-        {{ p }}
+        <input type="checkbox" [checked]="filters.priority.includes(priority)" (change)="toggleCheck(filters.priority, priority)">
+        {{ priority }}
       </label>
       }
     </div>
@@ -62,10 +62,10 @@
     </div>
 
     <div class="tl-filter-options">
-      @for (a of assignees; track a) {
+      @for (assignee of assignees; track assignee) {
       <label>
-        <input type="checkbox" [checked]="filters.assignee.includes(a)" (change)="toggleCheck(filters.assignee, a)">
-        {{ a }}
+        <input type="checkbox" [checked]="filters.assignee.includes(assignee)" (change)="toggleCheck(filters.assignee, assignee)">
+        {{ assignee }}
       </label>
       }
     </div>

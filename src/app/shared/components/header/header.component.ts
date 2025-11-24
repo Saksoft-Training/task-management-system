@@ -18,7 +18,7 @@ import { User } from '../../../../types/models/user';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
- 
+
   //#region Component Properties
   /**
    * @summary Controls the visibility state of the notifications dropdown panel
@@ -30,13 +30,13 @@ export class HeaderComponent implements OnInit {
  * @description Used to show a numeric badge on the notification bell icon
  */
   public unreadCount = 0;
- 
+
   /**
    * @summary Observable stream of notifications from the notification service
    * @description Provides reactive updates whenever notifications change in the system
    */
   public notifications$!: Observable<AppNotification[]>;
- 
+
   //#region UI State
   /**
    * @summary Controls visibility of the logout confirmation dialog.
@@ -45,13 +45,13 @@ export class HeaderComponent implements OnInit {
    */
   public showLogoutDialog: boolean = false;
   //#endregion
- 
+
   /**
    * @summary Logged-in user's email displayed in the header.
    */
   public user: User | null = null;
   public userEmail: string | null = null;
- 
+
   /**
    * @summary Navigation menu items shown in the header.
    */
@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
     { label: 'Projects', path: '/projects' },
     { label: 'Tasks', path: '/tasks' },
     { label: 'Board', path: '/board' },
- 
+
   ];
   //#endregion
   //#region Constructor
@@ -105,16 +105,16 @@ export class HeaderComponent implements OnInit {
     );
   }
   //#endregion
- onNavigateNotification(notification: any) {
-  // Example: navigate using router
-  console.log('Navigate to notification:', notification);
+  onNavigateNotification(notification: any) {
+    // Example: navigate using router
+    console.log('Navigate to notification:', notification);
 
-  // optionally close dropdown
-  this.showNotifications = false;
+    // optionally close dropdown
+    this.showNotifications = false;
 
-  // If notifications have a route:
-  // this.router.navigate([notification.route]);
-}
+    // If notifications have a route:
+    // this.router.navigate([notification.route]);
+  }
 
   //#region Event Handlers
   /**
@@ -154,9 +154,9 @@ export class HeaderComponent implements OnInit {
     this.notificationService.clearAll(); // Use clearAll() instead of clearAllNotifications()
   }
   //#endregion
- 
+
   //#region Logout Dialog Actions
- 
+
   /**
    * @summary Opens the logout confirmation dialog.
    * @returns {void}
@@ -164,7 +164,7 @@ export class HeaderComponent implements OnInit {
   public openLogoutDialog(): void {
     this.showLogoutDialog = true;
   }
- 
+
   /**
    * @summary Confirms logout action and triggers AuthService logout.
    * @returns {void}
@@ -173,7 +173,7 @@ export class HeaderComponent implements OnInit {
     this.showLogoutDialog = false;
     this.authService.logout();
   }
- 
+
   /**
    * @summary Cancels the logout dialog and closes it.
    * @returns {void}
@@ -181,17 +181,28 @@ export class HeaderComponent implements OnInit {
   public cancelLogout(): void {
     this.showLogoutDialog = false;
   }
- 
+
   //#endregion
- 
+
   //#region Navigation
- 
+
   /**
    * @summary Navigates the user to the login page.
    * @returns {void}
    */
   public goToLogin(): void {
     this.router.navigate(['/login']);
+  }
+   /**
+   * @summary Navigates the user to the profile page.
+   * @returns {void}
+   */
+  public goToProfile(): void {
+  this.router.navigate(['/profile']);
+}
+  onDismissNotification(notificationId: string) {
+    console.log("Removing notification:", notificationId);
+    this.notificationService.dismiss(notificationId);  // delete from storage
   }
   //#endregion
 }

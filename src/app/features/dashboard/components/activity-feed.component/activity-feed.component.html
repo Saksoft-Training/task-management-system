@@ -1,0 +1,35 @@
+<div class="activity-feed-stats">
+  <div class="header-row-stats">
+    <h2>Recent Activity</h2>
+  </div>
+
+  <ng-container *ngIf="activities$ | async as activities; else emptyTpl">
+    <ng-container *ngIf="activities.length > 0; else emptyTpl">
+      <ul class="activity-list-stats">
+        <li class="activity-item-stats" *ngFor="let activity of activities" (click)="onActivityClick(activity)">
+          <div class="avatar-stats">
+            <span>{{ getInitials(activity.user) }}</span>
+          </div>
+
+          <div class="content-stats">
+            <div class="line1-stats">
+              <span class="action-stats">{{ formatAction(activity) }}</span>
+              <span class="item-name-stats">{{ activity.itemName }}</span>
+            </div>
+
+            <div class="line2-stats">
+              <span class="user-stats">{{ activity.user }}</span>
+              <span class="timestamp-stats">
+                {{ activity.timestamp | date: 'short' }}
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #emptyTpl>
+    <div class="info-stats">No recent activities.</div>
+  </ng-template>
+</div>

@@ -1,37 +1,111 @@
-<!-- Main wrapper -->
+<!-- MAIN WRAPPER -->
 <div class="tl-wrapper">
 
-  <!-- Header -->
-  <div class="tl-header">
+  @if (projectId) {
 
-    <!-- Page title -->
-    @if (viewMode === 'project') {
-    <h2 class="tl-header-title">Tasks</h2>
-    }
+  <div class="tl-project-header">
 
-    @if (viewMode === 'list') {
-    <h2 class="tl-header-title-large">All Tasks</h2>
-    }
+    <div class="tl-project-header-top">
 
-    <!-- Header right controls -->
-    <div class="tl-header-controls">
+      <!-- LEFT SIDE -->
+      <div class="tl-project-header-left">
 
-      <!-- View mode toggle -->
-      <div class="tl-header-toggle">
+        <!-- Breadcrumb -->
+        <nav class="tl-project-breadcrumbs">
+          <a routerLink="/projects">Projects</a>
+          <span>/</span>
+          <a [routerLink]="'/projects/' + projectId">
+            {{ getProjectName(projectId) }}
+          </a>
+          <span>/</span>
+          <span class="current">Task List</span>
+        </nav>
 
-        <button class="tl-toggle-btn" [class.active]="viewMode === 'list'" (click)="setMode('list')">
-          <img src="assets/icons/list-Icon.svg" class="icon" alt="List" />
-          List
-        </button>
+        <!-- Title + Status -->
+        <div class="tl-project-title-row">
+          <h1 class="tl-project-title">{{ getProjectName(projectId) }}</h1>
 
-        <button class="tl-toggle-btn" [class.active]="viewMode === 'board'" (click)="setMode('board')">
-          <img src="assets/icons/board-Icon.svg" class="icon" alt="Board" />
-          Board
+          <span class="tl-project-status-chip"
+                [ngClass]="projectService.getById(projectId, userEmail)?.status?.toLowerCase()">
+            {{ projectService.getById(projectId, userEmail)?.status }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <p class="tl-project-desc">
+          {{ projectService.getById(projectId, userEmail)?.description }}
+        </p>
+
+        <!-- META INFO (Dates + Task Count) -->
+        <div class="tl-project-meta-row">
+
+          <div class="tl-project-meta-item">
+            <img src="assets/icons/calendar-Icon.svg" />
+            <span>
+              {{ projectService.getById(projectId, userEmail)?.startDate }}
+              →
+              {{ projectService.getById(projectId, userEmail)?.endDate }}
+            </span>
+          </div>
+
+          <div class="tl-project-meta-separator"></div>
+
+          <div class="tl-project-meta-item">
+            <img src="assets/icons/task-Icon.svg" />
+            <span>{{ filteredTasks.length }} Tasks</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT SIDE (Toggle + Create Task) -->
+      <div class="tl-project-header-right">
+
+        <!-- TOGGLE -->
+        <div class="tl-board-toggle">
+
+          <button class="tl-board-toggle-btn active" (click)="setMode('list')">
+            <img src="assets/icons/list-Icon.svg" class="icon" />
+            List
+          </button>
+
+          <button class="tl-board-toggle-btn" (click)="setMode('board')">
+            <img src="assets/icons/board-Icon.svg" class="icon" />
+            Board
+          </button>
+
+        </div>
+
+        <!-- Create Task -->
+        <button class="tl-create-task-btn" (click)="createTask()">
+          Create New Task
         </button>
 
       </div>
 
-      <!-- Create task button -->
+    </div>
+
+  </div>
+
+  }
+
+  @if (!projectId && viewMode === 'list') {
+
+  <div class="tl-header">
+    <h2 class="tl-header-title-large">All Tasks</h2>
+
+    <div class="tl-header-controls">
+
+      <div class="tl-header-toggle">
+        <button class="tl-toggle-btn active" (click)="setMode('list')">
+          <img src="assets/icons/list-Icon.svg" class="icon" /> List
+        </button>
+        <button class="tl-toggle-btn" (click)="setMode('board')">
+          <img src="assets/icons/board-Icon.svg" class="icon" /> Board
+        </button>
+      </div>
+
       <button class="tl-create-btn" (click)="createTask()">
         Create New Task
       </button>
@@ -39,165 +113,154 @@
     </div>
   </div>
 
-  <!-- LIST MODE -->
+  }
+
   @if (viewMode === 'list') {
 
-  <div class="tl-global-list">
+  <!-- Filter + Sort Controls -->
+  <div class="tl-global-controls">
 
-    <!-- Filters, sort, count -->
-    <div class="tl-global-controls">
+    <!-- Filter Button -->
+    <button class="tl-filter-btn" (click)="isFilterOpen = true">
+      <img src="assets/icons/filter-Icon.svg" class="icon" />
+      Filters
+    </button>
 
-      <!-- Open filter panel -->
-      <button class="tl-filter-btn" (click)="isFilterOpen = true">
-        <img src="assets/icons/filter-Icon.svg" class="icon" />
-        Filters
-      </button>
+    <!-- Filter Panel -->
+    <app-filter-panel
+      [open]="isFilterOpen"
+      [assignees]="allUsers"
+      (close)="isFilterOpen = false"
+      (filtersChanged)="applyFilters($event)">
+    </app-filter-panel>
 
-      <!-- Filter popup -->
-      <app-filter-panel
-        [open]="isFilterOpen"
-        [assignees]="allUsers"
-        (close)="isFilterOpen = false"
-        (filtersChanged)="applyFilters($event)">
-      </app-filter-panel>
+    <!-- Sort -->
+    <div class="tl-sort-box" (click)="toggleSortMenu()">
+      <img src="assets/icons/sort-Icon.svg" class="sort-icon" />
+      Sort: {{ getSortLabel() }}
+    </div>
 
-      <!-- Sort button -->
-      <div class="tl-sort-box" (click)="toggleSortMenu()">
-        <img src="assets/icons/sort-Icon.svg" class="sort-icon" />
-        Sort: {{ getSortLabel() }}
-      </div>
+    <!-- Task Count -->
+    <span class="tl-task-count">
+      Showing {{ filteredTasks.length }} of {{ tasks.length }} tasks
+    </span>
 
-      <!-- Task count -->
-      <span class="tl-task-count">
-        Showing {{ filteredTasks.length }} of {{ tasks.length }} tasks
-      </span>
-
-      <!-- Sort menu -->
-      @if (isSortMenuOpen) {
+    <!-- Sort Menu -->
+    @if (isSortMenuOpen) {
       <div class="tl-sort-menu">
         <button (click)="setSortDirection(true)">↑ Ascending</button>
         <button (click)="setSortDirection(false)">↓ Descending</button>
-        <button (click)="setSortField('title'); $event.stopPropagation()">Title</button>
-        <button (click)="setSortField('dueDate'); $event.stopPropagation()">Due Date</button>
-        <button (click)="setSortField('priority'); $event.stopPropagation()">Priority</button>
-        <button (click)="setSortField('status'); $event.stopPropagation()">Status</button>
+        <button (click)="setSortField('title')">Title</button>
+        <button (click)="setSortField('dueDate')">Due Date</button>
+        <button (click)="setSortField('priority')">Priority</button>
+        <button (click)="setSortField('status')">Status</button>
       </div>
-      }
-    </div>
+    }
 
-    <!-- Task table -->
-    <div class="tl-table-wrapper">
-      <table class="tl-table">
+  </div>
 
-        <thead>
-          <tr>
-            <th (click)="changeSort('title')">Title ⇅</th>
-            <th (click)="changeSort('status')">Status ⇅</th>
-            <th (click)="changeSort('priority')">Priority ⇅</th>
-            <th (click)="changeSort('assignee')">Assignee ⇅</th>
-            <th (click)="changeSort('dueDate')">Due Date ⇅</th>
-            <th>Project</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+  <!-- TABLE -->
+  <div class="tl-table-wrapper">
 
-        <tbody>
+    <table class="tl-table">
 
-          <!-- Task rows -->
-          @for (t of filteredTasks; track t.id) {
+      <thead>
+        <tr>
+          <th (click)="changeSort('title')">Title ⇅</th>
+          <th (click)="changeSort('status')">Status ⇅</th>
+          <th (click)="changeSort('priority')">Priority ⇅</th>
+          <th (click)="changeSort('assignee')">Assignee ⇅</th>
+          <th (click)="changeSort('dueDate')">Due Date ⇅</th>
+          <th>Project</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-          <tr (click)="openCard(t)">
+      <tbody>
 
-            <!-- Title -->
-            <td class="tl-col-title">{{ t.title }}</td>
+        @for (taskItem of filteredTasks; track taskItem.id) {
+        <tr (click)="openCard(taskItem)">
 
-            <!-- Status -->
-            <td>
-              <span class="tl-status tl-status--{{ t.status.toLowerCase().replace(' ', '-') }}">
-                {{ t.status }}
-              </span>
-            </td>
+          <td class="tl-col-title">{{ taskItem.title }}</td>
 
-            <!-- Priority -->
-            <td>
-              <span class="tl-priority tl-priority--{{ t.priority.toLowerCase().replace(' ', '-') }}">
-                {{ t.priority }}
-              </span>
-            </td>
+          <td>
+            <span class="tl-status tl-status--{{ taskItem.status.toLowerCase().replace(' ', '-') }}">
+              {{ taskItem.status }}
+            </span>
+          </td>
 
-            <!-- Assignee -->
-            <td>
-              <div class="tl-assignee">
-                <div class="tl-avatar">
-                  {{ t.assignee[0] }}{{ t.assignee.split(' ')[1]?.[0] || '' }}
-                </div>
-                <span class="tl-assignee-name">{{ t.assignee }}</span>
+          <td>
+            <span class="tl-priority tl-priority--{{ taskItem.priority.toLowerCase().replace(' ', '-') }}">
+              {{ taskItem.priority }}
+            </span>
+          </td>
+
+          <td>
+            <div class="tl-assignee">
+              <div class="tl-avatar">
+                {{ taskItem.assignee[0] }}{{ taskItem.assignee.split(' ')[1]?.[0] || '' }}
               </div>
-            </td>
+              <span class="tl-assignee-name">{{ taskItem.assignee }}</span>
+            </div>
+          </td>
 
-            <!-- Date -->
-            <td class="tl-date">{{ t.dueDate | date }}</td>
+          <td class="tl-date">{{ taskItem.dueDate | date }}</td>
 
-            <!-- Project name -->
-            <td class="tl-project-name">{{ getProjectName(t.projectId) }}</td>
+          <td class="tl-project-name">{{ getProjectName(taskItem.projectId) }}</td>
 
-            <!-- Actions -->
-            <td class="tl-actions">
+          <td class="tl-actions">
 
-              <img src="assets/icons/edit-Icon.svg" class="tl-action-icon"
-                (click)="editTask(t); $event.stopPropagation()" />
+            <img src="assets/icons/edit-Icon.svg"
+                 class="tl-action-icon"
+                 (click)="editTask(taskItem); $event.stopPropagation()" />
 
-              <img src="assets/icons/delete-Icon.svg" class="tl-action-icon"
-                (click)="deleteTask(t); $event.stopPropagation()" />
+            <img src="assets/icons/delete-Icon.svg"
+                 class="tl-action-icon"
+                 (click)="deleteTask(taskItem); $event.stopPropagation()" />
 
-              <!-- Delete confirmation -->
-              @if (isDeleteModalOpen) {
-              <app-confirmation-dialog-component
-                [title]="'Delete Task'"
-                [message]="'Are you sure you want to delete the task:\n' + (pendingDeleteTask?.title || '') + '?'"
-                [confirmText]="'Delete'"
-                [cancelText]="'Cancel'"
-                [type]="'danger'"
-                (confirm)="onConfirmDelete()"
-                (cancel)="onCancelDelete()">
-              </app-confirmation-dialog-component>
-              }
-            </td>
+          </td>
 
-          </tr>
+        </tr>
+        }
 
-          }
+      </tbody>
 
-        </tbody>
+    </table>
 
-      </table>
-
-      <!-- Selected task card -->
-      @if (activeTask) {
+    <!-- POPUP CARD -->
+    @if (activeTask) {
       <app-task-card-component
         [task]="activeTask"
         (close)="closeCard()">
       </app-task-card-component>
-      }
-    </div>
+    }
 
   </div>
 
   }
 
+  @if (viewMode === 'board') {
+
+    @if (projectId) {
+      <app-task-board [title]="getProjectName(projectId)"></app-task-board>
+    }
+
+    @if (!projectId) {
+      <app-task-board [title]="'All Board'"></app-task-board>
+    }
+
+  }
+
+  <app-confirmation-dialog-component
+    *ngIf="isDeleteModalOpen"
+    [title]="'Delete Task'"
+    [message]="'Are you sure you want to delete: ' + (pendingDeleteTask?.title || '') + '?'"
+    [confirmText]="'Delete'"
+    [cancelText]="'Cancel'"
+    [type]="'danger'"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+</app-confirmation-dialog-component>
+  
+
 </div>
-
-<!-- BOARD MODE -->
-@if (viewMode === 'board') {
-
-<!-- Single project board -->
-@if (projectId) {
-<app-task-board [title]="getProjectName(projectId)"></app-task-board>
-}
-
-<!-- Global board -->
-@if (!projectId) {
-<app-task-board [title]="'All Board'"></app-task-board>
-}
-
-}

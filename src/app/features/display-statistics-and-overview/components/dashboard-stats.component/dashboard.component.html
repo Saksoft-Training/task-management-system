@@ -1,32 +1,41 @@
-<section class="dashboard-page">
+<section class="dashboard-page-stats">
     <p>Overview of your projects and tasks</p>
-    <div *ngIf="loading" class="loading-note">Loading statistics…</div>
+    <div *ngIf="loading" class="loading-note-stats">Loading statistics…</div>
     <ng-container *ngIf="(stats$ | async) as stats">
-        <div class="grid">
+        <div class="grid-stats">
             <app-statistics-card [value]="stats.totalProjects" icon="/assets/icons/total-projects-icon.svg"
-                [label]="'Total Projects'" [status]="'Total'" colorClass="blue"
-                [loading]="loading"></app-statistics-card>
+                [label]="'Total Projects'" [status]="'Total'" colorClass="blue" [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'Active Projects'" [value]="stats.activeProjects"
-                icon="assets/icons/active-projects-icon.svg" [status]="'Active'" colorClass="amber"
-                [loading]="loading"></app-statistics-card>
+                icon="assets/icons/active-projects-icon.svg" [status]="'Active'" colorClass="amber" [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'Completed Projects'" [value]="stats.completedProjects"
                 icon="assets/icons/completed-projects-icon.svg" [status]="'Completed'" colorClass="green"
-                [loading]="loading"></app-statistics-card>
+                [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'Completion Rate'" [value]="stats.overallCompletionRate + '%'"
-                icon="assets/icons/completion-rate-icon.svg" [status]="'Rate'" colorClass="blue"
-                [loading]="loading"></app-statistics-card>
-
+                icon="assets/icons/completion-rate-icon.svg" [status]="'Rate'" colorClass="blue" [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'Completed Tasks'" [value]="stats.completedTasks" [status]="'Completed'"
-                colorClass="green" [loading]="loading"></app-statistics-card>
+                colorClass="green" [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'In Progress Tasks'" [value]="stats.inProgressTasks" [icon]="' '"
-                [status]="'In Progress'" colorClass="amber" [loading]="loading"></app-statistics-card>
+                [status]="'In Progress'" colorClass="amber" [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'Overdue Tasks'" [value]="stats.overdueTasks" [icon]="' '" colorClass="red"
-                [status]="'Overdue'" [loading]="loading"></app-statistics-card>
+                [status]="'Overdue'" [loading]="loading">
+            </app-statistics-card>
             <app-statistics-card [label]="'Total Tasks'" [value]="stats.totalTasks" colorClass="neutral"
-                [status]="'Total'" [loading]="loading"></app-statistics-card>
+                [status]="'Total'" [loading]="loading">
+            </app-statistics-card>
         </div>
-        <div *ngIf="stats.totalProjects === 0 && stats.totalTasks === 0" class="empty-state">
+        <div *ngIf="stats.totalProjects === 0 && stats.totalTasks === 0" class="empty-state-stats">
             No projects or tasks found. Add a project to get started.
+        </div>
+        <div class="charts-grid-stats">
+            <div class="chart-card-stats">
+                <app-dashboard-charts></app-dashboard-charts>
+            </div>
         </div>
     </ng-container>
 </section>
