@@ -1,34 +1,38 @@
 import { Injectable } from '@angular/core';
 import { User } from '../../../types/models/user';
-
+import { HttpClient } from '@angular/common/http'; // ⭐ CHANGED: added HttpClient
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators'; // ⭐ CHANGED: for API helpers
+ 
 const USERS_KEY = 'users';
 const PASSWORD_SECRET = 'MyAppSecret@2025';
+ 
 @Injectable({ providedIn: 'root' })
 export class UserStorageService {
-  //#region User Retrieval
+  private readonly apiUrl = 'https://692433503ad095fb847320c8.mockapi.io/users';
+  constructor(private http: HttpClient) {}
+ 
+  //#region OLD localStorage methods (still here to avoid breaking other code)
   /**
    * @summary Retrieves all stored users from localStorage.
-   * @returns User[] Array of stored user objects.
+   * NOTE: Prefer using API helpers below for new features.
    */
   public getAllUsers(): User[] {
     const usersJson = localStorage.getItem(USERS_KEY);
     return usersJson ? JSON.parse(usersJson) : [];
   }
+ 
   /**
    * @summary Saves the updated array of users back to localStorage.
-   * @param users Array of users to be saved.
-   * @returns void
+   * NOTE: Kept for backward compatibility.
    */
   public saveAllUsers(users: User[]): void {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
-  //#endregion
-
-  //#region Email Helpers
+ 
   /**
-   * @summary Checks if a given email already exists in stored users.
-   * @param email Email address to check.
-   * @returns boolean True if email exists.
+   * @summary Checks if a given email already exists in localStorage users.
+   * NOTE: For new logic, use isEmailExistsApi().
    */
   public isEmailExists(email: string): boolean {
     const check = email.trim().toLowerCase();
@@ -37,21 +41,48 @@ export class UserStorageService {
     );
   }
   //#endregion
-
-  //#region Password Encoding
+ 
+  //#region API helpers 
   /**
-   * @summary Encrypts raw password using base64 + secret prefix.
-   * @param raw Raw password string.
-   * @returns string Encoded password.
+   * @summary Get all users from MockAPI.
    */
+  public getAllUsersFromApi(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+ 
+  /**
+   * @summary Check if email exists using MockAPI (for async validator).
+   */
+  public isEmailExistsApi(email: string): Observable<boolean> {
+    const normalized = email.trim().toLowerCase();
+    return this.http
+      .get<User[]>(`${this.apiUrl}?email=${encodeURIComponent(normalized)}`)
+      .pipe(map(users => users.length > 0));
+  }
+ 
+  /**
+   * @summary Create a new user via MockAPI.
+   */
+  public createUser(user: User): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
+  }
+ 
+  /**
+   * @summary Find a single user by email via MockAPI (used for login).
+   */
+  public findUserByEmail(email: string): Observable<User | null> {
+    const normalized = email.trim().toLowerCase();
+    return this.http
+      .get<User[]>(`${this.apiUrl}?email=${encodeURIComponent(normalized)}`)
+      .pipe(map(users => (users.length ? users[0] : null)));
+  }
+  //#endregion
+ 
+  //#region Password Encoding
   public encodePassword(raw: string): string {
     return btoa(`${PASSWORD_SECRET}:${raw}`);
   }
-  /**
-   * @summary Decodes an encoded password back to plain text.
-   * @param encoded Encoded password string.
-   * @returns string Decoded raw password.
-   */
+ 
   public decodePassword(encoded: string): string {
     try {
       const decoded = atob(encoded);
@@ -61,14 +92,8 @@ export class UserStorageService {
     }
   }
   //#endregion
-
-  //#region Password Update
-  /**
-   * @summary Updates password for a specific user by email.
-   * @param email User's email to update password for.
-   * @param newPass New raw password.
-   * @returns boolean True if update succeeded.
-   */
+ 
+  //#region Password Update 
   public updatePasswordForEmail(email: string, newPass: string): boolean {
     const normalized = email.trim().toLowerCase();
     const users = this.getAllUsers();
@@ -81,19 +106,11 @@ export class UserStorageService {
     return true;
   }
   //#endregion
-
-  //#region User Update
-  /**
-   * @summary Updates stored user data. Required when profile email changes.
-   * @param updatedUser Updated user object.
-   * @param oldEmail Optional old email reference before updating.
-   * @returns boolean True if update succeeded.
-   */
+ 
+  //#region User Update 
   public updateUser(updatedUser: User, oldEmail?: string): boolean {
     const users = this.getAllUsers();
-    const matchEmail = (oldEmail || updatedUser.email)
-      .trim()
-      .toLowerCase();
+    const matchEmail = (oldEmail || updatedUser.email).trim().toLowerCase();
     const index = users.findIndex(
       u => (u.email || '').trim().toLowerCase() === matchEmail
     );

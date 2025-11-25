@@ -3,11 +3,11 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../../../../types/models/project';
-
+ 
 import { AuthService } from '../../../user-account-management/services/auth-service';
 import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
 import { NotificationService } from '../../../dashboard/services/notification-service';
-
+ 
 @Component({
   selector: 'app-project-create-component',
   imports: [ReactiveFormsModule, DialogDeleteComponent],
@@ -29,16 +29,16 @@ export class ProjectCreateComponent {
   /** Minimum date allowed for date fields (today) */
   public minDate: string = new Date().toISOString().split('T')[0];
   public showDeleteDialog = false;
-
+ 
   public deleteDialogData = {
     title: 'DELETE PROJECT',
     message: '',
     confirmText: 'Delete',
     cancelText: 'Cancel'
   };
-
+ 
   // #endregion
-
+ 
   //#region Constructor
   /**
    * @summary Initializes the component, form controls, validators, and validates route param.
@@ -66,13 +66,13 @@ export class ProjectCreateComponent {
     });
   }
   //#endregion
-
+ 
   ngOnInit() {
     const user = this.authService.getCurrentUser();
     this.currentUser = user?.email || '';
     this.validateProjectId();
   }
-
+ 
   //#region Private Utility Methods
   /**
    * @summary Validates project ID from route. Redirects to project list if ID invalid.
@@ -80,26 +80,26 @@ export class ProjectCreateComponent {
    */
   private validateProjectId(): void {
     const projectIdParam = this.route.snapshot.paramMap.get('id');
-
+ 
     if (!projectIdParam) {
       return;
     }
-
+ 
     const projectId = Number(projectIdParam);
-
+ 
     if (!Number.isInteger(projectId) || projectId <= 0) {
       this.router.navigate(['/projects']);
       return;
     }
-
+ 
     const project = this.projectService.getById(projectId, this.currentUser);
     if (!project) {
       this.router.navigate(['/projects']);
       return;
     }
-
+ 
     this.editProjectId = projectId;
-
+ 
     // 👉 Patch form when editing
     this.projectForm.patchValue({
       name: project.name,
@@ -109,7 +109,7 @@ export class ProjectCreateComponent {
       endDate: project.endDate
     });
   }
-
+ 
   /**
    * @summary Converts various date formats into a Date object without time.
    * @param value - Input date value
@@ -126,7 +126,7 @@ export class ProjectCreateComponent {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
   // #endregion
-
+ 
   // #region Validators
   /**
    * @summary Validator ensuring selected date is today or in the future.
@@ -154,7 +154,7 @@ export class ProjectCreateComponent {
     return endDateOnly < startDateOnly ? { endBeforeStart: true } : null;
   }
   // #endregion
-
+ 
   // #region Getters
   /**
    * @summary Computes minimum allowed end date after selecting start date.
@@ -164,7 +164,7 @@ export class ProjectCreateComponent {
     return this.projectForm.get('startDate')?.value || '';
   }
   // #endregion
-
+ 
   // #region Form Actions
   /**
    * @summary Handles project creation or update logic.
@@ -235,17 +235,17 @@ export class ProjectCreateComponent {
   }
   public onDeleteProject(): void {
     if (!this.editProjectId) return;
-
+ 
     const project = this.projectService.getById(this.editProjectId, this.currentUser);
     if (!project) return;
-
+ 
     this.deleteDialogData.message =
       `Are you sure you want to delete “${project.name}” ?\n\n` +
       `Are you sure you want to delete this project? This action cannot be undone.\n\n`;
-
+ 
     this.showDeleteDialog = true;
   }
-
+ 
   public handleDeleteConfirm(): void {
     if (this.editProjectId) {
       this.projectService.delete(this.editProjectId, this.currentUser);
@@ -253,12 +253,12 @@ export class ProjectCreateComponent {
     }
     this.showDeleteDialog = false;
   }
-
+ 
   public handleDeleteCancel(): void {
     this.showDeleteDialog = false;
   }
-
-
+ 
+ 
   /**
   * @summary Navigates to the list of all projects.
   * @returns {void}
@@ -266,6 +266,6 @@ export class ProjectCreateComponent {
   public goToProjects(): void {
     this.router.navigate(['/projects']);
   }
-
+ 
   // #endregion
 }
