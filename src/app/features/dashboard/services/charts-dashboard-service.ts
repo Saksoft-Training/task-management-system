@@ -21,7 +21,7 @@ export class chartsDashboardService {
   activities$ = this.activitiesSubject.asObservable();
  constructor(
     private taskService: TaskService,
-    private activityService: ActivityService  // your Activity list source
+    private activityService: ActivityService // your Activity list source
   ) {
 
     // 🔥 Replace localStorage data with LIVE API data

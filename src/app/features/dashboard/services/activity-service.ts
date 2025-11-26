@@ -32,19 +32,32 @@ export class ActivityService {
    * Fetch all activities from API
    */
   loadForCurrentUser(): void {
-  const user = this.auth.getCurrentUser();
-  console.log("DEBUG - currentUser from ActivityService:", user);
-  if (!user) return;
+   const currentUser = this.auth.getCurrentUser();
+  if (!currentUser) return;
 
-  const url = `${this.apiBase}?userId=${user.id}`;
+  const url = `${this.apiBase}?userId=${currentUser.id}`;
 
-  this.http.get<Activity[]>(url)
+  this.http.get<any[]>(url)
     .pipe(
       catchError(err => {
         console.error('[ActivityService] Failed to fetch activities', err);
         return of([] as Activity[]);
       }),
-      tap(list => {
+      tap(rawList => {
+
+        const list: Activity[] = rawList.map(a => ({
+          id: a.id,
+          userId: a.userId,
+          itemId: a.itemId,
+          type: a.type,
+          action: a.action,
+          timestamp: a.timestamp,
+
+          // UI fields
+          user: currentUser.email,
+          prettyAction: `${a.type} ${a.action}`
+        }));
+
         const sorted = [...list].sort(
           (a, b) => +new Date(b.timestamp) - +new Date(a.timestamp)
         );

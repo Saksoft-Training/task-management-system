@@ -57,7 +57,8 @@ export class ActivityFeedComponent {
    * @param name - Full name of the user.
    * @returns A string representing the initials.
    */
-  public getInitials(name: string): string {
+  public getInitials(name?: string): string {
+     if (!name || name.trim().length === 0) return '?';
     return name
       .split(' ')
       .filter(Boolean)

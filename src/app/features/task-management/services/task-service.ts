@@ -4,8 +4,6 @@ import { Task, TaskStatus } from '../../../../types/models/task';
 import { AuthService } from '../../user-account-management/services/auth-service';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { ActivityService } from '../../dashboard/services/activity-service';
-import { Activity } from '../../../../types/activity/activity.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService implements OnDestroy {
@@ -33,8 +31,7 @@ export class TaskService implements OnDestroy {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly http: HttpClient,
-    private readonly activityService: ActivityService
+    private readonly http: HttpClient
   ) {
     /** Load tasks immediately (like old readForCurrentUser logic) */
     this.loadFromApi();
@@ -154,21 +151,9 @@ export class TaskService implements OnDestroy {
         }),
         tap(created => {
           if (created) {
-    this.removeFromCacheById(tempId);
-    this.upsertTaskInCache(created);
-
-    const user = this.authService.getCurrentUser();
-
-    if (user) {
-      this.activityService.push({
-        user: user.email,
-    itemId: String(created.id),
-    action: 'created',
-    type: 'task',
-    timestamp: new Date().toISOString()
-});
-    }
-
+            /** Replace temp task with real API task */
+            this.removeFromCacheById(tempId);
+            this.upsertTaskInCache(created);
           }
         })
       )
@@ -279,8 +264,8 @@ export class TaskService implements OnDestroy {
 
 
   //#endregion
-
-  public getOverdueTasks(): Task[] {
+  // In your TaskService - make sure this method exists:
+getOverdueTasks(): any[] {
   const now = new Date();
   return this.tasksCache.filter(t => {
     if (!t.dueDate) return false;
@@ -288,5 +273,4 @@ export class TaskService implements OnDestroy {
     return due < now && t.status !== 'Completed';
   });
 }
-
 }
