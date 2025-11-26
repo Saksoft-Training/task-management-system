@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Statistics } from '../../../../../types/models/statistics';
 import { DashboardService } from '../../services/dashboard-service';
 import { StatisticsCardComponent } from '../statistics-card.component/statistics-card.component';
 import { CommonModule } from '@angular/common';
 import { DashboardChartsComponent } from '../../../dashboard/components/dashboard-charts.component/dashboard-charts.component';
+import { TaskService } from '../../../task-management/services/task-service';
 
 @Component({
   selector: 'app-dashboard.component',
@@ -14,39 +15,24 @@ import { DashboardChartsComponent } from '../../../dashboard/components/dashboar
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponentStats {
-  // #region Public Properties
+ 
   public stats$!: Observable<Statistics>;
-  /** Controls visibility of loading spinner. */
   public loading = true;
+  public overdueList: any[] = []; 
 
-  // #endregion
+  private subscription!: Subscription;
 
-  // #region Constructor
-
-  /**
-   * Creates an instance of DashboardComponentStats.
-   * @summary Subscribes to statistics stream and handles loading state.
-   * @param dashboardService - Service providing dashboard statistics data.
-   */
-  constructor(private dashboardService: DashboardService) {
-    this.stats$ = this.dashboardService.getStatistics();
-
-    this.stats$.subscribe(() => {
+  constructor(private dashboardService: DashboardService,private taskService: TaskService) {
+    this.stats$ = this.dashboardService.stats$;
+    this.overdueList = this.taskService.getOverdueTasks();
+    // Subscribe once only to track loading state
+    this.subscription = this.stats$.subscribe(() => {
       this.loading = false;
     });
   }
 
-  // #endregion
-
-  // #region Public Methods
-
-  /**
-   * Refreshes dashboard statistics.
-   * @summary Calls backend refresh and reloads statistics data.
-   * @returns void
-   */
-  public refresh() {
-    this.dashboardService.refresh();
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
-  // #endregion
+
 }

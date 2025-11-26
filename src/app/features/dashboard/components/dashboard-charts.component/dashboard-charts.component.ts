@@ -115,7 +115,6 @@ export class DashboardChartsComponent implements OnInit {
    */
   public refresh(): void {
     this.loading = true;
-    this.dashboardservice.refresh();
 
     setTimeout(() => this.loading = false, 350);
   }

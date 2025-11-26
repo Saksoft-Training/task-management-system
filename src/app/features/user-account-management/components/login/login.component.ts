@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../../dashboard/services/notification-service';
+import { ActivityService } from '../../../dashboard/services/activity-service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private activityService: ActivityService
   ) { }
   //#endregion
 
@@ -115,6 +117,7 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.isFormSubmitting = false;
         this.loginAttempted = false;
+         this.activityService.loadForCurrentUser();
         this.notificationService.addNotification({
           kind: 'custom' as any,
           severity: 'success',

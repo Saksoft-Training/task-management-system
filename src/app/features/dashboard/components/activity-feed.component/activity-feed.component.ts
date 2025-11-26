@@ -32,7 +32,7 @@ export class ActivityFeedComponent {
    * @param dashboardService - Service providing recent activity stream.
    * @param router - Router instance to navigate between pages.
    */
-  constructor(private dashboardService: chartsDashboardService, private router: Router) { }
+  constructor(private dashboardService: chartsDashboardService, private router: Router,private activityService: ActivityService) { }
 
   // #endregion
 

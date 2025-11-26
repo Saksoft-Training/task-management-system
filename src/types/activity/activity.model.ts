@@ -2,11 +2,10 @@ export type ActivityType = 'project' | 'task';
 export type ActivityAction = 'created' | 'updated' | 'deleted' | 'completed' | 'assigned';
 
 export interface Activity {
-  id: number;
-  type: ActivityType;
-  action: ActivityAction;
-  itemId: number;
-  itemName: string;
-  user: string;
-  timestamp: string; // ISO
+ id?: string;        // MockAPI auto-generates
+  user: string;       // who did the action
+  itemId: string;     // must be string
+  action: string;     // created / updated / deleted
+  type: string;       // task / project
+  timestamp: string;  // ISO timestamp
 }

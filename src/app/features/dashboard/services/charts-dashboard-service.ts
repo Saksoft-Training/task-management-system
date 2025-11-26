@@ -4,6 +4,8 @@ import { Task, TaskPriority, TaskStatus } from '../../../../types/models/task';
 import { Activity } from '../../../../types/activity/activity.model';
 import { ChartConfiguration } from 'chart.js';
 import { OverdueInfo } from '../../../../types/activity/overdueInfo';
+import { TaskService } from '../../task-management/services/task-service';
+import { ActivityService } from './activity-service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,20 @@ export class chartsDashboardService {
 
   tasks$ = this.tasksSubject.asObservable();
   activities$ = this.activitiesSubject.asObservable();
+ constructor(
+    private taskService: TaskService,
+    private activityService: ActivityService  // your Activity list source
+  ) {
 
+    // 🔥 Replace localStorage data with LIVE API data
+    this.taskService.tasks$.subscribe(tasks => {
+      this.tasksSubject.next(tasks);
+    });
+
+    this.activityService.activities$.subscribe(activities => {
+      this.activitiesSubject.next(activities);
+    });
+  }
   // ---- Chart Observables ----
 
   taskCompletionChartData$: Observable<ChartConfiguration['data']> = this.tasks$.pipe(
@@ -133,21 +148,6 @@ export class chartsDashboardService {
         .slice(0, 15)
     )
   );
-
-  constructor() {
-    this.loadFromLocalStorage();
-  }
-
-  loadFromLocalStorage(): void {
-    const tasks = this.readLocal<Task[]>(this.TASKS_KEY) || [];
-    const activities = this.readLocal<Activity[]>(this.ACTIVITIES_KEY) || [];
-    this.tasksSubject.next(tasks);
-    this.activitiesSubject.next(activities);
-  }
-
-  refresh(): void {
-    this.loadFromLocalStorage();
-  }
 
   private readLocal<T>(key: string): T | null {
     try {

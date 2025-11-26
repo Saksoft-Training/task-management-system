@@ -20,8 +20,12 @@ export class AuthService {
     private router: Router,
     private userStorage: UserStorageService
   ) {
-    const savedUser = this.getCurrentUser();
+    const savedUserJson = localStorage.getItem(CURRENT_USER_KEY);
+
+  if (savedUserJson) {
+    const savedUser = JSON.parse(savedUserJson);
     this.currentUserSubject.next(savedUser);
+  }
   }
   //#endregion
  
@@ -30,7 +34,7 @@ export class AuthService {
    * @summary Validates credentials and logs in the user via MockAPI.
    */
 public login(credentials: {
-  email: string;
+   email: string;
   password: string;
   rememberMe: boolean;
 }): Observable<User> {
@@ -48,8 +52,11 @@ public login(credentials: {
         return throwError(() => new Error("Invalid email or password"));
       }
 
-      // Only keep user in memory
+      // ⭐ Save to memory
       this.currentUserSubject.next(user);
+
+      // ⭐ Save to localStorage so user survives refresh
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 
       return of(user);
     }),
@@ -85,6 +92,7 @@ public login(credentials: {
   //#region Logout
   public logout(): void {
   this.currentUserSubject.next(null);
+   localStorage.removeItem(CURRENT_USER_KEY);
   this.router.navigate(['/login'], { replaceUrl: true });
 }
 
