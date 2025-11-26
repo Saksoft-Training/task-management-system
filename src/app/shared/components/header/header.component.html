@@ -13,10 +13,10 @@
     </nav>
   </div>
   <div class="user-section">
-    @if (userEmail) {
+    @if (userEmail$ | async) {
     <div class="user-email" (click)="goToProfile()">
       <img src="assets/icons/profile-Icon.svg" alt="profile" />
-      <span>{{ userEmail }}</span>
+      <span>{{ userEmail$ | async}}</span>
     </div>
     }
     <div class="notification-container">

@@ -4,9 +4,7 @@ import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, tap, mergeMap } from 'rxjs/operators'; // ⭐ CHANGED: added mergeMap
 import { User } from '../../../../types/models/user';
 import { UserStorageService } from '../../../shared/services/storage-service';
- 
-const CURRENT_USER_KEY = 'currentUser';
-const AUTH_TOKEN_KEY = 'authToken';
+
  
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -19,9 +17,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private userStorage: UserStorageService
-  ) {
-    const savedUser = this.getCurrentUser();
-    this.currentUserSubject.next(savedUser);
+  ) { 
+    this.restoreUserSession();
   }
   //#endregion
  
@@ -38,27 +35,36 @@ public login(credentials: {
 
   return this.userStorage.findUserByEmail(email).pipe(
     mergeMap(user => {
-      if (!user) {
-        return throwError(() => new Error("Email not registered"));
-      }
+      if (!user) return throwError(() => new Error("Email not registered"));
 
       const storedPassword = this.userStorage.decodePassword(user.password);
-
-      if (storedPassword !== password) {
+      if (storedPassword !== password)
         return throwError(() => new Error("Invalid email or password"));
-      }
 
-      // Only keep user in memory
-      this.currentUserSubject.next(user);
-
-      return of(user);
+      // IMPORTANT: `updatedUser` is returned from MockAPI
+      return this.userStorage.markUserAsLoggedIn(user.id).pipe(
+        tap(updatedUser => {
+          this.currentUserSubject.next(updatedUser);
+        })
+      );
     }),
     delay(400)
   );
 }
 
+
   //#endregion
- 
+ private restoreUserSession() {
+  this.userStorage.getLoggedInUser().subscribe(user => {
+    if (user) {
+      // Emit a brand-new object to trigger header update
+      this.currentUserSubject.next({ ...user });
+    }
+  });
+}
+
+
+
   //#region Authentication Helpers
   public isLoggedIn(): boolean {
   return this.currentUserSubject.value !== null;
@@ -69,10 +75,7 @@ public login(credentials: {
 }
 
   public getAuthToken(): string | null {
-    return (
-      sessionStorage.getItem(AUTH_TOKEN_KEY) ||
-      localStorage.getItem(AUTH_TOKEN_KEY)
-    );
+    return null;
   }
   //#endregion
  
@@ -84,9 +87,16 @@ public login(credentials: {
  
   //#region Logout
   public logout(): void {
-  this.currentUserSubject.next(null);
-  this.router.navigate(['/login'], { replaceUrl: true });
-}
+  const user = this.currentUserSubject.value;
 
+  if (user) {
+    this.userStorage.markUserAsLoggedOut(user.id).subscribe(() => {
+      this.currentUserSubject.next(null);
+      this.router.navigate(['/login'], { replaceUrl: true });
+    });
+  } else {
+    this.router.navigate(['/login'], { replaceUrl: true });
+  }
+}
   //#endregion
 }

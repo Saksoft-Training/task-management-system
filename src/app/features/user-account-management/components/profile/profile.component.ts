@@ -212,47 +212,59 @@ export class ProfileComponent implements OnInit {
    * @returns void
    */
   public saveProfile(): void {
-    if (this.editForm.invalid) {
-      this.editForm.markAllAsTouched();
-      return;
-    }
-    const oldEmail = this.currentUser!.email.trim().toLowerCase();
-    const name = this.editForm.value.name.trim();
-    const email = this.editForm.value.email.trim().toLowerCase();
-    const newPassword = this.editForm.value.password;
-    const updatedUser = {
-      ...this.currentUser!,
-      name,
-      email,
-      photo: this.previewImage || this.currentUser!.photo,
-      createdAt: this.currentUser!.createdAt
-    };
-    if (newPassword) {
-      updatedUser.password = this.userStorage.encodePassword(newPassword);
-    }
-    const success = this.userStorage.updateUser(updatedUser, oldEmail);
-    if (!success) {
-      this.notificationService.addNotification({
-        title: 'Update Failed',
-        message: 'Unable to update your profile.',
-        severity: 'critical',
-        kind: 'profile-update-error' as any,
-        showToast: true
-      }); return;
-    }
-    sessionStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-    this.authService.updateCurrentUser(updatedUser);
-    this.currentUser = updatedUser;
-    this.isEditing = false;
-    this.previewImage = null;
-    this.notificationService.addNotification({
-      title: 'Profile Updated',
-      message: 'Your profile was updated successfully.',
-      severity: 'success',
-      kind: 'profile-update' as any,
-      showToast: true
-    }); this.router.navigate(['/dashboard']);
+  if (this.editForm.invalid) {
+    this.editForm.markAllAsTouched();
+    return;
   }
+
+  const oldEmail = this.currentUser!.email.trim().toLowerCase();
+  const name = this.editForm.value.name.trim();
+  const email = this.editForm.value.email.trim().toLowerCase();
+  const newPassword = this.editForm.value.password;
+
+  const updatedUser: Partial<User> = {
+    name,
+    email,
+    photo: this.previewImage || this.currentUser!.photo,
+  };
+
+  if (newPassword) {
+    updatedUser.password = this.userStorage.encodePassword(newPassword);
+  }
+
+  this.userStorage.updateUserApi(this.currentUser!.id, updatedUser)
+    .subscribe({
+      next: (updated) => {
+        // Sync user
+        sessionStorage.setItem('currentUser', JSON.stringify(updated));
+        localStorage.setItem('currentUser', JSON.stringify(updated));
+        this.authService.updateCurrentUser(updated);
+        this.currentUser = updated;
+
+        this.isEditing = false;
+        this.previewImage = null;
+
+        this.notificationService.addNotification({
+          title: 'Profile Updated',
+          message: 'Your profile was updated successfully.',
+          severity: 'success',
+          kind: 'profile-update' as any,
+          showToast: true
+        });
+
+        this.router.navigate(['/dashboard']);
+      },
+      error: () => {
+        this.notificationService.addNotification({
+          title: 'Update Failed',
+          message: 'Unable to update your profile.',
+          severity: 'critical',
+          kind: 'profile-update-error' as any,
+          showToast: true
+        });
+      }
+    });
+}
+
   //#endregion
 }

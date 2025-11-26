@@ -151,31 +151,36 @@ export class ProjectService {
    * @description Adds a temporary project locally until server confirms.
    */
   public save(project: Project, email: string): void {
-    const tempId = Date.now();
+  const finalId = project.id; // keep the Date.now() ID you generated
 
-    const tempProject: Project = { ...project, id: tempId };
+  const finalProject: Project = { ...project, id: finalId };
 
-    // Optimistic update
-    this.upsertCache(tempProject);
+  // Optimistic update
+  this.upsertCache(finalProject);
 
-    this.http
-      .post<Project>(this.apiBase, tempProject)
-      .pipe(
-        catchError((err) => {
-          console.error('[ProjectService.save] failed', err);
-          this.removeFromCache(tempProject.id);
-          return of(null as any);
-        }),
-        tap((created) => {
-          if (created) {
-            const normalized = this.normalizeProject(created);
-            this.removeFromCache(tempProject.id);
-            this.upsertCache(normalized);
-          }
-        })
-      )
-      .subscribe();
-  }
+  this.http
+    .post<Project>(this.apiBase, finalProject)
+    .pipe(
+      catchError((err) => {
+        console.error('[ProjectService.save] failed', err);
+        this.removeFromCache(finalId);
+        return of(null as any);
+      }),
+      tap((created) => {
+        if (created) {
+          // Ensure backend doesn't override your ID
+          const normalized = {
+            ...created,
+            id: finalId, // FORCE your own ID
+          };
+
+          this.upsertCache(normalized);
+        }
+      })
+    )
+    .subscribe();
+}
+
 
   /**
    * @summary Updates an existing project.

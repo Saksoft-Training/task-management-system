@@ -104,22 +104,28 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
 
     // Subscribe to project stream — real-time updates when API returns or data changes
     const projectSub = this.projectService.projects$.subscribe(allProjects => {
-      const found = allProjects.find(p => Number(p.id) === this.projectId);
 
-      if (found) {
-        this.project = found;
-        this.calculateProgress();
-        this.loadTasks();
-        this.calculateTaskStats();
-        this.cdr.detectChanges();
-      } else {
-        // Only show not-found message when API has loaded AND it's not a deletion flow
-        if (!this.isDeleting && allProjects.length > 0) {
-          alert('Project not found');
-          this.router.navigate(['/projects']);
-        }
-      }
-    });
+  if (allProjects.length === 0) return;
+
+  const projectFound = allProjects.find(p => Number(p.id) === this.projectId);
+
+  const isProjectDetailPage = this.router.url.startsWith('/projects/');
+
+  if (!projectFound) {
+    if (!this.isDeleting && isProjectDetailPage) {
+      this.router.navigate(['/projects']);
+    }
+    return;
+  }
+
+  this.project = projectFound;
+  this.calculateProgress();
+  this.loadTasks();
+  this.calculateTaskStats();
+  this.cdr.detectChanges();
+});
+
+
 
     this.subs.add(projectSub);
 

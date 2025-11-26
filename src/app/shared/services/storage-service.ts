@@ -94,30 +94,49 @@ export class UserStorageService {
   //#endregion
  
   //#region Password Update 
-  public updatePasswordForEmail(email: string, newPass: string): boolean {
-    const normalized = email.trim().toLowerCase();
-    const users = this.getAllUsers();
-    const idx = users.findIndex(
-      u => (u.email || '').trim().toLowerCase() === normalized
-    );
-    if (idx === -1) return false;
-    users[idx].password = this.encodePassword(newPass);
-    this.saveAllUsers(users);
-    return true;
-  }
+  /**
+ * @summary Update user password via MockAPI
+ */
+public updateUserPasswordApi(userId: string, newPassword: string): Observable<User> {
+  return this.http.put<User>(`${this.apiUrl}/${userId}`, {
+    password: this.encodePassword(newPassword)
+  });
+}
+
+public updateUserApi(userId: string, updatedUser: Partial<User>): Observable<User> {
+  return this.http.put<User>(`${this.apiUrl}/${userId}`, updatedUser);
+}
+
   //#endregion
- 
-  //#region User Update 
-  public updateUser(updatedUser: User, oldEmail?: string): boolean {
-    const users = this.getAllUsers();
-    const matchEmail = (oldEmail || updatedUser.email).trim().toLowerCase();
-    const index = users.findIndex(
-      u => (u.email || '').trim().toLowerCase() === matchEmail
-    );
-    if (index === -1) return false;
-    users[index] = { ...users[index], ...updatedUser };
-    this.saveAllUsers(users);
-    return true;
-  }
-  //#endregion
+  //#region Login State Helpers (NEW)
+
+/**
+ * @summary Mark a user as logged in using MockAPI.
+ */
+public markUserAsLoggedIn(userId: string): Observable<User> {
+  return this.http.put<User>(`${this.apiUrl}/${userId}`, {
+    isLoggedIn: true
+  });
+}
+
+/**
+ * @summary Mark a user as logged out.
+ */
+public markUserAsLoggedOut(userId: string): Observable<User> {
+  return this.http.put<User>(`${this.apiUrl}/${userId}`, {
+    isLoggedIn: false
+  });
+}
+
+/**
+ * @summary Fetch currently logged-in user from API.
+ * Will return first user with isLoggedIn === true
+ */
+public getLoggedInUser(): Observable<User | null> {
+  return this.http
+    .get<User[]>(`${this.apiUrl}?isLoggedIn=true`)
+    .pipe(map(users => (users.length ? users[0] : null)));
+}
+//#endregion
+
 }
