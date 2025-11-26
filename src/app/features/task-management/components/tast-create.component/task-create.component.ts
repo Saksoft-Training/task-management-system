@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-
+ 
 import { Project } from '../../../../../types/models/project';
 import { Task, TaskPriority, TaskStatus } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
@@ -19,7 +19,7 @@ import { UserStorageService } from '../../../../shared/services/storage-service'
 import { ConfirmationDialogComponent } from "../../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from '../../../dashboard/services/notification-service';
 //#endregion
-
+ 
 @Component({
   selector: 'app-create-task',
   standalone: true,
@@ -28,49 +28,49 @@ import { NotificationService } from '../../../dashboard/services/notification-se
   styleUrls: ['./task-create.component.scss']
 })
 export class TaskCreateComponent implements OnInit, OnDestroy {
-
+ 
   //#region Public Properties
-
+ 
   /** Main reactive form group for create/edit screen */
   public form!: FormGroup;
-
+ 
   /** Static lists for dropdowns */
   public readonly statuses: TaskStatus[] = ['To Do', 'In Progress', 'Completed'];
   public readonly priorities: TaskPriority[] = ['Low', 'Medium', 'High', 'Urgent'];
-
+ 
   /** Loaded project list and currently selected project */
   public projects: Project[] = [];
   public selectedProject?: Project;
-
+ 
   /** Whether to show the project dropdown (hidden when pre-selected via route) */
   public showProjectDropdown: boolean = true;
-
+ 
   /** UI feedback message after save */
   public successMessage: string = '';
-
+ 
   /** Maximum length allowed for description */
   public readonly maxDescription = 500;
-
+ 
   /** List of users used in the assignee dropdown */
   public users: User[] = [];
-
+ 
   /** Logged-in user's email */
   public currentUser: string = '';
-
+ 
   /** Edit mode state */
   public isEdit: boolean = false;
   public editTaskId?: number;
   public taskToEdit?: Task;
-
+ 
   /** Delete modal state */
   public showDeleteModal = false;
   public taskToDelete: Task | null = null;
-
+ 
   //#endregion
-
+ 
   // Keep a subscription container for cleanup (OLD comment preserved)
   private subs = new Subscription();
-
+ 
   /**
    * @summary Constructor injection for services used by the component.
    */
@@ -84,9 +84,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly notificationService: NotificationService
   ) { }
-
+ 
   //#region Lifecycle
-
+ 
   /**
    * @summary Initializes the form, loads projects/users,
    * detects edit mode, and pre-fills form data.
@@ -103,12 +103,12 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const loggedUser = this.authService.getCurrentUser();
     this.currentUser = loggedUser?.email || '';
-
+ 
     this.buildTaskForm();
-
+ 
     // Trigger initial loads (services manage fetching)
     this.projectService.getAllAsync();
-
+ 
     // load users (subscribe to ensure we get values)
     const usersSub = this.userStorageService.getAllUsersFromApi().subscribe({
       next: (u) => this.users = u,
@@ -121,10 +121,10 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       }
     });
     this.subs.add(usersSub);
-
+ 
     this.detectProjectFromRoute();
     this.detectEditMode();
-
+ 
     // subscribe to projects stream
     const pSub = this.projectService.projects$.subscribe(list => {
       this.projects = list;
@@ -133,35 +133,47 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       }
     });
     this.subs.add(pSub);
-
+ 
     // Wait for projects, users and tasks (once) before patching in edit mode
     const combo = combineLatest([
-      this.projectService.projects$,
-      this.userStorageService.getAllUsersFromApi(),
-      this.taskService.tasks$
-    ]).pipe(take(1)).subscribe(([projects, users, tasks]) => {
-      this.projects = projects;
-      this.users = users;
-
-      if (this.isEdit && this.editTaskId) {
-        this.taskToEdit = this.taskService.getTaskById(this.editTaskId) ?? undefined;
-      }
-
-      if (this.isEdit && this.taskToEdit) {
-        this.selectedProject = this.projectService.getById(this.taskToEdit.projectId, this.currentUser) ?? undefined;
-        this.showProjectDropdown = true;
-
-        this.form.patchValue({
-          projectId: this.taskToEdit.projectId ?? null,
-          title: this.taskToEdit.title ?? '',
-          status: this.taskToEdit.status ?? 'To Do',
-          priority: this.taskToEdit.priority ?? 'Medium',
-          description: this.taskToEdit.description ?? '',
-          assignee: this.findUserIdByName(this.taskToEdit.assignee) ?? null,
-          assigneeEmail: this.taskToEdit.assigneeEmail ?? '',
-          dueDate: this.taskToEdit.dueDate ?? ''
-        });
-      }
+  this.projectService.projects$,
+  this.userStorageService.getAllUsersFromApi(),
+  this.taskService.tasks$
+])
+.pipe(take(1))
+.subscribe(([projects, users, tasks]) => {
+ 
+  this.projects = projects;
+  this.users = users;
+ 
+  if (this.isEdit && this.editTaskId) {
+ 
+    // ✅ FIX: Fetch task from loaded tasks, NOT from service snapshot
+    this.taskToEdit = tasks.find(
+      t => Number(t.id) === Number(this.editTaskId)
+    );
+ 
+    if (this.taskToEdit) {
+      this.selectedProject = this.projectService.getById(
+        this.taskToEdit.projectId,
+        this.currentUser
+      );
+ 
+      this.showProjectDropdown = true;
+ 
+      // pre-fill form
+      this.form.patchValue({
+        projectId: this.taskToEdit.projectId,
+        title: this.taskToEdit.title,
+        status: this.taskToEdit.status,
+        priority: this.taskToEdit.priority,
+        description: this.taskToEdit.description,
+        assignee: this.findUserIdByName(this.taskToEdit.assignee),
+        assigneeEmail: this.taskToEdit.assigneeEmail,
+        dueDate: this.taskToEdit.dueDate
+      });
+    }
+  }
     }, () => {
       // fallback patch if combineLatest errors
       if (this.isEdit && this.taskToEdit) {
@@ -178,10 +190,10 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       }
     });
     this.subs.add(combo);
-
+ 
     this.subscribeToProjectChange();
   }
-
+ 
   /**
    * @summary Ensures subscriptions are cleaned up to avoid leaks.
    * OLD comment preserved: unsubscribe on destroy.
@@ -189,11 +201,11 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
-
+ 
   //#endregion
-
+ 
   //#region Initialization Helpers (OLD comments applied where appropriate)
-
+ 
   /**
    * @summary Builds the reactive form with validators.
    * OLD comment preserved.
@@ -210,7 +222,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       dueDate: ['', [Validators.required, this.validateDueDate.bind(this)]]
     });
   }
-
+ 
   /**
    * @summary Detects if projectId was passed via route or query params.
    * If yes → lock project selection.
@@ -226,7 +238,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       if (this.form) this.form.patchValue({ projectId: id });
     }
   }
-
+ 
   /**
    * @summary Detects if editing an existing task.
    * Loads the task and its associated project.
@@ -245,7 +257,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       }
     }
   }
-
+ 
   /**
    * @summary Subscribes to project selection changes and revalidates due date.
    * OLD comment preserved.
@@ -256,11 +268,11 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       this.form.get('dueDate')?.updateValueAndValidity();
     });
   }
-
+ 
   //#endregion
-
+ 
   //#region Validators (OLD comments preserved)
-
+ 
   /**
    * @summary Validates that due date:
    * - is not in the past (create mode only)
@@ -271,15 +283,15 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   private validateDueDate(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
     if (!value) return null;
-
+ 
     const date = new Date(value);
     date.setHours(0, 0, 0, 0);
-
+ 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-
+ 
     if (!this.isEdit && date < today) return { pastDate: true };
-
+ 
     if (this.selectedProject) {
       const start = new Date(this.selectedProject.startDate);
       const end = new Date(this.selectedProject.endDate);
@@ -288,14 +300,14 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       if (date < start) return { beforeProjectStart: true };
       if (date > end) return { afterProjectEnd: true };
     }
-
+ 
     return null;
   }
-
+ 
   //#endregion
-
+ 
   //#region Getters (OLD comments preserved)
-
+ 
   /** Minimum allowed date for date picker */
   get minDate(): string {
     const today = new Date().toISOString().split('T')[0];
@@ -304,21 +316,21 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       ? this.selectedProject.startDate
       : today;
   }
-
+ 
   /** Maximum allowed date for date picker */
   get maxDate(): string {
     return this.selectedProject?.endDate ?? '';
   }
-
+ 
   /** Character count for live description counter */
   get descriptionCount(): number {
     return this.form.get('description')?.value?.length ?? 0;
   }
-
+ 
   //#endregion
-
+ 
   //#region Actions (OLD comments preserved + NEW comments for assignee mapping logic)
-
+ 
   /**
    * @summary Saves the task (create or update)
    * and shows success toast.
@@ -333,13 +345,13 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       this.form.markAllAsTouched();
       return;
     }
-
+ 
     const value = this.form.getRawValue();
     const timestamp = new Date().toISOString();
-
+ 
     const assigneeId = Number(value.assignee);
     const assigneeUser = this.users.find(u => Number(u.id) === assigneeId);
-
+ 
     if (this.isEdit && this.taskToEdit) {
       const updated: Task = {
         ...this.taskToEdit,
@@ -349,7 +361,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         assigneeEmail: assigneeUser?.email ?? value.assigneeEmail ?? this.taskToEdit.assigneeEmail,
         updatedAt: timestamp
       };
-
+ 
       this.taskService.updateTask(updated);
       this.notificationService.addNotification({
         kind: 'custom' as any,
@@ -374,7 +386,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         updatedAt: timestamp,
         completedAt: null
       };
-
+ 
       this.taskService.saveTask(newTask);
       this.notificationService.addNotification({
         kind: 'custom' as any,
@@ -384,22 +396,22 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
         showToast: true
       });
     }
-
+ 
     setTimeout(() => this.navigateAfterSave(), 600);
   }
-
+ 
   /** Navigate user after saving task */
   private navigateAfterSave(): void {
     if (this.selectedProject) this.router.navigate(['/projects', this.selectedProject.id]);
     else this.router.navigate(['/tasks']);
   }
-
+ 
   /** Opens delete confirmation modal */
   public onDelete(): void {
     this.taskToDelete = this.taskToEdit || null;
     this.showDeleteModal = true;
   }
-
+ 
   /** Deletes task and redirects */
   public onConfirmDelete(): void {
     if (this.taskToDelete) this.taskService.deleteTask(this.taskToDelete.id);
@@ -407,42 +419,42 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     this.taskToDelete = null;
     this.router.navigate(['/tasks']);
   }
-
+ 
   /** Cancels the delete modal */
   public onCancelDelete(): void {
     this.showDeleteModal = false;
     this.taskToDelete = null;
   }
-
+ 
   /** Clears form (only in create mode) */
   public onReset(): void {
     if (this.isEdit) return;
-
+ 
     this.form.reset({
       projectId: this.selectedProject?.id ?? null,
       status: 'To Do',
       priority: 'Medium'
     });
-
+ 
     this.successMessage = '';
   }
-
+ 
   /** Navigate back to project/tasks page */
   public onCancel(): void {
     if (this.selectedProject) this.router.navigate(['/projects', this.selectedProject.id]);
     else this.router.navigate(['/tasks']);
   }
-
+ 
   /** Opens native date picker programmatically */
   public openDatePicker(): void {
     const el = document.querySelector<HTMLInputElement>('input[formControlName="dueDate"]');
     if (el) el.showPicker?.();
   }
-
+ 
   //#endregion
-
+ 
   //#region Assignee Helpers (NEW helper + OLD-style helper merged)
-
+ 
   /**
    * @summary Called when assignee select value changes (keeps old-style handler).
    * Patches assigneeEmail and assignee id into the form when available.
@@ -450,7 +462,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   public onAssigneeChange(event: any): void {
     const userId = Number(event.target.value);
     const selectedUser = this.users.find(u => Number(u.id) === userId);
-
+ 
     if (selectedUser) {
       this.form.patchValue({
         assignee: selectedUser.id,
@@ -458,7 +470,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       });
     }
   }
-
+ 
   /**
    * @summary OLD helper preserved:
    * findUserIdByName(name) => returns numeric id for a user string (name or email)
@@ -468,6 +480,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     const u = this.users.find(x => x.name === name || x.email === name);
     return u ? Number(u.id) : null;
   }
-
+ 
   //#endregion
 }

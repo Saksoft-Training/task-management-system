@@ -15,6 +15,6 @@ export interface Task {
   status: TaskStatus;
   title: string;
   updatedAt: string;
-
+  statusHistory?: { status: string; date: string }[];
 }
 
