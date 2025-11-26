@@ -1,10 +1,25 @@
+//#region Imports
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../../dashboard/services/notification-service';
+//#endregion
+
+/**
+ * @summary
+ * Login component responsible for handling authentication input,
+ * validation, error handling, and login state management.
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,19 +28,32 @@ import { NotificationService } from '../../../dashboard/services/notification-se
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  //#region Properties
+
+  //#region Public Properties
+
+  /** Main login form group */
   public loginFormGroup!: FormGroup;
+
+  /** Indicates whether form is in submission/loading state */
   public isFormSubmitting = false;
+
+  /** Stores API login error message */
   public loginErrorMessage = '';
+
+  /** Used to track whether the form was already attempted */
   public loginAttempted = false;
+
   //#endregion
 
+
   //#region Constructor
+
   /**
-   * @summary Injects form builder, authentication service and router.
-   * @param formBuilder - Used to build reactive forms.
-   * @param authService - Handles API authentication.
-   * @param router - Used for routing/navigation.
+   * @summary Injects FormBuilder, AuthService, Router, and NotificationService.
+   * @param formBuilder Creates and manages reactive forms
+   * @param authService Handles authentication API requests
+   * @param router Used for page navigation
+   * @param notificationService Displays toast notifications
    */
   constructor(
     private formBuilder: FormBuilder,
@@ -33,22 +61,26 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService
   ) { }
+
   //#endregion
 
-  //#region Lifecycle Hook
+
+  //#region Lifecycle
+
   /**
    * @summary Initializes login form on component load.
-   * @returns void
    */
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.initializeLoginForm();
   }
+
   //#endregion
 
-  //#region Form Initialization
+
+  //#region Form Setup
+
   /**
-   * @summary Creates login form with Gmail validation rule.
-   * @returns void
+   * @summary Creates login form with Gmail validation and rememberMe toggle.
    */
   private initializeLoginForm(): void {
     this.loginFormGroup = this.formBuilder.group({
@@ -57,12 +89,14 @@ export class LoginComponent implements OnInit {
       rememberMe: [false]
     });
   }
+
   //#endregion
 
+
   //#region Validators
+
   /**
-   * @summary Validates email to accept only Gmail.
-   * @param control - Form control for email.
+   * @summary Custom validator allowing only Gmail addresses.
    * @returns ValidationErrors | null
    */
   private gmailValidator() {
@@ -74,12 +108,14 @@ export class LoginComponent implements OnInit {
       return pattern.test(email) ? null : { invalidEmail: true };
     };
   }
+
   //#endregion
 
+
   //#region Helper Methods
+
   /**
-   * @summary Forces email input to lowercase for consistency.
-   * @returns void
+   * @summary Forces email input to lowercase to avoid mismatch issues.
    */
   public forceLowercaseEmail(): void {
     const emailCtrl = this.loginFormGroup.get('email');
@@ -88,33 +124,38 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * @summary Shortcut getter for form controls.
-   * @returns any
+   * @summary Shortcut to access form controls in template.
    */
   public get formControls(): FormGroup['controls'] {
     return this.loginFormGroup.controls;
   }
+
   //#endregion
 
+
   //#region Form Submission
+
   /**
-   * @summary Validates form, calls login API, and handles success/error.
-   * @returns void
+   * @summary Validates form, triggers login request and handles result states.
    */
   public submitLoginForm(): void {
     this.loginErrorMessage = '';
     this.loginAttempted = true;
 
+    // Prevents validation bypass
     if (this.loginFormGroup.invalid) {
       this.loginFormGroup.markAllAsTouched();
       return;
     }
+
     const { email, password, rememberMe } = this.loginFormGroup.value;
+
+    // Disable UI to prevent duplicate submissions
     this.isFormSubmitting = true;
+    this.loginFormGroup.disable();
+
     this.authService.login({ email, password, rememberMe }).subscribe({
       next: () => {
-        this.isFormSubmitting = false;
-        this.loginAttempted = false;
         this.notificationService.addNotification({
           kind: 'custom' as any,
           severity: 'success',
@@ -122,36 +163,46 @@ export class LoginComponent implements OnInit {
           message: '',
           showToast: true
         });
+
         setTimeout(() => {
+          this.isFormSubmitting = false;
           this.router.navigate(['/profile']);
-        }, 800);
+        }, 600);
       },
+
       error: (err) => {
          this.isFormSubmitting = false;
-
-        // ⭐ FIXED — set inline error so template can show message
         this.loginErrorMessage = err?.message || 'Invalid email or password';
 
         this.notificationService.addNotification({
           kind: 'custom' as any,
           severity: 'critical',
           title: 'Login Failed',
-          message: this.loginErrorMessage,   // ⭐ FIXED
+          message: this.loginErrorMessage,  
           showToast: true
         });
+
+        // Re-enable UI for retry
+        setTimeout(() => {
+          this.isFormSubmitting = false;
+          this.loginFormGroup.enable();
+        }, 600);
       }
     });
   }
+
   //#endregion
 
+
   //#region Navigation
+
   /**
-   * @summary Navigates to given route path
-   * @param path - Router path to navigate.
-   * @returns void
+   * @summary Navigates user to another route (Ex: forgot-password/register)
+   * @param path Router navigation path
    */
   public navigateTo(path: string): void {
     this.router.navigate([path]);
   }
+
   //#endregion
 }

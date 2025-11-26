@@ -29,7 +29,7 @@ export class ForgotPasswordComponent implements OnInit {
     private userStorage: UserStorageService,
     private router: Router,
     private notificationService: NotificationService,
-    private http: HttpClient     // ✅ REQUIRED
+    private http: HttpClient     
   ) { }
 
   ngOnInit(): void {
@@ -91,7 +91,7 @@ export class ForgotPasswordComponent implements OnInit {
     const email = this.resetForm.value.email.trim().toLowerCase();
     const newPassword = this.resetForm.value.newPassword;
 
-    // 1️⃣ Find user by email from API
+    // Find user by email from API
     this.userStorage.findUserByEmail(email).pipe(
       switchMap(user => {
         if (!user) {
@@ -106,7 +106,7 @@ export class ForgotPasswordComponent implements OnInit {
           return of(null);
         }
 
-        // 2️⃣ Update password using API
+        // 2️ Update password using API
         return this.userStorage.updateUserPasswordApi(user.id, newPassword);
       })
     ).subscribe(updated => {
@@ -129,7 +129,7 @@ export class ForgotPasswordComponent implements OnInit {
       }, 800);
     });
   }
-// ---------------- HELPERS ------------------
+
 
 get formControls() {
   return this.resetForm.controls;
