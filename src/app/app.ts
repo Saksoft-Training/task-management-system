@@ -5,12 +5,13 @@ import { HeaderComponent } from './shared/components/header/header.component';
 
 import { FooterComponent } from './shared/components/footer.component/footer.component';
 import { ToastNotificationComponent } from './features/dashboard/components/notifications/toast-notification/toast-notification.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HeaderComponent,FooterComponent, ToastNotificationComponent],
+  imports: [RouterOutlet,HeaderComponent,FooterComponent, ToastNotificationComponent, HttpClientModule],
 
   templateUrl: './app.html',
   styleUrls: ['./app.scss']

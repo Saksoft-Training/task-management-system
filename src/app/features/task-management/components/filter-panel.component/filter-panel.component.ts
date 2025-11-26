@@ -47,12 +47,12 @@ export class FilterPanelComponent {
     fromDate: string | null;
     toDate: string | null;
   } = {
-    status: [],
-    priority: [],
-    assignee: [],
-    fromDate: null,
-    toDate: null,
-  };
+      status: [],
+      priority: [],
+      assignee: [],
+      fromDate: null,
+      toDate: null,
+    };
 
   /** UI lists */
   public statusList: string[] = ['To Do', 'In Progress', 'Completed'];
@@ -66,11 +66,8 @@ export class FilterPanelComponent {
   public toggleCheck(list: string[], value: string): void {
     const index = list.indexOf(value);
 
-    if (index !== -1) {
-      list.splice(index, 1);
-    } else {
-      list.push(value);
-    }
+    if (index !== -1) list.splice(index, 1);
+    else list.push(value);
 
     this.filtersChanged.emit(this.filters);
   }
