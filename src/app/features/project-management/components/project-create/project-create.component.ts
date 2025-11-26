@@ -3,11 +3,9 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validatio
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../../../../types/models/project';
-
 import { AuthService } from '../../../user-account-management/services/auth-service';
 import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
 import { NotificationService } from '../../../dashboard/services/notification-service';
-
 @Component({
   selector: 'app-project-create-component',
   imports: [ReactiveFormsModule, DialogDeleteComponent],
@@ -28,24 +26,26 @@ export class ProjectCreateComponent {
   public currentUser: string = '';
   /** Minimum date allowed for date fields (today) */
   public minDate: string = new Date().toISOString().split('T')[0];
+  /** Controls delete confirmation dialog */
   public showDeleteDialog = false;
-
+  /** Delete dialog configuration data */
   public deleteDialogData = {
     title: 'DELETE PROJECT',
     message: '',
     confirmText: 'Delete',
     cancelText: 'Cancel'
   };
-
   // #endregion
 
   //#region Constructor
   /**
-   * @summary Initializes the component, form controls, validators, and validates route param.
-   * @param formBuilder - Angular FormBuilder service
-   * @param router - Angular Router service for navigation
-   * @param projectService - Custom project service for CRUD operations
-   * @param route - ActivatedRoute to read route parameters
+   * @summary Initializes form, injects services, prepares validators.
+   * @param formBuilder Angular FormBuilder
+   * @param router Angular Router
+   * @param projectService Project CRUD service
+   * @param route ActivatedRoute for reading route parameters
+   * @param authService Authentication service
+   * @param notificationService Notification toast popup service
    */
   constructor(
     private formBuilder: FormBuilder,
@@ -67,11 +67,16 @@ export class ProjectCreateComponent {
   }
   //#endregion
 
+  //#region Lifecycle
+  /**
+  * @summary Load logged-in user and check if editing an existing project.
+  */
   ngOnInit() {
     const user = this.authService.getCurrentUser();
     this.currentUser = user?.email || '';
     this.validateProjectId();
   }
+  //#endregion
 
   //#region Private Utility Methods
   /**
@@ -79,53 +84,44 @@ export class ProjectCreateComponent {
    * @returns {void}
    */
   private validateProjectId(): void {
-  const projectIdParam = this.route.snapshot.paramMap.get('id');
-
-  if (!projectIdParam) return;
-
-  const projectId = Number(projectIdParam);
-
-  if (!Number.isInteger(projectId) || projectId <= 0) {
-    this.router.navigate(['/projects']);
-    return;
+    const projectIdParam = this.route.snapshot.paramMap.get('id');
+    if (!projectIdParam) return;
+    const projectId = Number(projectIdParam);
+    if (!Number.isInteger(projectId) || projectId <= 0) {
+      this.router.navigate(['/projects']);
+      return;
+    }
+    let project = this.projectService.getById(projectId, this.currentUser);
+    if (!project) {
+      setTimeout(() => {
+        project = this.projectService.getById(projectId, this.currentUser);
+        if (!project) {
+          this.router.navigate(['/projects']);
+          return;
+        }
+        this.patchProjectForm(project!);
+      }, 150);
+      return;
+    }
+    this.patchProjectForm(project);
   }
-
-  let project = this.projectService.getById(projectId, this.currentUser);
-
-  // Try again because save() may not be completed yet
-  if (!project) {
-    setTimeout(() => {
-      project = this.projectService.getById(projectId, this.currentUser);
-
-      if (!project) {
-        // Still not found → THEN redirect
-        this.router.navigate(['/projects']);
-        return;
-      }
-
-      // Patch form after retry success
-      this.patchProjectForm(project!);
-    }, 150);
-
-    return;
+  /**
+    * @summary Populates form fields with project data when editing.
+    * @param project Project object to load into form
+    */
+  private patchProjectForm(project: Project): void {
+    this.editProjectId = project.id;
+    this.projectForm.patchValue({
+      name: project.name,
+      description: project.description,
+      status: project.status,
+      startDate: project.startDate,
+      endDate: project.endDate
+    });
   }
+  //#endregion
 
-  // First attempt success → patch form
-  this.patchProjectForm(project);
-}
-
-private patchProjectForm(project: Project): void {
-  this.editProjectId = project.id;
-
-  this.projectForm.patchValue({
-    name: project.name,
-    description: project.description,
-    status: project.status,
-    startDate: project.startDate,
-    endDate: project.endDate
-  });
-}
-
+  //#region Date Handling Utilities
   /**
    * @summary Converts various date formats into a Date object without time.
    * @param value - Input date value
@@ -194,7 +190,6 @@ private patchProjectForm(project: Project): void {
     }
     const form = this.projectForm.value;
     const now = new Date();
-    // Update project
     if (this.editProjectId) {
       const updatedProject: Project = {
         ...this.projectService.getById(this.editProjectId, this.currentUser)!,
@@ -212,10 +207,8 @@ private patchProjectForm(project: Project): void {
       this.router.navigate(['/projects', this.editProjectId]);
       return;
     }
-    // Create project
-    // Create project
     const newProject: Project = {
-      id: Date.now(), 
+      id: Date.now(),
       name: form.name,
       description: form.description,
       startDate: form.startDate,
@@ -225,9 +218,7 @@ private patchProjectForm(project: Project): void {
       createdAt: now.toISOString(),
       updatedAt: now.toISOString()
     };
-
     this.projectService.save(newProject, this.currentUser);
-
     this.notificationService.addNotification({
       kind: 'custom' as any,
       severity: 'success',
@@ -235,13 +226,10 @@ private patchProjectForm(project: Project): void {
       message: newProject.name,
       showToast: true
     });
-
-    // FIXED NAVIGATION
     setTimeout(() => {
       this.router.navigate(['/projects', newProject.id]);
     }, 800);
   }
-
   /**
    * @summary Resets form values and clears success message.
    * @returns {void}
@@ -257,19 +245,21 @@ private patchProjectForm(project: Project): void {
   public onCancel(): void {
     this.router.navigate(['/projects']);
   }
+  //#endregion
+
+  //#region Delete Project
+  /**
+  * @summary Opens delete confirmation dialog.
+  */
   public onDeleteProject(): void {
     if (!this.editProjectId) return;
-
     const project = this.projectService.getById(this.editProjectId, this.currentUser);
     if (!project) return;
-
     this.deleteDialogData.message =
       `Are you sure you want to delete “${project.name}” ?\n\n` +
       `Are you sure you want to delete this project? This action cannot be undone.\n\n`;
-
     this.showDeleteDialog = true;
   }
-
   public handleDeleteConfirm(): void {
     if (this.editProjectId) {
       this.projectService.delete(this.editProjectId, this.currentUser);
@@ -277,12 +267,15 @@ private patchProjectForm(project: Project): void {
     }
     this.showDeleteDialog = false;
   }
-
+  /**
+    * @summary Confirms and deletes the project.
+    */
   public handleDeleteCancel(): void {
     this.showDeleteDialog = false;
   }
+  //#endregion
 
-
+  //#region Navigation
   /**
   * @summary Navigates to the list of all projects.
   * @returns {void}

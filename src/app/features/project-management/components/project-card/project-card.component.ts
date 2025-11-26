@@ -10,31 +10,25 @@ import { TruncatePipePipe } from '../../../../shared/pipes/truncate-pipe-pipe';
   styleUrl: './project-card.component.scss',
 })
 export class ProjectCardComponent {
-
   // #region Properties
-
   /**
    * @summary The index of the project in the displayed list.
    * Used mainly for list rendering and animations.
    */
   @Input() index!: number;
-
   /**
    * @summary The full project data object passed from the parent component.
    * Contains title, description, status, dates, and other metadata.
    */
   @Input() project!: Project;
-
   /**
    * @summary The number of tasks linked to the project.
    * Defaults to 0 if not provided.
    */
   @Input() taskCount: number = 0;
-
   // #endregion
 
   // #region Computed Getters
-
   /**
    * @summary Returns a formatted and safe CSS class based on project status.
    *
@@ -48,18 +42,12 @@ export class ProjectCardComponent {
    */
   public get statusClass(): string {
     const status = this.project?.status;
-
-    // New Validation:
-    // Ensures the class never breaks even if project.status is missing.
     if (!status || typeof status !== 'string') {
       return 'unknown'; // fallback CSS class
     }
-
-    // Converts spaces → hyphens & lowercase formatting
     return status
       .toLowerCase()
       .replace(/\s+/g, '-');
   }
-
   // #endregion
 }

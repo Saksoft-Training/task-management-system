@@ -110,7 +110,7 @@
         <label class="ct-field-label required">Assignee</label>
 
         <select class="ct-field-select" formControlName="assignee" (change)="onAssigneeChange($event)">
-          <option value="" disabled>Select an assignee</option>
+          <option value="null" disabled hidden>Select an assignee</option>
 
           @for (userItem of users; track userItem.id) {
             <option [value]="userItem.id">{{ userItem.name }}</option>

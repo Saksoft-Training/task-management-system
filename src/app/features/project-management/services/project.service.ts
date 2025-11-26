@@ -8,34 +8,27 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProjectService {
-
   //#region Properties
-
   /**
    * @summary Base API URL for all project operations.
    * MockAPI endpoint used to simulate backend CRUD behavior.
    */
   private readonly apiBase = 'https://692433503ad095fb847320c8.mockapi.io/projects';
-
   /**
    * @summary In-memory cache of projects.
    * Stores all projects fetched from API to avoid repeated network calls.
    */
   private projectsCache: Project[] = [];
-
   /**
    * @summary Observable stream of current projects.
    * Components subscribe to this to get live updates.
    */
   private projectsSubject = new BehaviorSubject<Project[]>([]);
-
   /** Public observable exposed to components */
   public projects$ = this.projectsSubject.asObservable();
-
   //#endregion
 
   //#region Constructor
-
   /**
    * @summary Initializes the service and loads initial data from API.
    */
@@ -43,15 +36,15 @@ export class ProjectService {
     // Load initial API data asynchronously
     this.refreshFromApi();
   }
-
   //#endregion
 
   //#region Internal Helpers
-
   /**
-   * @summary Normalizes project data received from API.
-   * Ensures dates and statuses are valid before saving to cache.
-   */
+     * @summary Normalizes a raw project object from API.
+     * Ensures valid date strings, IDs, and statuses.
+     * @param p Raw project object
+     * @returns Normalized Project
+     */
   private normalizeProject(p: any): Project {
     return {
       ...p,
@@ -61,10 +54,10 @@ export class ProjectService {
       id: Number(p.id),
     } as Project;
   }
-
   /**
-   * @summary Ensures project status is always one of the valid expected values.
-   * Prevents backend anomalies from breaking UI.
+   * @summary Ensures project status is always valid.
+   * @param status Status string from API
+   * @returns Valid status
    */
   private normalizeStatus(
     status: string
@@ -72,7 +65,6 @@ export class ProjectService {
     const validStatuses = ['Planning', 'In Progress', 'Completed', 'On Hold'] as const;
     return validStatuses.includes(status as any) ? (status as any) : 'Planning';
   }
-
   /**
    * @summary Loads all projects from API and updates both cache and observable.
    * Includes error handling + normalizes all received records.
@@ -94,7 +86,6 @@ export class ProjectService {
       )
       .subscribe();
   }
-
   /**
    * @summary Inserts or replaces a project in the cache.
    * Emits updated list to subscribers.
@@ -103,16 +94,13 @@ export class ProjectService {
     const index = this.projectsCache.findIndex(
       (p) => String(p.id) === String(project.id)
     );
-
     if (index === -1) {
       this.projectsCache.push(project);
     } else {
       this.projectsCache[index] = project;
     }
-
     this.projectsSubject.next(this.projectsCache.slice());
   }
-
   /**
    * @summary Removes a project from the cache by ID.
    */
@@ -120,14 +108,11 @@ export class ProjectService {
     this.projectsCache = this.projectsCache.filter(
       (p) => String(p.id) !== String(id)
     );
-
     this.projectsSubject.next(this.projectsCache.slice());
   }
-
   //#endregion
 
   //#region API-backed CRUD Methods
-
   /**
    * @summary Async observable getter for project list.
    * Automatically refreshes from API when called.
@@ -137,7 +122,6 @@ export class ProjectService {
     this.refreshFromApi();
     return this.projects$;
   }
-
   /**
    * @summary Returns a snapshot of cached projects.
    * Maintains compatibility with old localStorage-based usage.
@@ -145,56 +129,46 @@ export class ProjectService {
   public getAll(email: string): Project[] {
     return this.projectsCache.slice();
   }
-
   /**
    * @summary Saves a new project to backend using optimistic update.
    * @description Adds a temporary project locally until server confirms.
    */
   public save(project: Project, email: string): void {
-  const finalId = project.id; // keep the Date.now() ID you generated
-
-  const finalProject: Project = { ...project, id: finalId };
-
-  // Optimistic update
-  this.upsertCache(finalProject);
-
-  this.http
-    .post<Project>(this.apiBase, finalProject)
-    .pipe(
-      catchError((err) => {
-        console.error('[ProjectService.save] failed', err);
-        this.removeFromCache(finalId);
-        return of(null as any);
-      }),
-      tap((created) => {
-        if (created) {
-          // Ensure backend doesn't override your ID
-          const normalized = {
-            ...created,
-            id: finalId, // FORCE your own ID
-          };
-
-          this.upsertCache(normalized);
-        }
-      })
-    )
-    .subscribe();
-}
-
-
+    const finalId = project.id;
+    const finalProject: Project = { ...project, id: finalId };
+    this.upsertCache(finalProject);
+    this.http
+      .post<Project>(this.apiBase, finalProject)
+      .pipe(
+        catchError((err) => {
+          console.error('[ProjectService.save] failed', err);
+          this.removeFromCache(finalId);
+          return of(null as any);
+        }),
+        tap((created) => {
+          if (created) {
+            const normalized = {
+              ...created,
+              id: finalId,
+            };
+            this.upsertCache(normalized);
+          }
+        })
+      )
+      .subscribe();
+  }
   /**
    * @summary Updates an existing project.
    * @description Sends updated project to API and refreshes cached data.
    */
   public update(project: Project, email: string): void {
-    this.upsertCache(project); // optimistic update
-
+    this.upsertCache(project);
     this.http
       .put<Project>(`${this.apiBase}/${project.id}`, project)
       .pipe(
         catchError((err) => {
           console.error('[ProjectService.update] failed', err);
-          this.refreshFromApi(); // fallback
+          this.refreshFromApi();
           return of(null as any);
         }),
         tap((updated) => {
@@ -206,7 +180,6 @@ export class ProjectService {
       )
       .subscribe();
   }
-
   /**
    * @summary Retrieves a project by ID from cache.
    * @returns Project | undefined
@@ -216,26 +189,23 @@ export class ProjectService {
       (p) => Number(p.id) === Number(id)
     );
   }
-
   /**
    * @summary Deletes a project using optimistic update.
    * @description Removes locally, then sends DELETE request to API.
    */
   public delete(id: number, email: string): void {
-    this.removeFromCache(id); // optimistic delete
-
+    this.removeFromCache(id);
     this.http
       .delete<void>(`${this.apiBase}/${id}`)
       .pipe(
         catchError((err) => {
           console.error('[ProjectService.delete] failed', err);
-          this.refreshFromApi(); // restore data on error
+          this.refreshFromApi();
           return of(null as any);
         })
       )
       .subscribe();
   }
-
   /**
    * @summary Clears all projects created by a specific user.
    */
@@ -245,6 +215,5 @@ export class ProjectService {
     );
     this.projectsSubject.next(this.projectsCache.slice());
   }
-
   //#endregion
 }

@@ -127,21 +127,33 @@ export class TaskDetailPageComponent implements OnInit {
   }
 
   /** Confirm delete and return to tasks */
-  public onConfirmDelete(): void {
-    if (this.pendingDeleteTask) {
-      this.taskService.deleteTask(this.pendingDeleteTask.id);
-    }
+  /** Confirm delete and go to the project detail page */
+public onConfirmDelete(): void {
+  if (this.pendingDeleteTask) {
+    const projectId = this.pendingDeleteTask.projectId;
 
+    // Delete task
+    this.taskService.deleteTask(this.pendingDeleteTask.id);
+
+    // Close dialog
     this.isDeleteModalOpen = false;
     this.pendingDeleteTask = null;
-    this.router.navigate(['/tasks']);
-  }
 
-  /** Cancel delete modal */
-  public onCancelDelete(): void {
-    this.isDeleteModalOpen = false;
-    this.pendingDeleteTask = null;
+    // Navigate to that task's project detail page
+    this.router.navigate([`/projects/${projectId}`]);
   }
+}
+
+
+  /** Cancel delete modal and stay on same task detail page */
+public onCancelDelete(): void {
+  this.isDeleteModalOpen = false;
+
+  if (this.task) {
+    this.router.navigate([`/tasks/${this.task.id}`]);  // Stay here
+  }
+}
+
 
   /**
    * Updates status and logs history entry.

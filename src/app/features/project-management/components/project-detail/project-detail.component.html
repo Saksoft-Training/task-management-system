@@ -12,7 +12,6 @@
                     {{ project?.status }}
                 </span>
             </div>
-
             <p class="page-subtitle">{{ project?.description }}</p>
         </div>
         <div class="actions-right">
@@ -84,71 +83,57 @@
         </div>
     </div>
     <div class="tasks-panel">
-
         <div class="tl-header">
             <h3>Tasks</h3>
             <div class="tl-header-controls">
                 <div class="tl-header-toggle">
-                    <button class="tl-toggle-btn"  (click)="goToList()">
+                    <button class="tl-toggle-btn" (click)="goToList()">
                         <img src="assets/icons/list-Icon.svg" class="icon" />
                         List
                     </button>
-
                     <button class="tl-toggle-btn" (click)="goToBoard()">
                         <img src="assets/icons/board-Icon.svg" class="icon" />
                         Board
                     </button>
                 </div>
-
                 <button class="tl-create-btn" (click)="onCreateTask()">Create New Task</button>
             </div>
         </div>
-
         <div class="tl-project-list">
-
             @for (task of tasks; track task.id) {
-
             <div class="tl-project-card" (click)="openTaskCard(task)">
-
                 <div class="tl-project-left">
                     <h4 class="tl-header">{{ task.title }}</h4>
                     <p class="tl-project-sub">
                         {{ task.dueDate | date:'MMM d, y' }} • Assigned to: {{ task.assignee }}
                     </p>
                 </div>
-
                 <div class="tl-project-right">
                     <span class="tl-status tl-status--{{ task.status.toLowerCase().replace(' ', '-') }}">
                         {{ task.status }}
                     </span>
-
                     <span class="tl-priority tl-priority--{{ task.priority.toLowerCase().replace(' ', '-') }}">
                         {{ task.priority }}
                     </span>
                 </div>
 
             </div>
-
             }
             @if (activeTask) {
             <app-task-card-component [task]="activeTask" (close)="closeTaskCard()">
             </app-task-card-component>
             }
-
             @if (tasks.length === 0) {
             <div class="tasks-empty">
                 <p>No tasks yet</p>
                 <button class="create-task-btn" (click)="onCreateTask()">Create New Task</button>
             </div>
             }
-
         </div>
     </div>
-    <!-- DELETE CONFIRMATION DIALOG -->
     @if (showDeleteDialog) {
     <app-dialog-delete-component [title]="deleteDialogData.title" [message]="deleteDialogData.message"
         [confirmText]="deleteDialogData.confirmText" [cancelText]="deleteDialogData.cancelText" type="danger"
         (confirm)="handleDeleteConfirm()" (cancel)="handleDeleteCancel()" />
     }
-
 </div>

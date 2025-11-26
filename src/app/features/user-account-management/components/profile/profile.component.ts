@@ -190,20 +190,23 @@ export class ProfileComponent implements OnInit {
    * @returns void
    */
   public onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files || !input.files[0]) return;
-    const file = input.files[0];
-    if (file.size > 2 * 1024 * 1024) {
-      this.errorMessage = 'Image too large (max 2MB)';
-      setTimeout(() => (this.errorMessage = ''), 2500);
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.previewImage = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+  const input = event.target as HTMLInputElement;
+  if (!input.files || !input.files[0]) return;
+
+  const file = input.files[0];
+
+  if (file.size > 2 * 1024 * 1024) {
+    this.errorMessage = 'Image too large (max 2MB)';
+    setTimeout(() => (this.errorMessage = ''), 2500);
+    return;
   }
+
+  // Compress before storing
+  this.compressImage(file, (tinyBase64: string) => {
+    this.previewImage = tinyBase64;  // ✔ will fit MockAPI
+  });
+}
+
   //#endregion
 
   //#region Submit
@@ -265,6 +268,32 @@ export class ProfileComponent implements OnInit {
       }
     });
 }
+private compressImage(file: File, callback: (base64: string) => void): void {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    const img = new Image();
+    img.src = reader.result as string;
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+
+      // tiny thumbnail (fits MockAPI limits)
+      canvas.width = 40;
+      canvas.height = 40;
+
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, 40, 40);
+
+      // reduce quality so Base64 becomes small
+      const tinyBase64 = canvas.toDataURL('image/jpeg', 0.3);
+
+      callback(tinyBase64);
+    };
+  };
+}
+
 
   //#endregion
 }

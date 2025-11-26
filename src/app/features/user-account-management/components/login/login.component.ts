@@ -127,12 +127,16 @@ export class LoginComponent implements OnInit {
         }, 800);
       },
       error: (err) => {
-        this.isFormSubmitting = false;
+         this.isFormSubmitting = false;
+
+        // ⭐ FIXED — set inline error so template can show message
+        this.loginErrorMessage = err?.message || 'Invalid email or password';
+
         this.notificationService.addNotification({
           kind: 'custom' as any,
           severity: 'critical',
           title: 'Login Failed',
-          message: err?.message || 'Invalid email or password',
+          message: this.loginErrorMessage,   // ⭐ FIXED
           showToast: true
         });
       }

@@ -20,6 +20,7 @@ export const routes: Routes = [
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'projects', component: ProjectListComponent },
   { path: 'projects/create', component: ProjectCreateComponent },
+  { path: 'projects/create/:id', component: ProjectCreateComponent },
   { path: 'projects/:id', component: ProjectDetailComponent },
   { path: 'projects/:id/board', component: TaskBoardComponent },
   { path: 'tasks', component: TaskListComponent },
