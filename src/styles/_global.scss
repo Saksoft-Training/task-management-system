@@ -3091,7 +3091,7 @@ body::-webkit-scrollbar {
 
 /* -------- PAGE WRAPPER -------- */
 .ct-create-task-page {
-  padding: 20px 40px 40px 40px;
+  padding: 40px 80px;
 }
 
 /* -------- PAGE TITLE -------- */
@@ -3172,7 +3172,7 @@ body::-webkit-scrollbar {
   padding: 8px 12px;
   background: variables.$input-background !important;
   border-radius: 10px;
-  border: 1px solid transparent;
+  border: none;
   color: variables.$color-black;
   font-size: 14px;
 }
@@ -3207,7 +3207,7 @@ body::-webkit-scrollbar {
   padding: 10px 14px;
   background: variables.$input-background !important;
   border-radius: 10px;
-  border: 1px solid transparent;
+  border: none;
   resize: none;
   font-size: 14px;
 }
@@ -3316,7 +3316,7 @@ body::-webkit-scrollbar {
 // =============================================================
 .tl-wrapper {
   width: auto;
-  padding: 60px 40px 40px 40px;
+  padding: 40px 80px;
   min-height: 100vh;
   background: variables.$color-white;
   display: flex;
@@ -3730,7 +3730,9 @@ body::-webkit-scrollbar {
   font-family: 'Inter', sans-serif;
   color: variables.$color-text-primary;
 }
-
+.task-detail-main-container{
+  padding: 40px 80px;
+}
 /* ------------------------------
    Breadcrumb
 ------------------------------ */
@@ -3760,7 +3762,7 @@ body::-webkit-scrollbar {
 .tl-topbar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 2rem;
   margin-bottom: 20px;
 }
 
@@ -3799,29 +3801,48 @@ body::-webkit-scrollbar {
    Actions
 ------------------------------ */
 .tl-actions {
-  margin-left: auto;
-  display: flex;
-  gap: 10px;
-}
+    display: flex;
+    gap: 1rem;
+    margin-left: auto;
 
-.tl-btn-outline {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid variables.$color-border-d1;
-  background: variables.$color-white;
-  cursor: pointer;
-  font-size: 14px;
-}
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.tl-btn-delete {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: none;
-  background: variables.$color-btn-danger-bg;
-  cursor: pointer;
-  color: variables.$color-white;
-  font-size: 14px;
-}
+    .delete-task-btn img {
+      width: 16px;
+      height: 16px;
+      filter: brightness(0) invert(1);
+    }
+
+    .tl-btn-outline {
+      background: variables.$color-bg-footer;
+      color: variables.$color-title;
+      border: 1px solid #d1d5db;
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 0.875rem;
+
+      &:hover {
+        background: variables.$btn-secondary-bg-color;
+      }
+    }
+
+    .tl-btn-delete {
+      background: variables.$color-btn-danger-bg;
+      color: variables.$color-bg-footer;
+      padding: 10px 22px;
+      border-radius: 24px;
+      border: none;
+      font-size: 0.875rem;
+
+      &:hover {
+        background: color.adjust(variables.$color-btn-danger-bg, $lightness: -8%);
+      }
+    }
+  }
 
 /* ------------------------------
    Controls
@@ -4101,7 +4122,6 @@ body::-webkit-scrollbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60px 40px 0 40px;
 
   .tl-board-global-title {
     font-size: 60px;
@@ -4243,7 +4263,6 @@ body::-webkit-scrollbar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  padding: 0 40px 40px 40px;
 }
 
 /* Individual Column */
@@ -4375,8 +4394,10 @@ body::-webkit-scrollbar {
 /* ===========================================
    PROJECT HEADER (TOP OF PAGE)
 =========================================== */
+.tl-board-wrapper{
+  padding: 40px 80px;
+}
 .tl-project-header {
-  padding: 0 40px;
   margin-bottom: 20px;
 }
 

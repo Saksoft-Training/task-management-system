@@ -1,100 +1,152 @@
+//#region Imports
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { delay, tap, mergeMap } from 'rxjs/operators'; // ⭐ CHANGED: added mergeMap
+import { delay, tap, mergeMap, switchMap, catchError } from 'rxjs/operators'; // ⭐ FIX: added catchError
 import { User } from '../../../../types/models/user';
 import { UserStorageService } from '../../../shared/services/storage-service';
- 
-const CURRENT_USER_KEY = 'currentUser';
-const AUTH_TOKEN_KEY = 'authToken';
- 
+//#endregion
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  //#region Properties
+
+  //#region State Management
+
+  /**
+   * Holds the currently authenticated user.
+   * BehaviorSubject allows real-time UI updates (Header/Profile/User Menu).
+   */
   private currentUserSubject = new BehaviorSubject<User | null>(null);
+
+  /**
+   * Observable stream exposed to UI components to reactively subscribe to user state.
+   */
   public currentUser$ = this.currentUserSubject.asObservable();
+
   //#endregion
- 
+
   //#region Constructor
+
+  /**
+   * @summary Initializes session by restoring last logged-in user.
+   * Helps maintain persistent authentication across refreshes.
+   * @param router - Angular router for navigation
+   * @param userStorage - Data persistence + mock API handler
+   */
   constructor(
     private router: Router,
     private userStorage: UserStorageService
   ) {
-    const savedUserJson = localStorage.getItem(CURRENT_USER_KEY);
+    this.restoreUserSession();
+  }
 
-  if (savedUserJson) {
-    const savedUser = JSON.parse(savedUserJson);
-    this.currentUserSubject.next(savedUser);
-  }
-  }
   //#endregion
- 
+
   //#region Login
+
   /**
-   * @summary Validates credentials and logs in the user via MockAPI.
+   * @summary Validates user credentials and logs user in through MockAPI.
+   * Includes:
+   *  ✔ Email lookup
+   *  ✔ Password decoding + validation
+   *  ✔ Login status update + persistence
+   *  ✔ Delayed response for realistic UX
+   *
+   * @param credentials Object containing login form values
+   * @returns Observable<User>
    */
-public login(credentials: {
-   email: string;
-  password: string;
-  rememberMe: boolean;
-}): Observable<User> {
-  const { email, password } = credentials;
+  public login(credentials: { email: string; password: string; rememberMe: boolean }): Observable<any> {
+    const { email, password, rememberMe } = credentials;
 
-  return this.userStorage.findUserByEmail(email).pipe(
-    mergeMap(user => {
-      if (!user) {
-        return throwError(() => new Error("Email not registered"));
-      }
+    return this.userStorage.findUserByEmail(email).pipe(
 
-      const storedPassword = this.userStorage.decodePassword(user.password);
+      switchMap((user) => {
 
-      if (storedPassword !== password) {
-        return throwError(() => new Error("Invalid email or password"));
-      }
+        // USER NOT FOUND
+        if (!user) {
+          return throwError(() => new Error('Invalid email or password'));
+        }
 
-      // ⭐ Save to memory
-      this.currentUserSubject.next(user);
+        // WRONG PASSWORD
+        const decodedPassword = this.userStorage.decodePassword(user.password);
+        if (decodedPassword !== password) {
+          return throwError(() => new Error('Invalid email or password'));
+        }
 
-      // ⭐ Save to localStorage so user survives refresh
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+        // SUCCESS → mark logged in
+        return this.userStorage.markUserAsLoggedIn(user.id).pipe(
+          tap(updatedUser => {
+            const userJson = JSON.stringify(updatedUser);
+            sessionStorage.setItem('currentUser', userJson);
 
-      return of(user);
-    }),
-    delay(400)
-  );
-}
+            if (rememberMe) {
+              localStorage.setItem('currentUser', userJson);
+            }
 
-  //#endregion
- 
-  //#region Authentication Helpers
-  public isLoggedIn(): boolean {
-  return this.currentUserSubject.value !== null;
-}
+            this.currentUserSubject.next(updatedUser);
+          })
+        );
+      }),
 
-  public getCurrentUser(): User | null {
-  return this.currentUserSubject.value;
-}
-
-  public getAuthToken(): string | null {
-    return (
-      sessionStorage.getItem(AUTH_TOKEN_KEY) ||
-      localStorage.getItem(AUTH_TOKEN_KEY)
+      catchError(err => throwError(() => err))
     );
   }
   //#endregion
- 
+
+
+  private restoreUserSession() {
+    this.userStorage.getLoggedInUser().subscribe(user => {
+      if (user) {
+        // Emit a brand-new object to trigger header update
+        this.currentUserSubject.next({ ...user });
+      }
+    });
+  }
+
+  //#region Authentication Helpers
+
+  /**
+   * @summary Returns login status.
+   * @returns boolean
+   */
+  public isLoggedIn(): boolean {
+    return this.currentUserSubject.value !== null;
+  }
+
+  /**
+   * @summary Returns currently authenticated user.
+   */
+  public getCurrentUser(): User | null {
+    return this.currentUserSubject.value;
+  }
+
+  /**
+   * @summary Placeholder for future JWT token support.
+   */
+  public getAuthToken(): string | null {
+    return null;
+  }
+
+  //#endregion
+
   //#region User Sync With Header / Profile
   public updateCurrentUser(user: User): void {
     this.currentUserSubject.next(user);
   }
   //#endregion
- 
+
   //#region Logout
   public logout(): void {
-  this.currentUserSubject.next(null);
-   localStorage.removeItem(CURRENT_USER_KEY);
-  this.router.navigate(['/login'], { replaceUrl: true });
-}
+    const user = this.currentUserSubject.value;
 
+    if (user) {
+      this.userStorage.markUserAsLoggedOut(user.id).subscribe(() => {
+        this.currentUserSubject.next(null);
+        this.router.navigate(['/login'], { replaceUrl: true });
+      });
+    } else {
+      this.router.navigate(['/login'], { replaceUrl: true });
+    }
+  }
   //#endregion
 }

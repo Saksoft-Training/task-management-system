@@ -6,7 +6,7 @@
 
   <!-- Delete button (only in edit) -->
   @if (isEdit) {
-    <button class="ct-delete-btn" (click)="onDelete()">Delete Task <img src="assets/icons/trash.svg" alt="Delete" /></button>
+    <button class="ct-delete-btn" (click)="onDelete()">Delete Task <img src="assets/icons/delete-Icon.svg" alt="Delete" /></button>
   }
 
   <!-- Confirmation modal -->
@@ -110,7 +110,7 @@
         <label class="ct-field-label required">Assignee</label>
 
         <select class="ct-field-select" formControlName="assignee" (change)="onAssigneeChange($event)">
-          <option value="" disabled>Select an assignee</option>
+          <option value="null" disabled hidden>Select an assignee</option>
 
           @for (userItem of users; track userItem.id) {
             <option [value]="userItem.id">{{ userItem.name }}</option>

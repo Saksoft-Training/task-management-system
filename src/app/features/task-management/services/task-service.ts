@@ -255,26 +255,28 @@ export class TaskService implements OnDestroy {
   //#region Bulk Operations
 
   /** Delete all tasks for a project (old deleteTasksByProjectId behavior maintained) */
-  public deleteTasksByProjectId(projectId: number): void {
+ public deleteTasksByProjectId(projectId: number): void {
 
-    /** Optimistic removal */
-    this.tasksCache = this.tasksCache.filter(t => t.projectId !== projectId);
-    this.tasksSubject.next(this.readForCurrentUserSnapshot());
+  /** Collect tasks first BEFORE optimistic removal */
+  const tasksToDelete = this.tasksCache.filter(t => t.projectId === projectId);
 
-    /** MockAPI has no bulk delete, delete each individually */
-    const tasksToDelete = this.tasksCache.filter(t => t.projectId === projectId);
+  /** Optimistic removal */
+  this.tasksCache = this.tasksCache.filter(t => t.projectId !== projectId);
+  this.tasksSubject.next(this.readForCurrentUserSnapshot());
 
-    tasksToDelete.forEach(t => {
-      this.http.delete<void>(`${this.apiBase}/${t.id}`)
-        .pipe(
-          catchError(err => {
-            console.error(`[TaskService.deleteTasksByProjectId] failed for ${t.id}`, err);
-            return of(null as any);
-          })
-        )
-        .subscribe();
-    });
-  }
+  /** Now delete from API */
+  tasksToDelete.forEach(t => {
+    this.http.delete<void>(`${this.apiBase}/${t.id}`)
+      .pipe(
+        catchError(err => {
+          console.error(`[TaskService.deleteTasksByProjectId] failed for ${t.id}`, err);
+          return of(null as any);
+        })
+      )
+      .subscribe();
+  });
+}
+
 
   //#endregion
 

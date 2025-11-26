@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../features/user-account-management/services/auth-service';
 import { NotificationService } from '../../../features/dashboard/services/notification-service';
 import { AppNotification } from '../../../../types/models/notifications';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
 import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
 import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit {
    * @summary Logged-in user's email displayed in the header.
    */
   public user: User | null = null;
-  public userEmail: string | null = null;
+public userEmail$!: Observable<string | null>;
 
   /**
    * @summary Navigation menu items shown in the header.
@@ -81,15 +81,15 @@ export class HeaderComponent implements OnInit {
    * @returns void
    */
   public ngOnInit(): void {
-    this.authService.currentUser$.subscribe(user => {
-      this.userEmail = user?.email || null;
-    });
-    this.notifications$ = this.notificationService.notifications$;
-    this.notifications$.subscribe(notifications => {
-    });
-    this.notificationService.unreadCount$.subscribe(count => {
-      this.unreadCount = count;
-    });
+    this.userEmail$ = this.authService.currentUser$.pipe(
+    map(user => user?.email ?? null)
+  );
+
+  this.notifications$ = this.notificationService.notifications$;
+
+  this.notificationService.unreadCount$.subscribe(count => {
+    this.unreadCount = count;
+  });
   }
   //#endregion
   //#region Methods

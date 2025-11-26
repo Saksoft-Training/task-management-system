@@ -1,7 +1,10 @@
 <div class="login-container">
-  <h1 class="page-title-login ">Login</h1>
+  <h1 class="page-title-login">Login</h1>
+
   <div class="login-page">
-    <form [formGroup]="loginFormGroup" (ngSubmit)="submitLoginForm()" class="card" autocomplete="off">
+    <form [formGroup]="loginFormGroup" (ngSubmit)="submitLoginForm()"
+      class="card" autocomplete="off">
+
       <div class="header">
         <div class="header-content">
           <img src="assets/icons/arrow-Icon.svg" alt="Welcome back" />
@@ -9,46 +12,79 @@
         </div>
         <p>Login to access your task management dashboard</p>
       </div>
+
       <div class="input-section">
+
+        <!-- Email -->
         <div class="input-group">
           <label>Email</label>
-          <input formControlName="email" placeholder="Enter your email" autocomplete="new-email" (input)="forceLowercaseEmail()" [ngClass]="{ 'invalid-input': formControls['email'].invalid && formControls['email'].touched }" />
+          <input
+            formControlName="email"
+            (input)="forceLowercaseEmail()"
+            placeholder="Enter your email"
+            autocomplete="new-email"
+            [disabled]="isFormSubmitting"
+            [ngClass]="{ 'invalid-input': formControls['email'].touched && formControls['email'].invalid }" />
+
           @if (formControls['email'].touched && formControls['email'].invalid) {
-            <div class="error">
-              @if (formControls['email'].errors?.['required']) { <p>Email is required.</p> }
-              @if (formControls['email'].errors?.['invalidEmail']) { <p>Enter a valid Gmail address.</p> }
-            </div>
+          <div class="error">
+            @if (formControls['email'].errors?.['required']) { <p>Email is
+              required.</p> }
+            @if (formControls['email'].errors?.['invalidEmail']) { <p>Enter a
+              valid Gmail address.</p> }
+          </div>
           }
         </div>
+
+        <!-- Password -->
         <div class="input-group">
           <label>Password</label>
-          <input type="password" formControlName="password" placeholder="Enter your password" autocomplete="new-password" [ngClass]="{ 'invalid-input': formControls['password'].invalid && formControls['password'].touched }" />
-          @if (formControls['password'].touched && formControls['password'].invalid) {
-            <div class="error"><p>Password is required.</p></div>
+          <input
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            placeholder="Enter your password"
+            [disabled]="isFormSubmitting"
+            [ngClass]="{ 'invalid-input': formControls['password'].touched && formControls['password'].invalid }" />
+
+          @if (formControls['password'].touched &&
+          formControls['password'].invalid) {
+          <div class="error"><p>Password is required.</p></div>
           }
+
           @if (loginAttempted && loginErrorMessage) {
-            <div class="error"><p>{{ loginErrorMessage }}</p></div>
+          <div class="error"><p>{{ loginErrorMessage }}</p></div>
           }
         </div>
       </div>
+
       <div class="options">
         <div class="remember">
           <input type="checkbox" formControlName="rememberMe" />
           <span>Remember me</span>
         </div>
-        <a class="forgot-link" (click)="navigateTo('/forgot-password')">Forgot Password?</a>
+        <a class="forgot-link" (click)="navigateTo('/forgot-password')">Forgot
+          Password?</a>
       </div>
+
       <div class="button-section">
-        <button type="submit" class="login-btn" [disabled]="isFormSubmitting">Login</button>
+        <button type="submit" class="login-btn" [disabled]="isFormSubmitting">
+          {{ isFormSubmitting ? 'Authenticating...' : 'Login' }}
+        </button>
+
         <p class="no-account">Don't have an account?</p>
-        <button type="button" class="create-btn" (click)="navigateTo('/register')">
-          <img src="assets/icons/create-account-Icon.svg" alt="create account" />
+        <button type="button" class="create-btn"
+          (click)="navigateTo('/register')">
+          <img src="assets/icons/create-account-Icon.svg"
+            alt="create account" />
           <span>Create Account</span>
         </button>
       </div>
     </form>
-    <app-loading-spinner [show]="isFormSubmitting" message="Logging in, please wait..."></app-loading-spinner>
+
+    <app-loading-spinner
+      [show]="isFormSubmitting"
+      message="Logging in, please wait..."></app-loading-spinner>
+
   </div>
 </div>
- 
- 

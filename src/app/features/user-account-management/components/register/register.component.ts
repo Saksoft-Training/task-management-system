@@ -193,6 +193,8 @@ export class RegisterComponent implements OnInit {
     const encryptedPassword = this.userStorage.encodePassword(password);
  
     const newUser: User = {
+      id: Date.now().toString(),
+
       name: name.trim(),
       email: email.trim().toLowerCase(),
       password: encryptedPassword,
