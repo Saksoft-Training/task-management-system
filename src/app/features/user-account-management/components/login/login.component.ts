@@ -118,10 +118,8 @@ export class LoginComponent implements OnInit {
           message: '',
           showToast: true
         });
-        setTimeout(() => {
-          this.isFormSubmitting = false;
-          this.router.navigate(['/profile']);
-        }, 600);
+        this.isFormSubmitting = false;
+        this.router.navigate(['/profile']);
       },
       error: (err) => {
         this.isFormSubmitting = false;
@@ -133,10 +131,8 @@ export class LoginComponent implements OnInit {
           message: this.loginErrorMessage,
           showToast: true
         });
-        setTimeout(() => {
-          this.isFormSubmitting = false;
-          this.loginFormGroup.enable();
-        }, 600);
+        this.loginFormGroup.enable();
+
       }
     });
   }

@@ -147,10 +147,8 @@ export class ForgotPasswordComponent implements OnInit {
         showToast: true
       });
       this.resetForm.reset();
-      setTimeout(() => {
-        this.isSubmitting = false;
-        this.router.navigate(['/login']);
-      }, 800);
+      this.isSubmitting = false;
+      this.router.navigate(['/login']);
     });
   }
   //#endregion

@@ -177,7 +177,11 @@ export class ProfileComponent implements OnInit {
     const file = input.files[0];
     if (file.size > 2 * 1024 * 1024) {
       this.errorMessage = 'Image too large (max 2MB)';
-      setTimeout(() => (this.errorMessage = ''), 2500);
+      import('rxjs').then(rx => {
+        rx.of(null).pipe(rx.delay(2500)).subscribe(() => {
+          this.errorMessage = '';
+        });
+      });
       return;
     }
     this.compressImage(file, (tinyBase64: string) => {

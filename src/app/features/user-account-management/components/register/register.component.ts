@@ -257,7 +257,7 @@ export class RegisterComponent implements OnInit {
           showToast: true
         });
         this.isSubmitting = false;
-        setTimeout(() => this.router.navigate(['/login']), 1200);
+      this.router.navigate(['/login']);
       },
       error: () => {
         this.notificationService.addNotification({
