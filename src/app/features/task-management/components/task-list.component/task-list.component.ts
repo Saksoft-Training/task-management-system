@@ -33,17 +33,14 @@ import { ConfirmationDialogComponent } from '../../../../shared/components/confi
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   //#region Inputs
-
   /** 
    * @summary Receives project ID from parent page (if opened under a project). 
    * If null → the list displays global tasks. 
    */
   @Input() projectId?: number | null;
-
   //#endregion
 
   //#region View Mode
-
   /**
    * @summary Defines which layout is currently active.
    * - 'project': task list inside a project details page
@@ -52,11 +49,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * - 'global': all tasks in the system
    */
   public viewMode: 'project' | 'list' | 'board' | 'global' = 'project';
-
   //#endregion
 
   //#region Task Data
-
   /** All tasks fetched from taskService */
   public tasks: Task[] = [];
 
@@ -71,18 +66,14 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   /** Logged in user email */
   public userEmail: string = '';
-
   //#endregion
 
   //#region Unsubscription Handler
-
   /** Emits when component should cleanup (instead of multiple subscriptions) */
   private destroy$ = new Subject<void>();
-
   //#endregion
 
   //#region Sorting
-
   /** Whether sort dropdown is open */
   public isSortMenuOpen = false;
 
@@ -91,11 +82,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   /** Sorting direction */
   public sortAsc = true;
-
   //#endregion
 
   //#region Constructor
-
   /**
    * @summary Constructor injecting required services.
    * @param route Provides route parameters such as projectId
@@ -113,11 +102,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef
   ) { }
-
   //#endregion
 
   //#region Lifecycle
-
   /**
    * @summary Initializes component:
    * - Loads logged-in user details
@@ -189,11 +176,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
   //#endregion
 
   //#region View Mode Logic
-
   /**
    * @summary Detects current page structure based on URL.
    * Ensures correct view mode (list / board / project context).
@@ -230,11 +215,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
   }
-
   //#endregion
 
   //#region Load + Filter + Sort
-
   /**
    * @summary Loads tasks into component:
    * - Filters by project if projectId exists
@@ -299,11 +282,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       return 0;
     });
   }
-
   //#endregion
 
   //#region Sorting Controls
-
   /** Toggles sort dropdown open/close */
   public toggleSortMenu(): void {
     this.isSortMenuOpen = !this.isSortMenuOpen;
@@ -348,11 +329,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       this.isSortMenuOpen = false;
     }
   }
-
   //#endregion
 
   //#region Task Popup
-
   /** Opens task detail popup */
   public openCard(task: Task): void {
     this.activeTask = task;
@@ -364,11 +343,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.activeTask = null;
     this.cdr.detectChanges();
   }
-
   //#endregion
 
   //#region CRUD
-
   /** User confirmation dialog state */
   public isDeleteModalOpen = false;
 
@@ -398,11 +375,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.pendingDeleteTask = null;
     this.cdr.detectChanges();
   }
-
   //#endregion
 
   //#region Mode Switch
-
   /**
    * @summary Switches between List and Board layout.
    * Ensures correct navigation based on project or global context.
@@ -430,11 +405,9 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       queryParams: { projectId: this.projectId }
     });
   }
-
   //#endregion
 
   //#region Helpers
-
   /**
    * @summary Returns project name based on projectId
    */
@@ -506,6 +479,5 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public trackByTask(index: number, item: Task): any {
     return item?.id ?? index;
   }
-
   //#endregion
 }

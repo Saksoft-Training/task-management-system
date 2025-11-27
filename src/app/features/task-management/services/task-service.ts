@@ -9,7 +9,6 @@ import { catchError, tap } from 'rxjs/operators';
 export class TaskService implements OnDestroy {
 
   //#region Properties
-
   /** API base URL where all tasks are stored */
   private readonly apiBase = 'https://692436183ad095fb84732c9f.mockapi.io/Tasks';
 
@@ -24,11 +23,8 @@ export class TaskService implements OnDestroy {
 
   /** Subscription to user changes so tasks refresh when user switches */
   private userSubscription!: Subscription;
-
   //#endregion
-
   //#region Constructor
-
   constructor(
     private readonly authService: AuthService,
     private readonly http: HttpClient
@@ -41,20 +37,15 @@ export class TaskService implements OnDestroy {
       this.loadFromApi();
     });
   }
-
   //#endregion
-
   //#region Cleanup
-
   ngOnDestroy(): void {
     /** Ensure subscription is cleaned up  */
     this.userSubscription?.unsubscribe();
   }
-
   //#endregion
 
   //#region Internal Helpers
-
   /** Reads ALL tasks from API and updates filtered list for current user */
   private loadFromApi(): void {
     this.http.get<Task[]>(this.apiBase)
@@ -80,7 +71,7 @@ export class TaskService implements OnDestroy {
     this.tasksSubject.next(this.readForCurrentUserSnapshot());
   }
 
-  /** Insert or update task in cache (equivalent to old update logic) */
+  /** Insert or update task in cache */
   private upsertTaskInCache(task: Task): void {
     const idx = this.tasksCache.findIndex(
       t => String(t.id) === String(task.id)
@@ -99,7 +90,6 @@ export class TaskService implements OnDestroy {
     );
     this.tasksSubject.next(this.readForCurrentUserSnapshot());
   }
-
   /**
    * @summary Returns tasks only for the logged-in user
    * (replaces old readForCurrentUser() logic)
@@ -107,11 +97,9 @@ export class TaskService implements OnDestroy {
   private readForCurrentUserSnapshot(): Task[] {
     return this.tasksCache.slice();
   }
-
   //#endregion
 
   //#region Public Fetch Methods
-
   /** All tasks for current user  */
   public getAllTasks(): Task[] {
     return this.readForCurrentUserSnapshot();
@@ -126,11 +114,9 @@ export class TaskService implements OnDestroy {
   public getTasksByProjectId(projectId: number): Task[] {
     return this.readForCurrentUserSnapshot().filter(t => t.projectId === projectId);
   }
-
   //#endregion
 
   //#region CRUD 
-
   /** Create new task (replaces old saveTask, but keeps same method name and behavior) */
   public saveTask(task: Task): void {
     /** Create temp ID to mimic old behavior where tasks instantly appeared */
@@ -164,7 +150,6 @@ export class TaskService implements OnDestroy {
   public updateTask(updated: Task): void {
     /** Optimistic update (same as old behavior) */
     this.upsertTaskInCache(updated);
-
     /** Persist to API */
     this.http.put<Task>(`${this.apiBase}/${updated.id}`, updated)
       .pipe(
@@ -201,25 +186,20 @@ export class TaskService implements OnDestroy {
     this.tasksCache = [];
     this.tasksSubject.next([]);
   }
-
   //#endregion
 
   //#region Drag & Drop Status Update
-
   /** Update task status after drag & drop */
   public updateTaskStatus(id: number, status: TaskStatus): void {
     const idx = this.tasksCache.findIndex(t => String(t.id) === String(id));
     if (idx === -1) return;
 
     const now = new Date().toISOString();
-
     /** Optimistic update */
     this.tasksCache[idx].status = status;
     this.tasksCache[idx].updatedAt = now;
     this.tasksCache[idx].completedAt = status === 'Completed' ? now : null;
-
     this.tasksSubject.next(this.readForCurrentUserSnapshot());
-
     /** Persist to API */
     const payload = { ...this.tasksCache[idx] };
 
@@ -234,11 +214,9 @@ export class TaskService implements OnDestroy {
       )
       .subscribe();
   }
-
   //#endregion
 
   //#region Bulk Operations
-
   /** Delete all tasks for a project  */
  public deleteTasksByProjectId(projectId: number): void {
 
@@ -261,7 +239,5 @@ export class TaskService implements OnDestroy {
       .subscribe();
   });
 }
-
-
-  //#endregion
+//#endregion
 }

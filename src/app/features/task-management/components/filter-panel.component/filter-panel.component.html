@@ -1,40 +1,27 @@
-<!-- ===========================
-     OVERLAY (click to close)
-     =========================== -->
+<!-- OVERLAY (click to close) -->
 @if (open) {
   <div class="tl-filter-overlay" (click)="close.emit()"></div>
 }
-
-<!-- ===========================
-     FILTER PANEL WRAPPER
-     =========================== -->
+<!-- FILTER PANEL WRAPPER -->
 @if (open) {
 <div class="tl-filter-panel" [class.open]="open">
-
-  <!-- ===========================
-       HEADER (Title + Close)
-       =========================== -->
+  <!-- HEADER (Title + Close) -->
   <div class="tl-filter-header">
     <h2>FILTER TASKS</h2>
     <button class="tl-filter-close-btn" (click)="close.emit()">
       <img src="assets/icons/cross-Icon.svg" alt="Close Icon">
     </button>
   </div>
-
-  <!-- ===========================
-       STATUS FILTER SECTION
-       =========================== -->
+  <!--STATUS FILTER SECTION -->
   <div class="tl-filter-box">
     <div class="tl-filter-box-title">
       <span>Status</span>
-
       <!-- Clear only Status filters -->
       <button class="tl-clear-btn" (click)="clearSection('status')">
         <img src="assets/icons/cross-Icon.svg">
         Clear Filters
       </button>
     </div>
-
     <!-- Checkboxes for each status -->
     <div class="tl-filter-options">
       @for (status of statusList; track status) {
@@ -49,21 +36,16 @@
       }
     </div>
   </div>
-
-  <!-- ===========================
-       PRIORITY FILTER SECTION
-       =========================== -->
+  <!-- PRIORITY FILTER SECTION -->
   <div class="tl-filter-box">
     <div class="tl-filter-box-title">
       <span>Priority</span>
-
       <!-- Clear only Priority filters -->
       <button class="tl-clear-btn" (click)="clearSection('priority')">
         <img src="assets/icons/cross-Icon.svg">
         Clear Filters
       </button>
     </div>
-
     <!-- Checkboxes for Priority -->
     <div class="tl-filter-options">
       @for (priority of priorityList; track priority) {
@@ -78,17 +60,13 @@
       }
     </div>
   </div>
-
-  <!-- ===========================
-       ASSIGNEE FILTER SECTION
-       =========================== -->
+  <!-- ASSIGNEE FILTER SECTION -->
   <div class="tl-filter-box">
     <div class="tl-filter-box-title">
       <span>
         <img src="assets/icons/profile-Icon.svg"> Assignee
       </span>
     </div>
-
     <!-- List of users -->
     <div class="tl-filter-options">
       @for (assignee of assignees; track assignee) {
@@ -103,17 +81,13 @@
       }
     </div>
   </div>
-
-  <!-- ===========================
-       DATE RANGE FILTER SECTION
-       =========================== -->
+  <!-- DATE RANGE FILTER SECTION -->
   <div class="tl-filter-box">
     <div class="tl-filter-box-title">
       <span>
         <img src="assets/icons/calendar-Icon.svg"> Due Date Range
       </span>
     </div>
-
     <!-- From / To date fields -->
     <div class="tl-filter-date-row">
       <div>
@@ -124,7 +98,6 @@
           (change)="filtersChanged.emit(filters)"
         >
       </div>
-
       <div>
         <label>To</label>
         <input
@@ -135,14 +108,10 @@
       </div>
     </div>
   </div>
-
-  <!-- ===========================
-       CLEAR ALL FILTERS BUTTON
-       =========================== -->
+  <!-- CLEAR ALL FILTERS BUTTON -->
   <button class="tl-filter-clear-all" (click)="clearAll()">
     <img src="assets/icons/cross-Icon.svg">
     Clear All Filters
   </button>
-
 </div>
 }

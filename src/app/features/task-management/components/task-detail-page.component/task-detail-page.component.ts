@@ -138,7 +138,6 @@ public onConfirmDelete(): void {
     // Close dialog
     this.isDeleteModalOpen = false;
     this.pendingDeleteTask = null;
-
     // Navigate to that task's project detail page
     this.router.navigate([`/projects/${projectId}`]);
   }
@@ -148,12 +147,10 @@ public onConfirmDelete(): void {
   /** Cancel delete modal and stay on same task detail page */
 public onCancelDelete(): void {
   this.isDeleteModalOpen = false;
-
   if (this.task) {
     this.router.navigate([`/tasks/${this.task.id}`]);  
   }
 }
-
 
   /**
    * Updates status and logs history entry.
@@ -162,19 +159,14 @@ public onCancelDelete(): void {
     if (!this.task) return;
 
     const timestamp = new Date().toISOString();
-
     if (!this.task.statusHistory) {
       this.task.statusHistory = [{ status: 'Created', date: this.task.createdAt }];
     }
-
     this.task.statusHistory.unshift({ status: newStatus, date: timestamp });
-
     this.task.status = newStatus as any;
     this.task.updatedAt = timestamp;
-
     this.taskService.updateTask(this.task);
     this.statusHistory = [...this.task.statusHistory];
-
     this.cdr.detectChanges();
   }
 
@@ -183,10 +175,8 @@ public onCancelDelete(): void {
    */
   public updatePriority(newPriority: string): void {
     if (!this.task) return;
-
     this.task.priority = newPriority as any;
     this.task.updatedAt = new Date().toISOString();
-
     this.taskService.updateTask(this.task);
     this.cdr.detectChanges();
   }
@@ -201,6 +191,5 @@ public onCancelDelete(): void {
     if (!projectId) return;
     this.router.navigate(['/projects', projectId]);
   }
-
   //#endregion
 }
