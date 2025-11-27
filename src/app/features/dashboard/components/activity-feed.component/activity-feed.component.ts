@@ -32,7 +32,7 @@ export class ActivityFeedComponent {
    * @param dashboardService - Service providing recent activity stream.
    * @param router - Router instance to navigate between pages.
    */
-  constructor(private dashboardService: chartsDashboardService, private router: Router,private activityService: ActivityService) { }
+  constructor(private dashboardService: chartsDashboardService, private router: Router, private activityService: ActivityService) { }
 
   // #endregion
 
@@ -58,7 +58,7 @@ export class ActivityFeedComponent {
    * @returns A string representing the initials.
    */
   public getInitials(name?: string): string {
-     if (!name || name.trim().length === 0) return '?';
+    if (!name || name.trim().length === 0) return '?';
     return name
       .split(' ')
       .filter(Boolean)
