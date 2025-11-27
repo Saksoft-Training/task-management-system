@@ -141,6 +141,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
         const id = params.get('id');
         this.projectId = id ? Number(id) : null;
         this.loadTasks(this.taskService.getAllTasks());
+        this.cdr.detectChanges();
       });
 
     // Determine initial visual mode (task list / board / project)
@@ -343,7 +344,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.cdr.detectChanges();
   }
   //#endregion
-
+  
   //#region CRUD
   /** User confirmation dialog state */
   public isDeleteModalOpen = false;
