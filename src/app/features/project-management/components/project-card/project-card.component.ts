@@ -19,6 +19,10 @@ export class ProjectCardComponent {
   * @summary The full project data object passed from the parent component.
   */
   @Input() project!: Project;
+  /**
+   * @summary The number of tasks linked to the project.
+   * Defaults to 0 if not provided.
+   */
   @Input() taskCount: number = 0;
   // #endregion
 
@@ -30,7 +34,11 @@ export class ProjectCardComponent {
    * - "On Hold"     → "on-hold"
    */
   public get statusClass(): string {
-    return this.project.status
+    const status = this.project?.status;
+    if (!status || typeof status !== 'string') {
+      return 'unknown'; // fallback CSS class
+    }
+    return status
       .toLowerCase()
       .replace(/\s+/g, '-');
   }
