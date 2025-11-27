@@ -92,20 +92,16 @@ export class ProjectCreateComponent {
       this.router.navigate(['/projects']);
       return;
     }
-    let project = this.projectService.getById(projectId, this.currentUser);
+    this.projectService.projects$.subscribe(projects => {
+    const project = projects.find(p => p.id === projectId);
     if (!project) {
-      setTimeout(() => {
-        project = this.projectService.getById(projectId, this.currentUser);
-        if (!project) {
-          this.router.navigate(['/projects']);
-          return;
-        }
-        this.patchProjectForm(project!);
-      }, 150);
       return;
     }
     this.patchProjectForm(project);
-  }
+    this.editProjectId = project.id;
+  });
+  this.projectService.getAllAsync().subscribe();
+}
   /**
   * @summary Populates form fields with project data when editing.
   * @param project Project object to load into form
