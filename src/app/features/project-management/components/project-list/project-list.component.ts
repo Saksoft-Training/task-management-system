@@ -1,4 +1,4 @@
-import { Component, HostListener, Pipe, PipeTransform } from '@angular/core';
+import { Component, HostListener, OnDestroy, Pipe, PipeTransform, ChangeDetectorRef } from '@angular/core';
 import { Project } from '../../../../../types';
 import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { ProjectCardComponent } from '../project-card/project-card.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService } from '../../../task-management/services/task-service';
+import { Subscription } from 'rxjs';
 
 /**
  * @summary Pipe used to convert strings by replacing spaces with hyphens
@@ -19,7 +20,8 @@ export class ReplaceSpacePipe implements PipeTransform {
   }
 }
 /**
- * @summary  Displays a list of projects, including search, sorting, and filtering options.
+ * @summary Displays a list of projects, including search, sorting,
+ * filtering, and auto-refresh via live API streams.
  */
 @Component({
   selector: 'app-project-list-component',
@@ -27,99 +29,114 @@ export class ReplaceSpacePipe implements PipeTransform {
   templateUrl: './project-list.component.html',
   styleUrl: './project-list.component.scss',
 })
-export class ProjectListComponent {
+export class ProjectListComponent implements OnDestroy {
   //#region Properties
-  /** @summary Stores all projects belonging to the logged-in user. */
+  /** Stores all projects fetched from API (for current user). */
   public projects: Project[] = [];
-  /** @summary Stores projects after applying search, sort, and filter options. */
+  /** Stores projects after applying search, sorting, and filter logic. */
   public filteredProjects: Project[] = [];
-  /** @summary Controls visibility of the status filter dropdown panel. */
+  /** Controls the visibility of the status filter dropdown. */
   public showFilters: boolean = false;
-  /** @summary Search box input for filtering projects by name. */
+  /** Search box input for filtering projects by name. */
   public searchTerm: string = '';
-  /** @summary List of selected status filters (Planning, Completed, etc.). */
+  /** List of currently selected status filters. */
   public selectedStatuses: string[] = [];
-  /** @summary Currently selected sort option. */
+  /** Currently selected sorting option ('name', 'newest', 'endingSoon'). */
   public sortOption: string = 'name';
-  /** @summary Static list of available status filter options. */
+  /** Static list of status options for filtering. */
   public statusOptions = ['Planning', 'In Progress', 'Completed', 'On Hold'];
-  /** @summary Logged-in user's email used for fetching projects. */
+  /** Logged-in user's email for API filtering logic. */
   public currentUserEmail: string = '';
-  /** @summary Controls visibility of the sorting dropdown. */
+  /** Controls the visibility of the sorting dropdown. */
   public showSort: boolean = false;
+  /** Stores all subscriptions to avoid memory leaks. */
+  private subs = new Subscription();
   //#endregion
 
   //#region Constructor
   /**
-   * @summary
-   * Initializes required services for project retrieval, navigation, and authentication.
+   * @summary Initializes required services for project retrieval,
+   * authentication, navigation and task counting.
    */
   constructor(
     private projectService: ProjectService,
     private router: Router,
     private authService: AuthService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private cdr: ChangeDetectorRef
   ) { }
   //#endregion
 
   //#region Lifecycle Hooks
   /**
-   * @summary Fetches current user and loads all projects when the component initializes.
-   * @returns void
+   * @summary Fetches the current user and loads all projects on component initialization.
    */
   public ngOnInit(): void {
     const user = this.authService.getCurrentUser();
     this.currentUserEmail = user?.email || '';
     this.loadProjects();
   }
+  /**
+   * @summary Clears all active subscriptions to prevent memory leaks.
+   */
+  public ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
   //#endregion
 
   //#region Data Loading
   /**
-   * @summary Loads all projects for the current user.
-   * @returns void
+   * @summary Loads all projects and keeps UI in sync with live API stream.
+   * Uses projectService.projects$ to auto-update UI when the backend changes.
    */
   private loadProjects(): void {
-    this.projects = this.projectService.getAll(this.currentUserEmail);
-    this.applyFilters();
+    const s = this.projectService.projects$.subscribe(projects => {
+      this.projects = projects;
+      this.applyFilters();
+      this.cdr.detectChanges();
+    });
+    this.subs.add(s);
   }
   //#endregion
+
   //#region Filtering & Searching
   /**
-   * @summary Applies search term, selected statuses, and sorting on the project list.
-   * @returns void
+   * @summary Applies search, status filters, and sorting to the project list.
    */
   public applyFilters(): void {
     this.filteredProjects = this.projects
       .filter(p =>
-        p.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        p.name?.toLowerCase().includes(this.searchTerm.toLowerCase() || '')
       )
       .filter(p =>
-        this.selectedStatuses.length === 0 || this.selectedStatuses.includes(p.status)
+        this.selectedStatuses.length === 0 ||
+        this.selectedStatuses.includes(p.status)
       );
     if (this.sortOption === 'name') {
-      this.filteredProjects = this.filteredProjects.sort((a, b) => a.name.localeCompare(b.name));
+      this.filteredProjects = this.filteredProjects.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
     }
-
     if (this.sortOption === 'newest') {
       this.filteredProjects = this.filteredProjects.sort((a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
     }
-
     if (this.sortOption === 'endingSoon') {
       this.filteredProjects = this.filteredProjects.sort((a, b) =>
         new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
       );
     }
   }
+  /**
+   * @summary Toggles the visibility of the status filter dropdown panel.
+   */
   public toggleFilterPanel(): void {
     this.showFilters = !this.showFilters;
   }
   /**
-    * @summary Toggles a status filter badge on/off. 
-    * @returns void 
-    */
+   * @summary Toggles a status filter on/off.
+   */
   public toggleStatusFilter(status: string): void {
     if (this.selectedStatuses.includes(status)) {
       this.selectedStatuses = this.selectedStatuses.filter(s => s !== status);
@@ -129,42 +146,49 @@ export class ProjectListComponent {
     this.applyFilters();
   }
   /**
-    * @summary Navigates user to create new project page.
-    */
+   * @summary Clears all active filters.
+   */
+  public clearFilters(): void {
+    this.selectedStatuses = [];
+    this.applyFilters();
+  }
+  //#endregion
+
+  //#region Navigation
+  /**
+   * @summary Navigates user to the project creation page.
+   */
   public goToCreate(): void {
     this.router.navigate(['/projects/create']);
-    this.router.navigate(['/projects/create']).then(result => {
-      console.log("Navigation result:", result);
-      console.log("Current URL after nav:", this.router.url);
-    });
   }
   /**
-    * @summary Navigates user to a specific project details page.
-    * @param id Project ID to view
-    */
+   * @summary Navigates user to the selected project details page.
+   * @param id Project ID to navigate to.
+   */
   public viewProject(id: number): void {
     this.router.navigate(['/projects', id]);
   }
+  //#endregion
+
+  //#region Sorting
   /**
-   * @summary Toggles sort dropdown visibility. 
-   * @returns void 
-   * */
+   * @summary Toggles sorting dropdown visibility.
+   */
   public toggleSort(): void {
     this.showSort = !this.showSort;
   }
   /**
-    * @summary Applies selected sorting type.
-    * @param option Sorting type ('name', 'newest', 'endingSoon')
-    */
+   * @summary Sets sorting option and refreshes the list.
+   * @param option Sorting type to apply.
+   */
   public setSort(option: string): void {
     this.sortOption = option;
     this.showSort = false;
     this.applyFilters();
   }
   /**
-    * @summary Returns the user-friendly label for the selected sorting option.
-    * @returns {string} The formatted label.
-    */
+   * @summary Returns the display label for selected sort option.
+   */
   public getSortLabel(): string {
     switch (this.sortOption) {
       case 'name': return 'Name A–Z';
@@ -173,34 +197,34 @@ export class ProjectListComponent {
       default: return 'Sort';
     }
   }
-  /**
-    * @summary Clears all active status filters. 
-    * @return void*/
-  public clearFilters(): void {
-    this.selectedStatuses = [];
-    this.applyFilters();
-  }
-  /**
-     * @summary
-     * Listens for clicks outside the sort/filter panels to close dropdowns.
-     *
-     * @param event Mouse click event
-     */
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const target = event.target as HTMLElement;
+  //#endregion
 
+  //#region UI Behavior
+  /**
+   * @summary Closes dropdowns when clicking outside relevant areas.
+   */
+  @HostListener('document:click', ['$event'])
+  public onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
     const insideSort = target.closest('.sort-wrapper');
     const insideFilter = target.closest('.filter-wrapper');
-
     if (!insideSort) this.showSort = false;
     if (!insideFilter) this.showFilters = false;
   }
-  public getTaskCount(projectId: number): number {
-  return this.taskService
-    .getTasksByProjectId(projectId)
-    .length;
-}
+  //#endregion
 
+  //#region Task Helpers
+  /**
+   * @summary Returns number of tasks belonging to a project.
+   */
+  public getTaskCount(projectId: number): number {
+    return this.taskService.getTasksByProjectId(projectId).length;
+  }
+  /**
+   * @summary Helps Angular track items by ID for better performance.
+   */
+  public trackById(_index: number, item: Project) {
+    return item.id;
+  }
   //#endregion
 }
