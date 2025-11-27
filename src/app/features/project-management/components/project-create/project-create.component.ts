@@ -223,7 +223,7 @@ export class ProjectCreateComponent {
       message: newProject.name,
       showToast: true
     });
-    setTimeout(() => this.router.navigate(['/projects', newProject.id]), 800);
+    this.router.navigate(['/projects', newProject.id]);
   }
   /**
    * @summary Resets form values and clears success message.

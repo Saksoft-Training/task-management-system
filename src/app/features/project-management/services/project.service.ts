@@ -45,7 +45,7 @@ export class ProjectService {
      * @param p Raw project object
      * @returns Normalized Project
      */
-  private normalizeProject(p: any): Project {
+  private normalizeProject(p: Project): Project {
     return {
       ...p,
       createdAt: !isNaN(Date.parse(p.createdAt)) ? p.createdAt : new Date().toISOString(),
