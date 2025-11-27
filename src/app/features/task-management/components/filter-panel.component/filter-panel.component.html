@@ -1,21 +1,14 @@
-<!-- Overlay -->
 @if (open) {
   <div class="tl-filter-overlay" (click)="close.emit()"></div>
 }
-
-<!-- Filter panel -->
 @if (open) {
 <div class="tl-filter-panel" [class.open]="open">
-
-  <!-- Header -->
   <div class="tl-filter-header">
     <h2>FILTER TASKS</h2>
     <button class="tl-filter-close-btn" (click)="close.emit()">
       <img src="assets/icons/cross-Icon.svg" alt="Close Icon">
     </button>
   </div>
-
-  <!-- Status filters -->
   <div class="tl-filter-box">
     <div class="tl-filter-box-title">
       <span>Status</span>
@@ -23,7 +16,6 @@
         <img src="assets/icons/cross-Icon.svg">Clear Filters
       </button>
     </div>
-
     <div class="tl-filter-options">
       @for (status of statusList; track status) {
       <label>
@@ -33,8 +25,6 @@
       }
     </div>
   </div>
-
-  <!-- Priority filters -->
   <div class="tl-filter-box">
     <div class="tl-filter-box-title">
       <span>Priority</span>
@@ -42,7 +32,6 @@
         <img src="assets/icons/cross-Icon.svg"> Clear Filters
       </button>
     </div>
-
     <div class="tl-filter-options">
       @for (priority of priorityList; track priority) {
       <label>
