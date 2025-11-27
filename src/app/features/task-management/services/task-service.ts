@@ -10,7 +10,7 @@ export class TaskService implements OnDestroy {
 
   //#region Properties
 
-  /** API base URL where all tasks are stored (replaces old localStorage system) */
+  /** API base URL where all tasks are stored */
   private readonly apiBase = 'https://692436183ad095fb84732c9f.mockapi.io/Tasks';
 
   /** In-memory cache of all tasks received from API */
@@ -33,10 +33,10 @@ export class TaskService implements OnDestroy {
     private readonly authService: AuthService,
     private readonly http: HttpClient
   ) {
-    /** Load tasks immediately (like old readForCurrentUser logic) */
+    /** Load tasks immediately */
     this.loadFromApi();
 
-    /** Refresh tasks whenever logged-in user changes (same behavior as old logic) */
+    /** Refresh tasks whenever logged-in user changes */
     this.userSubscription = this.authService.currentUser$.subscribe(() => {
       this.loadFromApi();
     });
@@ -47,7 +47,7 @@ export class TaskService implements OnDestroy {
   //#region Cleanup
 
   ngOnDestroy(): void {
-    /** Ensure subscription is cleaned up (same as old service) */
+    /** Ensure subscription is cleaned up  */
     this.userSubscription?.unsubscribe();
   }
 
@@ -67,7 +67,7 @@ export class TaskService implements OnDestroy {
           /** Cache updated list (equivalent to old read()) */
           this.tasksCache = all;
 
-          /** Emit tasks for current user (replaces old readForCurrentUser) */
+          /** Emit tasks for current user */
           this.tasksSubject.next(this.readForCurrentUserSnapshot());
         })
       )
@@ -112,7 +112,7 @@ export class TaskService implements OnDestroy {
 
   //#region Public Fetch Methods
 
-  /** All tasks for current user (immediate snapshot) */
+  /** All tasks for current user  */
   public getAllTasks(): Task[] {
     return this.readForCurrentUserSnapshot();
   }
@@ -129,7 +129,7 @@ export class TaskService implements OnDestroy {
 
   //#endregion
 
-  //#region CRUD (Optimistic Updates)
+  //#region CRUD 
 
   /** Create new task (replaces old saveTask, but keeps same method name and behavior) */
   public saveTask(task: Task): void {
@@ -170,7 +170,7 @@ export class TaskService implements OnDestroy {
       .pipe(
         catchError(err => {
           console.error('[TaskService.updateTask] failed', err);
-          /** Reload from server on failure (equivalent to old read()) */
+          /** Reload from server on failure */
           this.loadFromApi();
           return of(null as any);
         })
@@ -196,7 +196,7 @@ export class TaskService implements OnDestroy {
       .subscribe();
   }
 
-  /** Clear all tasks (local only, MockAPI has no bulk delete) */
+  /** Clear all tasks */
   public clearAllTasks(): void {
     this.tasksCache = [];
     this.tasksSubject.next([]);
@@ -213,7 +213,7 @@ export class TaskService implements OnDestroy {
 
     const now = new Date().toISOString();
 
-    /** Optimistic update (same as old version) */
+    /** Optimistic update */
     this.tasksCache[idx].status = status;
     this.tasksCache[idx].updatedAt = now;
     this.tasksCache[idx].completedAt = status === 'Completed' ? now : null;
@@ -239,7 +239,7 @@ export class TaskService implements OnDestroy {
 
   //#region Bulk Operations
 
-  /** Delete all tasks for a project (old deleteTasksByProjectId behavior maintained) */
+  /** Delete all tasks for a project  */
  public deleteTasksByProjectId(projectId: number): void {
 
   /** Collect tasks first BEFORE optimistic removal */

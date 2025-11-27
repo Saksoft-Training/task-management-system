@@ -173,7 +173,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * @summary Runs when input bindings change (like projectId).
+   * @summary Runs when input bindings change
    */
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['projectId']) {
@@ -278,7 +278,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * Sorting (NEW + OLD logic combined)
+     * Sorting 
      */
     this.filteredTasks = [...list].sort((a, b) => {
       const A: any = a[this.sortField] ?? '';

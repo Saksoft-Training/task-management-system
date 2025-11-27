@@ -8,7 +8,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
- 
 import { Project } from '../../../../../types/models/project';
 import { Task, TaskPriority, TaskStatus } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
@@ -91,7 +90,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
    * @summary Initializes the form, loads projects/users,
    * detects edit mode, and pre-fills form data.
    *
-   * OLD comments preserved:
    * - Builds form
    * - Triggers initial loads
    * - Subscribes to project stream
@@ -148,7 +146,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
   if (this.isEdit && this.editTaskId) {
  
-    // ✅ FIX: Fetch task from loaded tasks, NOT from service snapshot
+    // Fetch task from loaded tasks, NOT from service snapshot
     this.taskToEdit = tasks.find(
       t => Number(t.id) === Number(this.editTaskId)
     );
@@ -204,7 +202,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
   //#endregion
  
-  //#region Initialization Helpers (OLD comments applied where appropriate)
+  //#region Initialization Helpers 
  
   /**
    * @summary Builds the reactive form with validators.
@@ -271,7 +269,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
   //#endregion
  
-  //#region Validators (OLD comments preserved)
+  //#region Validators 
  
   /**
    * @summary Validates that due date:
@@ -306,7 +304,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
   //#endregion
  
-  //#region Getters (OLD comments preserved)
+  //#region Getters 
  
   /** Minimum allowed date for date picker */
   get minDate(): string {
@@ -329,7 +327,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
   //#endregion
  
-  //#region Actions (OLD comments preserved + NEW comments for assignee mapping logic)
+  //#region Actions 
  
   /**
    * @summary Saves the task (create or update)

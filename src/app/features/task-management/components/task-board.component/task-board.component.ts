@@ -27,8 +27,6 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
 
   // #endregion
 
-  // #region Project Info
-
   /** If board is for a specific project, this holds the projectId. */
   public projectId: number | null = null;
   /** Indicates if this view belongs to a specific project board. */
@@ -65,12 +63,8 @@ export class TaskBoardComponent implements OnInit, OnDestroy {
   // #endregion
 
   // #region Filters
-
-  /** Controls the visibility of the filter panel. */
   public isFilterOpen = false;
-  /** List of all possible users for filtering. */
   public allUsers: string[] = [];
-  /** Currently applied filters. */
   public appliedFilters: any = {
     status: [],
     priority: [],

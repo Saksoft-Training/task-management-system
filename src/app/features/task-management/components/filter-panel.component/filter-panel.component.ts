@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class FilterPanelComponent {
 
-  //#region -------------- Input Properties --------------
+  //#region - Input Properties -
 
   /** Controls visibility of the filter sidebar */
   @Input() public open: boolean = false;
@@ -27,7 +27,7 @@ export class FilterPanelComponent {
 
   //#endregion
 
-  //#region ------------------ Output Events ---------------
+  //#region - Output Events -
 
   /** Emits when filter panel is closed */
   @Output() public close: EventEmitter<void> = new EventEmitter<void>();
@@ -37,7 +37,7 @@ export class FilterPanelComponent {
 
   //#endregion
 
-  //#region ---------------- Internal Filter State ----------
+  //#region - Internal Filter State -
 
   /** Stores all applied filter values */
   public filters: {
@@ -60,7 +60,7 @@ export class FilterPanelComponent {
 
   //#endregion
 
-  //#region --------------- Public Methods ----------------
+  //#region - Public Methods -
 
   /** Toggles checkbox selection */
   public toggleCheck(list: string[], value: string): void {

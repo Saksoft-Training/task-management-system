@@ -150,7 +150,7 @@ public onCancelDelete(): void {
   this.isDeleteModalOpen = false;
 
   if (this.task) {
-    this.router.navigate([`/tasks/${this.task.id}`]);  // Stay here
+    this.router.navigate([`/tasks/${this.task.id}`]);  
   }
 }
 
