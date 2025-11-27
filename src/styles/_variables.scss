@@ -472,46 +472,47 @@ $border-radius-lg-stats: 12px;
 //=============
 //======statistics=======
 // ==========================
-// SPACING
-// ==========================
-$space-xs-stats: 0.25rem;
-$space-sm-stats: 0.5rem;
-$space-md-stats: 1rem;
-$space-lg-stats: 1.5rem;
-$space-xl-stats: 2rem;
+// ---------- CARD DIMENSIONS ----------
+$charts-card-width: 288px;
+$charts-card-height: 166px;
+$charts-card-padding: 16px;
+$charts-card-radius: 12px;
 
-// ==========================
-// FONT SIZES
-// ==========================
-$font-size-xs-stats: 0.75rem;
-$font-size-sm-stats: 0.9rem;
-$font-size-base-stats: 1rem;
-$font-size-lg-stats: 1.25rem;
-$font-size-xl-stats: 1.5rem;
+// ---------- COLORS ----------
+$charts-white: #ffffff;
+$charts-gray-light: #e5e7eb;
+$charts-gray-lighter: #f3f4f6;
+$charts-gray-text: #6b7280;
 
-// ==========================
-// COLORS
-// ==========================
-$color-text-primary-stats: #222;
-$color-text-secondary-stats: #666;
+$charts-primary: #dbeafe;
+$charts-blue: #dbeafe;
+$charts-secondary: #f3e8ff;
+$charts-purple: #f3e8ff;
 
-$color-bg-card-stats: #ffffff;
-$color-bg-empty-stats: #f4f4f4;
+$charts-success: #dcfce7;
+$charts-green: #dcfce7;
 
-$color-border-stats: #e5e5e5;
+$charts-warning: #fef3c7;
+$charts-amber: #f3e8ff;
 
-$shadow-sm-stats: 0 1px 3px rgba(0, 0, 0, 0.08);
-$stats-color-blue-bg: #dbeafe;
-$stats-color-amber-bg: #eccefa;
-$stats-color-green-bg: #d1fae5;
-$stats-color-red-bg: #f3d7d7;
-$stats-color-neutral-bg: #f3f4f6;
-// ==========================
-// BORDER RADII
-// ==========================
-$border-radius-sm-stats: 4px;
-$border-radius-md-stats: 8px;
-$border-radius-lg-stats: 12px;
+$charts-danger-stat: #e9cbcb; // light red
+$charts-red-stat: #bda6a6;    // light red
+
+$charts-neutral: #ffffff;
+
+// ---------- SHADOWS ----------
+$charts-shadow-default: 0 1px 3px rgba(0, 0, 0, 0.08);
+$charts-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.1);
+
+// ---------- ICON ----------
+$charts-icon-size: 56px;
+
+// ---------- FONT SIZES ----------
+$charts-label-font: 18px;
+$charts-value-font: 2rem;
+$charts-small-font: 0.75rem;
+$charts-status-font: 12px;
+
 
 //==============================
 //activity feed latest======

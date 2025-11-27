@@ -4879,57 +4879,74 @@ textarea:focus {
 //=================
 
 .stat-card {
-  width: 100%;
-  padding: variables.$space-md-stats;
-  background: variables.$color-bg-card-stats;
-  border: 1px solid variables.$color-border-stats;
-  border-radius: variables.$border-radius-lg-stats;
+  width: variables.$charts-card-width;
+  height: variables.$charts-card-height;
+  padding: variables.$charts-card-padding;
+  border-radius: variables.$charts-card-radius;
+  border: none;
+  outline: none;
+  background: variables.$charts-white;
   cursor: pointer;
   display: block;
-  transition: 0.2s ease-in-out;
-  box-shadow: variables.$shadow-sm-stats;
   text-align: left;
+  transition: all 0.25s ease;
+  box-shadow: variables.$charts-shadow-default;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: variables.$charts-shadow-hover;
   }
 
-  /* =========================================
-     COLOR CLASSES
-  ========================================= */
+  &.primary,
   &.blue {
-     background: variables.$stats-color-blue-bg;
-    
-  }
-  &.amber {
-    background: variables.$stats-color-amber-bg;  
-    
-  }
-  &.green {
-    background:  variables.$stats-color-green-bg;
-    
-  }
-  &.red {
-    background: variables.$stats-color-red-bg; 
-    
-  }
-  &.neutral {
-    background: variables.$stats-color-neutral-bg;
+    background: variables.$charts-primary;
   }
 
-  /* =========================================
-     SKELETON LOADER
-  ========================================= */
+  &.secondary,
+  &.purple {
+    background: variables.$charts-secondary;
+  }
+
+  &.success .value::after {
+    background: variables.$charts-success;
+    content: "Success";
+  }
+
+  &.green {
+    background: variables.$charts-green;
+  }
+
+  &.warning {
+    background: variables.$charts-warning;
+  }
+
+  &.amber {
+    background: variables.$charts-amber;
+  }
+
+  &.danger {
+    background: variables.$charts-danger-stat;
+  }
+  
+  &.red {
+    background: variables.$charts-danger-stat;
+  }
+
+  &.neutral {
+    background: variables.$charts-neutral;
+  }
+
+  /* Skeleton Loader */
   .skeleton {
     display: flex;
     flex-direction: column;
-    gap: variables.$space-sm-stats;
+    gap: 8px;
 
     .skeleton-line {
-      height: 10px;
-      border-radius: 4px;
-      background: variables.$color-bg-empty-stats;
+      height: 12px;
+      background: variables.$charts-gray-light;
+      border-radius: 6px;
+      animation: shimmer 1.4s infinite linear;
 
       &.short {
         width: 40%;
@@ -4941,66 +4958,105 @@ textarea:focus {
     }
   }
 
-  /* =========================================
-     MAIN CARD CONTENT
-  ========================================= */
+  @keyframes shimmer {
+    0% { background-color: variables.$charts-gray-light; }
+    50% { background-color: variables.$charts-gray-lighter; }
+    100% { background-color: variables.$charts-gray-light; }
+  }
+
+  /* Top Card Content */
   .statistic-card {
     display: flex;
     align-items: center;
-    gap: variables.$space-md-stats;
-   
-    .icon {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 
-      img {
-        width: 100%;
-        height: 100%;
-      }
+    .top-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
 
     .content {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
       .label {
-        font-size: variables.$font-size-sm-stats;
-        color: variables.$color-text-secondary-stats;
-        margin-bottom: variables.$space-xs-stats;
+        font-size: variables.$charts-label-font;
+        opacity: 0.7;
+        color: variables.$charts-gray-text;
+        font-weight: 400;
+        color: #000000;
+        margin-bottom: 40px;
       }
 
       .value {
-        font-size: variables.$font-size-xl-stats;
-        font-weight: 600;
-        color: variables.$color-text-primary-stats;
+        font-size: variables.$charts-value-font;
+        font-weight: 700;
+        color: #000000;
 
         small {
-          font-size: variables.$font-size-sm-stats;
+          font-size: variables.$charts-small-font;
           margin-left: 4px;
-          color: variables.$color-text-secondary-stats;
+          opacity: 0.6;
         }
       }
     }
 
-    .meta {
-      text-align: right;
+    .icon {
+      width: variables.$charts-icon-size;
+      height: variables.$charts-icon-size;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: variables.$charts-card-radius;
+      flex-shrink: 0;
 
-      .status-badge-card {
-        display: inline-block;
-        padding: variables.$space-xs-stats variables.$space-sm-stats;
-        background: variables.$color-bg-empty-stats;
-        border-radius: variables.$border-radius-sm-stats;
-        font-size: variables.$font-size-xs-stats;
-        color: variables.$color-text-secondary-stats;
-        margin-bottom: variables.$space-xs-stats;
+      img {
+        width: 16px;
+        height: 16px;
+        margin-bottom: 80px;
       }
 
-      .trend {
-        font-size: variables.$font-size-sm-stats;
-        color: #10b981;
-        font-weight: 600;
+      span {
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  /* Status badge row */
+  .meta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+
+    .status-badge-card {
+      color: variables.$charts-gray-text;
+      font-size: variables.$charts-status-font;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+
+    .trend {
+      font-size: variables.$charts-status-font;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    padding: 14px;
+
+    .statistic-card {
+      flex-direction: row;
+      align-items: flex-start;
+
+      .icon {
+        width: 48px;
+        height: 48px;
       }
     }
   }
