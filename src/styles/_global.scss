@@ -4874,19 +4874,6 @@ textarea:focus {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-/* ======================= */
-/* ACTIVITY FEED */
-/* ======================= */
-.activity-feed-card-stats {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid #eee;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-
-
 //=================
 //=====statistics==
 //=================
@@ -5015,6 +5002,279 @@ textarea:focus {
         color: #10b981;
         font-weight: 600;
       }
+    }
+  }
+}
+//=====================
+//activity latest======
+//=====================
+.activity-feed-stats {
+  width: variables.$activity-width-full;
+  display: flex;
+  flex-direction: column;
+  gap: variables.$activity-gap-main;
+  padding: 0 variables.$activity-padding-x;
+
+  .header-row-stats {
+    h2 {
+      font-size: variables.$activity-header-font-size;
+      font-weight: variables.$activity-header-font-weight;
+      margin: 0;
+      padding: 4px 0;
+      color: variables.$activity-header-color;
+    }
+  }
+
+  /* List styling */
+  .activity-list-stats {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: variables.$activity-list-gap;
+  }
+
+  .activity-item-stats {
+    display: flex;
+    align-items: center;
+    gap: variables.$activity-list-gap;
+    padding: variables.$activity-item-padding;
+    border-radius: variables.$activity-item-radius;
+    background: variables.$activity-item-bg;
+    box-shadow: variables.$activity-item-shadow;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background: variables.$activity-item-hover-bg;
+      transform: translateY(-1px);
+    }
+  }
+
+  /* Avatar */
+  .avatar-stats {
+    width: variables.$activity-avatar-size;
+    height: variables.$activity-avatar-size;
+    background: variables.$activity-avatar-bg;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: variables.$activity-avatar-text-color;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  /* Activity content */
+  .content-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+
+    .line1-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .action-stats {
+        font-size: variables.$activity-action-font-size;
+        font-weight: variables.$activity-action-font-weight;
+        color: variables.$activity-action-color;
+      }
+    }
+
+    .line2-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: variables.$activity-line2-font-size;
+      color: variables.$activity-line2-color;
+
+      .user-stats {
+        font-weight: 500;
+        color: variables.$activity-user-color;
+      }
+
+      .timestamp-stats {
+        margin-left: auto;
+        color: variables.$activity-timestamp-color;
+      }
+    }
+  }
+
+  /* Empty state */
+  .info-stats {
+    text-align: center;
+    padding: 40px 0;
+    color: variables.$activity-info-color;
+    font-size: variables.$activity-info-font-size;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .activity-feed-stats .activity-item-stats {
+    padding: variables.$activity-mobile-item-padding;
+  }
+
+  .activity-feed-stats .avatar-stats {
+    width: variables.$activity-mobile-avatar-size;
+    height: variables.$activity-mobile-avatar-size;
+  }
+}
+//============================
+//=======dashboard-charts=======
+//=============================
+.dashboard-charts-stats {
+  padding: variables.$charts-padding-main;
+
+  .top-row-stats {
+    h1 {
+      font-size: variables.$charts-title-size;
+      font-weight: 600;
+      margin-bottom: variables.$charts-gap;
+    }
+  }
+
+  .loading-stats {
+    text-align: center;
+    padding: variables.$charts-padding-main 0;
+    font-size: variables.$charts-loading-size;
+  }
+
+  /* DESKTOP GRID */
+  .charts-grid-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: variables.$charts-gap;
+    margin-top: variables.$charts-gap;
+
+    .card-stats:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* CARD */
+  .card-stats {
+    background: variables.$charts-white;
+    border-radius: variables.$charts-radius;
+    padding: variables.$charts-card-padding;
+    box-shadow: variables.$charts-card-shadow;
+
+    h2 {
+      font-size: variables.$charts-subtitle-size;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .empty-stats {
+      text-align: center;
+      padding: variables.$charts-padding-main;
+      color: variables.$charts-text-light;
+      font-size: variables.$charts-empty-size;
+    }
+  }
+
+  /* OVERDUE CARD */
+  .overdue-stats {
+    .overdue-header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        margin: 0;
+      }
+
+      .badge-stats {
+        background: variables.$charts-danger;
+        color: variables.$charts-white;
+        padding: 4px 10px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+
+        &.ok-stats {
+          background: variables.$charts-success;
+        }
+      }
+    }
+
+    .overdue-list-stats {
+      margin-top: 12px;
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 10px 0;
+        border-bottom: 1px solid variables.$charts-border-light;
+
+        .title-stats {
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .meta-stats {
+          font-size: variables.$charts-meta-size;
+          color: variables.$charts-text-muted;
+
+          span {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  /* ACTIVITY SECTION */
+  .activity-section-stats {
+    margin-top: 30px;
+  }
+
+  /* TABLET */
+  @media (max-width: 1024px) {
+    .charts-grid-stats {
+      grid-template-columns: 1fr 1fr;
+
+      .card-stats:nth-child(3) {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .charts-grid-stats {
+      grid-template-columns: 1fr;
+
+      .card-stats:nth-child(3) {
+        grid-column: auto;
+      }
+    }
+
+    .top-row-stats h1 {
+      font-size: variables.$charts-title-size-md;
+    }
+  }
+
+  /* SMALL MOBILE */
+  @media (max-width: 480px) {
+    padding: variables.$charts-mobile-padding;
+
+    .card-stats {
+      padding: variables.$charts-mobile-padding;
+
+      h2 {
+        font-size: variables.$charts-card-title-mobile;
+      }
+    }
+
+    .top-row-stats h1 {
+      font-size: variables.$charts-title-size-sm;
     }
   }
 }

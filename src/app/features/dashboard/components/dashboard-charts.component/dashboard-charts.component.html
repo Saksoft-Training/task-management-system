@@ -1,7 +1,6 @@
 <div class="dashboard-charts-stats">
   <div class="top-row-stats">
     <h1>Visual Charts & Activity</h1>
-    <button type="button" (click)="refresh()">Refresh</button>
   </div>
 
   <div *ngIf="loading" class="loading-stats">
@@ -71,7 +70,7 @@
         </ng-container>
 
         <ng-template #noOverdue>
-          <p class="empty-stats">No overdue tasks. 🎉</p>
+          <p class="empty-stats"><img src="/assets/icons/green-right-icon.svg"><br>No overdue tasks.</p>
         </ng-template>
       </div>
     </div>

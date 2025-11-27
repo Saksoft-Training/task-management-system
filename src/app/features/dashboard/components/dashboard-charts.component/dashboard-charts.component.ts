@@ -105,18 +105,4 @@ export class DashboardChartsComponent implements OnInit {
     };
   }
   // #endregion
-
-  // #region Actions
-
-  /**
-   * Refreshes all dashboard data.
-   * @summary Calls backend refresh and re-enables loading spinner.
-   * @returns void
-   */
-  public refresh(): void {
-    this.loading = true;
-
-    setTimeout(() => this.loading = false, 350);
-  }
-  // #endregion
 }

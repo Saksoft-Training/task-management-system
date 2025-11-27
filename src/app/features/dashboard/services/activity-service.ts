@@ -9,16 +9,16 @@ import { AuthService } from '../../user-account-management/services/auth-service
   providedIn: 'root',
 })
 export class ActivityService {
-   private readonly apiBase ='https://692435723ad095fb84732960.mockapi.io/activities';
- 
+  private readonly apiBase = 'https://692435723ad095fb84732960.mockapi.io/activities';
+
   private _activities$ = new BehaviorSubject<Activity[]>([]);
   get activities$(): Observable<Activity[]> {
     return this._activities$.asObservable();
   }
   constructor(private http: HttpClient, private auth: AuthService) {
-      // Load activity whenever user logs in
-      console.log("ActivityService constructor loaded");
-      console.log("Current user restored:", this.auth.getCurrentUser());
+    // Load activity whenever user logs in
+    console.log("ActivityService constructor loaded");
+    console.log("Current user restored:", this.auth.getCurrentUser());
 
 
     this.auth.currentUser$.subscribe(user => {
@@ -28,44 +28,45 @@ export class ActivityService {
       }
     });
   }
-   /**
-   * Fetch all activities from API
-   */
+  /**
+  * Fetch all activities from API
+  */
   loadForCurrentUser(): void {
-   const currentUser = this.auth.getCurrentUser();
-  if (!currentUser) return;
+    const currentUser = this.auth.getCurrentUser();
+    if (!currentUser) return;
 
-  const url = `${this.apiBase}?userId=${currentUser.id}`;
+    const url = `${this.apiBase}?userId=${currentUser.id}`;
 
-  this.http.get<any[]>(url)
-    .pipe(
-      catchError(err => {
-        console.error('[ActivityService] Failed to fetch activities', err);
-        return of([] as Activity[]);
-      }),
-      tap(rawList => {
+    this.http.get<any[]>(url)
+      .pipe(
+        catchError(err => {
+          console.error('[ActivityService] Failed to fetch activities', err);
+          return of([] as Activity[]);
+        }),
+        tap(rawList => {
 
-        const list: Activity[] = rawList.map(a => ({
-          id: a.id,
-          userId: a.userId,
-          itemId: a.itemId,
-          type: a.type,
-          action: a.action,
-          timestamp: a.timestamp,
+          const list: Activity[] = rawList.map(a => ({
+            id: a.id,
+            userId: a.userId,
+            itemId: a.itemId,
+            type: a.type,
+            action: a.action,
+            timestamp: a.timestamp,
 
-          // UI fields
-          user: currentUser.email,
-          prettyAction: `${a.type} ${a.action}`
-        }));
+            // UI fields (fixed)
+            userName: currentUser.name,        // <-- correct name for initials
+            userEmail: currentUser.email,
+            prettyAction: `${a.type} ${a.action}`
+          }));
 
-        const sorted = [...list].sort(
-          (a, b) => +new Date(b.timestamp) - +new Date(a.timestamp)
-        );
+          const sorted = [...list].sort(
+            (a, b) => +new Date(b.timestamp) - +new Date(a.timestamp)
+          );
 
-        this._activities$.next(sorted.slice(0, 50));
-      })
-    )
-    .subscribe();
+          this._activities$.next(sorted.slice(0, 50));
+        })
+      )
+      .subscribe();
   }
 
   /**

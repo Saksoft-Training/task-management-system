@@ -512,3 +512,77 @@ $stats-color-neutral-bg: #f3f4f6;
 $border-radius-sm-stats: 4px;
 $border-radius-md-stats: 8px;
 $border-radius-lg-stats: 12px;
+
+//==============================
+//activity feed latest======
+//==============================
+// Activity Feed Variables
+$activity-width-full: 100%;
+$activity-gap-main: 12px;
+$activity-padding-x: 8px;
+
+$activity-header-font-size: 1.1rem;
+$activity-header-font-weight: 600;
+$activity-header-color: #222;
+
+$activity-list-gap: 14px;
+
+$activity-item-padding: 12px 10px;
+$activity-item-radius: 10px;
+$activity-item-bg: #fff;
+$activity-item-hover-bg: #f4f4f7;
+$activity-item-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+
+$activity-avatar-size: 40px;
+$activity-avatar-bg: #dfe3f0;
+$activity-avatar-text-color: #3a3a3a;
+
+$activity-action-font-size: 1rem;
+$activity-action-font-weight: 600;
+$activity-action-color: #111;
+
+$activity-line2-font-size: 0.87rem;
+$activity-line2-color: #555;
+
+$activity-user-color: #333;
+$activity-timestamp-color: #777;
+
+$activity-info-color: #777;
+$activity-info-font-size: 0.95rem;
+
+$activity-mobile-avatar-size: 36px;
+$activity-mobile-item-padding: 10px;
+//================================
+//dashboard-charts=============
+//============================
+// Spacing
+$charts-padding-main: 20px;
+$charts-gap: 20px;
+$charts-card-padding: 16px;
+$charts-mobile-padding: 12px;
+
+// Colors
+$charts-white: #fff;
+$charts-text-light: #888;
+$charts-text-muted: #666;
+$charts-border-light: #eee;
+$charts-danger: #e74c3c;
+$charts-success: #2ecc71;
+
+// Font Sizes
+$charts-title-size: 1.4rem;
+$charts-subtitle-size: 1.1rem;
+$charts-loading-size: 1rem;
+$charts-empty-size: 0.95rem;
+$charts-meta-size: 0.85rem;
+
+// Mobile font sizes
+$charts-title-size-md: 1.2rem;
+$charts-title-size-sm: 1.1rem;
+$charts-card-title-mobile: 1rem;
+
+// Border Radius
+$charts-radius: 12px;
+
+// Shadows
+$charts-card-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);

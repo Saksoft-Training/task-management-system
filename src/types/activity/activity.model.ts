@@ -9,4 +9,7 @@ export interface Activity {
   type: string;     // task, project
   timestamp: string;
     user?: string;
+     userName?: string;
+  userEmail?: string;
+  prettyAction?: string;
 }

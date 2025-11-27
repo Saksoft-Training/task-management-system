@@ -8,7 +8,7 @@
       <ul class="activity-list-stats">
         <li class="activity-item-stats" *ngFor="let activity of activities" (click)="onActivityClick(activity)">
           <div class="avatar-stats">
-            <span>{{ getInitials(activity.user) }}</span>
+            <span>{{getInitials(activity.userName || activity.userEmail)  }}</span>
           </div>
 
           <div class="content-stats">
@@ -18,7 +18,7 @@
             </div>
 
             <div class="line2-stats">
-              <span class="user-stats">{{ activity.user }}</span>
+             <span class="user-stats">{{ activity.userName || activity.userEmail }}</span>
               <span class="timestamp-stats">
                 {{ activity.timestamp | date: 'short' }}
               </span>
@@ -30,6 +30,6 @@
   </ng-container>
 
   <ng-template #emptyTpl>
-    <div class="info-stats">No recent activities.</div>
+    <div class="info-stats"><img src="/assets/icons/activity-icon.svg"><br>No recent activities.</div>
   </ng-template>
 </div>
