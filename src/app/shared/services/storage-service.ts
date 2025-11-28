@@ -31,7 +31,6 @@ export class UserStorageService {
     const usersJson = localStorage.getItem(USERS_KEY);
     return usersJson ? JSON.parse(usersJson) : [];
   }
-
   /**
    * @summary Saves updated users array back to localStorage.
    * @param users Array of User objects
@@ -101,48 +100,14 @@ export class UserStorageService {
    * @param raw Plain text password
    * @returns string Encoded password
    */
-  public getAllUsersFromApi(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  public encodePassword(raw: string): string {
+    return btoa(`${PASSWORD_SECRET}:${raw}`);
   }
-
   /**
    * @summary Decodes Base64 encoded password.
    * @param encoded Encoded password string
    * @returns string Decoded password or empty string if error
    */
-  public isEmailExistsApi(email: string): Observable<boolean> {
-    const normalized = email.trim().toLowerCase();
-    return this.http
-      .get<User[]>(`${this.apiUrl}?email=${encodeURIComponent(normalized)}`)
-      .pipe(map(users => users.length > 0));
-  }
-
-  /**
-   * @summary Create a new user via MockAPI.
-   */
-  public createUser(user: User): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
-  }
-
-  /**
-   * @summary Find a single user by email via MockAPI (used for login).
-   */
-  public findUserByEmail(email: string): Observable<User | null> {
-  return this.http.get<User[]>(this.apiUrl).pipe(
-    map(users => {
-      const normalizedEmail = email.trim().toLowerCase();
-      const user = users.find(u => u.email.toLowerCase() === normalizedEmail);
-      return user ?? null;
-    })
-  );
-}
-  //#endregion
-
-  //#region Password Encoding
-  public encodePassword(raw: string): string {
-    return btoa(`${PASSWORD_SECRET}:${raw}`);
-  }
-
   public decodePassword(encoded: string): string {
     try {
       const decoded = atob(encoded);
@@ -174,9 +139,7 @@ export class UserStorageService {
   public updateUserApi(userId: string, updatedUser: Partial<User>): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}`, updatedUser);
   }
-
   //#endregion
-  //#region Login State Helpers (NEW)
 
   //#region Login State Helpers
   /**

@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ReactiveFormsModule, FormBuilder, FormGroup, Validators,
-  AbstractControl, ValidationErrors, AsyncValidatorFn, ValidatorFn
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -32,12 +29,13 @@ export class ForgotPasswordComponent implements OnInit {
    * @summary Inject required services for form building, API calls, notification, and navigation.
    */
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private userStorage: UserStorageService,
     private router: Router,
     private notificationService: NotificationService,
     private http: HttpClient
   ) { }
+  //#endregion
 
   //#region Lifecycle
   /**
@@ -53,6 +51,7 @@ export class ForgotPasswordComponent implements OnInit {
       { validators: this.confirmPasswordValidator() }
     );
   }
+  //#endregion
 
   //#region Validators
   /**
@@ -152,6 +151,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.router.navigate(['/login']);
     });
   }
+  //#endregion
 
   //#region Helpers
   /** Getter to access controls easily in HTML */

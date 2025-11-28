@@ -208,13 +208,6 @@ export class ProfileComponent implements OnInit {
       };
     };
   }
-
-  // Compress before storing
-  this.compressImage(file, (tinyBase64: string) => {
-    this.previewImage = tinyBase64;  // ✔ will fit MockAPI
-  });
-}
-
   //#endregion
 
   //#region Submit
@@ -265,66 +258,5 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-
-  this.userStorage.updateUserApi(this.currentUser!.id, updatedUser)
-    .subscribe({
-      next: (updated) => {
-        // Sync user
-        sessionStorage.setItem('currentUser', JSON.stringify(updated));
-        localStorage.setItem('currentUser', JSON.stringify(updated));
-        this.authService.updateCurrentUser(updated);
-        this.currentUser = updated;
-
-        this.isEditing = false;
-        this.previewImage = null;
-
-        this.notificationService.addNotification({
-          title: 'Profile Updated',
-          message: 'Your profile was updated successfully.',
-          severity: 'success',
-          kind: 'profile-update' as any,
-          showToast: true
-        });
-
-        this.router.navigate(['/dashboard']);
-      },
-      error: () => {
-        this.notificationService.addNotification({
-          title: 'Update Failed',
-          message: 'Unable to update your profile.',
-          severity: 'critical',
-          kind: 'profile-update-error' as any,
-          showToast: true
-        });
-      }
-    });
-}
-private compressImage(file: File, callback: (base64: string) => void): void {
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-
-  reader.onload = () => {
-    const img = new Image();
-    img.src = reader.result as string;
-
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-
-      // tiny thumbnail (fits MockAPI limits)
-      canvas.width = 40;
-      canvas.height = 40;
-
-      const ctx = canvas.getContext('2d')!;
-      ctx.drawImage(img, 0, 0, 40, 40);
-
-      // reduce quality so Base64 becomes small
-      const tinyBase64 = canvas.toDataURL('image/jpeg', 0.3);
-
-      callback(tinyBase64);
-    };
-  };
-}
-
-
   //#endregion
 }
