@@ -8,7 +8,6 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
- 
 import { Project } from '../../../../../types/models/project';
 import { Task, TaskPriority, TaskStatus } from '../../../../../types/models/task';
 import { TaskService } from '../../services/task-service';
@@ -65,9 +64,8 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   /** Delete modal state */
   public showDeleteModal = false;
   public taskToDelete: Task | null = null;
- 
   //#endregion
- 
+
   // Keep a subscription container for cleanup (OLD comment preserved)
   private subs = new Subscription();
  
@@ -86,12 +84,10 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   ) { }
  
   //#region Lifecycle
- 
   /**
    * @summary Initializes the form, loads projects/users,
    * detects edit mode, and pre-fills form data.
    *
-   * OLD comments preserved:
    * - Builds form
    * - Triggers initial loads
    * - Subscribes to project stream
@@ -148,7 +144,7 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
   if (this.isEdit && this.editTaskId) {
  
-    // ✅ FIX: Fetch task from loaded tasks, NOT from service snapshot
+    // Fetch task from loaded tasks, NOT from service snapshot
     this.taskToEdit = tasks.find(
       t => Number(t.id) === Number(this.editTaskId)
     );
@@ -160,7 +156,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       );
  
       this.showProjectDropdown = true;
- 
       // pre-fill form
       this.form.patchValue({
         projectId: this.taskToEdit.projectId,
@@ -201,11 +196,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
- 
   //#endregion
  
-  //#region Initialization Helpers (OLD comments applied where appropriate)
- 
+  //#region Initialization Helpers 
   /**
    * @summary Builds the reactive form with validators.
    * OLD comment preserved.
@@ -268,11 +261,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
       this.form.get('dueDate')?.updateValueAndValidity();
     });
   }
- 
   //#endregion
  
-  //#region Validators (OLD comments preserved)
- 
+  //#region Validators 
   /**
    * @summary Validates that due date:
    * - is not in the past (create mode only)
@@ -303,11 +294,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
  
     return null;
   }
- 
   //#endregion
  
-  //#region Getters (OLD comments preserved)
- 
+  //#region Getters 
   /** Minimum allowed date for date picker */
   get minDate(): string {
     const today = new Date().toISOString().split('T')[0];
@@ -326,11 +315,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
   get descriptionCount(): number {
     return this.form.get('description')?.value?.length ?? 0;
   }
- 
   //#endregion
  
-  //#region Actions (OLD comments preserved + NEW comments for assignee mapping logic)
- 
+  //#region Actions 
   /**
    * @summary Saves the task (create or update)
    * and shows success toast.
@@ -450,11 +437,9 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     const el = document.querySelector<HTMLInputElement>('input[formControlName="dueDate"]');
     if (el) el.showPicker?.();
   }
- 
   //#endregion
  
   //#region Assignee Helpers (NEW helper + OLD-style helper merged)
- 
   /**
    * @summary Called when assignee select value changes (keeps old-style handler).
    * Patches assigneeEmail and assignee id into the form when available.
@@ -480,7 +465,6 @@ export class TaskCreateComponent implements OnInit, OnDestroy {
     const u = this.users.find(x => x.name === name || x.email === name);
     return u ? Number(u.id) : null;
   }
- 
   //#endregion
 }
  

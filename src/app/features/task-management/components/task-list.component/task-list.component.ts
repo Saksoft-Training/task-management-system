@@ -33,7 +33,6 @@ import { ConfirmationDialogComponent } from '../../../../shared/components/confi
 export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   //#region Inputs
-
   /** 
    * @summary Receives project ID from parent page (if opened under a project). 
    * If null → the list displays global tasks. 
@@ -43,7 +42,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region View Mode
-
   /**
    * @summary Defines which layout is currently active.
    * - 'project': task list inside a project details page
@@ -56,7 +54,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Task Data
-
   /** All tasks fetched from taskService */
   public tasks: Task[] = [];
 
@@ -75,14 +72,12 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Unsubscription Handler
-
   /** Emits when component should cleanup (instead of multiple subscriptions) */
   private destroy$ = new Subject<void>();
 
   //#endregion
 
   //#region Sorting
-
   /** Whether sort dropdown is open */
   public isSortMenuOpen = false;
 
@@ -95,7 +90,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Constructor
-
   /**
    * @summary Constructor injecting required services.
    * @param route Provides route parameters such as projectId
@@ -117,7 +111,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Lifecycle
-
   /**
    * @summary Initializes component:
    * - Loads logged-in user details
@@ -173,7 +166,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   /**
-   * @summary Runs when input bindings change (like projectId).
+   * @summary Runs when input bindings change
    */
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['projectId']) {
@@ -193,7 +186,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region View Mode Logic
-
   /**
    * @summary Detects current page structure based on URL.
    * Ensures correct view mode (list / board / project context).
@@ -234,7 +226,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Load + Filter + Sort
-
   /**
    * @summary Loads tasks into component:
    * - Filters by project if projectId exists
@@ -278,7 +269,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * Sorting (NEW + OLD logic combined)
+     * Sorting 
      */
     this.filteredTasks = [...list].sort((a, b) => {
       const A: any = a[this.sortField] ?? '';
@@ -303,7 +294,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Sorting Controls
-
   /** Toggles sort dropdown open/close */
   public toggleSortMenu(): void {
     this.isSortMenuOpen = !this.isSortMenuOpen;
@@ -352,7 +342,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Task Popup
-
   /** Opens task detail popup */
   public openCard(task: Task): void {
     this.activeTask = task;
@@ -366,9 +355,8 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   //#endregion
-
+  
   //#region CRUD
-
   /** User confirmation dialog state */
   public isDeleteModalOpen = false;
 
@@ -402,7 +390,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Mode Switch
-
   /**
    * @summary Switches between List and Board layout.
    * Ensures correct navigation based on project or global context.
@@ -434,7 +421,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   //#endregion
 
   //#region Helpers
-
   /**
    * @summary Returns project name based on projectId
    */
@@ -498,7 +484,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.sortTasks();
     this.cdr.detectChanges();
   }
-
   /**
    * @summary Angular performance helper:
    * Ensures that when tasks update, *only changed tasks re-render*.
@@ -506,6 +491,5 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
   public trackByTask(index: number, item: Task): any {
     return item?.id ?? index;
   }
-
   //#endregion
 }

@@ -9,8 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
 export class TaskService implements OnDestroy {
 
   //#region Properties
-
-  /** API base URL where all tasks are stored (replaces old localStorage system) */
+  /** API base URL where all tasks are stored */
   private readonly apiBase = 'https://692436183ad095fb84732c9f.mockapi.io/Tasks';
 
   /** In-memory cache of all tasks received from API */
@@ -24,37 +23,29 @@ export class TaskService implements OnDestroy {
 
   /** Subscription to user changes so tasks refresh when user switches */
   private userSubscription!: Subscription;
-
   //#endregion
-
   //#region Constructor
-
   constructor(
     private readonly authService: AuthService,
     private readonly http: HttpClient
   ) {
-    /** Load tasks immediately (like old readForCurrentUser logic) */
+    /** Load tasks immediately */
     this.loadFromApi();
 
-    /** Refresh tasks whenever logged-in user changes (same behavior as old logic) */
+    /** Refresh tasks whenever logged-in user changes */
     this.userSubscription = this.authService.currentUser$.subscribe(() => {
       this.loadFromApi();
     });
   }
-
   //#endregion
-
   //#region Cleanup
-
   ngOnDestroy(): void {
-    /** Ensure subscription is cleaned up (same as old service) */
+    /** Ensure subscription is cleaned up  */
     this.userSubscription?.unsubscribe();
   }
-
   //#endregion
 
   //#region Internal Helpers
-
   /** Reads ALL tasks from API and updates filtered list for current user */
   private loadFromApi(): void {
     this.http.get<Task[]>(this.apiBase)
@@ -67,7 +58,7 @@ export class TaskService implements OnDestroy {
           /** Cache updated list (equivalent to old read()) */
           this.tasksCache = all;
 
-          /** Emit tasks for current user (replaces old readForCurrentUser) */
+          /** Emit tasks for current user */
           this.tasksSubject.next(this.readForCurrentUserSnapshot());
         })
       )
@@ -80,7 +71,7 @@ export class TaskService implements OnDestroy {
     this.tasksSubject.next(this.readForCurrentUserSnapshot());
   }
 
-  /** Insert or update task in cache (equivalent to old update logic) */
+  /** Insert or update task in cache */
   private upsertTaskInCache(task: Task): void {
     const idx = this.tasksCache.findIndex(
       t => String(t.id) === String(task.id)
@@ -108,11 +99,11 @@ export class TaskService implements OnDestroy {
     return this.tasksCache.slice();
   }
 
+ 
   //#endregion
 
   //#region Public Fetch Methods
-
-  /** All tasks for current user (immediate snapshot) */
+  /** All tasks for current user  */
   public getAllTasks(): Task[] {
     return this.readForCurrentUserSnapshot();
   }
@@ -126,11 +117,9 @@ export class TaskService implements OnDestroy {
   public getTasksByProjectId(projectId: number): Task[] {
     return this.readForCurrentUserSnapshot().filter(t => t.projectId === projectId);
   }
-
   //#endregion
 
-  //#region CRUD (Optimistic Updates)
-
+  //#region CRUD 
   /** Create new task (replaces old saveTask, but keeps same method name and behavior) */
   public saveTask(task: Task): void {
     /** Create temp ID to mimic old behavior where tasks instantly appeared */
@@ -164,13 +153,12 @@ export class TaskService implements OnDestroy {
   public updateTask(updated: Task): void {
     /** Optimistic update (same as old behavior) */
     this.upsertTaskInCache(updated);
-
     /** Persist to API */
     this.http.put<Task>(`${this.apiBase}/${updated.id}`, updated)
       .pipe(
         catchError(err => {
           console.error('[TaskService.updateTask] failed', err);
-          /** Reload from server on failure (equivalent to old read()) */
+          /** Reload from server on failure */
           this.loadFromApi();
           return of(null as any);
         })
@@ -196,30 +184,25 @@ export class TaskService implements OnDestroy {
       .subscribe();
   }
 
-  /** Clear all tasks (local only, MockAPI has no bulk delete) */
+  /** Clear all tasks */
   public clearAllTasks(): void {
     this.tasksCache = [];
     this.tasksSubject.next([]);
   }
-
   //#endregion
 
   //#region Drag & Drop Status Update
-
   /** Update task status after drag & drop */
   public updateTaskStatus(id: number, status: TaskStatus): void {
     const idx = this.tasksCache.findIndex(t => String(t.id) === String(id));
     if (idx === -1) return;
 
     const now = new Date().toISOString();
-
-    /** Optimistic update (same as old version) */
+    /** Optimistic update */
     this.tasksCache[idx].status = status;
     this.tasksCache[idx].updatedAt = now;
     this.tasksCache[idx].completedAt = status === 'Completed' ? now : null;
-
     this.tasksSubject.next(this.readForCurrentUserSnapshot());
-
     /** Persist to API */
     const payload = { ...this.tasksCache[idx] };
 
@@ -234,11 +217,9 @@ export class TaskService implements OnDestroy {
       )
       .subscribe();
   }
-
   //#endregion
 
   //#region Bulk Operations
-
   /** Delete all tasks for a project (old deleteTasksByProjectId behavior maintained) */
  public deleteTasksByProjectId(projectId: number): void {
 

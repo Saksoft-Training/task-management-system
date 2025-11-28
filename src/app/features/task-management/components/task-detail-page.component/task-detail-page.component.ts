@@ -51,12 +51,10 @@ export class TaskDetailPageComponent implements OnInit {
 
   /** Loading flag to avoid blank UI flicker */
   public isLoading = true;
-
   //#endregion
 
 
   //#region Constructor
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -68,14 +66,12 @@ export class TaskDetailPageComponent implements OnInit {
 
 
   //#region Lifecycle
-
   /**
    * Loads task by ID and initializes project + status history.
    * Listens to live task stream to update UI dynamically.
    */
   ngOnInit(): void {
     const taskId = Number(this.route.snapshot.paramMap.get('id'));
-
     if (!taskId) {
       this.router.navigate(['/tasks']);
       return;
@@ -83,19 +79,14 @@ export class TaskDetailPageComponent implements OnInit {
 
     this.taskService.tasks$.subscribe(tasks => {
       this.task = tasks.find(t => Number(t.id) === taskId) ?? null;
-
       if (!this.task) return;
-
       this.projectId = this.task.projectId;
-
       const user =
         JSON.parse(localStorage.getItem('currentUser') || 'null') ||
         JSON.parse(sessionStorage.getItem('currentUser') || 'null');
-
       const email = user?.email || '';
       const project = this.projectService.getById(this.projectId, email);
       this.projectName = project?.name || 'Unknown Project';
-
       // Build history log if exists, else create initial entries
       this.statusHistory = this.task.statusHistory?.length
         ? [...this.task.statusHistory]
@@ -103,42 +94,33 @@ export class TaskDetailPageComponent implements OnInit {
             { status: 'Created', date: this.task.createdAt },
             { status: this.task.status, date: this.task.updatedAt }
           ];
-
       this.isLoading = false;
       this.cdr.markForCheck();
     });
   }
   //#endregion
 
-
   //#region Actions
-
   /** Navigate to edit screen */
   public onEdit(): void {
     if (!this.task) return;
     this.router.navigate(['/tasks/edit', this.task.id]);
   }
-
   /** Trigger delete confirmation modal */
   public onDelete(): void {
     if (!this.task) return;
     this.pendingDeleteTask = this.task;
     this.isDeleteModalOpen = true;
   }
-
-  /** Confirm delete and return to tasks */
   /** Confirm delete and go to the project detail page */
 public onConfirmDelete(): void {
   if (this.pendingDeleteTask) {
     const projectId = this.pendingDeleteTask.projectId;
-
     // Delete task
     this.taskService.deleteTask(this.pendingDeleteTask.id);
-
     // Close dialog
     this.isDeleteModalOpen = false;
     this.pendingDeleteTask = null;
-
     // Navigate to that task's project detail page
     this.router.navigate([`/projects/${projectId}`]);
   }
@@ -148,12 +130,10 @@ public onConfirmDelete(): void {
   /** Cancel delete modal and stay on same task detail page */
 public onCancelDelete(): void {
   this.isDeleteModalOpen = false;
-
   if (this.task) {
-    this.router.navigate([`/tasks/${this.task.id}`]);  // Stay here
+    this.router.navigate([`/tasks/${this.task.id}`]);  
   }
 }
-
 
   /**
    * Updates status and logs history entry.
@@ -162,19 +142,14 @@ public onCancelDelete(): void {
     if (!this.task) return;
 
     const timestamp = new Date().toISOString();
-
     if (!this.task.statusHistory) {
       this.task.statusHistory = [{ status: 'Created', date: this.task.createdAt }];
     }
-
     this.task.statusHistory.unshift({ status: newStatus, date: timestamp });
-
     this.task.status = newStatus as any;
     this.task.updatedAt = timestamp;
-
     this.taskService.updateTask(this.task);
     this.statusHistory = [...this.task.statusHistory];
-
     this.cdr.detectChanges();
   }
 
@@ -183,7 +158,6 @@ public onCancelDelete(): void {
    */
   public updatePriority(newPriority: string): void {
     if (!this.task) return;
-
     this.task.priority = newPriority as any;
     this.task.updatedAt = new Date().toISOString();
 
@@ -201,6 +175,5 @@ public onCancelDelete(): void {
     if (!projectId) return;
     this.router.navigate(['/projects', projectId]);
   }
-
   //#endregion
 }
