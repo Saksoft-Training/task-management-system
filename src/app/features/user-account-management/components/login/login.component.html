@@ -10,7 +10,10 @@
         </div>
         <p>Login to access your task management dashboard</p>
       </div>
+
       <div class="input-section">
+
+        <!-- Email -->
         <div class="input-group">
           <label>Email</label>
           <input
@@ -29,6 +32,8 @@
           </div>
           }
         </div>
+
+        <!-- Password -->
         <div class="input-group">
           <label>Password</label>
           <input
@@ -42,11 +47,13 @@
           formControls['password'].invalid) {
           <div class="error"><p>Password is required.</p></div>
           }
+
           @if (loginAttempted && loginErrorMessage) {
           <div class="error"><p>{{ loginErrorMessage }}</p></div>
           }
         </div>
       </div>
+
       <div class="options">
         <div class="remember">
           <input type="checkbox" formControlName="rememberMe" />
@@ -55,6 +62,7 @@
         <a class="forgot-link" (click)="navigateTo('/forgot-password')">Forgot
           Password?</a>
       </div>
+
       <div class="button-section">
         <button type="submit" class="login-btn" [disabled]="isFormSubmitting">
           {{ isFormSubmitting ? 'Authenticating...' : 'Login' }}

@@ -1,210 +1,136 @@
-<!-- CREATE / EDIT TASK PAGE -->
 <div class="ct-create-task-page">
-
-  <!-- Page Title -->
-  <h1 class="page-title">
-    {{ isEdit ? 'Edit Task' : 'Create Task' }}
-  </h1>
-
-  <!-- Subtitle -->
-  <p class="page-subtitle">
-    {{ isEdit ? 'Edit/Modify or Update your task' : 'Create your task' }}
-  </p>
-
-  <!-- Delete button (only in edit mode) -->
+  <h1 class="page-title">{{ isEdit ? 'Edit Task' : 'Create Task' }}</h1>
+  <p class="page-subtitle">{{ isEdit ? 'Edit/Modify or Update your task' : 'Create your task' }}</p>
+  <!-- Delete button (only in edit) -->
   @if (isEdit) {
-  <button class="ct-delete-btn" (click)="onDelete()">Delete Task 🗑</button>
+    <button class="ct-delete-btn" (click)="onDelete()">Delete Task <img src="assets/icons/delete-Icon.svg" alt="Delete" /></button>
   }
-
-  <!-- Delete confirmation modal -->
+  <!-- Confirmation modal -->
   @if (showDeleteModal) {
-  <app-confirmation-dialog-component 
-    [title]="'Delete Task'"
-    [message]="'Are you sure you want to delete the task:\n' + (taskToDelete?.title || '') + '?'"
-    [confirmText]="'Delete'" 
-    [cancelText]="'Cancel'" 
-    [type]="'danger'"
-    (confirm)="onConfirmDelete()"
-    (cancel)="onCancelDelete()">
-  </app-confirmation-dialog-component>
+    <app-confirmation-dialog-component
+      [title]="'Delete Task'"
+      [message]="'Are you sure you want to delete: ' + (taskToDelete?.title || '') + '?'"
+      [confirmText]="'Delete'"
+      [cancelText]="'Cancel'"
+      [type]="'danger'"
+      (confirm)="onConfirmDelete()"
+      (cancel)="onCancelDelete()">
+    </app-confirmation-dialog-component>
   }
-
   <div class="project-form-container">
-
-    <!-- Form heading -->
-    <p class="form-title">
-      {{ isEdit ? 'Update your task details' : 'Add a new task to track progress on your project' }}
-    </p>
-
-    <!-- TASK FORM -->
+    <p class="form-title">{{ isEdit ? 'Update your task details' : 'Add a new task to track progress on your project' }}</p>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ct-form">
-
-      <!-- Project field -->
+      <!-- PROJECT -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Project</label>
-
         @if (!showProjectDropdown) {
-        <input 
-          title="project" 
-          placeholder="Select project" 
-          class="ct-field-input ct-readonly"
-          [value]="selectedProject?.name || ''" 
-          readonly />
+          <input class="ct-field-input ct-readonly"
+                 [value]="selectedProject?.name"
+                 placeholder="Project"
+                 readonly />
+        } @else {
+          <select class="ct-field-select" formControlName="projectId">
+            <option [value]="null" disabled hidden>Select project</option>
+            @for (projectItem of projects; track projectItem.id) {
+              <option [value]="projectItem.id">{{ projectItem.name }}</option>
+            }
+          </select>
         }
-        @else {
-        <select 
-          title="project" 
-          class="ct-field-select" 
-          formControlName="projectId" 
-          [compareWith]="compareProject">
-
-          <option value="" disabled hidden>Select project</option>
-
-          @for (projectItem of projects; track projectItem.id) {
-          <option [value]="projectItem.id">{{ projectItem.name }}</option>
-          }
-        </select>
-        }
-
         @if (form.get('projectId')?.touched && form.get('projectId')?.invalid) {
-        <div class="ct-error"><small>Project is required.</small></div>
+          <div class="ct-error"><small>Project is required.</small></div>
         }
       </div>
-
-      <!-- Title -->
+      <!-- TITLE -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Title</label>
         <input class="ct-field-input" formControlName="title" placeholder="Enter task title" />
-
         @if (form.get('title')?.touched && form.get('title')?.invalid) {
-        <div class="ct-error">
-
-          @if (form.get('title')?.hasError('required')) {
-          <small>Title is required.</small>
-          }
-          @if (form.get('title')?.hasError('minlength')) {
-          <small>Minimum 5 characters.</small>
-          }
-          @if (form.get('title')?.hasError('maxlength')) {
-          <small>Maximum 100 characters.</small>
-          }
-
-        </div>
+          <div class="ct-error">
+            @if (form.get('title')?.hasError('required')) {
+              <small>Title is required.</small>
+            }
+            @if (form.get('title')?.hasError('minlength')) {
+              <small>Minimum 5 characters.</small>
+            }
+            @if (form.get('title')?.hasError('maxlength')) {
+              <small>Maximum 100 characters.</small>
+            }
+          </div>
         }
       </div>
-
-      <!-- Status -->
+      <!-- STATUS -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Status</label>
-        <select title="status" class="ct-field-select" formControlName="status">
-          @for (statusItem of statuses; track statusItem) {
-          <option [value]="statusItem">{{ statusItem }}</option>
+        <select class="ct-field-select" formControlName="status">
+          @for (s of statuses; track s) {
+            <option [value]="s">{{ s }}</option>
           }
         </select>
       </div>
-
-      <!-- Priority -->
+      <!-- PRIORITY -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Priority</label>
-        <select title="priority" class="ct-field-select" formControlName="priority">
-          @for (priorityItem of priorities; track priorityItem) {
-          <option [value]="priorityItem">{{ priorityItem }}</option>
+        <select class="ct-field-select" formControlName="priority">
+          @for (p of priorities; track p) {
+            <option [value]="p">{{ p }}</option>
           }
         </select>
       </div>
-
-      <!-- Description -->
+      <!-- DESCRIPTION -->
       <div class="ct-field-group ct-full-width">
         <div class="ct-description-header">
           <label class="ct-field-label">Description</label>
-          <span class="ct-char-counter">
-            {{ descriptionCount }}/500 characters
-          </span>
+          <span class="ct-char-counter">{{ descriptionCount }}/500</span>
         </div>
-
-        <textarea 
-          class="ct-description-box" 
-          maxlength="500" 
-          formControlName="description"
-          placeholder="Enter project description (optional)">
-        </textarea>
-
-        @if (form.get('description')?.hasError('maxlength')) {
-        <div class="ct-error"><small>Maximum 500 characters allowed.</small></div>
-        }
+        <textarea class="ct-description-box"
+                  maxlength="500"
+                  formControlName="description"
+                  placeholder="Enter description (optional)"></textarea>
       </div>
-
-      <!-- Assignee -->
+      <!-- ASSIGNEE -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Assignee</label>
-
-        <select title="assignee" class="ct-field-select" formControlName="assignee">
-          <option disabled value>Select an assignee</option>
-
-          @for (userItem of users; track userItem.email) {
-          <option [value]="userItem.name">{{ userItem.name }}</option>
+        <select class="ct-field-select" formControlName="assignee" (change)="onAssigneeChange($event)">
+          <option value="null" disabled hidden>Select an assignee</option>
+          @for (userItem of users; track userItem.id) {
+            <option [value]="userItem.id">{{ userItem.name }}</option>
           }
         </select>
-
         @if (form.get('assignee')?.touched && form.get('assignee')?.invalid) {
-        <div class="ct-error"><small>Assignee is required.</small></div>
+          <div class="ct-error"><small>Assignee is required.</small></div>
         }
       </div>
-
-      <!-- Due date -->
+      <!-- Hidden email control -->
+      <input type="hidden" formControlName="assigneeEmail" />
+      <!-- DUE DATE -->
       <div class="ct-field-group">
         <label class="ct-field-label required">Due Date</label>
-
         <div class="ct-date-wrapper" (click)="openDatePicker()">
-          <input 
-            #dueDateInput 
-            title="due date" 
-            type="date" 
-            class="ct-field-input"
-            formControlName="dueDate"
-            [min]="minDate" 
-            [max]="maxDate" />
+          <input type="date"
+                 class="ct-field-input"
+                 formControlName="dueDate"
+                 [min]="minDate"
+                 [max]="maxDate" />
         </div>
-
         @if (selectedProject) {
-        <div class="ct-project-dates">
-          Project dates: {{ selectedProject.startDate }} to {{ selectedProject.endDate }}
-        </div>
-        }
-
-        @if (form.get('dueDate')?.touched && form.get('dueDate')?.invalid) {
-        <div class="ct-error">
-
-          @if (form.get('dueDate')?.hasError('required')) {
-          <small>Due date is required.</small>
-          }
-          @if (form.get('dueDate')?.hasError('pastDate')) {
-          <small>Cannot be in past.</small>
-          }
-          @if (form.get('dueDate')?.hasError('beforeProjectStart')) {
-          <small>Before project start.</small>
-          }
-          @if (form.get('dueDate')?.hasError('afterProjectEnd')) {
-          <small>After project end.</small>
-          }
-
-        </div>
+          <div class="ct-project-dates">
+            Project dates:
+            {{ selectedProject.startDate }}
+            →
+            {{ selectedProject.endDate }}
+          </div>
         }
       </div>
-
       <!-- Buttons -->
       <div class="ct-buttons">
         <button class="ct-btn ct-btn-submit" type="submit" [disabled]="form.invalid">
           {{ isEdit ? 'Save Changes' : 'Create Task' }}
         </button>
-
         @if (!isEdit) {
-        <button class="ct-btn ct-btn-secondary" type="button" (click)="onReset()">Reset</button>
+          <button class="ct-btn ct-btn-secondary" type="button" (click)="onReset()">Reset</button>
         }
-
         <button class="ct-btn ct-btn-secondary" type="button" (click)="onCancel()">Cancel</button>
       </div>
-
     </form>
   </div>
 </div>

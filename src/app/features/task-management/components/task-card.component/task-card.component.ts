@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-task-card-component',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule],
   templateUrl: './task-card.component.html',
   styleUrls: ['./task-card.component.scss'],
 })
@@ -38,33 +38,27 @@ export class TaskCardComponent implements OnInit {
    *          same way as TaskDetailPage (using currentUser.email).
    */
   public ngOnInit(): void {
-    // 🔹 Get current user from localStorage or sessionStorage
+    //  Get current user from localStorage or sessionStorage
     const user =
       JSON.parse(localStorage.getItem('currentUser') || 'null') ||
       JSON.parse(sessionStorage.getItem('currentUser') || 'null');
-
     const email: string = user?.email || '';
-
-    // 🔹 Fetch the project using its ID and user email
+    //  Fetch the project using its ID and user email
     const project = this.projectService.getById(this.task.projectId, email);
-
-    // 🔹 Safely assign name or fallback if not found
+    //  Safely assign name or fallback if not found
     this.projectName = project?.name || 'Unknown Project';
-
     if (!project) {
       console.warn(
-        `⚠️ [TaskCard] Project not found for ID: ${this.task.projectId} (email: ${email})`
+        ` [TaskCard] Project not found for ID: ${this.task.projectId} (email: ${email})`
       );
     }
   }
-
   /**
    * @summary Emits the close event to parent component.
    */
   public closeCard(): void {
     this.close.emit();
   }
-
   /**
    * @summary Navigate to Task Details page.
    * @param id Task ID

@@ -1,10 +1,25 @@
+//#region Imports
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../../dashboard/services/notification-service';
+//#endregion
+
+/**
+ * @summary
+ * Login component responsible for handling authentication input,
+ * validation, error handling, and login state management.
+ */
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -22,9 +37,12 @@ export class LoginComponent implements OnInit {
   public loginErrorMessage = '';
   /** Indicates if user has attempted login */
   public loginAttempted = false;
+
   //#endregion
 
+
   //#region Constructor
+
   /**
    * @summary Injects FormBuilder, AuthService, Router, and NotificationService
    * @param formBuilder Builds the Reactive Form
@@ -38,6 +56,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService
   ) { }
+
   //#endregion
 
   //#region Lifecycle
@@ -47,6 +66,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.initializeLoginForm();
   }
+
   //#endregion
 
   //#region Form Setup
@@ -60,9 +80,12 @@ export class LoginComponent implements OnInit {
       rememberMe: [false]
     });
   }
+
   //#endregion
 
+
   //#region Validators
+
   /**
    * @summary Custom validator allowing only Gmail addresses.
    * @returns ValidationErrors | null
@@ -76,9 +99,12 @@ export class LoginComponent implements OnInit {
       return pattern.test(email) ? null : { invalidEmail: true };
     };
   }
+
   //#endregion
 
+
   //#region Helper Methods
+
   /**
    * @summary Forces email to lowercase to avoid case mismatch.
    */
@@ -93,9 +119,12 @@ export class LoginComponent implements OnInit {
   public get formControls(): FormGroup['controls'] {
     return this.loginFormGroup.controls;
   }
+
   //#endregion
 
+
   //#region Form Submission
+
   /**
    * @summary Submits form, validates inputs, sends login request & handles result.
    */
@@ -106,7 +135,10 @@ export class LoginComponent implements OnInit {
       this.loginFormGroup.markAllAsTouched();
       return;
     }
+
     const { email, password, rememberMe } = this.loginFormGroup.value;
+
+    // Disable UI to prevent duplicate submissions
     this.isFormSubmitting = true;
     this.loginFormGroup.disable();
     this.authService.login({ email, password, rememberMe }).subscribe({
@@ -121,6 +153,7 @@ export class LoginComponent implements OnInit {
         this.isFormSubmitting = false;
         this.router.navigate(['/profile']);
       },
+
       error: (err) => {
         this.isFormSubmitting = false;
         this.loginErrorMessage = err?.message || 'Invalid email or password';
@@ -136,9 +169,12 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+
   //#endregion
 
+
   //#region Navigation
+
   /**
    * @summary Navigates user to the provided route (e.g., forgot-password/register)
    * @param path The route path to navigate
@@ -146,5 +182,6 @@ export class LoginComponent implements OnInit {
   public navigateTo(path: string): void {
     this.router.navigate([path]);
   }
+
   //#endregion
 }

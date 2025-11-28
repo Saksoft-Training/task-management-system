@@ -1,3 +1,4 @@
+//#region Imports
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
@@ -13,13 +14,16 @@ export class AuthService {
    * BehaviorSubject ensures all components receive live updates.
    */
   private currentUserSubject = new BehaviorSubject<User | null>(null);
+
   /**
    * @summary Observable stream for subscription across components.
    */
   public currentUser$ = this.currentUserSubject.asObservable();
+
   //#endregion
 
   //#region Constructor
+
   /**
    * @summary Initializes service and restores session if a user is already logged in.
    * @param router Route navigation handler
@@ -31,9 +35,11 @@ export class AuthService {
   ) {
     this.restoreUserSession();
   }
+
   //#endregion
 
   //#region Login
+
   /**
    * @summary Validates credentials and logs user in through MockAPI.
    * @param credentials Login form values
@@ -87,6 +93,7 @@ export class AuthService {
   public isLoggedIn(): boolean {
     return this.currentUserSubject.value !== null;
   }
+
   /**
    * @summary Returns currently authenticated user.
    * @returns User | null
@@ -94,6 +101,7 @@ export class AuthService {
   public getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
+
   /**
    * @summary Placeholder for future token-based auth.
    * @returns null
@@ -101,6 +109,7 @@ export class AuthService {
   public getAuthToken(): string | null {
     return null;
   }
+
   //#endregion
 
   //#region User Sync
