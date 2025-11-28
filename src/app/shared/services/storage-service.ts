@@ -2,20 +2,30 @@ import { Injectable } from '@angular/core';
 import { User } from '../../../types/models/user';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'; 
+import { map } from 'rxjs/operators';
 
 const USERS_KEY = 'users';
 const PASSWORD_SECRET = 'MyAppSecret@2025';
 
 @Injectable({ providedIn: 'root' })
 export class UserStorageService {
+  //#region Properties
+  /** MockAPI endpoint for users */
   private readonly apiUrl = 'https://692433503ad095fb847320c8.mockapi.io/users';
-  constructor(private http: HttpClient) { }
+  //#endregion
 
-  //#region OLD localStorage methods (still here to avoid breaking other code)
+  //#region Constructor
   /**
-   * @summary Retrieves all stored users from localStorage.
-   * NOTE: Prefer using API helpers below for new features.
+   * @summary Injects HttpClient for API operations.
+   * @param http Angular HttpClient for making HTTP requests
+   */
+  constructor(private http: HttpClient) { }
+  //#endregion
+
+  //#region LocalStorage Legacy Methods
+  /**
+   * @summary Retrieves all users stored in browser localStorage.
+   * @returns User[]
    */
   public getAllUsers(): User[] {
     const usersJson = localStorage.getItem(USERS_KEY);
@@ -23,16 +33,16 @@ export class UserStorageService {
   }
 
   /**
-   * @summary Saves the updated array of users back to localStorage.
-   * NOTE: Kept for backward compatibility.
+   * @summary Saves updated users array back to localStorage.
+   * @param users Array of User objects
    */
   public saveAllUsers(users: User[]): void {
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
   }
-
   /**
-   * @summary Checks if a given email already exists in localStorage users.
-   * NOTE: For new logic, use isEmailExistsApi().
+   * @summary Checks whether a given email exists in localStorage.
+   * @param email Email to search for
+   * @returns boolean
    */
   public isEmailExists(email: string): boolean {
     const check = email.trim().toLowerCase();
@@ -42,16 +52,63 @@ export class UserStorageService {
   }
   //#endregion
 
-  //#region API helpers 
+  //#region API Helpers
   /**
-   * @summary Get all users from MockAPI.
+   * @summary Fetches all users from MockAPI.
+   * @returns Observable<User[]>
+   */
+  public getAllUsersFromApi(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl);
+  }
+  /**
+   * @summary Checks if an email exists using MockAPI.
+   * @param email Email to validate
+   * @returns Observable<boolean>
+   */
+  public isEmailExistsApi(email: string): Observable<boolean> {
+    const normalized = email.trim().toLowerCase();
+    return this.http
+      .get<User[]>(`${this.apiUrl}?email=${encodeURIComponent(normalized)}`)
+      .pipe(map(users => users.length > 0));
+  }
+  /**
+   * @summary Creates a new user via MockAPI.
+   * @param user Full user object
+   * @returns Observable<User>
+   */
+  public createUser(user: User): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
+  }
+  /**
+   * @summary Finds a user by email via MockAPI.
+   * @param email User email to search for
+   * @returns Observable<User | null>
+   */
+  public findUserByEmail(email: string): Observable<User | null> {
+    return this.http.get<User[]>(this.apiUrl).pipe(
+      map(users => {
+        const normalizedEmail = email.trim().toLowerCase();
+        const user = users.find(u => u.email.toLowerCase() === normalizedEmail);
+        return user ?? null;
+      })
+    );
+  }
+  //#endregion
+
+  //#region Password Encoding
+  /**
+   * @summary Encodes password using Base64 format.
+   * @param raw Plain text password
+   * @returns string Encoded password
    */
   public getAllUsersFromApi(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }
 
   /**
-   * @summary Check if email exists using MockAPI (for async validator).
+   * @summary Decodes Base64 encoded password.
+   * @param encoded Encoded password string
+   * @returns string Decoded password or empty string if error
    */
   public isEmailExistsApi(email: string): Observable<boolean> {
     const normalized = email.trim().toLowerCase();
@@ -96,16 +153,24 @@ export class UserStorageService {
   }
   //#endregion
 
-  //#region Password Update 
+  //#region Password Updates
   /**
- * @summary Update user password via MockAPI
- */
+   * @summary Updates user password on MockAPI.
+   * @param userId User's ID
+   * @param newPassword New plain password
+   * @returns Observable<User>
+   */
   public updateUserPasswordApi(userId: string, newPassword: string): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}`, {
       password: this.encodePassword(newPassword)
     });
   }
-
+  /**
+   * @summary Updates partial user data on MockAPI.
+   * @param userId User ID
+   * @param updatedUser Partial update object
+   * @returns Observable<User>
+   */
   public updateUserApi(userId: string, updatedUser: Partial<User>): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}`, updatedUser);
   }
@@ -113,27 +178,30 @@ export class UserStorageService {
   //#endregion
   //#region Login State Helpers (NEW)
 
+  //#region Login State Helpers
   /**
-   * @summary Mark a user as logged in using MockAPI.
+   * @summary Marks user as logged in (MockAPI).
+   * @param userId ID of user to update
+   * @returns Observable<User>
    */
   public markUserAsLoggedIn(userId: string): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}`, {
       isLoggedIn: true
     });
   }
-
   /**
-   * @summary Mark a user as logged out.
+   * @summary Marks user as logged out.
+   * @param userId ID of user to update
+   * @returns Observable<User>
    */
   public markUserAsLoggedOut(userId: string): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${userId}`, {
       isLoggedIn: false
     });
   }
-
   /**
-   * @summary Fetch currently logged-in user from API.
-   * Will return first user with isLoggedIn === true
+   * @summary Fetches first user with `isLoggedIn = true`.
+   * @returns Observable<User | null>
    */
   public getLoggedInUser(): Observable<User | null> {
     return this.http
@@ -141,5 +209,4 @@ export class UserStorageService {
       .pipe(map(users => (users.length ? users[0] : null)));
   }
   //#endregion
-
 }
