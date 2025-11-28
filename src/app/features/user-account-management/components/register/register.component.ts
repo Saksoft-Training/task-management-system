@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../../types/models/user';
 import { AuthService } from '../../services/auth-service';
 import { UserStorageService } from '../../../../shared/services/storage-service';
 import { NotificationService } from '../../../dashboard/services/notification-service';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -16,11 +17,16 @@ import { NotificationService } from '../../../dashboard/services/notification-se
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  //#region Properties
+  //#region Public Properties
+  /** Register form group */
   public registerForm!: FormGroup;
+  /** Success message after submission */
   public successMessage = '';
+  /** Error message when registration fails */
   public errorMessage = '';
+  /** Indicates loading state during submission */
   public isSubmitting = false;
+  /** Password rule flags for progress bar UI */
   public passwordRulesStatus = {
     hasMinLength: false,
     hasUppercase: false,
@@ -31,11 +37,12 @@ export class RegisterComponent implements OnInit {
 
   //#region Constructor
   /**
-   * @summary Injects form builder, authentication service, user storage service, and router.
-   * @param formBuilder - Builds reactive form controls.
-   * @param authService - Handles API-related auth actions.
-   * @param userStorage - Manages local stored user data.
-   * @param router - Handles navigation.
+   * @summary Injects form builder, API services, router and toast service.
+   * @param formBuilder Builds registration form
+   * @param authService Manages auth states (future use)
+   * @param userStorage API handler for user operations
+   * @param router Navigation service
+   * @param notificationService Displays toast notifications
    */
   constructor(
     private formBuilder: FormBuilder,
@@ -46,14 +53,12 @@ export class RegisterComponent implements OnInit {
   ) { }
   //#endregion
 
-  //#region Lifecycle Hook
+  //#region Lifecycle
   /**
-   * @summary Initializes form and listens for password changes.
-   * @returns void
+   * @summary Initializes register form and password rule tracking.
    */
   public ngOnInit(): void {
     this.initializeForm();
-
     this.registerForm.get('password')?.valueChanges.subscribe(password =>
       this.updatePasswordRulesStatus(password)
     );
@@ -62,8 +67,7 @@ export class RegisterComponent implements OnInit {
 
   //#region Form Initialization
   /**
-   * @summary Builds the registration form with synchronous and asynchronous validators.
-   * @returns void
+   * @summary Builds the reactive registration form with validators.
    */
   private initializeForm(): void {
     this.registerForm = this.formBuilder.group(
@@ -87,32 +91,29 @@ export class RegisterComponent implements OnInit {
 
   //#region Validators
   /**
-   * @summary Validates that name contains only letters and spaces.
-   * @returns ValidationErrors | null
+   * @summary Validates names (letters + spaces only)
    */
   private nameValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
       const name = control.value;
-      if (!name) return null;
-      return /^[A-Za-z\s]+$/.test(name) ? null : { invalidName: true };
+      return !name || /^[A-Za-z\s]+$/.test(name)
+        ? null
+        : { invalidName: true };
     };
   }
   /**
-   * @summary Validates email format to allow only Gmail addresses.
-   * @returns ValidationErrors | null
+   * @summary Gmail-only email validation.
    */
   private gmailValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
       const email = control.value;
-      if (!email) return null;
-      return /^[a-z0-9._%+-]+@gmail\.com$/.test(email)
+      return !email || /^[a-z0-9._%+-]+@gmail\.com$/.test(email)
         ? null
         : { invalidEmail: true };
     };
   }
   /**
-   * @summary Checks password strength: min length, uppercase, number, special char.
-   * @returns ValidationErrors | null
+   * @summary Validates password strength (uppercase, number, special char).
    */
   private passwordStrengthValidator() {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -122,13 +123,11 @@ export class RegisterComponent implements OnInit {
         /[A-Z]/.test(password) &&
         /\d/.test(password) &&
         /[^A-Za-z0-9]/.test(password);
-
       return valid ? null : { weakPassword: true };
     };
   }
   /**
-   * @summary Ensures password & confirm password match.
-   * @returns ValidationErrors | null
+   * @summary Confirms password matches confirmPassword field.
    */
   private confirmPasswordValidator() {
     return (group: AbstractControl): ValidationErrors | null => {
@@ -139,40 +138,34 @@ export class RegisterComponent implements OnInit {
         : null;
     };
   }
-  //#endregion
-
-  //#region Async Validators
   /**
-   * @summary Asynchronous validator to check if email already exists.
-   * @returns Observable<ValidationErrors | null>
+   * @summary Async validator checking if email already exists in API.
    */
   private emailUniqueValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       const email = (control.value || '').trim().toLowerCase();
       if (!email) return of(null);
-
-      return of(this.userStorage.isEmailExists(email)).pipe(
-        delay(300),
-        map(isTaken => (isTaken ? { emailTaken: true } : null))
+      return this.userStorage.isEmailExistsApi(email).pipe(
+        map(exists => (exists ? { emailTaken: true } : null))
       );
     };
   }
   //#endregion
 
-  //#region Helpers
+  //#region Email Handling
   /**
-   * @summary Converts email input value to lowercase.
-   * @returns void
+   * @summary Converts email to lowercase automatically.
    */
   public forceLowercaseEmail(): void {
     const emailCtrl = this.registerForm.get('email');
     const val = emailCtrl?.value || '';
-    emailCtrl?.setValue(val.toLowerCase(), { emitEvent: true });
+    emailCtrl?.setValue(val.toLowerCase(), { emitEvent: false });
   }
+  //#endregion
+
+  //#region Password Strength Helpers
   /**
-   * @summary Updates password rule tracking used for strength UI.
-   * @param password - Current password input.
-   * @returns void
+   * @summary Updates UI indicators based on password strength.
    */
   private updatePasswordRulesStatus(password: string): void {
     this.passwordRulesStatus = {
@@ -183,8 +176,7 @@ export class RegisterComponent implements OnInit {
     };
   }
   /**
-   * @summary Calculates password strength percentage.
-   * @returns number
+   * @summary Returns percentage strength for progress bar.
    */
   public getPasswordStrengthPercentage(): number {
     let s = 0;
@@ -195,8 +187,7 @@ export class RegisterComponent implements OnInit {
     return s;
   }
   /**
-   * @summary Determines CSS class for password strength meter.
-   * @returns string
+   * @summary Returns CSS class based on password strength.
    */
   public getPasswordStrengthClass(): string {
     const s = this.getPasswordStrengthPercentage();
@@ -206,8 +197,7 @@ export class RegisterComponent implements OnInit {
     return 'strength-very-strong';
   }
   /**
-   * @summary Returns human-readable strength label.
-   * @returns string
+   * @summary Returns user-friendly label for password strength.
    */
   public getPasswordStrengthLabel(): string {
     const s = this.getPasswordStrengthPercentage();
@@ -216,19 +206,15 @@ export class RegisterComponent implements OnInit {
     if (s <= 75) return 'Strong';
     return 'Very Strong';
   }
-  /**
-   * @summary Getter for all form controls.
-   * @returns any
-   */
+  //#endregion
+
+  //#region Form Helpers
+  /** Getter for form controls in template */
   public get formControls() {
     return this.registerForm.controls;
   }
-  //#endregion
-
-  //#region Reset
   /**
-   * @summary Resets the form and password status indicators.
-   * @returns void
+   * @summary Resets form and password strength UI.
    */
   public onReset(): void {
     this.registerForm.reset();
@@ -243,69 +229,52 @@ export class RegisterComponent implements OnInit {
 
   //#region Submit
   /**
-   * @summary Validates registration form, stores user, and redirects to login.
-   * @returns void
+   * @summary Handles registration form submission.
    */
   public onSubmit(): void {
-  this.isSubmitting = true;
-  this.registerForm.updateValueAndValidity();
-
-  if (this.registerForm.invalid) {
-    this.registerForm.markAllAsTouched();
-    this.isSubmitting = false;
-    return;
+    this.isSubmitting = true;
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      this.isSubmitting = false;
+      return;
+    }
+    const { name, email, password } = this.registerForm.value;
+    const encryptedPassword = this.userStorage.encodePassword(password);
+    const newUser: User = {
+      id: Date.now().toString(),
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      password: encryptedPassword,
+      createdAt: new Date().toISOString()
+    };
+    this.userStorage.createUser(newUser).subscribe({
+      next: () => {
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'success',
+          title: 'Registration Successful',
+          message: 'Your account has been created.',
+          showToast: true
+        });
+        this.isSubmitting = false;
+      this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.notificationService.addNotification({
+          kind: 'custom' as any,
+          severity: 'critical',
+          title: 'Registration Failed',
+          message: 'Please try again.',
+          showToast: true
+        });
+        this.isSubmitting = false;
+      }
+    });
   }
-
-  const { name, email, password } = this.registerForm.value;
-
-  if (this.userStorage.isEmailExists(email)) {
-    this.registerForm.get('email')?.setErrors({ emailTaken: true });
-
-    this.notificationService.addNotification({
-  kind: 'custom' as any,
-  severity: 'critical',
-  title: 'Registration Failed',
-  message: 'Please try again.',
-  showToast: true
-});
-
-
-    this.isSubmitting = false;
-    return;
-  }
-
-  const encryptedPassword = this.userStorage.encodePassword(password);
-  const newUser: User = {
-    name: name.trim(),
-    email: email.trim().toLowerCase(),
-    password: encryptedPassword,
-    createdAt: new Date().toISOString()
-  };
-
-  const users = this.userStorage.getAllUsers();
-  users.push(newUser);
-  this.userStorage.saveAllUsers(users);
-
-  this.notificationService.addNotification({
-  kind: 'custom' as any,  // if no specific kind is needed
-  severity: 'success',
-  title: 'Registration Successful',
-  message: 'Your account has been created.',
-  showToast: true   // 👈 VERY IMPORTANT
-});
-
-
-  setTimeout(() => this.router.navigate(['/login']), 1200);
-  this.isSubmitting = false;
-}
-
   //#endregion
 
   //#region Navigation
-  /**
-   * @summary Navigates back to login screen.
-   * @returns void
-   */
+  /** Navigates to login page */
   public goToLogin(): void {
     this.router.navigate(['/login']);
   }
