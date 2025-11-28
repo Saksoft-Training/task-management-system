@@ -157,7 +157,7 @@ body::-webkit-scrollbar {
 .user-section {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 2rem;
   cursor: pointer;
 }
 
@@ -889,7 +889,7 @@ body::-webkit-scrollbar {
   .page-title-register {
     width: 100%;
     max-width: 50rem;
-    margin-bottom: 2.5rem;
+    margin: 50px 0;
     @include mixins.flex(center, center, column);
     gap: 1.25rem;
     font-size: 3.75rem;
@@ -1215,7 +1215,7 @@ body::-webkit-scrollbar {
     letter-spacing: -3%;
     color: variables.$color-black;
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin: 60px 0;
     width: 100%;
     max-width: 50rem;
   }
@@ -1450,7 +1450,7 @@ body::-webkit-scrollbar {
     font-weight: 400;
     color: variables.$color-black;
     text-align: center;
-    margin-top: 2rem;
+    margin: 50px 0;
   }
 
   .card {
@@ -3100,7 +3100,6 @@ body::-webkit-scrollbar {
   font-weight: 600;
   color: variables.$color-title;
   margin-bottom: 6px;
-  padding-left: 20px;
 }
 
 /* -------- PAGE SUBTITLE -------- */
@@ -3108,7 +3107,6 @@ body::-webkit-scrollbar {
   font-size: 16px;
   color: variables.$color-subtitle;
   margin-bottom: 24px;
-  padding-left: 20px;
 }
 
 /* -------- WHITE FORM BOX -------- */
@@ -3581,7 +3579,6 @@ body::-webkit-scrollbar {
 .tl-table-wrapper {
   width: 100%;
   background: variables.$color-white;
-  border-radius: 14px;
   border: 1px solid variables.$color-gray-200;
   box-shadow: 0 2px 10px variables.$shadow-light-05;
   overflow: hidden;
@@ -3882,11 +3879,12 @@ body::-webkit-scrollbar {
    Info Card
 ------------------------------ */
 .tl-info-card {
-  background: #FAFAFA;
+  background: #eff5e2;
   padding: 24px;
   border-radius: 12px;
   border: 1px solid variables.$color-gray-200;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  width: 100%;
 }
 
 .tl-info-row {
@@ -3908,6 +3906,9 @@ body::-webkit-scrollbar {
 /* ------------------------------
    Status History
 ------------------------------ */
+.tl-history-card {
+  width: 100%;
+}
 .tl-history-card h3 {
   font-size: 16px;
   font-weight: 600;
@@ -3936,6 +3937,7 @@ body::-webkit-scrollbar {
   color: #00A854;
   font-size: 12px;
   font-weight: 600;
+  
 }
 
 .tl-history-date {
@@ -4196,7 +4198,8 @@ body::-webkit-scrollbar {
   align-items: center;
   position: relative;
   width: auto;
-  padding: 0 40px 20px 40px;
+  padding:auto;
+  margin-bottom: 20px;
   gap: 10px;
 }
 
@@ -4314,6 +4317,8 @@ body::-webkit-scrollbar {
   text-align: center;
   padding: 20px 0;
   color: variables.$color-gray-600;
+  align-content: center;
+  height: 100%;
 }
 
 /* ===========================================
@@ -4520,13 +4525,12 @@ body::-webkit-scrollbar {
   right: 0;
   top: 0;
   width: 380px;
-  height: 100%;
+  height: auto;
   background: variables.$color-modal-green;
   padding: 22px;
   overflow-y: auto;
   border-radius: 0 0 0 20px;
   box-shadow: -4px 0 12px variables.$shadow-15;
-
   transform: translateX(100%);
   transition: transform 0.35s ease;
   z-index: 999;
