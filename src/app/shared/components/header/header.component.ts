@@ -5,11 +5,10 @@ import { AuthService } from '../../../features/user-account-management/services/
 import { NotificationService } from '../../../features/dashboard/services/notification-service';
 import { AppNotification } from '../../../../types/models/notifications';
 import { map, Observable } from 'rxjs';
-import { DashboardNotificationsComponent } from '../../../features/dashboard/components/notifications/dashboard-notifications/dashboard-notifications.component';
-import { NotificationBellComponent } from '../../../features/dashboard/components/notifications/notification-bell/notification-bell.component';
 import { NotificationDropdownComponent } from '../../../features/dashboard/components/notifications/notification-dropdown/notification-dropdown.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { User } from '../../../../types/models/user';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -18,191 +17,143 @@ import { User } from '../../../../types/models/user';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
   //#region Component Properties
-  /**
-   * @summary Controls the visibility state of the notifications dropdown panel
-   * @description When true, the notifications panel is displayed; when false, it is hidden
-   */
+  /** Controls visibility state of notification dropdown */
   public showNotifications = false;
-  /**
- * @summary Count of unread notifications for badge display
- * @description Used to show a numeric badge on the notification bell icon
- */
+  /** Unread notification count for badge */
   public unreadCount = 0;
-
-  /**
-   * @summary Observable stream of notifications from the notification service
-   * @description Provides reactive updates whenever notifications change in the system
-   */
+  /** Observable notification stream */
   public notifications$!: Observable<AppNotification[]>;
-
   //#region UI State
-  /**
-   * @summary Controls visibility of the logout confirmation dialog.
-   * When true → dialog is shown. When false → dialog is hidden.
-   *
-   */
+  /** Controls visibility of logout confirmation dialog */
   public showLogoutDialog: boolean = false;
   //#endregion
-
-  /**
-   * @summary Logged-in user's email displayed in the header.
-   */
+  /** Logged-in user */
   public user: User | null = null;
-public userEmail$!: Observable<string | null>;
-
-  /**
-   * @summary Navigation menu items shown in the header.
-   */
+  /** Observable email of logged-in user */
+  public userEmail$!: Observable<string | null>;
+  /** Navigation links in header */
   public navLinks = [
     { label: 'Dashboard', path: '/dashboard' },
     { label: 'Projects', path: '/projects' },
     { label: 'Tasks', path: '/tasks' },
     { label: 'Board', path: '/board' },
-
   ];
   //#endregion
+
   //#region Constructor
   /**
    * @summary Injects required services.
-   * @param authService Provides logged-in user information.
-   * @param router Helps determine current route for UI logic.
+   * @param authService Provides current user observable
+   * @param router Helps determine current route
+   * @param notificationService Notification management service
    */
-  public constructor(
+  constructor(
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService
   ) { }
   //#endregion
+
   //#region Lifecycle Hook
   /**
-   * @summary Loads the logged-in user's email on component initialization.
-   * @returns void
+   * @summary Loads user email and initializes notifications on component init.
    */
   public ngOnInit(): void {
     this.userEmail$ = this.authService.currentUser$.pipe(
-    map(user => user?.email ?? null)
-  );
-
-  this.notifications$ = this.notificationService.notifications$;
-
-  this.notificationService.unreadCount$.subscribe(count => {
-    this.unreadCount = count;
-  });
+      map(user => user?.email ?? null)
+    );
+    this.notifications$ = this.notificationService.notifications$;
+    this.notificationService.unreadCount$.subscribe(count => {
+      this.unreadCount = count;
+    });
   }
   //#endregion
-  //#region Methods
+
+  //#region UI Utility Methods
   /**
-   * @summary Determines whether to show minimal header
-   * @returns boolean True if on login or registration page.
+   * @summary Checks if current route is login/register for minimal header.
+   * @returns boolean
    */
   public isAuthMinimal(): boolean {
     const url = this.router.url;
-    return (
-      url.includes('/login') ||
-      url.includes('/register')
-    );
+    return url.includes('/login') || url.includes('/register');
   }
   //#endregion
-  onNavigateNotification(notification: any) {
-    // Example: navigate using router
-    console.log('Navigate to notification:', notification);
 
-    // optionally close dropdown
+  //#region Notification Actions
+  public onNavigateNotification(notification: any) {
+    console.log('Navigate to:', notification);
     this.showNotifications = false;
-
-    // If notifications have a route:
-    // this.router.navigate([notification.route]);
   }
-
-  //#region Event Handlers
   /**
-  * @summary Marks a specific notification as read
-  * @param notificationId - The unique identifier of the notification to mark as read
-  * @returns void
-  */
-  onMarkAsRead(notificationId: string) {
-    // Call your notification service to mark as read
+   * @summary Mark specific notification as read.
+   */
+  public onMarkAsRead(notificationId: string) {
     this.notificationService.markAsRead(notificationId);
   }
   /**
-   * @summary Marks all notifications as read
-   * @returns void
+   * @summary Toggles notification dropdown visibility.
    */
-  /**
-  * @summary Toggles the notifications panel visibility
-  * @returns void
-  */
   public toggleNotifications(): void {
     this.showNotifications = !this.showNotifications;
-    this.notifications$.subscribe(notifications => {
-    }).unsubscribe();
+    this.notifications$.subscribe().unsubscribe();
   }
   /**
-    * @summary Marks all notifications as read
-    * @returns void
-    */
+   * @summary Marks all notifications as read.
+   */
   public onMarkAllRead(): void {
-    this.notificationService.markAllAsRead(); // This method exists in your service
+    this.notificationService.markAllAsRead();
   }
   /**
-    * @summary Clears all notifications from the system
-    * @returns void
-    */
+   * @summary Clears all notifications.
+   */
   public onClearAll(): void {
-    this.notificationService.clearAll(); // Use clearAll() instead of clearAllNotifications()
+    this.notificationService.clearAll();
+  }
+  /**
+   * @summary Dismiss a notification permanently.
+   */
+  public onDismissNotification(notificationId: string): void {
+    console.log('Removing notification:', notificationId);
+    this.notificationService.dismiss(notificationId);
   }
   //#endregion
 
   //#region Logout Dialog Actions
-
   /**
-   * @summary Opens the logout confirmation dialog.
-   * @returns {void}
+   * @summary Opens logout confirmation dialog.
    */
   public openLogoutDialog(): void {
     this.showLogoutDialog = true;
   }
-
   /**
-   * @summary Confirms logout action and triggers AuthService logout.
-   * @returns {void}
+   * @summary Confirms logout and triggers AuthService logout.
    */
   public confirmLogout(): void {
     this.showLogoutDialog = false;
     this.authService.logout();
   }
-
   /**
-   * @summary Cancels the logout dialog and closes it.
-   * @returns {void}
+   * @summary Cancels logout dialog.
    */
   public cancelLogout(): void {
     this.showLogoutDialog = false;
   }
-
   //#endregion
 
   //#region Navigation
-
   /**
-   * @summary Navigates the user to the login page.
-   * @returns {void}
+   * @summary Navigates to login page.
    */
   public goToLogin(): void {
     this.router.navigate(['/login']);
   }
-   /**
-   * @summary Navigates the user to the profile page.
-   * @returns {void}
+  /**
+   * @summary Navigates to profile page.
    */
   public goToProfile(): void {
-  this.router.navigate(['/profile']);
-}
-  onDismissNotification(notificationId: string) {
-    console.log("Removing notification:", notificationId);
-    this.notificationService.dismiss(notificationId);  // delete from storage
+    this.router.navigate(['/profile']);
   }
   //#endregion
 }

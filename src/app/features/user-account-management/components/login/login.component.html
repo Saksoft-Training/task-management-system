@@ -1,10 +1,8 @@
 <div class="login-container">
   <h1 class="page-title-login">Login</h1>
-
   <div class="login-page">
     <form [formGroup]="loginFormGroup" (ngSubmit)="submitLoginForm()"
       class="card" autocomplete="off">
-
       <div class="header">
         <div class="header-content">
           <img src="assets/icons/arrow-Icon.svg" alt="Welcome back" />
@@ -25,7 +23,6 @@
             autocomplete="new-email"
             [disabled]="isFormSubmitting"
             [ngClass]="{ 'invalid-input': formControls['email'].touched && formControls['email'].invalid }" />
-
           @if (formControls['email'].touched && formControls['email'].invalid) {
           <div class="error">
             @if (formControls['email'].errors?.['required']) { <p>Email is
@@ -46,7 +43,6 @@
             placeholder="Enter your password"
             [disabled]="isFormSubmitting"
             [ngClass]="{ 'invalid-input': formControls['password'].touched && formControls['password'].invalid }" />
-
           @if (formControls['password'].touched &&
           formControls['password'].invalid) {
           <div class="error"><p>Password is required.</p></div>
@@ -71,7 +67,6 @@
         <button type="submit" class="login-btn" [disabled]="isFormSubmitting">
           {{ isFormSubmitting ? 'Authenticating...' : 'Login' }}
         </button>
-
         <p class="no-account">Don't have an account?</p>
         <button type="button" class="create-btn"
           (click)="navigateTo('/register')">
@@ -81,10 +76,8 @@
         </button>
       </div>
     </form>
-
     <app-loading-spinner
       [show]="isFormSubmitting"
       message="Logging in, please wait..."></app-loading-spinner>
-
   </div>
 </div>
