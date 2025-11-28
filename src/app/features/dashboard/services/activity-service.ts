@@ -9,18 +9,27 @@ import { AuthService } from '../../user-account-management/services/auth-service
   providedIn: 'root',
 })
 export class ActivityService {
+  // #region Properties & Observables
+  /** @summary Base API endpoint for activities */
   private readonly apiBase = 'https://692435723ad095fb84732960.mockapi.io/activities';
-
+  /** @summary Internal subject holding the activity list */
   private _activities$ = new BehaviorSubject<Activity[]>([]);
-  get activities$(): Observable<Activity[]> {
+ /**
+   * @summary Observable stream of activities
+   * @returns {Observable<Activity[]>} Stream of latest 50 activities sorted by timestamp
+   */  get activities$(): Observable<Activity[]> {
     return this._activities$.asObservable();
   }
+
+  // #endregion Properties & Observables
+  // #region Constructor
+  /**
+   * @summary Constructor initializes service and listens for login events
+   * @param http HttpClient for API calls
+   * @param auth AuthService for reading current user data
+   */
   constructor(private http: HttpClient, private auth: AuthService) {
     // Load activity whenever user logs in
-    console.log("ActivityService constructor loaded");
-    console.log("Current user restored:", this.auth.getCurrentUser());
-
-
     this.auth.currentUser$.subscribe(user => {
       if (user) {
         console.log("User logged in → loading activities...");
@@ -28,9 +37,14 @@ export class ActivityService {
       }
     });
   }
+  // #endregion Constructor
+  // #region Load Activities
   /**
-  * Fetch all activities from API
-  */
+   * @summary Loads all activities for the currently logged-in user
+   * @description Fetches data from the API, normalizes it into Activity objects,
+   * sorts it by timestamp, and updates the BehaviorSubject.
+   * @returns {void}
+   */
   loadForCurrentUser(): void {
     const currentUser = this.auth.getCurrentUser();
     if (!currentUser) return;
@@ -52,25 +66,25 @@ export class ActivityService {
             type: a.type,
             action: a.action,
             timestamp: a.timestamp,
-
-            // UI fields (fixed)
-            userName: currentUser.name,        // <-- correct name for initials
+            userName: currentUser.name,
             userEmail: currentUser.email,
             prettyAction: `${a.type} ${a.action}`
           }));
-
           const sorted = [...list].sort(
             (a, b) => +new Date(b.timestamp) - +new Date(a.timestamp)
           );
-
           this._activities$.next(sorted.slice(0, 50));
         })
       )
       .subscribe();
   }
 
+  // #endregion Load Activities
+  // #region Add Single Activity
   /**
-   * Add new activity (POST)
+   * @summary Pushes a new activity to the backend and updates the local cache
+   * @param activity The Activity object to insert
+   * @returns {void}
    */
   push(activity: Activity): void {
     this.http.post<Activity>(this.apiBase, activity)
@@ -90,12 +104,24 @@ export class ActivityService {
       )
       .subscribe();
   }
-
+  // #endregion Add Single Activity
+  // #region Bulk Insert Activities
+  /**
+   * @summary Inserts multiple activities locally without calling the API
+   * @param activities Array of activities to add
+   * @returns {void}
+   */
   bulkPush(activities: Activity[]) {
     const merged = [...activities, ...this._activities$.getValue()];
     merged.sort((a, b) => +new Date(b.timestamp) - +new Date(a.timestamp));
     this._activities$.next(merged.slice(0, 50));
   }
+  // #endregion Bulk Insert Activities
+  // #region Clear
+  /**
+   * @summary Clears all activities from the local cache
+   * @returns {void}
+   */
   clear() { this._activities$.next([]); }
-
+  // #endregion Clear
 }

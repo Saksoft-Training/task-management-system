@@ -245,8 +245,16 @@ export class TaskService implements OnDestroy {
 
 
   //#endregion
-  // In your TaskService - make sure this method exists:
-getOverdueTasks(): any[] {
+  // #region Overdue Tasks Logic
+
+/**
+ * Returns only the overdue tasks.
+ * A task is considered overdue if:
+ *  - it has a dueDate
+ *  - dueDate is earlier than current date/time
+ *  - status is NOT 'Completed'
+ */
+getOverdueTasks(): Task[] {
   const now = new Date();
   return this.tasksCache.filter(t => {
     if (!t.dueDate) return false;
@@ -254,4 +262,5 @@ getOverdueTasks(): any[] {
     return due < now && t.status !== 'Completed';
   });
 }
+// #endregion Overdue Tasks Logic
 }
