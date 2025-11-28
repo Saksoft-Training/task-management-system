@@ -199,7 +199,7 @@ export class ProjectListComponent implements OnDestroy {
   }
   //#endregion
 
-  //#region UI Behaviour
+  //#region UI Behavior
   /**
    * @summary Closes dropdowns when clicking outside relevant areas.
    */

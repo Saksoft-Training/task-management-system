@@ -29,19 +29,14 @@ import { ActivityService } from '../../../dashboard/services/activity-service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   //#region Public Properties
-
-  /** Main login form group */
+  /** Reactive login form */
   public loginFormGroup!: FormGroup;
-
-  /** Indicates whether form is in submission/loading state */
+  /** Loader state during authentication */
   public isFormSubmitting = false;
-
-  /** Stores API login error message */
+  /** Stores API login failure message */
   public loginErrorMessage = '';
-
-  /** Used to track whether the form was already attempted */
+  /** Indicates if user has attempted login */
   public loginAttempted = false;
 
   //#endregion
@@ -50,11 +45,11 @@ export class LoginComponent implements OnInit {
   //#region Constructor
 
   /**
-   * @summary Injects FormBuilder, AuthService, Router, and NotificationService.
-   * @param formBuilder Creates and manages reactive forms
-   * @param authService Handles authentication API requests
-   * @param router Used for page navigation
-   * @param notificationService Displays toast notifications
+   * @summary Injects FormBuilder, AuthService, Router, and NotificationService
+   * @param formBuilder Builds the Reactive Form
+   * @param authService Handles login API calls
+   * @param router Navigates between routes
+   * @param notificationService Displays toast messages
    */
   constructor(
     private formBuilder: FormBuilder,
@@ -66,11 +61,9 @@ export class LoginComponent implements OnInit {
 
   //#endregion
 
-
   //#region Lifecycle
-
   /**
-   * @summary Initializes login form on component load.
+   * @summary Initializes the login form on component load.
    */
   ngOnInit(): void {
     this.initializeLoginForm();
@@ -78,11 +71,9 @@ export class LoginComponent implements OnInit {
 
   //#endregion
 
-
   //#region Form Setup
-
   /**
-   * @summary Creates login form with Gmail validation and rememberMe toggle.
+   * @summary Creates login form with email, password & rememberMe.
    */
   private initializeLoginForm(): void {
     this.loginFormGroup = this.formBuilder.group({
@@ -117,16 +108,15 @@ export class LoginComponent implements OnInit {
   //#region Helper Methods
 
   /**
-   * @summary Forces email input to lowercase to avoid mismatch issues.
+   * @summary Forces email to lowercase to avoid case mismatch.
    */
   public forceLowercaseEmail(): void {
     const emailCtrl = this.loginFormGroup.get('email');
     const val = emailCtrl?.value || '';
     emailCtrl?.setValue(val.toLowerCase(), { emitEvent: true });
   }
-
   /**
-   * @summary Shortcut to access form controls in template.
+   * @summary Returns form controls for easier template access.
    */
   public get formControls(): FormGroup['controls'] {
     return this.loginFormGroup.controls;
@@ -138,13 +128,11 @@ export class LoginComponent implements OnInit {
   //#region Form Submission
 
   /**
-   * @summary Validates form, triggers login request and handles result states.
+   * @summary Submits form, validates inputs, sends login request & handles result.
    */
   public submitLoginForm(): void {
     this.loginErrorMessage = '';
     this.loginAttempted = true;
-
-    // Prevents validation bypass
     if (this.loginFormGroup.invalid) {
       this.loginFormGroup.markAllAsTouched();
       return;
@@ -155,12 +143,8 @@ export class LoginComponent implements OnInit {
     // Disable UI to prevent duplicate submissions
     this.isFormSubmitting = true;
     this.loginFormGroup.disable();
-
     this.authService.login({ email, password, rememberMe }).subscribe({
       next: () => {
-        this.isFormSubmitting = false;
-        this.loginAttempted = false;
-         this.activityService.loadForCurrentUser();
         this.notificationService.addNotification({
           kind: 'custom' as any,
           severity: 'success',
@@ -168,30 +152,22 @@ export class LoginComponent implements OnInit {
           message: '',
           showToast: true
         });
-
-        setTimeout(() => {
-          this.isFormSubmitting = false;
-          this.router.navigate(['/profile']);
-        }, 600);
+        this.isFormSubmitting = false;
+        this.router.navigate(['/profile']);
       },
 
       error: (err) => {
-         this.isFormSubmitting = false;
+        this.isFormSubmitting = false;
         this.loginErrorMessage = err?.message || 'Invalid email or password';
-
         this.notificationService.addNotification({
           kind: 'custom' as any,
           severity: 'critical',
           title: 'Login Failed',
-          message: this.loginErrorMessage,  
+          message: this.loginErrorMessage,
           showToast: true
         });
+        this.loginFormGroup.enable();
 
-        // Re-enable UI for retry
-        setTimeout(() => {
-          this.isFormSubmitting = false;
-          this.loginFormGroup.enable();
-        }, 600);
       }
     });
   }
@@ -202,8 +178,8 @@ export class LoginComponent implements OnInit {
   //#region Navigation
 
   /**
-   * @summary Navigates user to another route (Ex: forgot-password/register)
-   * @param path Router navigation path
+   * @summary Navigates user to the provided route (e.g., forgot-password/register)
+   * @param path The route path to navigate
    */
   public navigateTo(path: string): void {
     this.router.navigate([path]);

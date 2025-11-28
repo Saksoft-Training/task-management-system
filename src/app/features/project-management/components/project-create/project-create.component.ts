@@ -85,30 +85,28 @@ export class ProjectCreateComponent {
    */
   private validateProjectId(): void {
     const projectIdParam = this.route.snapshot.paramMap.get('id');
-    if (!projectIdParam) return;
+    if (!projectIdParam) {
+      return;
+    }
     const projectId = Number(projectIdParam);
     if (!Number.isInteger(projectId) || projectId <= 0) {
       this.router.navigate(['/projects']);
       return;
     }
-    let project = this.projectService.getById(projectId, this.currentUser);
+    this.projectService.projects$.subscribe(projects => {
+    const project = projects.find(p => p.id === projectId);
     if (!project) {
-      setTimeout(() => {
-        project = this.projectService.getById(projectId, this.currentUser);
-        if (!project) {
-          this.router.navigate(['/projects']);
-          return;
-        }
-        this.patchProjectForm(project!);
-      }, 150);
       return;
     }
     this.patchProjectForm(project);
-  }
+    this.editProjectId = project.id;
+  });
+  this.projectService.getAllAsync().subscribe();
+}
   /**
-    * @summary Populates form fields with project data when editing.
-    * @param project Project object to load into form
-    */
+  * @summary Populates form fields with project data when editing.
+  * @param project Project object to load into form
+  */
   private patchProjectForm(project: Project): void {
     this.editProjectId = project.id;
     this.projectForm.patchValue({
@@ -226,9 +224,7 @@ export class ProjectCreateComponent {
       message: newProject.name,
       showToast: true
     });
-    setTimeout(() => {
-      this.router.navigate(['/projects', newProject.id]);
-    }, 800);
+    this.router.navigate(['/projects', newProject.id]);
   }
   /**
    * @summary Resets form values and clears success message.
@@ -283,6 +279,5 @@ export class ProjectCreateComponent {
   public goToProjects(): void {
     this.router.navigate(['/projects']);
   }
-
   // #endregion
 }
