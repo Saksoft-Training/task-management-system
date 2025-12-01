@@ -2,11 +2,14 @@ export type ActivityType = 'project' | 'task';
 export type ActivityAction = 'created' | 'updated' | 'deleted' | 'completed' | 'assigned';
 
 export interface Activity {
-  id: number;
-  type: ActivityType;
-  action: ActivityAction;
-  itemId: number;
-  itemName: string;
-  user: string;
-  timestamp: string; // ISO
+   id: string;
+  userId: string;
+  itemId: string;
+  action: string;   // created, updated, completed
+  type: string;     // task, project
+  timestamp: string;
+    user?: string;
+     userName?: string;
+  userEmail?: string;
+  prettyAction?: string;
 }

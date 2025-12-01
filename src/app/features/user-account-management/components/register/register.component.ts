@@ -16,7 +16,6 @@ import { User } from '../../../../../types/models/user';
 import { AuthService } from '../../services/auth-service';
 import { UserStorageService } from '../../../../shared/services/storage-service';
 import { NotificationService } from '../../../dashboard/services/notification-service';
-
 @Component({
   selector: 'app-register',
   standalone: true,

@@ -208,6 +208,7 @@ export class ProfileComponent implements OnInit {
       };
     };
   }
+
   //#endregion
 
   //#region Submit
@@ -258,5 +259,6 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
   //#endregion
 }

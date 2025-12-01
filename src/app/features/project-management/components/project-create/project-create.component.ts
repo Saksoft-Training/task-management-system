@@ -6,7 +6,6 @@ import { Project } from '../../../../../types/models/project';
 import { AuthService } from '../../../user-account-management/services/auth-service';
 import { DialogDeleteComponent } from '../../../../shared/components/dialog-delete/dialog-delete.component';
 import { NotificationService } from '../../../dashboard/services/notification-service';
-
 @Component({
   selector: 'app-project-create-component',
   imports: [ReactiveFormsModule, DialogDeleteComponent],
@@ -40,11 +39,13 @@ export class ProjectCreateComponent {
 
   //#region Constructor
   /**
-   * @summary Initializes the component, form controls, validators, and validates route param.
-   * @param formBuilder - Angular FormBuilder service
-   * @param router - Angular Router service for navigation
-   * @param projectService - Custom project service for CRUD operations
-   * @param route - ActivatedRoute to read route parameters
+   * @summary Initializes form, injects services, prepares validators.
+   * @param formBuilder Angular FormBuilder
+   * @param router Angular Router
+   * @param projectService Project CRUD service
+   * @param route ActivatedRoute for reading route parameters
+   * @param authService Authentication service
+   * @param notificationService Notification toast popup service
    */
   constructor(
     private formBuilder: FormBuilder,
@@ -118,6 +119,7 @@ export class ProjectCreateComponent {
   }
   //#endregion
 
+  //#region Date Handling Utilities
   /**
    * @summary Converts various date formats into a Date object without time.
    * @param value - Input date value
@@ -203,7 +205,6 @@ export class ProjectCreateComponent {
       this.router.navigate(['/projects', this.editProjectId]);
       return;
     }
-    // Create project
     const newProject: Project = {
       id: Date.now(),
       name: form.name,
@@ -240,6 +241,12 @@ export class ProjectCreateComponent {
   public onCancel(): void {
     this.router.navigate(['/projects']);
   }
+  //#endregion
+
+  //#region Delete Project
+  /**
+  * @summary Opens delete confirmation dialog.
+  */
   public onDeleteProject(): void {
     if (!this.editProjectId) return;
     const project = this.projectService.getById(this.editProjectId, this.currentUser);
@@ -249,7 +256,6 @@ export class ProjectCreateComponent {
       `Are you sure you want to delete this project? This action cannot be undone.\n\n`;
     this.showDeleteDialog = true;
   }
-
   public handleDeleteConfirm(): void {
     if (this.editProjectId) {
       this.projectService.delete(this.editProjectId, this.currentUser);

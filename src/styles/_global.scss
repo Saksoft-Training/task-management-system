@@ -4878,75 +4878,79 @@ textarea:focus {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-/* ======================= */
-/* ACTIVITY FEED */
-/* ======================= */
-.activity-feed-card-stats {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid #eee;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-
-
 //=================
 //=====statistics==
 //=================
 
 .stat-card {
-  width: 100%;
-  padding: variables.$space-md-stats;
-  background: variables.$color-bg-card-stats;
-  border: 1px solid variables.$color-border-stats;
-  border-radius: variables.$border-radius-lg-stats;
+  width: variables.$charts-card-width;
+  height: variables.$charts-card-height;
+  padding: variables.$charts-card-padding;
+  border-radius: variables.$charts-card-radius;
+  border: none;
+  outline: none;
+  background: variables.$charts-white;
   cursor: pointer;
   display: block;
-  transition: 0.2s ease-in-out;
-  box-shadow: variables.$shadow-sm-stats;
   text-align: left;
+  transition: all 0.25s ease;
+  box-shadow: variables.$charts-shadow-default;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: variables.$charts-shadow-hover;
   }
 
-  /* =========================================
-     COLOR CLASSES
-  ========================================= */
+  &.primary,
   &.blue {
-     background: variables.$stats-color-blue-bg;
-    
-  }
-  &.amber {
-    background: variables.$stats-color-amber-bg;  
-    
-  }
-  &.green {
-    background:  variables.$stats-color-green-bg;
-    
-  }
-  &.red {
-    background: variables.$stats-color-red-bg; 
-    
-  }
-  &.neutral {
-    background: variables.$stats-color-neutral-bg;
+    background: variables.$charts-primary;
   }
 
-  /* =========================================
-     SKELETON LOADER
-  ========================================= */
+  &.secondary,
+  &.purple {
+    background: variables.$charts-secondary;
+  }
+
+  &.success .value::after {
+    background: variables.$charts-success;
+    content: "Success";
+  }
+
+  &.green {
+    background: variables.$charts-green;
+  }
+
+  &.warning {
+    background: variables.$charts-warning;
+  }
+
+  &.amber {
+    background: variables.$charts-amber;
+  }
+
+  &.danger {
+    background: variables.$charts-danger-stat;
+  }
+  
+  &.red {
+    background: variables.$charts-danger-stat;
+  }
+
+  &.neutral {
+    background: variables.$charts-neutral;
+  }
+
+  /* Skeleton Loader */
   .skeleton {
     display: flex;
     flex-direction: column;
-    gap: variables.$space-sm-stats;
+    gap: 8px;
 
     .skeleton-line {
-      height: 10px;
-      border-radius: 4px;
-      background: variables.$color-bg-empty-stats;
+      height: 12px;
+      background: variables.$charts-gray-light;
+      border-radius: 6px;
+      animation: shimmer 1.4s infinite linear;
 
       &.short {
         width: 40%;
@@ -4958,67 +4962,379 @@ textarea:focus {
     }
   }
 
-  /* =========================================
-     MAIN CARD CONTENT
-  ========================================= */
+  @keyframes shimmer {
+    0% { background-color: variables.$charts-gray-light; }
+    50% { background-color: variables.$charts-gray-lighter; }
+    100% { background-color: variables.$charts-gray-light; }
+  }
+
+  /* Top Card Content */
   .statistic-card {
     display: flex;
     align-items: center;
-    gap: variables.$space-md-stats;
-   
-    .icon {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 
-      img {
-        width: 100%;
-        height: 100%;
-      }
+    .top-row {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
     }
 
     .content {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
       .label {
-        font-size: variables.$font-size-sm-stats;
-        color: variables.$color-text-secondary-stats;
-        margin-bottom: variables.$space-xs-stats;
+        font-size: variables.$charts-label-font;
+        opacity: 0.7;
+        color: variables.$charts-gray-text;
+        font-weight: 400;
+        color: #000000;
+        margin-bottom: 40px;
       }
 
       .value {
-        font-size: variables.$font-size-xl-stats;
-        font-weight: 600;
-        color: variables.$color-text-primary-stats;
+        font-size: variables.$charts-value-font;
+        font-weight: 700;
+        color: #000000;
 
         small {
-          font-size: variables.$font-size-sm-stats;
+          font-size: variables.$charts-small-font;
           margin-left: 4px;
-          color: variables.$color-text-secondary-stats;
+          opacity: 0.6;
         }
       }
     }
 
-    .meta {
-      text-align: right;
+    .icon {
+      width: variables.$charts-icon-size;
+      height: variables.$charts-icon-size;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: variables.$charts-card-radius;
+      flex-shrink: 0;
 
-      .status-badge {
-        display: inline-block;
-        padding: variables.$space-xs-stats variables.$space-sm-stats;
-        background: variables.$color-bg-empty-stats;
-        border-radius: variables.$border-radius-sm-stats;
-        font-size: variables.$font-size-xs-stats;
-        color: variables.$color-text-secondary-stats;
-        margin-bottom: variables.$space-xs-stats;
+      img {
+        width: 16px;
+        height: 16px;
+        margin-bottom: 80px;
       }
 
-      .trend {
-        font-size: variables.$font-size-sm-stats;
-        color: #10b981;
-        font-weight: 600;
+      span {
+        font-size: 1.8rem;
       }
+    }
+  }
+
+  /* Status badge row */
+  .meta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+
+    .status-badge-card {
+      color: variables.$charts-gray-text;
+      font-size: variables.$charts-status-font;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+
+    .trend {
+      font-size: variables.$charts-status-font;
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    padding: 14px;
+
+    .statistic-card {
+      flex-direction: row;
+      align-items: flex-start;
+
+      .icon {
+        width: 48px;
+        height: 48px;
+      }
+    }
+  }
+}
+//=====================
+//activity latest======
+//=====================
+.activity-feed-stats {
+  width: variables.$activity-width-full;
+  display: flex;
+  flex-direction: column;
+  gap: variables.$activity-gap-main;
+  padding: 0 variables.$activity-padding-x;
+
+  .header-row-stats {
+    h2 {
+      font-size: variables.$activity-header-font-size;
+      font-weight: variables.$activity-header-font-weight;
+      margin: 0;
+      padding: 4px 0;
+      color: variables.$activity-header-color;
+    }
+  }
+
+  /* List styling */
+  .activity-list-stats {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: variables.$activity-list-gap;
+  }
+
+  .activity-item-stats {
+    display: flex;
+    align-items: center;
+    gap: variables.$activity-list-gap;
+    padding: variables.$activity-item-padding;
+    border-radius: variables.$activity-item-radius;
+    background: variables.$activity-item-bg;
+    box-shadow: variables.$activity-item-shadow;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+      background: variables.$activity-item-hover-bg;
+      transform: translateY(-1px);
+    }
+  }
+
+  /* Avatar */
+  .avatar-stats {
+    width: variables.$activity-avatar-size;
+    height: variables.$activity-avatar-size;
+    background: variables.$activity-avatar-bg;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: variables.$activity-avatar-text-color;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  /* Activity content */
+  .content-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+
+    .line1-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .action-stats {
+        font-size: variables.$activity-action-font-size;
+        font-weight: variables.$activity-action-font-weight;
+        color: variables.$activity-action-color;
+      }
+    }
+
+    .line2-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: variables.$activity-line2-font-size;
+      color: variables.$activity-line2-color;
+
+      .user-stats {
+        font-weight: 500;
+        color: variables.$activity-user-color;
+      }
+
+      .timestamp-stats {
+        margin-left: auto;
+        color: variables.$activity-timestamp-color;
+      }
+    }
+  }
+
+  /* Empty state */
+  .info-stats {
+    text-align: center;
+    padding: 40px 0;
+    color: variables.$activity-info-color;
+    font-size: variables.$activity-info-font-size;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .activity-feed-stats .activity-item-stats {
+    padding: variables.$activity-mobile-item-padding;
+  }
+
+  .activity-feed-stats .avatar-stats {
+    width: variables.$activity-mobile-avatar-size;
+    height: variables.$activity-mobile-avatar-size;
+  }
+}
+//============================
+//=======dashboard-charts=======
+//=============================
+.dashboard-charts-stats {
+  padding: variables.$charts-padding-main;
+
+  .top-row-stats {
+    h1 {
+      font-size: variables.$charts-title-size;
+      font-weight: 600;
+      margin-bottom: variables.$charts-gap;
+    }
+  }
+
+  .loading-stats {
+    text-align: center;
+    padding: variables.$charts-padding-main 0;
+    font-size: variables.$charts-loading-size;
+  }
+
+  /* DESKTOP GRID */
+  .charts-grid-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: variables.$charts-gap;
+    margin-top: variables.$charts-gap;
+
+    .card-stats:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* CARD */
+  .card-stats {
+    background: variables.$charts-white;
+    border-radius: variables.$charts-radius;
+    padding: variables.$charts-card-padding;
+    box-shadow: variables.$charts-card-shadow;
+
+    h2 {
+      font-size: variables.$charts-subtitle-size;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .empty-stats {
+      text-align: center;
+      padding: variables.$charts-padding-main;
+      color: variables.$charts-text-light;
+      font-size: variables.$charts-empty-size;
+    }
+  }
+
+  /* OVERDUE CARD */
+  .overdue-stats {
+    .overdue-header-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h2 {
+        margin: 0;
+      }
+
+      .badge-stats {
+        background: variables.$charts-danger;
+        color: variables.$charts-white;
+        padding: 4px 10px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+
+        &.ok-stats {
+          background: variables.$charts-success;
+        }
+      }
+    }
+
+    .overdue-list-stats {
+      margin-top: 12px;
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 10px 0;
+        border-bottom: 1px solid variables.$charts-border-light;
+
+        .title-stats {
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+
+        .meta-stats {
+          font-size: variables.$charts-meta-size;
+          color: variables.$charts-text-muted;
+
+          span {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  /* ACTIVITY SECTION */
+  .activity-section-stats {
+    margin-top: 30px;
+  }
+
+  /* TABLET */
+  @media (max-width: 1024px) {
+    .charts-grid-stats {
+      grid-template-columns: 1fr 1fr;
+
+      .card-stats:nth-child(3) {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .charts-grid-stats {
+      grid-template-columns: 1fr;
+
+      .card-stats:nth-child(3) {
+        grid-column: auto;
+      }
+    }
+
+    .top-row-stats h1 {
+      font-size: variables.$charts-title-size-md;
+    }
+  }
+
+  /* SMALL MOBILE */
+  @media (max-width: 480px) {
+    padding: variables.$charts-mobile-padding;
+
+    .card-stats {
+      padding: variables.$charts-mobile-padding;
+
+      h2 {
+        font-size: variables.$charts-card-title-mobile;
+      }
+    }
+
+    .top-row-stats h1 {
+      font-size: variables.$charts-title-size-sm;
     }
   }
 }

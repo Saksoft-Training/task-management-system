@@ -38,6 +38,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * If null → the list displays global tasks. 
    */
   @Input() projectId?: number | null;
+
   //#endregion
 
   //#region View Mode
@@ -49,6 +50,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
    * - 'global': all tasks in the system
    */
   public viewMode: 'project' | 'list' | 'board' | 'global' = 'project';
+
   //#endregion
 
   //#region Task Data
@@ -66,11 +68,13 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   /** Logged in user email */
   public userEmail: string = '';
+
   //#endregion
 
   //#region Unsubscription Handler
   /** Emits when component should cleanup (instead of multiple subscriptions) */
   private destroy$ = new Subject<void>();
+
   //#endregion
 
   //#region Sorting
@@ -82,6 +86,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
 
   /** Sorting direction */
   public sortAsc = true;
+
   //#endregion
 
   //#region Constructor
@@ -102,6 +107,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     private readonly router: Router,
     private readonly cdr: ChangeDetectorRef
   ) { }
+
   //#endregion
 
   //#region Lifecycle
@@ -176,6 +182,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
   //#endregion
 
   //#region View Mode Logic
@@ -215,6 +222,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
   }
+
   //#endregion
 
   //#region Load + Filter + Sort
@@ -282,6 +290,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       return 0;
     });
   }
+
   //#endregion
 
   //#region Sorting Controls
@@ -329,6 +338,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       this.isSortMenuOpen = false;
     }
   }
+
   //#endregion
 
   //#region Task Popup
@@ -343,6 +353,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.activeTask = null;
     this.cdr.detectChanges();
   }
+
   //#endregion
   
   //#region CRUD
@@ -375,6 +386,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.pendingDeleteTask = null;
     this.cdr.detectChanges();
   }
+
   //#endregion
 
   //#region Mode Switch
@@ -405,6 +417,7 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
       queryParams: { projectId: this.projectId }
     });
   }
+
   //#endregion
 
   //#region Helpers
@@ -471,7 +484,6 @@ export class TaskListComponent implements OnInit, OnDestroy, OnChanges {
     this.sortTasks();
     this.cdr.detectChanges();
   }
-
   /**
    * @summary Angular performance helper:
    * Ensures that when tasks update, *only changed tasks re-render*.

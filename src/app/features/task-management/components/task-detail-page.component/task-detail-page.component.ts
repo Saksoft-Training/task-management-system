@@ -160,6 +160,7 @@ public onCancelDelete(): void {
     if (!this.task) return;
     this.task.priority = newPriority as any;
     this.task.updatedAt = new Date().toISOString();
+
     this.taskService.updateTask(this.task);
     this.cdr.detectChanges();
   }

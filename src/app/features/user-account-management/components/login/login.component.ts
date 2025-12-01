@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { AuthService } from '../../services/auth-service';
 import { NotificationService } from '../../../dashboard/services/notification-service';
+import { ActivityService } from '../../../dashboard/services/activity-service';
 //#endregion
 
 /**
@@ -54,7 +55,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private activityService: ActivityService
   ) { }
 
   //#endregion

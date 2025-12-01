@@ -90,6 +90,7 @@ export class TaskService implements OnDestroy {
     );
     this.tasksSubject.next(this.readForCurrentUserSnapshot());
   }
+
   /**
    * @summary Returns tasks only for the logged-in user
    * (replaces old readForCurrentUser() logic)
@@ -97,6 +98,8 @@ export class TaskService implements OnDestroy {
   private readForCurrentUserSnapshot(): Task[] {
     return this.tasksCache.slice();
   }
+
+ 
   //#endregion
 
   //#region Public Fetch Methods
@@ -217,7 +220,7 @@ export class TaskService implements OnDestroy {
   //#endregion
 
   //#region Bulk Operations
-  /** Delete all tasks for a project  */
+  /** Delete all tasks for a project (old deleteTasksByProjectId behavior maintained) */
  public deleteTasksByProjectId(projectId: number): void {
 
   /** Collect tasks first BEFORE optimistic removal */
@@ -239,5 +242,25 @@ export class TaskService implements OnDestroy {
       .subscribe();
   });
 }
-//#endregion
+
+
+  //#endregion
+  // #region Overdue Tasks Logic
+
+/**
+ * Returns only the overdue tasks.
+ * A task is considered overdue if:
+ *  - it has a dueDate
+ *  - dueDate is earlier than current date/time
+ *  - status is NOT 'Completed'
+ */
+getOverdueTasks(): Task[] {
+  const now = new Date();
+  return this.tasksCache.filter(t => {
+    if (!t.dueDate) return false;
+    const due = new Date(t.dueDate);
+    return due < now && t.status !== 'Completed';
+  });
+}
+// #endregion Overdue Tasks Logic
 }

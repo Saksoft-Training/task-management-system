@@ -31,6 +31,7 @@ export class UserStorageService {
     const usersJson = localStorage.getItem(USERS_KEY);
     return usersJson ? JSON.parse(usersJson) : [];
   }
+
   /**
    * @summary Saves updated users array back to localStorage.
    * @param users Array of User objects
@@ -100,6 +101,7 @@ export class UserStorageService {
    * @param raw Plain text password
    * @returns string Encoded password
    */
+  //#region Password Encoding
   public encodePassword(raw: string): string {
     return btoa(`${PASSWORD_SECRET}:${raw}`);
   }
